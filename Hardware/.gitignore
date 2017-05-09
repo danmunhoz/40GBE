@@ -1,0 +1,9 @@
+# Hardware builts
+*output_dir
+*vivado*.log
+*vivado*.jou
+*fsm_encoding.os
+*.Xil
+*.cache
+*webtalk*
+*.deb*

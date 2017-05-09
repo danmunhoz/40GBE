@@ -1,0 +1,22 @@
+10GbE RFC2544 Tester User Guide
+%%date(%c)
+
+%!target: html
+%!options: --toc --toc-level 4
+%!options: --style style.css
+%!encoding: utf-8
+
+%!postproc(html): '{([^}]*)}' '<\1>'
+
+%----------------------------
+%- LINKS
+%----------------------------
+%!preproc: TEAM_LNK            "[Project Team team.html]"
+%!preproc: HW_LNK              "[Hardware Documentation ./hardware/hardware.html]"
+%!preproc: SW_LNK              "[Software Documentation ./software/script_c.html]"
+%!preproc: WEB_LNK              "[Web Documentation ./software/web.html]"
+
+- TEAM_LNK
+- HW_LNK
+- SW_LNK
+- WEB_LNK

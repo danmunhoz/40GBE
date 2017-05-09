@@ -1,0 +1,55 @@
+body {
+    width: 80%;
+    text-align: justify;
+    position: relative;
+    left: 10%;
+    background-position: top left;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+table {
+    margin-left: auto;
+    margin-right: auto
+}
+pre {
+    padding: .5em;
+    border: 1px solid #CBCBCB;
+    background-color: #FFF8ED;
+    color: black;
+    margin-left: 1em;
+    font-family: monospace;
+}
+td {
+    border: 1px solid #EEEEEE;
+    background-color: #FFF8ED;
+}
+th {
+    border: 1px solid #EEEEEE;
+    background-color: #CCEECC;
+}
+h1, h2, h3 {
+    color: #183884;
+}
+hr {
+    border-style: none;
+    color: #FFBF00;
+}
+a:hover {
+    background-color: #FFBF00;
+}
+h1 { font: 180% sans-serif; border-bottom: thin solid #FFBF00  }
+h2 { font: 140% sans-serif }
+h3 { font: 120% sans-serif }
+h4 { font: bold 100% sans-serif }
+h5 { font: italic 100% sans-serif }
+h6 { font: small-caps 100% sans-serif }
+body {
+    background-image: url(pucrs_datacom.jpg);
+}
+div.news {
+    padding: .5em;
+    border: 1px solid #CBCBCB;
+    background-color: #FFF8ED;
+    color: black;
+    margin-left: 1em;
+}

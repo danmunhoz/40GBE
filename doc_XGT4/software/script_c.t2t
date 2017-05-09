@@ -1,0 +1,608 @@
+NetSume - Software Interface - XGETH_TESTER
+%%date(%c)
+
+%!target: html
+%!options: --toc --toc-level 4
+%!options: --style ../style.css
+%!encoding: utf-8
+
+%!postproc(html): '{([^}]*)}' '<\1>'
+%%%%%%%%%%%%%%%%%%%%%%
+= Software Interface =
+%%%%%%%%%%%%%%%%%%%%%%
+%------------------------
++ Software architecture +
+%------------------------
+This software runs with **multiple threads**, where each thread controls a **SFP module**. This independent control is achieved by accessing the different set of registers of each SFP module.
+All registers for each test are configured according to the default values. The only **required parameter** is an argument to one of the RFC2544 tests, or the rfc2544 argument, which will activate all of the suported tests. In case a test depends on the result of another, calling the dependent test will also execute the other.
+
+%----------------
++ RFC2544 tests +
+%----------------
+This section describes the supported RFC2544 tests according to what is implemented. All of the SFP modules are meant to run **independently**.
+All of these tests will be run once for each packet size as defined in the RFC2544: 64, 128, 256, 512, 1024, 1280 and 1518 bytes.
+
+++ Throughput ++
+The throughput test emmits streams of //n// packets, as defined in the **npkts** argument, and increase or decrease the rate according to a binary search algorithm to test whether the DUT will lose packets or not. The process for each frame size is iterative, starting from the rate specified in the **throughput-initrate** argument. It will define the maximum throughput rate with no packets lost for each packet size. A acceptable packet loss rate can be specified by the user.
+
+```
+     +--------+-------+--------+-------+--------+-------+--------+-------+
+1050 ++       +       +        +       +        Throughput (Mb/s)+**A***++
+     |                                                                   |
+1000 ++                                                                 ++
+     |                                                                   |
+     |                   **A**********A**********A*********A**********A  |
+ 950 ++            ******                                               ++
+     |         *A**                                                      |
+ 900 ++     ***                                                         ++
+     |    A*                                                             |
+     |    *                                                              |
+ 850 ++  *                                                              ++
+     |   *                                                               |
+ 800 ++  *                                                              ++
+     |  *                                                                |
+ 750 ++ A                                                               ++
+     |                                                                   |
+     |                                                                   |
+ 700 ++       +       +        +       +        +       +        +      ++
+     +--------+-------+--------+-------+--------+-------+--------+-------+
+     0       200     400      600     800      1000    1200     1400    1600
+
+     where  y-axis -> Throughput Rate (Mb/s)
+            x-axis -> Packet Size (KB)
+```
+
+++ Latency ++
+The latency test works by emmiting packets at the maximum available **throughput** rate for the time defined in the **latency-load-time** argument. After the defined time, it sends a unique packet to define the latency by the time it takes to return from the **DUT**. This test is dependent on the result given by the **throughput test**.
+
+```
+------------------------------------------------------------------------------
+|Frame Size(KB) |Rate(Mb/s)          |Media Type(Mb/s)  |Latency(us)         |
+|64             |744.186035          |1000              |6.856640            |
+|128            |871.934631          |1000              |7.382080            |
+|256            |920.863281          |1000              |8.204801            |
+|512            |957.367249          |1000              |10.726399           |
+|768            |976.105774          |1000              |13.160319           |
+|1024           |974.495605          |1000              |14.866879           |
+|1280           |974.124817          |1000              |17.372478           |
+|1518           |973.451355          |1000              |19.262081           |
+------------------------------------------------------------------------------
+```
+
+++ Frame loss rate ++
+This test verify the loss rate of packets for the **DUT** on high throughput rates. It starts at **top-rate** Mb/s and decreases the rate to plot the percentage of packets lost at each rate. The step of decreasing rate is given by //**loss-rate-step** * **top-rate**//. It gives a plot for each packet size.
+```
+   +-----+------+-----+-----+------+-----+------+-----+-----+------+-----+
+25 ++    +      +     +     +      +     +Loss rate for 64 kb (%) **A***++
+   |                                                            ***A     |
+   |                                                          **         |
+   |                                                        **           |
+20 ++                                                     **            ++
+   |                                                     *               |
+   |                                                  **A                |
+15 ++                                               **                  ++
+   |                                              **                     |
+   |                                            **                       |
+   |                                          **                         |
+10 ++                                       **                          ++
+   |                                      **                             |
+   |                                    **                               |
+ 5 ++                                 **                                ++
+   |                                **                                   |
+   |                              **                                     |
+   +     +      +     +     +      +     +      +     +     +      +     +
+ 0 ++A***************************A-+-----+------+-----+-----+------+----++
+   50    55     60    65    70     75    80     85    90    95    100   105
+
+14 ++----+------+-----+-----+------+-----+------+-----+-----+------+----++
+   +     +      +     +     +      +     Loss rate for 128 kb (%) **A*** +
+   |                                                               A     |
+12 ++                                                             *     ++
+   |                                                             *       |
+10 ++                                                           *       ++
+   |                                                           *         |
+   |                                                          *          |
+ 8 ++                                                        *          ++
+   |                                                        *            |
+   |                                                       *             |
+ 6 ++                                                     *             ++
+   |                                                     *               |
+   |                                                    *                |
+ 4 ++                                            ******A                ++
+   |                                        *****                        |
+ 2 ++                                  *****                            ++
+   |                               ****                                  |
+   +     +      +     +     +    **+     +      +     +     +      +     +
+ 0 +A***************************A--+-----+------+-----+-----+------+----++
+   50    55     60    65    70     75    80     85    90    95    100   105
+
+.
+.
+.
+
+    +---------+---------+---------+--------+---------+---------+---------+
+    +         +         +         +     Loss rate for 1518 kb (%) **A*** +
+1.4 ++                                                        *A        ++
+    |                                                        *           |
+    |                                                       *            |
+1.2 ++                                                    **            ++
+    |                                                    *               |
+  1 ++                                                  *               ++
+    |                                                  *                 |
+0.8 ++                                                *                 ++
+    |                                                *                   |
+    |                                               *                    |
+0.6 ++                                             *                    ++
+    |                                             *                      |
+0.4 ++                                          **                      ++
+    |                                          *                         |
+    |                                         *                          |
+0.2 ++                                       *                          ++
+    +         +         +         +        +         +         +         +
+  0 ++--A***********************************A--------+---------+--------++
+    70        75        80        85       90        95       100       105
+
+    where  y-axis -> Loss Rate (% of sent packets)
+           x-axis -> Throughput Rate (% of top rate)
+```
+
+++ Back-to-back ++
+This test is also dependent on the **throughput test**. It streams an increasing number of packets in order to check the maximum number of packets the **DUT** can process at maximum rate. It starts streaming **back-to-back-init** packets, increasing by **back-to-back-step** packets and until the **DUT** loses packets or the **back-to-back-limit** number of packets is reached. A acceptable packet loss rate can be specified by the user as in **throughput test**.
+
+```
+->Values greater than 1000000 packets were NOT tested
+--------------------------------------
+|Frame Size(KB) |Maximum Packet Count|
+|64             |1000000             |
+|128            |1000000             |
+|256            |1000000             |
+|512            |1000000             |
+|768            |1000000             |
+|1024           |1000000             |
+|1280           |1000000             |
+|1518           |1000000             |
+--------------------------------------
+
+```
+
+++ System recovery ++
+On the **system recovery test**, the tester sends packages at **110%** the maximum rate defined in the **througput test** for **system-recovery-overload-time** us. After this time, the tester drops rate to **55%** that defined in the **througput test** and counts the time needed to start receiving packets correctly from the **DUT**.
+```
+--------------------------------------------------------------------------------
+|Frame Size(KB) |110%%Rate(Mb/s)     |55%%Rate(Mb/s)      |Recovery Time       |
+|64             |818.604639          |451.282050          |29048.724609        |
+|128            |959.128094          |528.528516          |172544.593750       |
+|256            |1012.949609         |549.141968          |184326.531250       |
+|512            |1053.103973         |549.570648          |230364.796875       |
+|768            |1073.716351         |549.713687          |629043.187500       |
+|1024           |1071.945166         |549.785223          |230360.921875       |
+|1280           |1071.537299         |549.828192          |1917479.250000      |
+|1518           |1070.796490         |549.782706          |1858799.375000      |
+--------------------------------------------------------------------------------
+```
+%----------------
++ Custom tests +
+%----------------
+
+These are custom tests designed to attend common network verification cases. Each of these tests must be run **separetedly**.  
+
+++ Timed troughput ++
+This test is a version of RFC 2544 **throughput test**, with the addition of the time duration (in seconds) parameter. 
+```
+TIMED THROUGHPUT  TEST
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+|Frame Size(KB) |Sent Packets        |Received Packets  |Rate (pkts/s)       |Desired Rate (pkts/s) |Lost Packets        |Calculated Throughput (MB/s)|
+|64             |976562              |976562            |976562.00           |976562.00             |0                   |500.000488                  |
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+...
+
+TIMED THROUGHPUT  TEST
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+|Frame Size(KB) |Sent Packets        |Received Packets  |Rate (pkts/s)       |Desired Rate (pkts/s) |Lost Packets        |Calculated Throughput (MB/s)|
+|1518           |41183               |41183             |41183.00            |41183.00              |0                   |500.044495                  |
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+```
+
+++ Loopback ++
+This test puts a chosen SFP in loopback mode. It receives a packet from a source, flips source and destiny addresses and retransmits the packet. 
+```
+LOOPBACK  TEST
+CHANNEL 1 IN LOOPBACK MODE
+```
+
+++ Training ++
+The **training test** uses the **timed throughput** to find the maximum rate with an acceptable packet loss rate. First, the **throughput test** is run for 3 seconds to discover the maximum rate in this time interval. After, the test run the **timed throughput test** for a time especified by the user. If the received packets number is less than total packets sent minus acceptable loss rate, the rate is decremented, and the **timed throughput test** is run again until the number of received packets be equals or greater than the total sent packets minus acceptable loss rate. The test reports the discovered rate.
+```
+training TEST
+-----------------------------------------------------------
+|Frame Size(KB) |Achieved Rate(Mb/s) |Loss Rate(%%)       |
+|64             |7619.047852         |0.000000            |
+|128            |8648.648438         |0.000000            |
+|256            |9275.362305         |0.000000            |
+|512            |9624.060547         |0.000000            |
+|768            |9746.193359         |0.000000            |
+|1024           |9808.428711         |0.000000            |
+|1280           |9846.154297         |0.000000            |
+|1518           |9869.960938         |0.000000            |
+-----------------------------------------------------------
+```
+
++ Usage +
+This section is dedicated to explain the build and use methods with examples.
+
+++ Setup ++
+The software described on this document shall only be used to communicate with an external **NetFPGA-Sume** board programmed to generate the tests when activate by the software.
+
+For this, the board should be connected on the host machine through the PCIe bus and the FPGA properly programmed. Before run the examples, make sure you know the host computer well recognized the board.
+
+Make sure the user you are on has access to the bar0 PCIe resource (the command //sudo// followed by the interface call with an administrator password should work in case you are not sure of you access level).
+
+The SFP modules to be used should be connected in loopback (make sure the link status LEDs are on).
+
+In order to generate the output plots, the software Gnuplot should be installed.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+++ Switch Configuration Examples ++
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The following switch configuration examples enable communication with the xgeth_tester platform. Each example implements a different scenario which helps evaluate specific aspects of the switch or the xgeth_tester. Note that switch used is the DM4100.
+
+%------------------------------------------
++++ Loopback with 10G port configuration +++
+%------------------------------------------
+
+This example configures communication through a 10G port (port 25) and enables a PHY loopback at another 10G port (port 26). This example suits well MAXIMUM throughput scenarios and initial tests.
+
+```
+! Login
+admin
+admin
+
+! Reset para configurações de fábrica
+copy default-config running-config
+
+! Verifica link nas portas 25 e 26
+show interfaces link
+
+! Pára tráfego de protocolos e libera tráfego em taxa máxima
+config
+interface ethernet all
+no loopback-detection
+no spanning-tree 1
+no switchport storm-control broadcast
+no switchport storm-control unicast
+no switchport storm-control multicast
+
+! Configra VLANs
+interface vlan 2
+set-member untagged ethernet range 1/1 1/24
+interface vlan 10
+set-member untagged ethernet range 1/25 1/26
+interface vlan 1
+no set-member ethernet range 1/1 1/26
+
+interface ethernet 25
+switchport native vlan 10
+interface ethernet 26
+switchport native vlan 10
+end
+
+! Copia config para startup
+copy running-config startup-config 1
+select startup-config 1
+reboot
+
+!Após rebootar o DM4100, a config estará salva.. apenas executar o teste:
+
+! Login
+admin
+admin
+
+! Conecta Shell Broadcom
+telnet 0 40213
+
+! Configura back-end loop na porta 26
+port xe1 lb=PHY
+```
+
+%------------------------------------------
++++ Loopback with 1G port configuration +++
+%------------------------------------------
+
+This example configures communication through a 10G port (port 25) and enables a PHY loopback at another 1G port (port 1). This example emulates realistic scenarios for all RFC25$
+
+```
+! Login
+admin
+admin
+
+! Reset para configurações de fábrica
+copy default-config running-config
+
+! Pára tráfego de protocolos e libera tráfego em taxa máxima
+config
+interface ethernet all
+no loopback-detection
+no spanning-tree 1
+no switchport storm-control broadcast
+no switchport storm-control unicast
+no switchport storm-control multicast
+
+! Configra VLANs
+interface vlan 10
+set-member untagged ethernet 1/1
+set-member untagged ethernet 1/25
+
+interface ethernet 1
+switchport native vlan 10
+interface ethernet 25
+switchport native vlan 10
+end
+
+! Copia config para startup
+copy running-config startup-config 1
+select startup-config 1
+reboot
+
+!Após rebootar o DM4100, a config estará salva.. apenas executar o teste:
+
+! Login
+admin
+admin
+
+! Conecta Shell Broadcom
+telnet 0 40213
+
+! Configura back-end loop na porta 1
+port ge0 lb=PHY
+```
+
+%-----------------------------------------------------------------
++++ Two vlans to test the 1Gb interface with the loopback mode +++
+%-----------------------------------------------------------------
+
+```
+! Login
+admin
+admin
+
+copy default-config running-config
+
+show interfaces link
+
+config
+interface ethernet all
+no loopback-detection
+spanning-tree 1
+no switchport storm-control broadcast
+no switchport storm-control unicast
+no switchport storm-control multicast
+interface vlan 2
+set-member untagged ethernet 1/2
+set-member untagged ethernet 1/26
+interface vlan 10
+set-member untagged ethernet 1/1
+set-member untagged ethernet 1/25
+
+end
+
+copy running-config startup-config 1
+select startup-config 1
+reboot
+```
+
+++ Build ++
+Under the //scriptsC// folder, execute the command //make all// from any linux terminal and the host-side of the project should be built.
+
+After the project is built, the //RFC2544// file shall be used to communicate with the external tester through the PCIe interface.
+
+++ Examples ++
+Follows a list of run examples with description.
+For the sake of example, whe will assume the NetFPGA-Sume board is connected to the host through the PCIe bus.
+Notice the **#** symbol before the calls indicate you should have administrator privileges on the operational system.
+
+-To run all RFC2544 supported tests on all SFP modules:
+```
+# ./RFC2544 --rfc2544 --sfp1 --sfp2 --sfp3 --sfp4 
+```
+
+-To run all RFC2544 supported tests on a 1Gb ethernet network through the SFP1 (notice the --throughput-initrate argument is not necessary, but will accelerate the process, since the throughput test will gess a more aproximate starting rate):
+```
+# ./RFC2544 --rfc2544 --top-rate 1000 --throughput-initrate 800
+```
+
+-To run the latency and loss-rate tests on the SFP1 and SFP2 (notice, this will run the throughput test as well, since the latency test is dependent on the throughput test):
+```
+# ./RFC2544 --latency --loss-rate --sfp1 --sfp2 
+```
+
+-To run the throughput test on the SFP1:
+```
+# ./RFC2544 --throughput --sfp1
+
+SFP 1:    # PACKET INFO                 
+SFP 1:     Packet type:                 UDP
+SFP 1:     Message:                     echo
+SFP 1:     Thread:                      0
+SFP 1:     SFP:                         1
+SFP 1:    ##Running Throughput test     
+SFP 1:    ##Number of packets:          1000000   
+SFP 1:    ##Packet length:              64 KB
+SFP 1:    ##Init rate:                  7272.727051 Mbit/s
+SFP 1:    ##Step:                       500 Mbit/s
+SFP 1:    ##Timeout:                    416.0000 ms
+SFP 1:    ##END THROUGHPUT TEST         
+SFP 1:       ->Maximum throughput rate: 7272.727051 Mbit/s
+SFP 1:       ->Minimum idle cycles:     1 cycles
+SFP 1:    ##Running Throughput test     
+SFP 1:    ##Number of packets:          1000000   
+SFP 1:    ##Packet length:              128 KB
+SFP 1:    ##Init rate:                  8205.127930 Mbit/s
+SFP 1:    ##Step:                       500 Mbit/s
+SFP 1:    ##Timeout:                    416.0000 ms
+SFP 1:    ##END THROUGHPUT TEST         
+SFP 1:       ->Maximum throughput rate: 8421.052734 Mbit/s
+SFP 1:       ->Minimum idle cycles:     1 cycles
+SFP 1:    ##Running Throughput test     
+SFP 1:    ##Number of packets:          1000000   
+SFP 1:    ##Packet length:              256 KB
+SFP 1:    ##Init rate:                  8101.265625 Mbit/s
+SFP 1:    ##Step:                       500 Mbit/s
+SFP 1:    ##Timeout:                    416.0000 ms
+SFP 1:    ##END THROUGHPUT TEST         
+SFP 1:       ->Maximum throughput rate: 9142.857422 Mbit/s
+SFP 1:       ->Minimum idle cycles:     1 cycles
+SFP 1:    ##Running Throughput test     
+SFP 1:    ##Number of packets:          1000000   
+SFP 1:    ##Packet length:              512 KB
+SFP 1:    ##Init rate:                  8050.314453 Mbit/s
+SFP 1:    ##Step:                       500 Mbit/s
+SFP 1:    ##Timeout:                    416.0000 ms
+SFP 1:    ##END THROUGHPUT TEST         
+SFP 1:       ->Maximum throughput rate: 9552.239258 Mbit/s
+SFP 1:       ->Minimum idle cycles:     1 cycles
+SFP 1:    ##Running Throughput test     
+SFP 1:    ##Number of packets:          1000000   
+SFP 1:    ##Packet length:              768 KB
+SFP 1:    ##Init rate:                  8033.472656 Mbit/s
+SFP 1:    ##Step:                       500 Mbit/s
+SFP 1:    ##Timeout:                    416.0000 ms
+SFP 1:    ##END THROUGHPUT TEST         
+SFP 1:       ->Maximum throughput rate: 9696.969727 Mbit/s
+SFP 1:       ->Minimum idle cycles:     1 cycles
+SFP 1:    ##Running Throughput test     
+SFP 1:    ##Number of packets:          1000000   
+SFP 1:    ##Packet length:              1024 KB
+SFP 1:    ##Init rate:                  8025.078613 Mbit/s
+SFP 1:    ##Step:                       500 Mbit/s
+SFP 1:    ##Timeout:                    416.0000 ms
+SFP 1:    ##END THROUGHPUT TEST         
+SFP 1:       ->Maximum throughput rate: 9770.992188 Mbit/s
+SFP 1:       ->Minimum idle cycles:     1 cycles
+SFP 1:    ##Running Throughput test     
+SFP 1:    ##Number of packets:          1000000   
+SFP 1:    ##Packet length:              1280 KB
+SFP 1:    ##Init rate:                  8020.050293 Mbit/s
+SFP 1:    ##Step:                       500 Mbit/s
+SFP 1:    ##Timeout:                    416.0000 ms
+SFP 1:    ##END THROUGHPUT TEST         
+SFP 1:       ->Maximum throughput rate: 9815.951172 Mbit/s
+SFP 1:       ->Minimum idle cycles:     1 cycles
+SFP 1:    ##Running Throughput test     
+SFP 1:    ##Number of packets:          1000000   
+SFP 1:    ##Packet length:              1518 KB
+SFP 1:    ##Init rate:                  8031.746094 Mbit/s
+SFP 1:    ##Step:                       500 Mbit/s
+SFP 1:    ##Timeout:                    416.0000 ms
+SFP 1:    ##END THROUGHPUT TEST         
+SFP 1:       ->Maximum throughput rate: 9844.358398 Mbit/s
+SFP 1:       ->Minimum idle cycles:     1 cycles
+sh: gnuplot: command not found
+SFP 1:    #FINISHING THREAD             0
+SFP 1:     SFP                          1
+Serial closed!
+
+```
+
+++ Output ++
+The outputs are generated separately for each SFP module. They are formatted according to the RFC2544 and, by default, can be found on the files //sfp**n**_plots.txt// where //n// stands for the SFP module number.
+More detailed results can be found on the //sfp**n**_data// folders.
+
+%---------------
++ File Structure +
+%---------------
+```
+.
+├── Hardware 			
+│   ├── constraint
+│   │   └── constraints.xdc
+│   ├── implementation
+│   │   ├── Makefile
+│   │   ├── output_dir
+│   │   ├── run_debug.tcl
+│   │   └── run_implementation.tcl
+│   ├── make_debug.tcl
+│   ├── Makefile	
+│   ├── make.sh			// Main build script
+│   ├── make.tcl
+│   ├── rtl		        // Contains the hardware description files of the project	
+│   │   ├── GTH_tester.vhd
+│   │   ├── gtwizard
+│   │   ├── I2C				//  I2C modules 
+│   │   ├── ip				//  IPs used in the project
+│   │   ├── MAC				//  MAC modules 
+│   │   ├── PCIe				//  PCIe modules 
+│   │   ├── PCS				//  PC modules 
+│   │   ├── SerialInterface //  Serial modules
+│   │   ├── utils
+│   │   └── XGETH_tester
+│   ├── sim
+│   │   └── testbench.sv
+│   ├── synthesis
+│   │   ├── Makefile
+│   │   ├── output_dir
+│   │   ├── run_debug.tcl
+│   │   ├── run_place.tcl
+│   │   └── run_synth.tcl
+│   └── tclLib				// Contains the libraries used in TCL scripts 		
+│       ├── compareSignals.tcl
+│       ├── config.tcl
+│       └── reportCriticalPaths.tcl
+└── Software
+    ├── scriptsC				// Contains the software interface files
+    │   ├── Makefile
+    │   ├── RFC2544
+    │   ├── RFC2544.c
+    │   ├── RFC2544_defines.h
+    │   └── RFC2544.h
+    └── web					// Contains the user web interface 
+        ├── pciRescan.sh
+        ├── setup_web.sh
+        ├── svn_url
+        ├── testador
+        ├── testador.bsdesign
+        └── testador.com.conf
+
+```
+
+%---------------
++ Command Line Arguments +
+%---------------
+Description and available values of the software interface.
+
+All of the arguments can be used in the software interface inside the **scriptsC** directory after built as
+
+```
+# ./RFC2544 [--ARGUMENT_NAME_1 [VALUE_1] --ARGUMENT_NAME_2 [VALUE_2]...]
+```
+
+|| Argument name | Short | Value type | Default value | Description
+| throughput | - | no value | - | Runs the **throughput** test according to the RFC2544.
+| latency | - | no value | - | Runs the **latency** test according to the RFC2544.
+| back-to-back | - | no value | - | Runs the **back-to-back frames** test according to the RFC2544.
+| loss-rate | - | no value | - | Runs the **frame loss rate** test according to the RFC2544.
+| system-recovery | - | no value | - | Runs the **system recovery** test according to the RFC2544.
+| rfc2544 | - | no value | - | Runs **all** the supported network tests according to the RFC2544.
+| timed-throughput | - | no value | - | Runs the **timed throughput** custom test
+| loopback | - | no value | - | Runs the **loopback** custom test
+| training | - | no value | - | Runs the **training** custom test
+| sfp1/sfp2/sfp3/sfp4 | - | no value | - | Select the desired SFP(s) to use in this run. By default, all the SFP modules are selected. Each SFP selected here will be mapped to a specific independent **thread** while the software is running.
+| verbose | - | no value | - | Print information about each iteration in the current execution.
+| ps64/ps128/ps256/ps512/ps768/ps1024/ps1280/ps1518 | - | no value | - | Select the desired packet lenght to use in this run. By default, all the packet lenghts are selected.
+| acceptable-error | - | float | 0 | Allowed percentage of packet loss.
+| top-rate | r | unsigned integer | 10000 | Defines the maximum throughput rate of the **DUT** in **MB/s**. This parameter is used too as execution  rate in **timed throughput test**.
+| npkts | n | unsigned integer | 1000000 | Defines the number of packets used for tests where it applies.
+| timeout | t | unsigned integer | 65000 | Defines the timeout time **in us**.
+| throughput-initrate | i | unsigned integer | 8000 | Defines the starting rate of the **throughput test** **in MB/s**.
+| latency-load-time | l | unsigned integer | 600000 | Defines the time **in us** for the **latency test** to load the network before evaluate the latency.
+| loss-rate-step | p | float | 0.1 | Defines the precision of the **frame loss rate test** step. It represents the percentage to be reduced of the **top-rate** in each step.
+| back-to-back-init | b | unsigned integer | 500000 | Defines the initial number of frames to be used in the **back-to-back frames test**.
+| back-to-back-step | c | unsigned integer | 100000 | Defines the step for each iteration of the **back-to-back frames test** in number of frames sent.
+| back-to-back-limit | k | unsigned integer | 1000000 | Defines the upper bound in number of frames sent for the **back-to-back frames test**.
+| system-recovery-overload-time | l | unsigned integer | 60000000 | Defines the time **in us** during which the **system recovery test** will overload the system with 110% of maximum rate **available in the current DUT** given by the **throughput test**.
+| system-recovery-iterations | g | unsigned integer | 5 | Defines the number of times the **system recovery test** will be run to get the average system recovery time.
+| timing | a | float | 60 | Defines, **in seconds**, the execution time of **timed throughput**.
+| out-file | o | string | plots.txt | File containing the reports according to the RFC2544.
+| help | h | no value | - | Prints a quick help message about the software arguments.

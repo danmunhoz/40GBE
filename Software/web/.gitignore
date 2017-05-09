@@ -1,0 +1,7 @@
+# Web
+Software/web/testador/vendor
+Software/web/testador/node_modules
+Software/web/testador/public/storage
+Software/web/testador/Homestead.yaml
+Software/web/testador/Homestead.json
+Software/web/testador/.env

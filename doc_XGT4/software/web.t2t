@@ -1,0 +1,76 @@
+NetSume - Web Interface - XGETH_TESTER
+%%date(%c)
+
+%!target: html
+%!options: --toc --toc-level 4
+%!options: --style ../style.css
+%!encoding: utf-8
+
+%!postproc(html): '{([^}]*)}' '<\1>'
+%%%%%%%%%%%%%%%%%
+= Web Interface =
+%%%%%%%%%%%%%%%%%
+%-------------------
++ Installing Guide +
+%-------------------
+This section presents a step by step guide to run the web interface of the NetSume Network Tester project.
+
+  ++ Dependencies ++
+  Although most dependencies (PHP, Apache2 and Laravel) can be installed through the //setup_web.sh// script explained later in this section, follows a brief review of overall dependencies of the project.
+  This web interface was built using the [Laravel Framework https://laravel.com/] 5.2 and PHP 5.5.9.
+  The host machine is an [Ubuntu http://www.ubuntu.com/] 14.04 LTS running an Apache2 server.
+  Composer is a tool to install PHP packages and dependencies.
+
+  ++ Directory Structure ++
+
+```
+  ├── pciRescan.sh        // Script to find the Tester FPGA in the current host (called by setup_web.sh)
+  ├── setup_web.sh        // Script tries to put the server up and running (install dependencies, build website and scan for the FPGA tester)
+  ├── testador            // Laravel project model
+  │   ├── app
+  │   ├── artisan
+  │   ├── bootstrap
+  │   ├── composer.json
+  │   ├── composer.lock
+  │   ├── config
+  │   ├── database
+  │   ├── gulpfile.js
+  │   ├── logs
+  │   ├── package.json
+  │   ├── phpunit.xml
+  │   ├── public
+  │   ├── readme.md
+  │   ├── resources
+  │   ├── server.php
+  │   ├── storage
+  │   └── tests
+  └── testador.com.config  // Apache2 Virtual Server configuration file
+```
+
+  ++ Composer Update Verification ++
+  In the script //setup_web.sh//, lines 29 through 35, where Composer is installed, you should verify, for security and stability reasons, if this section is equal to the code example found in the [Downlod Composer Page https://getcomposer.org/download/]. In case it is not up to date, you should overwrite this code with the one presented there.
+
+  ++ Deploy ++
+  In order to deploy the web tester in a new host, you should be sure to have the NetSume FPGA with the correct //bit// running and connected in an PCIe slot in the host.
+
+  After this, you should copy the project to the host, go to the folder //ta-2015/trunk/NetSUME_4CH_PCIE/Software/web// and run, **as root**, the command:
+```
+  ./setup_web.sh
+```
+
+  ++ Deploy Verification ++
+  If the deploy process was sccessfull, you should be able to access the tester web page through the host IP and see a page like the image bellow
+[web_default.png]
+
+%-------------
++ User Guide +
+%-------------
+This section has the purpose of help new users to start using the NetSume Network Tester through it's web interface.
+Follows the screens of options for each test.
+[web_RFC.png]
+
+[web_timed_throughput.png]
+
+[web_loopback.png]
+
+You can execute one test in each channel independently.
