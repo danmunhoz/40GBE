@@ -33,6 +33,7 @@ SC_MODULE(Top) {
   sc_signal<sc_lv<2> > header_from_xgt4;
 
   // RX
+
   sc_signal< sc_lv<64> >    block_to_xgt4;
   sc_signal< sc_logic  >    data_valid_xgt4;
   sc_signal< sc_lv<2>  >    header_to_xgt4;
@@ -130,12 +131,13 @@ inline void Top::clock_assign()
 
 inline void Top::reset_generator()
 {
-    static bool first = true;
+    static int first = 0;
     if (first == 0)
     {
         first ++;
         reset.write(SC_LOGIC_0);
         reset_deactivation_event.notify(35, SC_NS);
+        // Todos juntos
         reset_mii_tx.write(SC_LOGIC_0);
         reset_mii_rx.write(SC_LOGIC_0);
     }
@@ -143,6 +145,7 @@ inline void Top::reset_generator()
         first ++;
         reset.write(SC_LOGIC_1);
         reset_mii_rx.write(SC_LOGIC_1);
+
     }
 
 }
@@ -171,7 +174,7 @@ inline void Top::valid_rx_generator()
         f = false;
         rx_header_valid_in.write(SC_LOGIC_0);
         rx_data_valid_in.write(SC_LOGIC_0);
-        valid_rx_generator_event.notify(127, SC_NS);
+        valid_rx_generator_event.notify(35, SC_NS);
     }
     else {
         rx_header_valid_in.write(SC_LOGIC_1);

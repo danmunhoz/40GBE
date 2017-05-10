@@ -271,7 +271,6 @@ begin
 -- INST ECHO GEN
     echo_gen_inst : entity work.echo_generator port map (
         clock             => clk_156,
-        --reset         	=> reset,
         reset         		=> reset_in,
 
         -- Control Signals
