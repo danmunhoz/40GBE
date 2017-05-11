@@ -8,9 +8,7 @@
 //MODULES VHDL
 #include "tb_xgt4.h"
 #include "rx_xgt4.h"
-//#include "scoreboard.h"
-
-//SC_MODULE(Top)
+#include "scoreboard.h"
 
 SC_MODULE(Top) {
   sc_clock clk_156;
@@ -51,10 +49,9 @@ SC_MODULE(Top) {
   sc_signal<sc_logic>     rx_data_valid_in;
 
 
-  tb_xgt4 * tb_xgt4_inst;
-  rx_xgt4 * rx_xgt4_inst;
-
-  // scoreboard * scoreboard_inst;
+  tb_xgt4    * tb_xgt4_inst;
+  rx_xgt4    * rx_xgt4_inst;
+  scoreboard * scoreboard_inst;
 
   void clock_assign();
   void reset_generator();
@@ -70,6 +67,7 @@ SC_MODULE(Top) {
     // Creating instances
     tb_xgt4_inst = new tb_xgt4("tb_xgt4","tb_xgt4");
     rx_xgt4_inst = new rx_xgt4("rx_xgt4","rx_xgt4");
+    scoreboard_inst = new scoreboard("scoreboard");
 
     // Connections
     tb_xgt4_inst->clock_in156(iclock156);
@@ -100,6 +98,8 @@ SC_MODULE(Top) {
     rx_xgt4_inst->pkt_rx_val(pkt_rx_val);
     rx_xgt4_inst->pkt_rx_avail(pkt_rx_avail);
 
+    scoreboard_inst->clock_in156(iclock156);
+
     SC_METHOD(clock_assign);
     sensitive << clk_156.signal();
     sensitive << clk_161.signal();
@@ -116,7 +116,7 @@ SC_MODULE(Top) {
 
   }
   ~Top () {
-    delete tb_xgt4_inst, rx_xgt4_inst;
+    delete tb_xgt4_inst, rx_xgt4_inst, scoreboard_inst;
   }
 
 };

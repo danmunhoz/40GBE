@@ -1,34 +1,26 @@
 #ifndef SCOREBOARD
 #define SCOREBOARD
 
-#include <systemc.h>
+#include "systemc.h"
 
 SC_MODULE(scoreboard) {
 
-public:
-  // sc_in_clk scoreboard_clk;
-  // sc_port< sc_fifo_in_if<sc_lv<64>> > pkt_from_tx;
-  // sc_port< sc_fifo_in_if<sc_lv<64>> > pkt_from_rx;
-  //
-  // sc_port< sc_fifo_in_if<sc_lv<2>> > hdr_from_tx;
-  // sc_port< sc_fifo_in_if<sc_lv<2>> > hdr_from_rx;
-  //
-  // sc_fifo<sc_lv<64>> pkt_sent;
-  // sc_fifo<sc_lv<64>> pkt_rcvd;
-  // sc_fifo<sc_lv<2> > hdr_sent;
-  // sc_fifo<sc_lv<2> > hdr_rcvd;
+  sc_in<sc_logic> clock_in156;
+  sc_in<sc_lv<64> > block_in;
+  sc_in<sc_lv<2> >  header_in;
 
-  SC_CTOR(scoreboard) {
-    // SC_THREAD(check_data);
-    // sensitive<<scoreboard_clk.pos();
-    // SC_THREAD(compare_pkts);
-    // sensitive<<scoreboard_clk.pos();
-    // dont_initialize();
+  FILE * fd;
+
+  SC_CTOR( scoreboard ) {
+    fd = NULL;
+    fd = fopen("board.txt","rw+");
+    if (fd == NULL) {
+      printf("\nERROR Creating file!!\n");
+    } else {
+      printf("\n OK \n");
+    }
+    // SC_METHOD
   }
-
-private:
-  void check_data();
-  void compare_pkts();
 
 };
 
