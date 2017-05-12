@@ -1,12 +1,12 @@
-#ifndef SCOREBOARD
-#define SCOREBOARD
-
-#include "systemc.h"
-
 /*
 **  Modulo para commparar frames enviados vs. recebidos
 **
 */
+
+#ifndef SCOREBOARD
+#define SCOREBOARD
+
+#include "systemc.h"
 
 SC_MODULE(scoreboard) {
 
@@ -29,8 +29,6 @@ SC_MODULE(scoreboard) {
     fd = fopen("board.txt","rw+");
     if (fd == NULL) {
       printf("\nERROR Creating file!!\n");
-    } else {
-      printf("\n OK \n");
     }
     // SC_METHOD
   }

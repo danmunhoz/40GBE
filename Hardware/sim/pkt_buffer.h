@@ -1,3 +1,8 @@
+/*
+**  Modulo para enviar blocks do PCS tx -> PCS rx
+**
+*/
+
 #ifndef PKT_BUFFER
 #define PKT_BUFFER
 
@@ -7,14 +12,23 @@
 #include <iostream>
 #include <fstream>
 
-/*
-**  Modulo para enviar blocks do PCS tx -> PCS rx
-**
-*/
+#define PKTS_BTW_SYNC 16383
+
+/* SYNC_LANEx_LOW BIP SYNC_LANEx_HIGH BIP */
+#define SYNC_LANE0_LOW  100100000111011001000111    // 0x907647
+#define SYNC_LANE1_LOW  111100001100010011100110    // 0xf0c4e6
+#define SYNC_LANE2_LOW  110001010110010110011011    // 0xc5659b
+#define SYNC_LANE3_LOW  101000100111100100111101    // 0xa2793d
+#define SYNC_LANE0_HIGH 011011111000100110111000    // 0x6f89b8
+#define SYNC_LANE1_HIGH 000011110011101100011001    // 0x0f3b19
+#define SYNC_LANE2_HIGH 001110101001101001100100    // 0x3a9a64
+#define SYNC_LANE3_HIGH 010111011000011011000010    // 0x5d86c2
 
 SC_MODULE(pkt_buffer) {
 
   sc_in<sc_logic>   clock_in161;
+  sc_in<sc_logic>   reset_n;
+
   sc_in<sc_lv<64> > block_in;
   sc_in<sc_lv<2> >  header_in;
   sc_in<sc_logic>   data_valid_in;
@@ -29,6 +43,7 @@ SC_MODULE(pkt_buffer) {
   void tx(void) {
     std::stringstream buffer;
     int lane = 0;
+
     if ( data_valid_in == SC_LOGIC_1 ) {
       // cout << "HEADER_IN VALUE: " << header_in << endl;
       // cout << "BLOCK_IN  VALUE:" << block_in << endl;
@@ -54,6 +69,13 @@ SC_MODULE(pkt_buffer) {
           break;
         default:
           cout << "Ooops" << endl;
+      }
+
+      if( block_counter == PKTS_BTW_SYNC) {
+        lane0 << SYNC_LANE0_LOW << /*bip*/ << SYNC_LANE0_HIGH << /*bip*/ << endl;
+        lane1 << SYNC_LANE1_LOW << /*bip*/ << SYNC_LANE1_HIGH << /*bip*/ << endl;
+        lane2 << SYNC_LANE2_LOW << /*bip*/ << SYNC_LANE2_HIGH << /*bip*/ << endl;
+        lane3 << SYNC_LANE3_LOW << /*bip*/ << SYNC_LANE3_HIGH << /*bip*/ << endl;
       }
 
     }
