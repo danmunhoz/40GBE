@@ -9,6 +9,7 @@
 #include "tb_xgt4.h"
 #include "rx_xgt4.h"
 #include "scoreboard.h"
+#include "pkt_buffer.h"
 
 SC_MODULE(Top) {
   sc_clock clk_156;
@@ -52,6 +53,7 @@ SC_MODULE(Top) {
   tb_xgt4    * tb_xgt4_inst;
   rx_xgt4    * rx_xgt4_inst;
   scoreboard * scoreboard_inst;
+  pkt_buffer * pkt_buffer_inst;
 
   void clock_assign();
   void reset_generator();
@@ -68,6 +70,7 @@ SC_MODULE(Top) {
     tb_xgt4_inst = new tb_xgt4("tb_xgt4","tb_xgt4");
     rx_xgt4_inst = new rx_xgt4("rx_xgt4","rx_xgt4");
     scoreboard_inst = new scoreboard("scoreboard");
+    pkt_buffer_inst = new pkt_buffer("pkt_buffer");
 
     // Connections
     tb_xgt4_inst->clock_in156(iclock156);
@@ -99,6 +102,11 @@ SC_MODULE(Top) {
     rx_xgt4_inst->pkt_rx_avail(pkt_rx_avail);
 
     scoreboard_inst->clock_in156(iclock156);
+
+    pkt_buffer_inst->clock_in161(iclock161);
+    pkt_buffer_inst->header_in(header_from_xgt4);
+    pkt_buffer_inst->block_in(block_from_xgt4);
+    pkt_buffer_inst->data_valid_in(rx_data_valid_in);
 
     SC_METHOD(clock_assign);
     sensitive << clk_156.signal();

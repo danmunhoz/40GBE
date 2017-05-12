@@ -3,13 +3,26 @@
 
 #include "systemc.h"
 
+/*
+**  Modulo para commparar frames enviados vs. recebidos
+**
+*/
+
 SC_MODULE(scoreboard) {
 
-  sc_in<sc_logic> clock_in156;
+  sc_in<sc_logic>   clock_in156;
   sc_in<sc_lv<64> > block_in;
   sc_in<sc_lv<2> >  header_in;
+  sc_in<sc_logic>   rx_data_valid_in;
 
   FILE * fd;
+
+  // void board_write() {
+  //   while (true) {
+  //    if () {
+  //    }
+  //   }
+  // }
 
   SC_CTOR( scoreboard ) {
     fd = NULL;
@@ -20,6 +33,10 @@ SC_MODULE(scoreboard) {
       printf("\n OK \n");
     }
     // SC_METHOD
+  }
+
+  ~scoreboard () {
+    fclose(fd);
   }
 
 };
