@@ -1,0 +1,252 @@
+# Current time Mon May 15 19:32:51 2017
+# ModelSim Stack Trace
+# Program = vsim
+# Id = "10.3c"
+# Version = "2014.07"
+# Date = "Jul 18 2014"
+# Platform = linux_x86_64
+# --> START OF USERCODE
+# 0    0x00007ffff290443f: 'sc_dt::sc_lv_base::sc_lv_base(sc_dt::sc_lv_base const&) + 0x7f' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 1    0x00007ffff28e6901: 'sc_dt::sc_proxy<sc_dt::sc_lv_base>::operator^(int) const + 0x33' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 2    0x00007ffff28e27b0: 'pkt_buffer::bip_calculator(sc_dt::sc_lv<8>*, sc_dt::sc_lv<64>, sc_dt::sc_lv<2>) + 0x122' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 3    0x00007ffff28e2cc2: 'pkt_buffer::tx() + 0x2ce' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 4    0x00007ffff28f514b: 'sc_core::scmti_execute_method_process(void*) + 0x9b' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# <-- END OF USERCODE
+# 5    0x0000000000437205: '<unknown (@0x437205)>'
+# 6    0x000000000053f624: '<unknown (@0x53f624)>'
+# 7    0x00000000008d6f53: '<unknown (@0x8d6f53)>'
+# 8    0x00000000008d841e: '<unknown (@0x8d841e)>'
+# 9    0x000000000142e4af: '<unknown (@0x142e4af)>'
+# 10   0x000000000142f669: '<unknown (@0x142f669)>'
+# 11   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 12   0x000000000147a95f: '<unknown (@0x147a95f)>'
+# 13   0x0000000001430983: '<unknown (@0x1430983)>'
+# 14   0x000000000143b814: '<unknown (@0x143b814)>'
+# 15   0x000000000142f669: '<unknown (@0x142f669)>'
+# 16   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 17   0x000000000147ac80: '<unknown (@0x147ac80)>'
+# 18   0x000000000142e053: '<unknown (@0x142e053)>'
+# 19   0x0000000001440b18: '<unknown (@0x1440b18)>'
+# 20   0x000000000142f669: '<unknown (@0x142f669)>'
+# 21   0x00000000014302b6: '<unknown (@0x14302b6)>'
+# 22   0x0000000001430636: '<unknown (@0x1430636)>'
+# 23   0x00000000011548bc: '<unknown (@0x11548bc)>'
+# 24   0x000000000148b681: '<unknown (@0x148b681)>'
+# 25   0x00000000014d4a11: '<unknown (@0x14d4a11)>'
+# 26   0x00000000014a113d: '<unknown (@0x14a113d)>'
+# 27   0x00000000014a1475: '<unknown (@0x14a1475)>'
+# 28   0x0000000001343e76: '<unknown (@0x1343e76)>'
+# 29   0x00000000008b991b: '<unknown (@0x8b991b)>'
+# End of Stack Trace
+
+
+# Current time Mon May 15 19:34:29 2017
+# ModelSim Stack Trace
+# Program = vsim
+# Id = "10.3c"
+# Version = "2014.07"
+# Date = "Jul 18 2014"
+# Platform = linux_x86_64
+# --> START OF USERCODE
+# 0    0x00007ffff290436f: 'sc_dt::sc_lv_base::sc_lv_base(sc_dt::sc_lv_base const&) + 0x7f' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 1    0x00007ffff28e6801: 'sc_dt::sc_proxy<sc_dt::sc_lv_base>::operator^(int) const + 0x33' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 2    0x00007ffff28e26df: 'pkt_buffer::bip_calculator(sc_dt::sc_lv<8>*, sc_dt::sc_lv<64>, sc_dt::sc_lv<2>) + 0xa1' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 3    0x00007ffff28e2bec: 'pkt_buffer::tx() + 0x2ce' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 4    0x00007ffff28f507b: 'sc_core::scmti_execute_method_process(void*) + 0x9b' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# <-- END OF USERCODE
+# 5    0x0000000000437205: '<unknown (@0x437205)>'
+# 6    0x000000000053f624: '<unknown (@0x53f624)>'
+# 7    0x00000000008d6f53: '<unknown (@0x8d6f53)>'
+# 8    0x00000000008d841e: '<unknown (@0x8d841e)>'
+# 9    0x000000000142e4af: '<unknown (@0x142e4af)>'
+# 10   0x000000000142f669: '<unknown (@0x142f669)>'
+# 11   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 12   0x000000000147a95f: '<unknown (@0x147a95f)>'
+# 13   0x0000000001430983: '<unknown (@0x1430983)>'
+# 14   0x000000000143b814: '<unknown (@0x143b814)>'
+# 15   0x000000000142f669: '<unknown (@0x142f669)>'
+# 16   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 17   0x000000000147ac80: '<unknown (@0x147ac80)>'
+# 18   0x000000000142e053: '<unknown (@0x142e053)>'
+# 19   0x0000000001440b18: '<unknown (@0x1440b18)>'
+# 20   0x000000000142f669: '<unknown (@0x142f669)>'
+# 21   0x00000000014302b6: '<unknown (@0x14302b6)>'
+# 22   0x0000000001430636: '<unknown (@0x1430636)>'
+# 23   0x00000000011548bc: '<unknown (@0x11548bc)>'
+# 24   0x000000000148b681: '<unknown (@0x148b681)>'
+# 25   0x00000000014d4a11: '<unknown (@0x14d4a11)>'
+# 26   0x00000000014a113d: '<unknown (@0x14a113d)>'
+# 27   0x00000000014a1475: '<unknown (@0x14a1475)>'
+# 28   0x0000000001343e76: '<unknown (@0x1343e76)>'
+# 29   0x00000000008b991b: '<unknown (@0x8b991b)>'
+# End of Stack Trace
+
+
+# Current time Mon May 15 19:37:18 2017
+# ModelSim Stack Trace
+# Program = vsim
+# Id = "10.3c"
+# Version = "2014.07"
+# Date = "Jul 18 2014"
+# Platform = linux_x86_64
+# --> START OF USERCODE
+# 0    0x00007ffff290436f: 'sc_dt::sc_lv_base::sc_lv_base(sc_dt::sc_lv_base const&) + 0x7f' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 1    0x00007ffff28e6801: 'sc_dt::sc_proxy<sc_dt::sc_lv_base>::operator^(int) const + 0x33' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 2    0x00007ffff28e26df: 'pkt_buffer::bip_calculator(sc_dt::sc_lv<8>*, sc_dt::sc_lv<64>, sc_dt::sc_lv<2>) + 0xa1' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 3    0x00007ffff28e2bec: 'pkt_buffer::tx() + 0x2ce' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 4    0x00007ffff28f507b: 'sc_core::scmti_execute_method_process(void*) + 0x9b' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# <-- END OF USERCODE
+# 5    0x0000000000437205: '<unknown (@0x437205)>'
+# 6    0x000000000053f624: '<unknown (@0x53f624)>'
+# 7    0x00000000008d6f53: '<unknown (@0x8d6f53)>'
+# 8    0x00000000008d841e: '<unknown (@0x8d841e)>'
+# 9    0x000000000142e4af: '<unknown (@0x142e4af)>'
+# 10   0x000000000142f669: '<unknown (@0x142f669)>'
+# 11   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 12   0x000000000147a95f: '<unknown (@0x147a95f)>'
+# 13   0x0000000001430983: '<unknown (@0x1430983)>'
+# 14   0x000000000143b814: '<unknown (@0x143b814)>'
+# 15   0x000000000142f669: '<unknown (@0x142f669)>'
+# 16   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 17   0x000000000147ac80: '<unknown (@0x147ac80)>'
+# 18   0x000000000142e053: '<unknown (@0x142e053)>'
+# 19   0x0000000001440b18: '<unknown (@0x1440b18)>'
+# 20   0x000000000142f669: '<unknown (@0x142f669)>'
+# 21   0x00000000014302b6: '<unknown (@0x14302b6)>'
+# 22   0x0000000001430636: '<unknown (@0x1430636)>'
+# 23   0x00000000011548bc: '<unknown (@0x11548bc)>'
+# 24   0x000000000148b681: '<unknown (@0x148b681)>'
+# 25   0x00000000014d4a11: '<unknown (@0x14d4a11)>'
+# 26   0x00000000014a113d: '<unknown (@0x14a113d)>'
+# 27   0x00000000014a1475: '<unknown (@0x14a1475)>'
+# 28   0x0000000001343e76: '<unknown (@0x1343e76)>'
+# 29   0x00000000008b991b: '<unknown (@0x8b991b)>'
+# End of Stack Trace
+
+
+# Current time Mon May 15 19:38:45 2017
+# ModelSim Stack Trace
+# Program = vsim
+# Id = "10.3c"
+# Version = "2014.07"
+# Date = "Jul 18 2014"
+# Platform = linux_x86_64
+# --> START OF USERCODE
+# 0    0x00007ffff290438f: 'sc_dt::sc_lv_base::sc_lv_base(sc_dt::sc_lv_base const&) + 0x7f' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 1    0x00007ffff28e681d: 'sc_dt::sc_proxy<sc_dt::sc_lv_base>::operator^(int) const + 0x33' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 2    0x00007ffff28e26df: 'pkt_buffer::bip_calculator(sc_dt::sc_lv<8>*, sc_dt::sc_lv<64>, sc_dt::sc_lv<2>) + 0xa1' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 3    0x00007ffff28e2be0: 'pkt_buffer::tx() + 0x2c2' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 4    0x00007ffff28f509b: 'sc_core::scmti_execute_method_process(void*) + 0x9b' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# <-- END OF USERCODE
+# 5    0x0000000000437205: '<unknown (@0x437205)>'
+# 6    0x000000000053f624: '<unknown (@0x53f624)>'
+# 7    0x00000000008d6f53: '<unknown (@0x8d6f53)>'
+# 8    0x00000000008d841e: '<unknown (@0x8d841e)>'
+# 9    0x000000000142e4af: '<unknown (@0x142e4af)>'
+# 10   0x000000000142f669: '<unknown (@0x142f669)>'
+# 11   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 12   0x000000000147a95f: '<unknown (@0x147a95f)>'
+# 13   0x0000000001430983: '<unknown (@0x1430983)>'
+# 14   0x000000000143b814: '<unknown (@0x143b814)>'
+# 15   0x000000000142f669: '<unknown (@0x142f669)>'
+# 16   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 17   0x000000000147ac80: '<unknown (@0x147ac80)>'
+# 18   0x000000000142e053: '<unknown (@0x142e053)>'
+# 19   0x0000000001440b18: '<unknown (@0x1440b18)>'
+# 20   0x000000000142f669: '<unknown (@0x142f669)>'
+# 21   0x00000000014302b6: '<unknown (@0x14302b6)>'
+# 22   0x0000000001430636: '<unknown (@0x1430636)>'
+# 23   0x00000000011548bc: '<unknown (@0x11548bc)>'
+# 24   0x000000000148b681: '<unknown (@0x148b681)>'
+# 25   0x00000000014d4a11: '<unknown (@0x14d4a11)>'
+# 26   0x00000000014a113d: '<unknown (@0x14a113d)>'
+# 27   0x00000000014a1475: '<unknown (@0x14a1475)>'
+# 28   0x0000000001343e76: '<unknown (@0x1343e76)>'
+# 29   0x00000000008b991b: '<unknown (@0x8b991b)>'
+# End of Stack Trace
+
+
+# Current time Mon May 15 19:39:21 2017
+# ModelSim Stack Trace
+# Program = vsim
+# Id = "10.3c"
+# Version = "2014.07"
+# Date = "Jul 18 2014"
+# Platform = linux_x86_64
+# --> START OF USERCODE
+# 0    0x00007ffff290438f: 'sc_dt::sc_lv_base::sc_lv_base(sc_dt::sc_lv_base const&) + 0x7f' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 1    0x00007ffff28e681d: 'sc_dt::sc_proxy<sc_dt::sc_lv_base>::operator^(int) const + 0x33' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 2    0x00007ffff28e26df: 'pkt_buffer::bip_calculator(sc_dt::sc_lv<8>*, sc_dt::sc_lv<64>, sc_dt::sc_lv<2>) + 0xa1' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 3    0x00007ffff28e2be0: 'pkt_buffer::tx() + 0x2c2' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 4    0x00007ffff28f509b: 'sc_core::scmti_execute_method_process(void*) + 0x9b' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# <-- END OF USERCODE
+# 5    0x0000000000437205: '<unknown (@0x437205)>'
+# 6    0x000000000053f624: '<unknown (@0x53f624)>'
+# 7    0x00000000008d6f53: '<unknown (@0x8d6f53)>'
+# 8    0x00000000008d841e: '<unknown (@0x8d841e)>'
+# 9    0x000000000142e4af: '<unknown (@0x142e4af)>'
+# 10   0x000000000142f669: '<unknown (@0x142f669)>'
+# 11   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 12   0x000000000147a95f: '<unknown (@0x147a95f)>'
+# 13   0x0000000001430983: '<unknown (@0x1430983)>'
+# 14   0x000000000143b814: '<unknown (@0x143b814)>'
+# 15   0x000000000142f669: '<unknown (@0x142f669)>'
+# 16   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 17   0x000000000147ac80: '<unknown (@0x147ac80)>'
+# 18   0x000000000142e053: '<unknown (@0x142e053)>'
+# 19   0x0000000001440b18: '<unknown (@0x1440b18)>'
+# 20   0x000000000142f669: '<unknown (@0x142f669)>'
+# 21   0x00000000014302b6: '<unknown (@0x14302b6)>'
+# 22   0x0000000001430636: '<unknown (@0x1430636)>'
+# 23   0x00000000011548bc: '<unknown (@0x11548bc)>'
+# 24   0x000000000148b681: '<unknown (@0x148b681)>'
+# 25   0x00000000014d4a11: '<unknown (@0x14d4a11)>'
+# 26   0x00000000014a113d: '<unknown (@0x14a113d)>'
+# 27   0x00000000014a1475: '<unknown (@0x14a1475)>'
+# 28   0x0000000001343e76: '<unknown (@0x1343e76)>'
+# 29   0x00000000008b991b: '<unknown (@0x8b991b)>'
+# End of Stack Trace
+
+
+# Current time Mon May 15 19:40:15 2017
+# ModelSim Stack Trace
+# Program = vsim
+# Id = "10.3c"
+# Version = "2014.07"
+# Date = "Jul 18 2014"
+# Platform = linux_x86_64
+# --> START OF USERCODE
+# 0    0x00007ffff290438f: 'sc_dt::sc_lv_base::sc_lv_base(sc_dt::sc_lv_base const&) + 0x7f' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 1    0x00007ffff28e681d: 'sc_dt::sc_proxy<sc_dt::sc_lv_base>::operator^(int) const + 0x33' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 2    0x00007ffff28e26df: 'pkt_buffer::bip_calculator(sc_dt::sc_lv<8>*, sc_dt::sc_lv<64>, sc_dt::sc_lv<2>) + 0xa1' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 3    0x00007ffff28e2be0: 'pkt_buffer::tx() + 0x2c2' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 4    0x00007ffff28f509b: 'sc_core::scmti_execute_method_process(void*) + 0x9b' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# <-- END OF USERCODE
+# 5    0x0000000000437205: '<unknown (@0x437205)>'
+# 6    0x000000000053f624: '<unknown (@0x53f624)>'
+# 7    0x00000000008d6f53: '<unknown (@0x8d6f53)>'
+# 8    0x00000000008d841e: '<unknown (@0x8d841e)>'
+# 9    0x000000000142e4af: '<unknown (@0x142e4af)>'
+# 10   0x000000000142f669: '<unknown (@0x142f669)>'
+# 11   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 12   0x000000000147a95f: '<unknown (@0x147a95f)>'
+# 13   0x0000000001430983: '<unknown (@0x1430983)>'
+# 14   0x000000000143b814: '<unknown (@0x143b814)>'
+# 15   0x000000000142f669: '<unknown (@0x142f669)>'
+# 16   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 17   0x000000000147ac80: '<unknown (@0x147ac80)>'
+# 18   0x000000000142e053: '<unknown (@0x142e053)>'
+# 19   0x0000000001440b18: '<unknown (@0x1440b18)>'
+# 20   0x000000000142f669: '<unknown (@0x142f669)>'
+# 21   0x00000000014302b6: '<unknown (@0x14302b6)>'
+# 22   0x0000000001430636: '<unknown (@0x1430636)>'
+# 23   0x00000000011548bc: '<unknown (@0x11548bc)>'
+# 24   0x000000000148b681: '<unknown (@0x148b681)>'
+# 25   0x00000000014d4a11: '<unknown (@0x14d4a11)>'
+# 26   0x00000000014a113d: '<unknown (@0x14a113d)>'
+# 27   0x00000000014a1475: '<unknown (@0x14a1475)>'
+# 28   0x0000000001343e76: '<unknown (@0x1343e76)>'
+# 29   0x00000000008b991b: '<unknown (@0x8b991b)>'
+# End of Stack Trace
+
+

@@ -79,4 +79,4 @@ sccom -link -B/usr/bin/
 vsim -novopt work.glbl work.Top -t 1ps
 
 do wave.do
-run 300 ns
+run 600 ns
