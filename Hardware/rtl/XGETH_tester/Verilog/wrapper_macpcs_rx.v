@@ -39,7 +39,9 @@ module wrapper_macpcs_rx(
                         // Wishbone (XMAC)
                         wb_ack_o, wb_dat_o, wb_int_o,
                         // Para uso do Testbench
-            						start_fifo
+            						start_fifo,
+                        dump_xgmii_rxc,
+                        dump_xgmii_rxd
                         );
 
     // Clocks
@@ -143,6 +145,9 @@ module wrapper_macpcs_rx(
     output [31:0]   wb_dat_o;
     output          wb_int_o;
 
+    // Para uso do Testbench
+    output [7:0]    dump_xgmii_rxc;
+    output [63:0]   dump_xgmii_rxd;
 
     wire            tx_clk_161_13;
     wire            rx_clk_161_13;
@@ -160,6 +165,8 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*)
     wire [63:0]     xgmii_rxd;
 
+    assign dump_xgmii_rxc = xgmii_rxc;
+    assign dump_xgmii_rxd = xgmii_rxd;
 
     PCS_core INST_PCS_core
     (

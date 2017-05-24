@@ -18,7 +18,10 @@ entity tb_xgt4 is
 
     --pkt_tx_start  : in std_logic;
     data_out   : out std_logic_vector(63 downto 0);
-    header_out : out std_logic_vector(1 downto 0)
+    header_out : out std_logic_vector(1 downto 0);
+
+    dump_xgmii_txc : out std_logic_vector(7 downto 0);
+    dump_xgmii_txd : out std_logic_vector(63 downto 0)
   );
 end tb_xgt4;
 
@@ -86,6 +89,8 @@ architecture behav of tb_xgt4 is
         reset_rx_done       : in std_logic;
 
         start_fifo          : in std_logic;
+        dump_xgmii_txc      : out std_logic_vector(7 downto 0);
+        dump_xgmii_txd      : out std_logic_vector(63 downto 0);
 
         -- PCS Inputs
         rx_jtm_en           : in  std_logic;
@@ -130,7 +135,7 @@ architecture behav of tb_xgt4 is
         pkt_tx_mod          : in  std_logic_vector(2 downto 0);
         pkt_tx_sop          : in  std_logic;
         pkt_tx_val          : in  std_logic;
-            -- Wishbone (MAC)
+        -- Wishbone (MAC)
         wb_adr_i            : in  std_logic_vector(7 downto 0);
         wb_clk_i            : in  std_logic;
         wb_cyc_i            : in  std_logic;
@@ -192,6 +197,8 @@ begin
         --reset_rx_done       => reset_in,
 
         start_fifo => start_fifo,
+        dump_xgmii_txc => dump_xgmii_txc,
+        dump_xgmii_txd => dump_xgmii_txd,
 
         -- PCS IN
         rx_header_valid_in  => rx_header_valid_in,
@@ -304,7 +311,7 @@ begin
         payload_last_size   => (others=>'0'),
         pkt_lost_counter    => open
     );
---
+
     process
     begin
 
@@ -315,9 +322,13 @@ begin
         pkt_tx_start <= '1';
         wait until pkt_tx_eop = '1';
         pkt_tx_start <= '0';
+        --wait;
+        wait for 18 ns;
+        pkt_tx_start <= '1';
+        wait until pkt_tx_eop = '1';
+        pkt_tx_start <= '0';
         wait;
-        -- wait for 18 ns;
-      -- end loop;
+      --end loop;
 
     end process;
 

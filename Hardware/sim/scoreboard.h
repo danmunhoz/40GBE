@@ -1,5 +1,5 @@
 /*
-**  Modulo para commparar frames enviados vs. recebidos
+**  Modulo para comparar frames enviados vs. recebidos
 **
 */
 

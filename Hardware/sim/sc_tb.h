@@ -10,6 +10,7 @@
 #include "rx_xgt4.h"
 #include "scoreboard.h"
 #include "pkt_buffer.h"
+#include "dump_mii.h"
 
 SC_MODULE(Top) {
   sc_clock clk_156;
@@ -29,10 +30,13 @@ SC_MODULE(Top) {
 
   // TX
   sc_signal<sc_lv<64> > block_from_xgt4;
-  sc_signal<sc_lv<2> > header_from_xgt4;
+  sc_signal<sc_lv<2> >  header_from_xgt4;
+  sc_signal<sc_lv<8> >  dump_xgmii_txc;
+  sc_signal<sc_lv<64> > dump_xgmii_txd;
+  sc_signal<sc_lv<8> >  dump_xgmii_rxc;
+  sc_signal<sc_lv<64> > dump_xgmii_rxd;
 
   // RX
-
   sc_signal< sc_lv<64> >    block_to_xgt4;
   sc_signal< sc_logic  >    data_valid_xgt4;
   sc_signal< sc_lv<2>  >    header_to_xgt4;
@@ -54,6 +58,8 @@ SC_MODULE(Top) {
   rx_xgt4    * rx_xgt4_inst;
   scoreboard * scoreboard_inst;
   pkt_buffer * pkt_buffer_inst;
+  dump_mii   * dump_mii_tx_inst;
+  dump_mii   * dump_mii_rx_inst;
 
   void clock_assign();
   void reset_generator();
@@ -71,6 +77,8 @@ SC_MODULE(Top) {
     rx_xgt4_inst = new rx_xgt4("rx_xgt4","rx_xgt4");
     scoreboard_inst = new scoreboard("scoreboard");
     pkt_buffer_inst = new pkt_buffer("pkt_buffer");
+    dump_mii_tx_inst = new dump_mii("dump_mii_tx","dump_mii_tx.txt");
+    dump_mii_rx_inst = new dump_mii("dump_mii_rx","dump_mii_rx.txt");
 
     // Connections
     tb_xgt4_inst->clock_in156(iclock156);
@@ -80,7 +88,9 @@ SC_MODULE(Top) {
     tb_xgt4_inst->reset_in_mii_rx(reset_mii_rx);
     tb_xgt4_inst->data_out(block_from_xgt4);
     tb_xgt4_inst->header_out(header_from_xgt4);
-    //tb_xgt4_inst->pkt_tx_start(pkt_tx_start);
+    tb_xgt4_inst->dump_xgmii_txc(dump_xgmii_txc);
+    tb_xgt4_inst->dump_xgmii_txd(dump_xgmii_txd);
+    // tb_xgt4_inst->pkt_tx_start(pkt_tx_start);
 
     rx_xgt4_inst->clock_in156(iclock156);
     rx_xgt4_inst->clock_in161(iclock161);
@@ -92,6 +102,8 @@ SC_MODULE(Top) {
     rx_xgt4_inst->rx_data_valid_in(rx_data_valid_in);
     rx_xgt4_inst->rx_data_in(block_from_xgt4);
     rx_xgt4_inst->pkt_rx_data(block_from_mac_rx);
+    rx_xgt4_inst->dump_xgmii_rxc(dump_xgmii_rxc);
+    rx_xgt4_inst->dump_xgmii_rxd(dump_xgmii_rxd);
 
 
     rx_xgt4_inst->pkt_rx_eop(pkt_rx_eop);
@@ -107,6 +119,14 @@ SC_MODULE(Top) {
     pkt_buffer_inst->header_in(header_from_xgt4);
     pkt_buffer_inst->block_in(block_from_xgt4);
     pkt_buffer_inst->data_valid_in(rx_data_valid_in);
+
+    dump_mii_tx_inst->clock_in(iclock156);
+    dump_mii_tx_inst->mii_c(dump_xgmii_txc);
+    dump_mii_tx_inst->mii_d(dump_xgmii_txd);
+
+    dump_mii_rx_inst->clock_in(iclock156);
+    dump_mii_rx_inst->mii_c(dump_xgmii_rxc);
+    dump_mii_rx_inst->mii_d(dump_xgmii_rxd);
 
     SC_METHOD(clock_assign);
     sensitive << clk_156.signal();

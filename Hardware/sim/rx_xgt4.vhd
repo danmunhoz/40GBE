@@ -30,8 +30,11 @@ entity rx_xgt4 is
       pkt_rx_err          : out  std_logic;
       pkt_rx_mod          : out  std_logic_vector(2 downto 0);
       pkt_rx_sop          : out  std_logic;
-      pkt_rx_val          : out  std_logic
+      pkt_rx_val          : out  std_logic;
       --pkt_tx_full         : out  std_logic
+
+      dump_xgmii_rxc : out std_logic_vector(7 downto 0);
+      dump_xgmii_rxd : out std_logic_vector(63 downto 0)
 
       );
 end rx_xgt4;
@@ -100,6 +103,8 @@ architecture behav of rx_xgt4 is
           reset_rx_done       : in std_logic;
 
           start_fifo          : in std_logic;
+          dump_xgmii_rxc      : out std_logic_vector(7 downto 0);
+          dump_xgmii_rxd      : out std_logic_vector(63 downto 0);
 
           -- PCS Inputs
           rx_jtm_en           : in  std_logic;
@@ -199,6 +204,8 @@ begin
           reset_rx_done       => reset_in_mii_rx,
 
           start_fifo => start_fifo,
+          dump_xgmii_rxc => dump_xgmii_rxc,
+          dump_xgmii_rxd => dump_xgmii_rxd,
 
           -- PCS IN
           rx_header_valid_in  => rx_header_valid_in,
