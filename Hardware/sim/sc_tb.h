@@ -11,6 +11,7 @@
 #include "scoreboard.h"
 #include "pkt_buffer.h"
 #include "dump_mii.h"
+#include "fiber.h"
 
 SC_MODULE(Top) {
   sc_clock clk_156;
@@ -53,6 +54,16 @@ SC_MODULE(Top) {
   sc_signal<sc_logic>     rx_header_valid_in;
   sc_signal<sc_logic>     rx_data_valid_in;
 
+  //Sinais fiber
+  sc_signal<sc_lv<64 > > block_out_0;
+  sc_signal<sc_lv<2 > >  header_out_0;
+  sc_signal<sc_lv<64 > > block_out_1;
+  sc_signal<sc_lv<2 > >  header_out_1;
+  sc_signal<sc_lv<64 > > block_out_2;
+  sc_signal<sc_lv<2 > >  header_out_2;
+  sc_signal<sc_lv<64 > > block_out_3;
+  sc_signal<sc_lv<2 > >  header_out_3;
+
 
   tb_xgt4    * tb_xgt4_inst;
   rx_xgt4    * rx_xgt4_inst;
@@ -60,6 +71,7 @@ SC_MODULE(Top) {
   pkt_buffer * pkt_buffer_inst;
   dump_mii   * dump_mii_tx_inst;
   dump_mii   * dump_mii_rx_inst;
+  fiber      * fiber_inst;
 
   void clock_assign();
   void reset_generator();
@@ -79,6 +91,7 @@ SC_MODULE(Top) {
     pkt_buffer_inst = new pkt_buffer("pkt_buffer");
     dump_mii_tx_inst = new dump_mii("dump_mii_tx","dump_mii_tx.txt");
     dump_mii_rx_inst = new dump_mii("dump_mii_rx","dump_mii_rx.txt");
+    fiber_inst  = new fiber("fiber");
 
     // Connections
     tb_xgt4_inst->clock_in156(iclock156);
@@ -127,6 +140,16 @@ SC_MODULE(Top) {
     dump_mii_rx_inst->clock_in(iclock156);
     dump_mii_rx_inst->mii_c(dump_xgmii_rxc);
     dump_mii_rx_inst->mii_d(dump_xgmii_rxd);
+
+    fiber_inst->clock_in(iclock161);
+    fiber_inst->block_out_0(block_out_0);
+    fiber_inst->header_out_0(header_out_0);
+    fiber_inst->block_out_1(block_out_1);
+    fiber_inst->header_out_1(header_out_1);
+    fiber_inst->block_out_2(block_out_2);
+    fiber_inst->header_out_2(header_out_2);
+    fiber_inst->block_out_3(block_out_3);
+    fiber_inst->header_out_3(header_out_3);
 
     SC_METHOD(clock_assign);
     sensitive << clk_156.signal();

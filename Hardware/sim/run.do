@@ -73,6 +73,7 @@ scgenmod rx_xgt4 > rx_xgt4.h
 
 sccom scoreboard.cpp
 sccom pkt_buffer.cpp
+sccom fiber.cpp
 sccom -novopt -g sc_tb.cpp
 sccom -link -B/usr/bin/
 
