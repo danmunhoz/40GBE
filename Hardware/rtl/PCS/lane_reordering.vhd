@@ -5,20 +5,29 @@ use ieee.std_logic_arith.all;
 use ieee.numeric_std.all;
 
 entity application is
-  port 
+  port
   (
     clock           : in std_logic;
     reset           : in std_logic;
 
-    lane_0_data_in  : in std_logic_vector(65 downto 0);
-    lane_1_data_in  : in std_logic_vector(65 downto 0);
-    lane_2_data_in  : in std_logic_vector(65 downto 0);
-    lane_3_data_in  : in std_logic_vector(65 downto 0);
+    lane_0_data_in  : in std_logic_vector(63 downto 0);
+    lane_1_data_in  : in std_logic_vector(63 downto 0);
+    lane_2_data_in  : in std_logic_vector(63 downto 0);
+    lane_3_data_in  : in std_logic_vector(63 downto 0);
+
+    lane_0_header_in  : in std_logic_vector(1 downto 0);
+    lane_1_header_in  : in std_logic_vector(1 downto 0);
+    lane_2_header_in  : in std_logic_vector(1 downto 0);
+    lane_3_header_in  : in std_logic_vector(1 downto 0);
 
     pcs_0_data_out  : out std_logic_vector(63 downto 0);
     pcs_1_data_out  : out std_logic_vector(63 downto 0);
     pcs_2_data_out  : out std_logic_vector(63 downto 0);
-    pcs_3_data_out  : out std_logic_vector(63 downto 0)
+    pcs_3_data_out  : out std_logic_vector(63 downto 0);
+    pcs_0_header_out  : out std_logic_vector(1 downto 0);
+    pcs_1_header_out  : out std_logic_vector(1 downto 0);
+    pcs_2_header_out  : out std_logic_vector(1 downto 0);
+    pcs_3_header_out  : out std_logic_vector(1 downto 0)
   );
 end entity;
 
@@ -26,7 +35,7 @@ architecture behav of application is
 -- DEFINES
     type fsm_state is (S_INIT, S_END, S_SYNC)
     signal CURRENT_STATE, NEXT_STATE: fsm_state;
-    
+
     function check_sync_block(data_block: in std_logic_vector(65 downto 0)) return std_logic is
     begin
        case data_block is
@@ -59,7 +68,7 @@ begin
       end if;
     end process;
 
-    FSM_SEQ: 
+    FSM_SEQ:
     process(reset, clock)
     begin
     if reset = '1' then
@@ -83,7 +92,7 @@ begin
     end if;
     end process;
 
-    FSM_COMB: 
+    FSM_COMB:
     process()
     begin
         case CURRENT_STATE is
@@ -100,7 +109,7 @@ begin
                     NEXT_STATE <= S_TRANSMIT
 
                 else
-                
+
                 end if;
 
             when S_END  =>
