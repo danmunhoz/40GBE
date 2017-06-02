@@ -12,6 +12,7 @@
 #include "pkt_buffer.h"
 #include "dump_mii.h"
 #include "fiber.h"
+// #include "lane_reorder.h"
 
 SC_MODULE(Top) {
   sc_clock clk_156;
@@ -30,17 +31,31 @@ SC_MODULE(Top) {
   //sc_signal<sc_logic> pkt_tx_start;
 
   // TX
-  sc_signal<sc_lv<64> > block_from_xgt4;
-  sc_signal<sc_lv<2> >  header_from_xgt4;
   sc_signal<sc_lv<8> >  dump_xgmii_txc;
   sc_signal<sc_lv<64> > dump_xgmii_txd;
   sc_signal<sc_lv<8> >  dump_xgmii_rxc;
   sc_signal<sc_lv<64> > dump_xgmii_rxd;
 
+  sc_signal<sc_lv<64> > block_from_xgt4;
+  sc_signal<sc_lv<2> >  header_from_xgt4;
+
+  // sc_signal<sc_lv<64> > lane0_block_from_xgt4;
+  // sc_signal<sc_lv<2> >  lane0_header_from_xgt4;
+  //
+  // sc_signal<sc_lv<64> > lane1_block_from_xgt4;
+  // sc_signal<sc_lv<2> >  lane1_header_from_xgt4;
+  //
+  // sc_signal<sc_lv<64> > lane2_block_from_xgt4;
+  // sc_signal<sc_lv<2> >  lane2_header_from_xgt4;
+  //
+  // sc_signal<sc_lv<64> > lane3_block_from_xgt4;
+  // sc_signal<sc_lv<2> >  lane3_header_from_xgt4;
+
   // RX
-  sc_signal< sc_lv<64> >    block_to_xgt4;
+  //sc_signal< sc_lv<64> >    block_to_xgt4;
+  //sc_signal< sc_lv<2>  >    header_to_xgt4;
+
   sc_signal< sc_logic  >    data_valid_xgt4;
-  sc_signal< sc_lv<2>  >    header_to_xgt4;
   sc_signal< sc_logic  >    header_valid_xgt4;
   sc_signal< sc_lv<64> >    block_from_mac_rx;
 
@@ -64,14 +79,24 @@ SC_MODULE(Top) {
   sc_signal<sc_lv<64 > > block_out_3;
   sc_signal<sc_lv<2 > >  header_out_3;
 
+  sc_signal<sc_lv<64 > > pcs_0_block_out;
+  sc_signal<sc_lv<64 > > pcs_1_block_out;
+  sc_signal<sc_lv<64 > > pcs_2_block_out;
+  sc_signal<sc_lv<64 > > pcs_3_block_out;
+  sc_signal<sc_lv<2 > > pcs_0_header_out;
+  sc_signal<sc_lv<2 > > pcs_1_header_out;
+  sc_signal<sc_lv<2 > > pcs_2_header_out;
+  sc_signal<sc_lv<2 > > pcs_3_header_out;
 
-  tb_xgt4    * tb_xgt4_inst;
-  rx_xgt4    * rx_xgt4_inst;
-  scoreboard * scoreboard_inst;
-  pkt_buffer * pkt_buffer_inst;
-  dump_mii   * dump_mii_tx_inst;
-  dump_mii   * dump_mii_rx_inst;
-  fiber      * fiber_inst;
+
+  tb_xgt4      * tb_xgt4_inst;
+  rx_xgt4      * rx_xgt4_inst;
+  scoreboard   * scoreboard_inst;
+  pkt_buffer   * pkt_buffer_inst;
+  dump_mii     * dump_mii_tx_inst;
+  dump_mii     * dump_mii_rx_inst;
+  fiber        * fiber_inst;
+  // lane_reorder * lane_reorder_inst;
 
   void clock_assign();
   void reset_generator();
@@ -81,8 +106,8 @@ SC_MODULE(Top) {
  SC_CTOR(Top): clk_156("clk_156", 6.4, SC_NS, 0.5, 0.0, SC_NS, false),
                clk_161("clk_161", 6.2, SC_NS, 0.5, 0.0, SC_NS, false),
                iclock156("iclock156"), iclock161("iclock161"), block_from_xgt4("block_from_xgt4"), header_from_xgt4("header_from_xgt4"),
-               block_to_xgt4("block_to_xgt4"), data_valid_xgt4("data_valid_xgt4"), header_to_xgt4("header_to_xgt4"),
-               header_valid_xgt4("header_valid_xgt4"), block_from_mac_rx("block_from_mac_rx") {
+               //block_to_xgt4("block_to_xgt4"), data_valid_xgt4("data_valid_xgt4"), header_to_xgt4("header_to_xgt4"),
+               data_valid_xgt4("data_valid_xgt4"), header_valid_xgt4("header_valid_xgt4"), block_from_mac_rx("block_from_mac_rx") {
 
     // Creating instances
     tb_xgt4_inst = new tb_xgt4("tb_xgt4","tb_xgt4");
@@ -92,6 +117,7 @@ SC_MODULE(Top) {
     dump_mii_tx_inst = new dump_mii("dump_mii_tx","dump_mii_tx.txt");
     dump_mii_rx_inst = new dump_mii("dump_mii_rx","dump_mii_rx.txt");
     fiber_inst  = new fiber("fiber");
+    // lane_reorder_inst = new lane_reorder("lane_reorder", "lane_reorder");
 
     // Connections
     tb_xgt4_inst->clock_in156(iclock156);
@@ -108,15 +134,31 @@ SC_MODULE(Top) {
     rx_xgt4_inst->clock_in156(iclock156);
     rx_xgt4_inst->clock_in161(iclock161);
     rx_xgt4_inst->reset_in(reset);
-    rx_xgt4_inst->reset_in_mii_tx(reset_mii_tx);
-    rx_xgt4_inst->reset_in_mii_rx(reset_mii_rx);
-    rx_xgt4_inst->rx_header_valid_in(rx_header_valid_in);
-    rx_xgt4_inst->rx_header_in(header_from_xgt4);
-    rx_xgt4_inst->rx_data_valid_in(rx_data_valid_in);
-    rx_xgt4_inst->rx_data_in(block_from_xgt4);
-    rx_xgt4_inst->pkt_rx_data(block_from_mac_rx);
     rx_xgt4_inst->dump_xgmii_rxc(dump_xgmii_rxc);
     rx_xgt4_inst->dump_xgmii_rxd(dump_xgmii_rxd);
+    rx_xgt4_inst->reset_in_mii_tx(reset_mii_tx);
+    rx_xgt4_inst->reset_in_mii_rx(reset_mii_rx);
+    rx_xgt4_inst->pkt_rx_data(block_from_mac_rx);
+
+    rx_xgt4_inst->rx_lane_0_header_valid_in(rx_header_valid_in);
+    rx_xgt4_inst->rx_lane_0_header_in(header_from_xgt4);
+    rx_xgt4_inst->rx_lane_0_data_valid_in(rx_data_valid_in);
+    rx_xgt4_inst->rx_lane_0_data_in(block_from_xgt4);
+
+    rx_xgt4_inst->rx_lane_1_header_valid_in(rx_header_valid_in);
+    rx_xgt4_inst->rx_lane_1_header_in(header_from_xgt4);
+    rx_xgt4_inst->rx_lane_1_data_valid_in(rx_data_valid_in);
+    rx_xgt4_inst->rx_lane_1_data_in(block_from_xgt4);
+
+    rx_xgt4_inst->rx_lane_2_header_valid_in(rx_header_valid_in);
+    rx_xgt4_inst->rx_lane_2_header_in(header_from_xgt4);
+    rx_xgt4_inst->rx_lane_2_data_valid_in(rx_data_valid_in);
+    rx_xgt4_inst->rx_lane_2_data_in(block_from_xgt4);
+
+    rx_xgt4_inst->rx_lane_3_header_valid_in(rx_header_valid_in);
+    rx_xgt4_inst->rx_lane_3_header_in(header_from_xgt4);
+    rx_xgt4_inst->rx_lane_3_data_valid_in(rx_data_valid_in);
+    rx_xgt4_inst->rx_lane_3_data_in(block_from_xgt4);
 
 
     rx_xgt4_inst->pkt_rx_eop(pkt_rx_eop);
@@ -150,6 +192,24 @@ SC_MODULE(Top) {
     fiber_inst->header_out_2(header_out_2);
     fiber_inst->block_out_3(block_out_3);
     fiber_inst->header_out_3(header_out_3);
+
+    //INSTACIANDO NO TOP POR AGORA PARA TESTER... DEPOIS VAI PRA DENTRO DO WRAPPER...
+    // lane_reorder_inst->lane_0_block_in(block_out_0);
+    // lane_reorder_inst->lane_1_block_in(block_out_1);
+    // lane_reorder_inst->lane_2_block_in(block_out_2);
+    // lane_reorder_inst->lane_3_block_in(block_out_3);
+    // lane_reorder_inst->lane_0_header_in(header_out_0);
+    // lane_reorder_inst->lane_1_header_in(header_out_1);
+    // lane_reorder_inst->lane_2_header_in(header_out_2);
+    // lane_reorder_inst->lane_3_header_in(header_out_3);
+    // lane_reorder_inst->pcs_0_block_out(pcs_0_block_out);
+    // lane_reorder_inst->pcs_1_block_out(pcs_1_block_out);
+    // lane_reorder_inst->pcs_2_block_out(pcs_2_block_out);
+    // lane_reorder_inst->pcs_3_block_out(pcs_3_block_out);
+    // lane_reorder_inst->pcs_0_header_out(pcs_0_header_out);
+    // lane_reorder_inst->pcs_1_header_out(pcs_1_header_out);
+    // lane_reorder_inst->pcs_2_header_out(pcs_2_header_out);
+    // lane_reorder_inst->pcs_3_header_out(pcs_3_header_out);
 
     SC_METHOD(clock_assign);
     sensitive << clk_156.signal();

@@ -30,7 +30,7 @@ public:
   {
     dump_file.open(file_name.c_str());
     if (dump_file.is_open()){
-      cout << "File "<< file_name << " opened." << endl;
+      cout << "[dump_mii] File "<< file_name << " opened." << endl;
     } else {
       cout << "ERROR opening " << file_name << endl;
     }

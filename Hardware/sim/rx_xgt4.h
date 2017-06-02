@@ -11,10 +11,22 @@ public:
     sc_in<sc_logic> reset_in;
     sc_in<sc_logic> reset_in_mii_tx;
     sc_in<sc_logic> reset_in_mii_rx;
-    sc_in<sc_logic> rx_header_valid_in;
-    sc_in<sc_lv<2> > rx_header_in;
-    sc_in<sc_logic> rx_data_valid_in;
-    sc_in<sc_lv<64> > rx_data_in;
+    sc_in<sc_logic> rx_lane_0_header_valid_in;
+    sc_in<sc_lv<2> > rx_lane_0_header_in;
+    sc_in<sc_logic> rx_lane_0_data_valid_in;
+    sc_in<sc_lv<64> > rx_lane_0_data_in;
+    sc_in<sc_logic> rx_lane_1_header_valid_in;
+    sc_in<sc_lv<2> > rx_lane_1_header_in;
+    sc_in<sc_logic> rx_lane_1_data_valid_in;
+    sc_in<sc_lv<64> > rx_lane_1_data_in;
+    sc_in<sc_logic> rx_lane_2_header_valid_in;
+    sc_in<sc_lv<2> > rx_lane_2_header_in;
+    sc_in<sc_logic> rx_lane_2_data_valid_in;
+    sc_in<sc_lv<64> > rx_lane_2_data_in;
+    sc_in<sc_logic> rx_lane_3_header_valid_in;
+    sc_in<sc_lv<2> > rx_lane_3_header_in;
+    sc_in<sc_logic> rx_lane_3_data_valid_in;
+    sc_in<sc_lv<64> > rx_lane_3_data_in;
     sc_out<sc_logic> pkt_rx_avail;
     sc_out<sc_lv<64> > pkt_rx_data;
     sc_out<sc_logic> pkt_rx_eop;
@@ -33,10 +45,22 @@ public:
        reset_in("reset_in"),
        reset_in_mii_tx("reset_in_mii_tx"),
        reset_in_mii_rx("reset_in_mii_rx"),
-       rx_header_valid_in("rx_header_valid_in"),
-       rx_header_in("rx_header_in"),
-       rx_data_valid_in("rx_data_valid_in"),
-       rx_data_in("rx_data_in"),
+       rx_lane_0_header_valid_in("rx_lane_0_header_valid_in"),
+       rx_lane_0_header_in("rx_lane_0_header_in"),
+       rx_lane_0_data_valid_in("rx_lane_0_data_valid_in"),
+       rx_lane_0_data_in("rx_lane_0_data_in"),
+       rx_lane_1_header_valid_in("rx_lane_1_header_valid_in"),
+       rx_lane_1_header_in("rx_lane_1_header_in"),
+       rx_lane_1_data_valid_in("rx_lane_1_data_valid_in"),
+       rx_lane_1_data_in("rx_lane_1_data_in"),
+       rx_lane_2_header_valid_in("rx_lane_2_header_valid_in"),
+       rx_lane_2_header_in("rx_lane_2_header_in"),
+       rx_lane_2_data_valid_in("rx_lane_2_data_valid_in"),
+       rx_lane_2_data_in("rx_lane_2_data_in"),
+       rx_lane_3_header_valid_in("rx_lane_3_header_valid_in"),
+       rx_lane_3_header_in("rx_lane_3_header_in"),
+       rx_lane_3_data_valid_in("rx_lane_3_data_valid_in"),
+       rx_lane_3_data_in("rx_lane_3_data_in"),
        pkt_rx_avail("pkt_rx_avail"),
        pkt_rx_data("pkt_rx_data"),
        pkt_rx_eop("pkt_rx_eop"),

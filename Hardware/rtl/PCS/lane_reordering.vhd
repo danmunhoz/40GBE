@@ -4,7 +4,7 @@ use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 use ieee.numeric_std.all;
 
-entity application is
+entity lane_reorder is
   port
   (
     clock           : in std_logic;
@@ -24,6 +24,7 @@ entity application is
     pcs_1_data_out  : out std_logic_vector(63 downto 0);
     pcs_2_data_out  : out std_logic_vector(63 downto 0);
     pcs_3_data_out  : out std_logic_vector(63 downto 0);
+
     pcs_0_header_out  : out std_logic_vector(1 downto 0);
     pcs_1_header_out  : out std_logic_vector(1 downto 0);
     pcs_2_header_out  : out std_logic_vector(1 downto 0);
@@ -31,16 +32,16 @@ entity application is
   );
 end entity;
 
-architecture behav of application is
+architecture behav of lane_reorder is
 -- DEFINES
-    type fsm_state is (S_INIT, S_END, S_SYNC)
+    type fsm_state is (S_INIT, S_END, S_SYNC, S_TRANSMIT);
     signal CURRENT_STATE, NEXT_STATE: fsm_state;
 
-    function check_sync_block(data_block: in std_logic_vector(65 downto 0)) return std_logic is
+    function check_sync_block(data_block: in std_logic_vector(63 downto 0)) return std_logic is
     begin
        case data_block is
-         when x"11111111111111111111111111111111" => return '1';
-         when x"00000000000000000000000000000000" => return '0';
+         when (others=>'1') => return '1';
+         when (others=>'0') => return '0';
          when others => return '0';
        end case;
     end check_sync_block;  --
@@ -93,7 +94,7 @@ begin
     end process;
 
     FSM_COMB:
-    process()
+    process
     begin
         case CURRENT_STATE is
 
@@ -106,7 +107,7 @@ begin
 
             when S_SYNC =>
                 if lane_sync = "1111" then
-                    NEXT_STATE <= S_TRANSMIT
+                    NEXT_STATE <= S_TRANSMIT;
 
                 else
 

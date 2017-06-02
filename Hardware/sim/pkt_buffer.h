@@ -278,30 +278,30 @@ SC_MODULE(pkt_buffer) {
 
     lane0.open("lane0.txt");
     if (lane0.is_open()){
-      cout << "File lane0.txt opened." << endl;
+      cout << "[pkt_buffer] File lane0.txt opened." << endl;
     } else {
-      cout << "ERROR opening lane0.txt" << endl;
+      cout << "[pkt_buffer] ERROR opening lane0.txt" << endl;
     }
 
     lane1.open("lane1.txt");
     if (lane1.is_open()){
-      cout << "File lane1.txt opened." << endl;
+      cout << "[pkt_buffer] File lane1.txt opened." << endl;
     } else {
-      cout << "ERROR opening lane1.txt" << endl;
+      cout << "[pkt_buffer] ERROR opening lane1.txt" << endl;
     }
 
     lane2.open("lane2.txt");
     if (lane2.is_open()){
-      cout << "File lane2.txt opened." << endl;
+      cout << "[pkt_buffer] File lane2.txt opened." << endl;
     } else {
-      cout << "ERROR opening lane2.txt" << endl;
+      cout << "[pkt_buffer] ERROR opening lane2.txt" << endl;
     }
 
     lane3.open("lane3.txt");
     if (lane3.is_open()){
-      cout << "File lane3.txt opened." << endl;
+      cout << "[pkt_buffer] File lane3.txt opened." << endl;
     } else {
-      cout << "ERROR opening lane3.txt" << endl;
+      cout << "[pkt_buffer] ERROR opening lane3.txt" << endl;
     }
 
     SC_METHOD(rx);

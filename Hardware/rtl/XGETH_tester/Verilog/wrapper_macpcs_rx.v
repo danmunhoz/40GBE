@@ -31,7 +31,10 @@ module wrapper_macpcs_rx(
                         // ------------- Outputs -------------//
 
                         // PHY -> Input of PCS
-                       rx_header_valid_in, rx_header_in, rx_data_in, rx_data_valid_in,
+                        rx_lane_0_header_valid_in, rx_lane_0_header_in, rx_lane_0_data_in, rx_lane_0_data_valid_in,
+                        rx_lane_1_header_valid_in, rx_lane_1_header_in, rx_lane_1_data_in, rx_lane_1_data_valid_in,
+                        rx_lane_2_header_valid_in, rx_lane_2_header_in, rx_lane_2_data_in, rx_lane_2_data_valid_in,
+                        rx_lane_3_header_valid_in, rx_lane_3_header_in, rx_lane_3_data_in, rx_lane_3_data_valid_in,
                         // PCS
                         jtest_errc, ber_cnt, hi_ber, blk_lock, linkstatus, rx_fifo_spill, tx_fifo_spill, rxlf, txlf, errd_blks,
                         // XMAC
@@ -72,14 +75,26 @@ module wrapper_macpcs_rx(
     input         jtm_dps_1;
     input [57:0]  seed_A;
     input [57:0]  seed_B;
-    (* KEEP = "true" *)
-    input        rx_header_valid_in;
-    (* KEEP = "true" *)
-    input [1:0]  rx_header_in;
-    (* KEEP = "true" *)
-    input        rx_data_valid_in;
-    (* KEEP = "true" *)
-    input [63:0] rx_data_in;
+
+    (* KEEP = "true" *) input        rx_lane_0_header_valid_in;
+    (* KEEP = "true" *) input [1:0]  rx_lane_0_header_in;
+    (* KEEP = "true" *) input        rx_lane_0_data_valid_in;
+    (* KEEP = "true" *) input [63:0] rx_lane_0_data_in;
+
+    (* KEEP = "true" *) input        rx_lane_1_header_valid_in;
+    (* KEEP = "true" *) input [1:0]  rx_lane_1_header_in;
+    (* KEEP = "true" *) input        rx_lane_1_data_valid_in;
+    (* KEEP = "true" *) input [63:0] rx_lane_1_data_in;
+
+    (* KEEP = "true" *) input        rx_lane_2_header_valid_in;
+    (* KEEP = "true" *) input [1:0]  rx_lane_2_header_in;
+    (* KEEP = "true" *) input        rx_lane_2_data_valid_in;
+    (* KEEP = "true" *) input [63:0] rx_lane_2_data_in;
+
+    (* KEEP = "true" *) input        rx_lane_3_header_valid_in;
+    (* KEEP = "true" *) input [1:0]  rx_lane_3_header_in;
+    (* KEEP = "true" *) input        rx_lane_3_data_valid_in;
+    (* KEEP = "true" *) input [63:0] rx_lane_3_data_in;
 
     //For Testbench use
 		input					start_fifo;
@@ -155,20 +170,31 @@ module wrapper_macpcs_rx(
     wire            async_reset_n;
 
 
-// MAC/PCS XGMII Interconnection
-    (* syn_keep = "true"*)
-    wire [7:0]      xgmii_txc;
-    (* syn_keep = "true"*)
-    wire [63:0]     xgmii_txd;
-    (* syn_keep = "true"*)
-    wire [7:0]      xgmii_rxc;
-    (* syn_keep = "true"*)
-    wire [63:0]     xgmii_rxd;
+    // MAC/PCS XGMII Interconnection
+    (* syn_keep = "true"*) wire [7:0]  xgmii_txc_lane_0;
+    (* syn_keep = "true"*) wire [63:0] xgmii_txd_lane_0;
+    (* syn_keep = "true"*) wire [7:0]  xgmii_rxc_lane_0;
+    (* syn_keep = "true"*) wire [63:0] xgmii_rxd_lane_0;
 
-    assign dump_xgmii_rxc = xgmii_rxc;
-    assign dump_xgmii_rxd = xgmii_rxd;
+    (* syn_keep = "true"*) wire [7:0]  xgmii_txc_lane_1;
+    (* syn_keep = "true"*) wire [63:0] xgmii_txd_lane_1;
+    (* syn_keep = "true"*) wire [7:0]  xgmii_rxc_lane_1;
+    (* syn_keep = "true"*) wire [63:0] xgmii_rxd_lane_1;
 
-    PCS_core INST_PCS_core
+    (* syn_keep = "true"*) wire [7:0]  xgmii_txc_lane_2;
+    (* syn_keep = "true"*) wire [63:0] xgmii_txd_lane_2;
+    (* syn_keep = "true"*) wire [7:0]  xgmii_rxc_lane_2;
+    (* syn_keep = "true"*) wire [63:0] xgmii_rxd_lane_2;
+
+    (* syn_keep = "true"*) wire [7:0]  xgmii_txc_lane_3;
+    (* syn_keep = "true"*) wire [63:0] xgmii_txd_lane_3;
+    (* syn_keep = "true"*) wire [7:0]  xgmii_rxc_lane_3;
+    (* syn_keep = "true"*) wire [63:0] xgmii_rxd_lane_3;
+
+    assign dump_xgmii_rxc = xgmii_rxc_lane_0;
+    assign dump_xgmii_rxd = xgmii_rxd_lane_0;
+
+    PCS_core INST_0_PCS_core
     (
         // CLOCKS
         .clk156             (clk_156),
@@ -194,10 +220,10 @@ module wrapper_macpcs_rx(
         .jtm_dps_1          (jtm_dps_1),
         .seed_A             (seed_A),
         .seed_B             (seed_B),
-        .rx_header_valid_in (rx_header_valid_in),
-        .rx_header_in       (rx_header_in[1:0]),
-        .rx_data_valid_in   (rx_data_valid_in),
-        .rx_data_in         (rx_data_in[63:0]),
+        .rx_header_valid_in (rx_lane_0_header_valid_in),
+        .rx_header_in       (rx_lane_0_header_in[1:0]),
+        .rx_data_valid_in   (rx_lane_0_data_valid_in),
+        .rx_data_in         (rx_lane_0_data_in[63:0]),
         .hi_ber             (hi_ber),
         .blk_lock           (blk_lock),
         .linkstatus         (linkstatus),
@@ -212,10 +238,160 @@ module wrapper_macpcs_rx(
         .tx_header_out      (tx_header_out[1:0]),
         .rxgearboxslip_out  (rxgearboxslip_out),
         .tx_sequence_out    (tx_sequence_out),
-        .xgmii_txc          (xgmii_txc),
-        .xgmii_txd          (xgmii_txd),
-        .xgmii_rxd          (xgmii_rxd),
-        .xgmii_rxc          (xgmii_rxc)
+        .xgmii_txc          (xgmii_txc_lane_0),
+        .xgmii_txd          (xgmii_txd_lane_0),
+        .xgmii_rxd          (xgmii_rxd_lane_0),
+        .xgmii_rxc          (xgmii_rxc_lane_0)
+    );
+
+    PCS_core INST_1_PCS_core
+    (
+        // CLOCKS
+        .clk156             (clk_156),
+        .tx_clk161          (tx_clk_161_13),
+        .rx_clk161          (rx_clk_161_13),
+        // RESETS
+        .arstb              (async_reset_n),
+        .reset_tx_n         (reset_tx_n),
+        .reset_rx_n         (reset_rx_n),
+
+        .start_fifo         (start_fifo),
+
+        // PCS Signals
+        .rx_jtm_en          (rx_jtm_en),
+        .bypass_descram     (bypass_descram),
+        .bypass_scram       (bypass_scram),
+        .bypass_66decoder   (bypass_66decoder),
+        .bypass_66encoder   (bypass_66encoder),
+        .clear_errblk       (clear_errblk),
+        .clear_ber_cnt      (clear_ber_cnt),
+        .tx_jtm_en          (tx_jtm_en),
+        .jtm_dps_0          (jtm_dps_0),
+        .jtm_dps_1          (jtm_dps_1),
+        .seed_A             (seed_A),
+        .seed_B             (seed_B),
+        .rx_header_valid_in (rx_lane_1_header_valid_in),
+        .rx_header_in       (rx_lane_1_header_in[1:0]),
+        .rx_data_valid_in   (rx_lane_1_data_valid_in),
+        .rx_data_in         (rx_lane_1_data_in[63:0]),
+        .hi_ber             (hi_ber),
+        .blk_lock           (blk_lock),
+        .linkstatus         (linkstatus),
+        .rx_fifo_spill      (rx_fifo_spill),
+        .tx_fifo_spill      (tx_fifo_spill),
+        .rxlf               (rxlf),
+        .txlf               (txlf),
+        .ber_cnt            (ber_cnt[5:0]),
+        .errd_blks          (errd_blks[7:0]),
+        .jtest_errc         (jtest_errc[15:0]),
+        .tx_data_out        (tx_data_out[63:0]),
+        .tx_header_out      (tx_header_out[1:0]),
+        .rxgearboxslip_out  (rxgearboxslip_out),
+        .tx_sequence_out    (tx_sequence_out),
+        .xgmii_txc          (xgmii_txc_lane_1),
+        .xgmii_txd          (xgmii_txd_lane_1),
+        .xgmii_rxd          (xgmii_rxd_lane_1),
+        .xgmii_rxc          (xgmii_rxc_lane_1)
+    );
+
+    PCS_core INST_2_PCS_core
+    (
+        // CLOCKS
+        .clk156             (clk_156),
+        .tx_clk161          (tx_clk_161_13),
+        .rx_clk161          (rx_clk_161_13),
+        // RESETS
+        .arstb              (async_reset_n),
+        .reset_tx_n         (reset_tx_n),
+        .reset_rx_n         (reset_rx_n),
+
+        .start_fifo         (start_fifo),
+
+        // PCS Signals
+        .rx_jtm_en          (rx_jtm_en),
+        .bypass_descram     (bypass_descram),
+        .bypass_scram       (bypass_scram),
+        .bypass_66decoder   (bypass_66decoder),
+        .bypass_66encoder   (bypass_66encoder),
+        .clear_errblk       (clear_errblk),
+        .clear_ber_cnt      (clear_ber_cnt),
+        .tx_jtm_en          (tx_jtm_en),
+        .jtm_dps_0          (jtm_dps_0),
+        .jtm_dps_1          (jtm_dps_1),
+        .seed_A             (seed_A),
+        .seed_B             (seed_B),
+        .rx_header_valid_in (rx_lane_2_header_valid_in),
+        .rx_header_in       (rx_lane_2_header_in[1:0]),
+        .rx_data_valid_in   (rx_lane_2_data_valid_in),
+        .rx_data_in         (rx_lane_2_data_in[63:0]),
+        .hi_ber             (hi_ber),
+        .blk_lock           (blk_lock),
+        .linkstatus         (linkstatus),
+        .rx_fifo_spill      (rx_fifo_spill),
+        .tx_fifo_spill      (tx_fifo_spill),
+        .rxlf               (rxlf),
+        .txlf               (txlf),
+        .ber_cnt            (ber_cnt[5:0]),
+        .errd_blks          (errd_blks[7:0]),
+        .jtest_errc         (jtest_errc[15:0]),
+        .tx_data_out        (tx_data_out[63:0]),
+        .tx_header_out      (tx_header_out[1:0]),
+        .rxgearboxslip_out  (rxgearboxslip_out),
+        .tx_sequence_out    (tx_sequence_out),
+        .xgmii_txc          (xgmii_txc_lane_2),
+        .xgmii_txd          (xgmii_txd_lane_2),
+        .xgmii_rxd          (xgmii_rxd_lane_2),
+        .xgmii_rxc          (xgmii_rxc_lane_2)
+    );
+
+    PCS_core INST_3_PCS_core
+    (
+        // CLOCKS
+        .clk156             (clk_156),
+        .tx_clk161          (tx_clk_161_13),
+        .rx_clk161          (rx_clk_161_13),
+        // RESETS
+        .arstb              (async_reset_n),
+        .reset_tx_n         (reset_tx_n),
+        .reset_rx_n         (reset_rx_n),
+
+        .start_fifo         (start_fifo),
+
+        // PCS Signals
+        .rx_jtm_en          (rx_jtm_en),
+        .bypass_descram     (bypass_descram),
+        .bypass_scram       (bypass_scram),
+        .bypass_66decoder   (bypass_66decoder),
+        .bypass_66encoder   (bypass_66encoder),
+        .clear_errblk       (clear_errblk),
+        .clear_ber_cnt      (clear_ber_cnt),
+        .tx_jtm_en          (tx_jtm_en),
+        .jtm_dps_0          (jtm_dps_0),
+        .jtm_dps_1          (jtm_dps_1),
+        .seed_A             (seed_A),
+        .seed_B             (seed_B),
+        .rx_header_valid_in (rx_lane_3_header_valid_in),
+        .rx_header_in       (rx_lane_3_header_in[1:0]),
+        .rx_data_valid_in   (rx_lane_3_data_valid_in),
+        .rx_data_in         (rx_lane_3_data_in[63:0]),
+        .hi_ber             (hi_ber),
+        .blk_lock           (blk_lock),
+        .linkstatus         (linkstatus),
+        .rx_fifo_spill      (rx_fifo_spill),
+        .tx_fifo_spill      (tx_fifo_spill),
+        .rxlf               (rxlf),
+        .txlf               (txlf),
+        .ber_cnt            (ber_cnt[5:0]),
+        .errd_blks          (errd_blks[7:0]),
+        .jtest_errc         (jtest_errc[15:0]),
+        .tx_data_out        (tx_data_out[63:0]),
+        .tx_header_out      (tx_header_out[1:0]),
+        .rxgearboxslip_out  (rxgearboxslip_out),
+        .tx_sequence_out    (tx_sequence_out),
+        .xgmii_txc          (xgmii_txc_lane_3),
+        .xgmii_txd          (xgmii_txd_lane_3),
+        .xgmii_rxd          (xgmii_rxd_lane_3),
+        .xgmii_rxc          (xgmii_rxc_lane_3)
     );
 
 
@@ -256,11 +432,10 @@ module wrapper_macpcs_rx(
         .wb_dat_o           (wb_dat_o),
         .wb_int_o           (wb_int_o),
 
-        .xgmii_txc          (xgmii_txc),
-        .xgmii_txd          (xgmii_txd),
-
-        .xgmii_rxc          (xgmii_rxc),
-        .xgmii_rxd          (xgmii_rxd)
+        .xgmii_txc          (xgmii_txc_lane_0),
+        .xgmii_txd          (xgmii_txd_lane_0),
+        .xgmii_rxc          (xgmii_rxc_lane_0),
+        .xgmii_rxd          (xgmii_rxd_lane_0)
     );
 
 endmodule
