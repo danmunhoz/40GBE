@@ -1,16 +1,25 @@
-# do run.do
+# //  ModelSim SE-64 10.3c Jul 18 2014 Linux 4.4.0-78-generic
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+do run.do
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:07 on Jun 02,2017
-# vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/glbl.v 
+# Start time: 14:33:54 on Jun 06,2017
+# vlog -reportprogress 300 -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/glbl.v 
 # -- Compiling module glbl
 # 
 # Top level modules:
 # 	glbl
-# End time: 15:02:07 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:33:54 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:07 on Jun 02,2017
-# vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND2B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND2B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND3B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND3B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND3B3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND4B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND4B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND4B3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND4B4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND5B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND5B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND5B3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND5B4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND5B5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND6.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND7.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND8.v 
+# Start time: 14:33:54 on Jun 06,2017
+# vlog -reportprogress 300 -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND2B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND2B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND3B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND3B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND3B3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND4B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND4B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND4B3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND4B4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND5B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND5B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND5B3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND5B4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND5B5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND6.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND7.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/AND8.v 
 # /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/BUF.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/BUFE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/BUFFOE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/BUFG.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/BUFGSR.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/BUFGTS.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/BUFT.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV10.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV10R.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV10RSD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV10SD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV12.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV12R.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV12RSD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV12SD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV14.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV14R.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV14RSD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV14SD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV16.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV16R.v 
 # /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV16RSD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV16SD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV2R.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV2RSD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV2SD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV4R.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV4RSD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV4SD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV6.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV6R.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV6RSD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV6SD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV8.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV8R.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV8RSD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CLK_DIV8SD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/CONFIG.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FDCE.v 
 # /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FDCP.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FDCPE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FDD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FDDC.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FDDCE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FDDCP.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FDDCPE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FDDP.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FDDPE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FDPE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FTC.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FTCP.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/FTP.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/GND.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/IBUF.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/ILD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/INV.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/IOBUFE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/KEEP.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/KEEPER.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/LD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/LDCP.v 
@@ -344,11 +353,11 @@
 # 	XOR3
 # 	XOR4
 # 	XOR5
-# End time: 15:02:07 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:33:54 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:07 on Jun 02,2017
-# vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/ADDMACC_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/ADDSUB_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/BRAM_SDP_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/BRAM_SINGLE_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/BRAM_TDP_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/COUNTER_LOAD_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/COUNTER_TC_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/EQ_COMPARE_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/FIFO_DUALCLOCK_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/FIFO_SYNC_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/MACC_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/MULT_MACRO.v 
+# Start time: 14:33:54 on Jun 06,2017
+# vlog -reportprogress 300 -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/ADDMACC_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/ADDSUB_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/BRAM_SDP_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/BRAM_SINGLE_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/BRAM_TDP_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/COUNTER_LOAD_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/COUNTER_TC_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/EQ_COMPARE_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/FIFO_DUALCLOCK_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/FIFO_SYNC_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/MACC_MACRO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/MULT_MACRO.v 
 # -- Compiling module ADDMACC_MACRO
 # -- Compiling module ADDSUB_MACRO
 # -- Compiling module BRAM_SDP_MACRO
@@ -375,11 +384,11 @@
 # 	FIFO_SYNC_MACRO
 # 	MACC_MACRO
 # 	MULT_MACRO
-# End time: 15:02:08 on Jun 02,2017, Elapsed time: 0:00:01
+# End time: 14:33:55 on Jun 06,2017, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:08 on Jun 02,2017
-# vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AFIFO36_INTERNAL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND2B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND2B1L.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND2B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND3B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND3B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND3B3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND4B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND4B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND4B3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND4B4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND5B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND5B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND5B3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND5B4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND5B5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/ARAMB36_INTERNAL.v 
+# Start time: 14:33:55 on Jun 06,2017
+# vlog -reportprogress 300 -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AFIFO36_INTERNAL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND2B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND2B1L.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND2B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND3B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND3B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND3B3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND4B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND4B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND4B3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND4B4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND5B1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND5B2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND5B3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND5B4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AND5B5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/ARAMB36_INTERNAL.v 
 # /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/AUTOBUF.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BSCANE2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BSCAN_FPGACORE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BSCAN_SPARTAN3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BSCAN_SPARTAN3A.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BSCAN_SPARTAN6.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BSCAN_VIRTEX4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BSCAN_VIRTEX5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BSCAN_VIRTEX6.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUF.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFCF.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFG.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFGCE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFGCE_1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFGCTRL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFGDLL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFGMUX.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFGMUX_1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFGMUX_CTRL.v 
 # /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFGMUX_VIRTEX4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFGP.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFG_LB.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFH.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFHCE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFIO.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFIO2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFIO2FB.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFIO2_2CLK.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFIODQS.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFMR.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFMRCE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFPLL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFPLL_MCB.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFR.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/BUFT.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CAPTUREE2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CAPTURE_FPGACORE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CAPTURE_SPARTAN3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CAPTURE_SPARTAN3A.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CAPTURE_VIRTEX4.v 
 # /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CAPTURE_VIRTEX5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CAPTURE_VIRTEX6.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CARRY4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CFGLUT5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CLKDLL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CLKDLLE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CLKDLLHF.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CONFIG.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CRC32.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/CRC64.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/DCIRESET.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/DCM.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/DCM_ADV.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/DCM_BASE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/DCM_CLKGEN.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/DCM_PS.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/DCM_SP.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/DNA_PORT.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/DSP48.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/DSP48A.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/DSP48A1.v 
@@ -2635,11 +2644,11 @@
 # 	XORCY_D
 # 	XORCY_L
 # 	ZHOLD_DELAY
-# End time: 15:02:12 on Jun 02,2017, Elapsed time: 0:00:04
+# End time: 14:33:59 on Jun 06,2017, Elapsed time: 0:00:04
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:12 on Jun 02,2017
-# vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AFIFO36_INTERNAL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND16.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND2B1L.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND32.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND6.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND7.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND8.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND9.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_ARAMB36_INTERNAL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AUTOBUF.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BPAD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BSCANE2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BSCAN_FPGACORE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BSCAN_SPARTAN3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BSCAN_SPARTAN3A.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BSCAN_SPARTAN6.v 
+# Start time: 14:34:02 on Jun 06,2017
+# vlog -reportprogress 300 -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AFIFO36_INTERNAL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND16.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND2B1L.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND32.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND6.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND7.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND8.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AND9.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_ARAMB36_INTERNAL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_AUTOBUF.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BPAD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BSCANE2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BSCAN_FPGACORE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BSCAN_SPARTAN3.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BSCAN_SPARTAN3A.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BSCAN_SPARTAN6.v 
 # /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BSCAN_VIRTEX4.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BSCAN_VIRTEX5.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BSCAN_VIRTEX6.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUF.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUFGCTRL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUFGMUX.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUFGMUX_1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUFG_LB.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUFHCE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUFIO2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUFIO2FB.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUFIO2_2CLK.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUFIODQS.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUFMRCE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUFPLL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUFPLL_MCB.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_BUFR.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_CAPTUREE2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_CAPTURE_VIRTEX6.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_CARRY4.v 
 # /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_CKBUF.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_CLKDLL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_CLKDLLE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_CLK_DIV.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_CRC32.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_CRC64.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_DCM.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_DCM_ADV.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_DCM_CLKGEN.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_DCM_SP.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_DNA_PORT.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_DSP48.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_DSP48A.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_DSP48A1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_DSP48E.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_DSP48E1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_EFUSE_USR.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_EMAC.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FDD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FDDRCPE.v 
 # /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FDDRRSE.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FF.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FF_CPLD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FIFO16.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FIFO18.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FIFO18E1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FIFO18_36.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FIFO36E1.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FIFO36_72_EXP.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FIFO36_EXP.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FRAME_ECCE2.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_FRAME_ECC_VIRTEX6.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_GT11.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_GT11CLK.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_GTHE1_QUAD.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_GTHE2_CHANNEL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_GTHE2_COMMON.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_GTPA1_DUAL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_GTPE2_CHANNEL.v /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/X_GTPE2_COMMON.v 
@@ -3312,400 +3321,400 @@
 # 	X_XOR8
 # 	X_ZERO
 # 	X_ZHOLD_DELAY
-# End time: 15:02:21 on Jun 02,2017, Elapsed time: 0:00:09
+# End time: 14:34:11 on Jun 06,2017, Elapsed time: 0:00:09
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:21 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/descramble.v 
+# Start time: 14:34:12 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/descramble.v 
 # -- Compiling module descramble
 # 
 # Top level modules:
 # 	descramble
-# End time: 15:02:21 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:12 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:21 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/tx_path.v 
+# Start time: 14:34:12 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/tx_path.v 
 # -- Compiling module tx_path
 # 
 # Top level modules:
 # 	tx_path
-# End time: 15:02:21 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:12 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:21 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/RX_FSM.v 
+# Start time: 14:34:12 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/RX_FSM.v 
 # -- Compiling module RX_FSM
 # 
 # Top level modules:
 # 	RX_FSM
-# End time: 15:02:21 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:12 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:21 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/T_TYPE_Encode.v 
+# Start time: 14:34:12 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/T_TYPE_Encode.v 
 # -- Compiling module T_TYPE_Encode
 # 
 # Top level modules:
 # 	T_TYPE_Encode
-# End time: 15:02:21 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:12 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:21 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/timescale.v 
-# End time: 15:02:21 on Jun 02,2017, Elapsed time: 0:00:00
+# Start time: 14:34:12 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/timescale.v 
+# End time: 14:34:12 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:21 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/XGMII_to_PCS.v 
+# Start time: 14:34:12 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/XGMII_to_PCS.v 
 # -- Compiling module XGMII_to_PCS
 # 
 # Top level modules:
 # 	XGMII_to_PCS
-# End time: 15:02:21 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:12 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:21 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/opt_fifo_new.v 
+# Start time: 14:34:12 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/opt_fifo_new.v 
 # -- Compiling module opt_fifo_new
 # 
 # Top level modules:
 # 	opt_fifo_new
-# End time: 15:02:21 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:12 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:21 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/TX_FSM.v 
+# Start time: 14:34:12 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/TX_FSM.v 
 # -- Compiling module TX_FSM
 # 
 # Top level modules:
 # 	TX_FSM
-# End time: 15:02:21 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:21 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/defines_PCS.v 
-# End time: 15:02:21 on Jun 02,2017, Elapsed time: 0:00:00
+# Start time: 14:34:13 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/defines_PCS.v 
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:21 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/rx_path.v 
+# Start time: 14:34:13 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/rx_path.v 
 # -- Compiling module rx_path
 # 
 # Top level modules:
 # 	rx_path
-# End time: 15:02:21 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:21 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/PCS_to_XGMII.v 
+# Start time: 14:34:13 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/PCS_to_XGMII.v 
 # -- Compiling module PCS_to_XGMII
 # 
 # Top level modules:
 # 	PCS_to_XGMII
-# End time: 15:02:21 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:21 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/definitions.v 
-# End time: 15:02:22 on Jun 02,2017, Elapsed time: 0:00:01
+# Start time: 14:34:13 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/definitions.v 
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:22 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/scramble.v 
+# Start time: 14:34:13 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/scramble.v 
 # -- Compiling module scramble
 # 
 # Top level modules:
 # 	scramble
-# End time: 15:02:22 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:22 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/R_TYPE_Decode.v 
+# Start time: 14:34:13 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/R_TYPE_Decode.v 
 # -- Compiling module R_TYPE_Decode
 # 
 # Top level modules:
 # 	R_TYPE_Decode
-# End time: 15:02:22 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:22 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/Encode.v 
+# Start time: 14:34:13 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/Encode.v 
 # -- Compiling module Encode
 # 
 # Top level modules:
 # 	Encode
-# End time: 15:02:22 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:22 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/Decode.v 
+# Start time: 14:34:13 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/Decode.v 
 # -- Compiling module Decode
 # 
 # Top level modules:
 # 	Decode
-# End time: 15:02:22 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:22 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/frame_sync.v 
+# Start time: 14:34:13 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/frame_sync.v 
 # -- Compiling module frame_sync
 # 
 # Top level modules:
 # 	frame_sync
-# End time: 15:02:22 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:22 on Jun 02,2017
-# vlog -novopt ../rtl/PCS/PCS_core.v 
+# Start time: 14:34:13 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/PCS/PCS_core.v 
 # -- Compiling module PCS_core
 # 
 # Top level modules:
 # 	PCS_core
-# End time: 15:02:22 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:22 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/fault_sm.v 
+# Start time: 14:34:13 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/fault_sm.v 
 # -- Compiling module fault_sm
 # 
 # Top level modules:
 # 	fault_sm
-# End time: 15:02:22 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:22 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/rx_dequeue.v 
+# Start time: 14:34:13 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/rx_dequeue.v 
 # -- Compiling module rx_dequeue
 # 
 # Top level modules:
 # 	rx_dequeue
-# End time: 15:02:22 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:22 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/tx_stats_fifo.v 
+# Start time: 14:34:13 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/tx_stats_fifo.v 
 # -- Compiling module tx_stats_fifo
 # 
 # Top level modules:
 # 	tx_stats_fifo
-# End time: 15:02:22 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:13 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:22 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/tx_dequeue.v 
+# Start time: 14:34:14 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/tx_dequeue.v 
 # -- Compiling module tx_dequeue
 # 
 # Top level modules:
 # 	tx_dequeue
-# End time: 15:02:22 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:14 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:22 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/sync_clk_wb.v 
+# Start time: 14:34:14 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/sync_clk_wb.v 
 # -- Compiling module sync_clk_wb
 # 
 # Top level modules:
 # 	sync_clk_wb
-# End time: 15:02:22 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:14 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:22 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/stats_sm.v 
+# Start time: 14:34:14 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/stats_sm.v 
 # -- Compiling module stats_sm
 # 
 # Top level modules:
 # 	stats_sm
-# End time: 15:02:22 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:14 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:22 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/defines.v 
-# End time: 15:02:23 on Jun 02,2017, Elapsed time: 0:00:01
+# Start time: 14:34:14 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/defines.v 
+# End time: 14:34:14 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:23 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/stats.v 
+# Start time: 14:34:14 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/stats.v 
 # -- Compiling module stats
 # 
 # Top level modules:
 # 	stats
-# End time: 15:02:23 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:14 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:23 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/generic_mem_small.v 
+# Start time: 14:34:14 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/generic_mem_small.v 
 # -- Compiling module generic_mem_small
 # 
 # Top level modules:
 # 	generic_mem_small
-# End time: 15:02:23 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:14 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:23 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/rx_data_fifo.v 
+# Start time: 14:34:14 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/rx_data_fifo.v 
 # -- Compiling module rx_data_fifo
 # 
 # Top level modules:
 # 	rx_data_fifo
-# End time: 15:02:23 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:14 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:23 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/meta_sync_single.v 
+# Start time: 14:34:14 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/meta_sync_single.v 
 # -- Compiling module meta_sync_single
 # 
 # Top level modules:
 # 	meta_sync_single
-# End time: 15:02:23 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:14 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:23 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/tx_hold_fifo.v 
+# Start time: 14:34:14 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/tx_hold_fifo.v 
 # -- Compiling module tx_hold_fifo
 # 
 # Top level modules:
 # 	tx_hold_fifo
-# End time: 15:02:23 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:14 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:23 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/rx_hold_fifo.v 
+# Start time: 14:34:14 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/rx_hold_fifo.v 
 # -- Compiling module rx_hold_fifo
 # 
 # Top level modules:
 # 	rx_hold_fifo
-# End time: 15:02:23 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:14 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:23 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/generic_mem_medium.v 
+# Start time: 14:34:14 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/generic_mem_medium.v 
 # -- Compiling module generic_mem_medium
 # 
 # Top level modules:
 # 	generic_mem_medium
-# End time: 15:02:23 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:14 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:23 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/meta_sync.v 
+# Start time: 14:34:14 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/meta_sync.v 
 # -- Compiling module meta_sync
 # 
 # Top level modules:
 # 	meta_sync
-# End time: 15:02:23 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:15 on Jun 06,2017, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:23 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/tx_data_fifo.v 
+# Start time: 14:34:15 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/tx_data_fifo.v 
 # -- Compiling module tx_data_fifo
 # 
 # Top level modules:
 # 	tx_data_fifo
-# End time: 15:02:23 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:15 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:23 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/tx_enqueue.v 
+# Start time: 14:34:15 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/tx_enqueue.v 
 # -- Compiling module tx_enqueue
 # 
 # Top level modules:
 # 	tx_enqueue
-# End time: 15:02:23 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:15 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:23 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/sync_clk_core.v 
+# Start time: 14:34:15 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/sync_clk_core.v 
 # -- Compiling module sync_clk_core
 # 
 # Top level modules:
 # 	sync_clk_core
-# End time: 15:02:24 on Jun 02,2017, Elapsed time: 0:00:01
+# End time: 14:34:15 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:24 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/rx_stats_fifo.v 
+# Start time: 14:34:15 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/rx_stats_fifo.v 
 # -- Compiling module rx_stats_fifo
 # 
 # Top level modules:
 # 	rx_stats_fifo
-# End time: 15:02:24 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:15 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:24 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/generic_fifo.v 
+# Start time: 14:34:15 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/generic_fifo.v 
 # -- Compiling module generic_fifo
 # 
 # Top level modules:
 # 	generic_fifo
-# End time: 15:02:24 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:15 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:24 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/wishbone_if.v 
+# Start time: 14:34:15 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/wishbone_if.v 
 # -- Compiling module wishbone_if
 # 
 # Top level modules:
 # 	wishbone_if
-# End time: 15:02:24 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:15 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:24 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/sync_clk_xgmii_tx.v 
+# Start time: 14:34:15 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/sync_clk_xgmii_tx.v 
 # -- Compiling module sync_clk_xgmii_tx
 # 
 # Top level modules:
 # 	sync_clk_xgmii_tx
-# End time: 15:02:24 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:15 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:24 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/generic_fifo_ctrl.v 
+# Start time: 14:34:15 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/generic_fifo_ctrl.v 
 # -- Compiling module generic_fifo_ctrl
 # 
 # Top level modules:
 # 	generic_fifo_ctrl
-# End time: 15:02:24 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:17 on Jun 06,2017, Elapsed time: 0:00:02
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:24 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/rx_enqueue.v 
+# Start time: 14:34:17 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/rx_enqueue.v 
 # -- Compiling module rx_enqueue
 # 
 # Top level modules:
 # 	rx_enqueue
-# End time: 15:02:24 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:17 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:24 on Jun 02,2017
-# vlog -novopt ../rtl/MAC/xge_mac.v 
+# Start time: 14:34:17 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/MAC/xge_mac.v 
 # -- Compiling module xge_mac
 # 
 # Top level modules:
 # 	xge_mac
-# End time: 15:02:24 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:18 on Jun 06,2017, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:24 on Jun 02,2017
-# vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v 
+# Start time: 14:34:18 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v 
 # -- Compiling module wrapper_macpcs
 # 
 # Top level modules:
 # 	wrapper_macpcs
-# End time: 15:02:24 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:18 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vlog 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:24 on Jun 02,2017
-# vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs_rx.v 
+# Start time: 14:34:18 on Jun 06,2017
+# vlog -reportprogress 300 -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs_rx.v 
 # -- Compiling module wrapper_macpcs_rx
 # 
 # Top level modules:
 # 	wrapper_macpcs_rx
-# End time: 15:02:24 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:18 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vcom 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:24 on Jun 02,2017
-# vcom -novopt ../rtl/XGETH_tester/VHD/lfsr.vhd 
+# Start time: 14:34:18 on Jun 06,2017
+# vcom -reportprogress 300 -novopt ../rtl/XGETH_tester/VHD/lfsr.vhd 
 # -- Loading package STANDARD
 # -- Loading package TEXTIO
 # -- Loading package std_logic_1164
@@ -3714,22 +3723,22 @@
 # -- Loading package NUMERIC_STD
 # -- Compiling entity lfsr
 # -- Compiling architecture arch_lfsr of lfsr
-# End time: 15:02:24 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:18 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vcom 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:24 on Jun 02,2017
-# vcom -novopt ../rtl/XGETH_tester/VHD/txsequence_counter.vhd 
+# Start time: 14:34:18 on Jun 06,2017
+# vcom -reportprogress 300 -novopt ../rtl/XGETH_tester/VHD/txsequence_counter.vhd 
 # -- Loading package STANDARD
 # -- Loading package TEXTIO
 # -- Loading package std_logic_1164
 # -- Loading package NUMERIC_STD
 # -- Compiling entity txsequence_counter
 # -- Compiling architecture Behavioral of txsequence_counter
-# End time: 15:02:24 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:18 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vcom 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:24 on Jun 02,2017
-# vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator.vhd 
+# Start time: 14:34:18 on Jun 06,2017
+# vcom -reportprogress 300 -novopt ../rtl/XGETH_tester/VHD/echo_generator.vhd 
 # -- Loading package STANDARD
 # -- Loading package TEXTIO
 # -- Loading package std_logic_1164
@@ -3739,11 +3748,11 @@
 # -- Compiling entity echo_generator
 # -- Compiling architecture arch_echo_generator of echo_generator
 # -- Loading entity lfsr
-# End time: 15:02:25 on Jun 02,2017, Elapsed time: 0:00:01
+# End time: 14:34:18 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vcom 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:25 on Jun 02,2017
-# vcom -novopt tb_xgt4.vhd 
+# Start time: 14:34:18 on Jun 06,2017
+# vcom -reportprogress 300 -novopt tb_xgt4.vhd 
 # -- Loading package STANDARD
 # -- Loading package TEXTIO
 # -- Loading package std_logic_1164
@@ -3754,11 +3763,11 @@
 # -- Loading package std_logic_arith
 # -- Loading package STD_LOGIC_UNSIGNED
 # -- Loading entity echo_generator
-# End time: 15:02:25 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:18 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vcom 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:25 on Jun 02,2017
-# vcom -novopt rx_xgt4.vhd 
+# Start time: 14:34:18 on Jun 06,2017
+# vcom -reportprogress 300 -novopt rx_xgt4.vhd 
 # -- Loading package STANDARD
 # -- Loading package TEXTIO
 # -- Loading package std_logic_1164
@@ -3766,241 +3775,39 @@
 # -- Loading package VCOMPONENTS
 # -- Compiling entity rx_xgt4
 # -- Compiling architecture behav of rx_xgt4
-# End time: 15:02:25 on Jun 02,2017, Elapsed time: 0:00:00
+# End time: 14:34:18 on Jun 06,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim SE-64 vcom 10.3c Compiler 2014.07 Jul 18 2014
-# Start time: 15:02:25 on Jun 02,2017
-# vcom -novopt ../rtl/PCS/lane_reordering.vhd 
+# Start time: 14:34:18 on Jun 06,2017
+# vcom -reportprogress 300 -novopt ../rtl/PCS/lane_reordering.vhd 
 # -- Loading package STANDARD
 # -- Loading package TEXTIO
 # -- Loading package std_logic_1164
-# -- Loading package std_logic_arith
-# -- Loading package STD_LOGIC_UNSIGNED
-# -- Loading package NUMERIC_STD
+# -- Compiling entity regnbit
+# -- Compiling architecture regn of regnbit
+# -- Compiling entity sync_lane
+# -- Compiling architecture behav_sync_lane of sync_lane
+# -- Compiling entity last_lane_reg
+# -- Compiling architecture behav_last_lane_reg of last_lane_reg
 # -- Compiling entity lane_reorder
-# -- Compiling architecture behav of lane_reorder
-# ** Warning: ../rtl/PCS/lane_reordering.vhd(43): Choice in CASE statement alternative must be locally static.
-# ** Warning: ../rtl/PCS/lane_reordering.vhd(44): Choice in CASE statement alternative must be locally static.
-# ** Warning: [2] ../rtl/PCS/lane_reordering.vhd(122): (vcom-1090) Possible infinite loop: Process contains no WAIT statement.
-# End time: 15:02:25 on Jun 02,2017, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 3
-# Start time: 15:02:26 on Jun 02,2017
+# -- Compiling architecture behav_lane_reorder of lane_reorder
+# ** Warning: ../rtl/PCS/lane_reordering.vhd(132): Choice in CASE statement alternative must be locally static.
+# ** Warning: ../rtl/PCS/lane_reordering.vhd(133): Choice in CASE statement alternative must be locally static.
+# -- Loading entity sync_lane
+# -- Loading entity last_lane_reg
+# -- Loading entity regnbit
+# End time: 14:34:19 on Jun 06,2017, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 2
+# Start time: 14:34:19 on Jun 06,2017
 # 
 # Model Technology ModelSim SE-64 sccom 10.3c compiler 2014.07 Jul 18 2014
-# End time: 15:02:27 on Jun 02,2017, Elapsed time: 0:00:01
+# End time: 14:34:20 on Jun 06,2017, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
-# Start time: 15:02:27 on Jun 02,2017
+# Start time: 14:34:20 on Jun 06,2017
 # 
 # Model Technology ModelSim SE-64 sccom 10.3c compiler 2014.07 Jul 18 2014
-# End time: 15:02:28 on Jun 02,2017, Elapsed time: 0:00:01
+# End time: 14:34:21 on Jun 06,2017, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
-# Start time: 15:02:28 on Jun 02,2017
+# Start time: 14:34:21 on Jun 06,2017
 # 
 # Model Technology ModelSim SE-64 sccom 10.3c compiler 2014.07 Jul 18 2014
-# End time: 15:02:28 on Jun 02,2017, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# Start time: 15:02:28 on Jun 02,2017
-# 
-# Model Technology ModelSim SE-64 sccom 10.3c compiler 2014.07 Jul 18 2014
-# 
-# g++: unrecognized option '-novopt'
-# 
-# Exported modules:
-# 	Top
-# End time: 15:02:30 on Jun 02,2017, Elapsed time: 0:00:02
-# Errors: 0, Warnings: 0
-# Start time: 15:02:30 on Jun 02,2017
-# 
-# Model Technology ModelSim SE-64 sccom 10.3c compiler 2014.07 Jul 18 2014
-# End time: 15:02:30 on Jun 02,2017, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
-# vsim -do "run.do" -c 
-# Start time: 15:02:30 on Jun 02,2017
-# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
-# //  ModelSim SE-64 10.3c Jul 18 2014 Linux 4.4.0-78-generic
-# //
-# //  Copyright 1991-2014 Mentor Graphics Corporation
-# //  All Rights Reserved.
-# //
-# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
-# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
-# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
-# //
-# Loading work.glbl
-# Loading /home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so
-# Loading /home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work.Top
-# Loading std.standard
-# Loading std.textio(body)
-# Loading ieee.std_logic_1164(body)
-# Loading ieee.numeric_std(body)
-# Loading unisim.vcomponents
-# Loading ieee.std_logic_arith(body)
-# Loading ieee.std_logic_unsigned(body)
-# Loading work.tb_xgt4(behav)
-# Loading work.rx_xgt4(behav)
-# [pkt_buffer] File lane0.txt opened.
-# [pkt_buffer] File lane1.txt opened.
-# [pkt_buffer] File lane2.txt opened.
-# [pkt_buffer] File lane3.txt opened.
-# [dump_mii] File dump_mii_tx.txt opened.
-# [dump_mii] File dump_mii_rx.txt opened.
-# [fiber] File lane0.txt opened.
-# [fiber] File lane1.txt opened.
-# [fiber] File lane2.txt opened.
-# [fiber] File lane3.txt opened.
-# Loading work.wrapper_macpcs
-# Loading work.PCS_core
-# Loading work.tx_path
-# Loading work.scramble
-# Loading work.opt_fifo_new
-# Loading work.FIFO_DUALCLOCK_MACRO
-# Loading work.Encode
-# Loading work.T_TYPE_Encode
-# Loading work.XGMII_to_PCS
-# Loading work.TX_FSM
-# Loading work.rx_path
-# Loading work.frame_sync
-# Loading work.descramble
-# Loading work.Decode
-# Loading work.R_TYPE_Decode
-# Loading work.PCS_to_XGMII
-# Loading work.RX_FSM
-# Loading work.xge_mac
-# Loading work.rx_enqueue
-# Loading work.rx_dequeue
-# Loading work.rx_data_fifo
-# Loading work.generic_fifo
-# Loading work.generic_fifo_ctrl
-# Loading work.rx_hold_fifo
-# Loading work.tx_enqueue
-# Loading work.tx_dequeue
-# Loading work.tx_data_fifo
-# Loading work.tx_hold_fifo
-# Loading work.fault_sm
-# Loading work.sync_clk_wb
-# Loading work.meta_sync
-# Loading work.sync_clk_xgmii_tx
-# Loading work.stats
-# Loading work.tx_stats_fifo
-# Loading work.rx_stats_fifo
-# Loading work.stats_sm
-# Loading work.wishbone_if
-# Loading work.FIFO36E1
-# Loading work.FF36_INTERNAL_VLOG
-# Loading work.generic_mem_medium
-# Loading work.generic_mem_small
-# Loading work.meta_sync_single
-# Loading work.txsequence_counter(behavioral)
-# Loading work.echo_generator(arch_echo_generator)
-# Loading work.lfsr(arch_lfsr)
-# Loading work.lane_reorder(behav)
-# Loading work.wrapper_macpcs_rx
-# ** Warning: (vsim-6627) Port Top/fiber/data_valid_in is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/fiber/reset_in is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/dump_mii_rx/reset_n is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/dump_mii_tx/reset_n is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/pkt_buffer/header_out_3 is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/pkt_buffer/block_out_3 is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/pkt_buffer/header_out_2 is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/pkt_buffer/block_out_2 is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/pkt_buffer/header_out_1 is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/pkt_buffer/block_out_1 is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/pkt_buffer/header_out_0 is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/pkt_buffer/block_out_0 is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/pkt_buffer/reset_n is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/scoreboard/rx_data_valid_in is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/scoreboard/header_in is not bound to any channel.
-# ** Warning: (vsim-6627) Port Top/scoreboard/block_in is not bound to any channel.
-# ** Warning: (vsim-8683) Uninitialized out port /Top/rx_xgt4/inst_lane_reorder/pcs_0_data_out(63 downto 0) has no driver.
-# This port will contribute value (64'hXXXXXXXXXXXXXXXX) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /Top/rx_xgt4/inst_lane_reorder/pcs_1_data_out(63 downto 0) has no driver.
-# This port will contribute value (64'hXXXXXXXXXXXXXXXX) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /Top/rx_xgt4/inst_lane_reorder/pcs_2_data_out(63 downto 0) has no driver.
-# This port will contribute value (64'hXXXXXXXXXXXXXXXX) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /Top/rx_xgt4/inst_lane_reorder/pcs_3_data_out(63 downto 0) has no driver.
-# This port will contribute value (64'hXXXXXXXXXXXXXXXX) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /Top/rx_xgt4/inst_lane_reorder/pcs_0_header_out(1 downto 0) has no driver.
-# This port will contribute value (2'hX) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /Top/rx_xgt4/inst_lane_reorder/pcs_1_header_out(1 downto 0) has no driver.
-# This port will contribute value (2'hX) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /Top/rx_xgt4/inst_lane_reorder/pcs_2_header_out(1 downto 0) has no driver.
-# This port will contribute value (2'hX) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /Top/rx_xgt4/inst_lane_reorder/pcs_3_header_out(1 downto 0) has no driver.
-# This port will contribute value (2'hX) to the signal network.
-# ** Error: (vish-4014) No objects found matching '/Top/rx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_rx_path/rx_header_valid_in'.
-# Executing ONERROR command at macro ./wave.do line 27
-# ** Error: (vish-4014) No objects found matching '/Top/rx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_rx_path/rx_data_valid_in'.
-# Executing ONERROR command at macro ./wave.do line 28
-# ** Error: (vish-4014) No objects found matching '/Top/rx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_rx_path/rx_header_in'.
-# Executing ONERROR command at macro ./wave.do line 29
-# ** Error: (vish-4014) No objects found matching '/Top/rx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_rx_path/rx_data_in'.
-# Executing ONERROR command at macro ./wave.do line 30
-# ** Error: (vish-4014) No objects found matching '/Top/rx_xgt4/inst_wrapper_macpcs/xgmii_rxc'.
-# Executing ONERROR command at macro ./wave.do line 31
-# ** Error: (vish-4014) No objects found matching '/Top/rx_xgt4/inst_wrapper_macpcs/xgmii_rxd'.
-# Executing ONERROR command at macro ./wave.do line 32
-# ** Error: (vish-4014) No objects found matching '/Top/rx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_rx_path/rxlf'.
-# Executing ONERROR command at macro ./wave.do line 33
-# ** Error: (vish-4014) No objects found matching '/Top/rx_xgt4/inst_wrapper_macpcs/INST_PCS_core/rx_fifo_spill'.
-# Executing ONERROR command at macro ./wave.do line 34
-# wave activecursor not supported in batch mode
-# configure wave not supported in batch mode
-# configure wave not supported in batch mode
-# configure wave not supported in batch mode
-# configure wave not supported in batch mode
-# configure wave not supported in batch mode
-# configure wave not supported in batch mode
-# configure wave not supported in batch mode
-# configure wave not supported in batch mode
-# configure wave not supported in batch mode
-# configure wave not supported in batch mode
-# configure wave not supported in batch mode
-# configure wave not supported in batch mode
-# configure wave not supported in batch mode
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/echo_gen_inst
-# ** Warning: NUMERIC_STD."=": metavalue detected, returning FALSE
-#    Time: 0 ps  Iteration: 0  Instance: /Top/tb_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_txsequence_counter
-# ** Warning: NUMERIC_STD."=": metavalue detected, returning FALSE
-#    Time: 0 ps  Iteration: 0  Instance: /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/INST_tx_path/INST_txsequence_counter
-# ** Warning: NUMERIC_STD."=": metavalue detected, returning FALSE
-#    Time: 0 ps  Iteration: 0  Instance: /Top/rx_xgt4/inst_wrapper_macpcs/INST_2_PCS_core/INST_tx_path/INST_txsequence_counter
-# ** Warning: NUMERIC_STD."=": metavalue detected, returning FALSE
-#    Time: 0 ps  Iteration: 0  Instance: /Top/rx_xgt4/inst_wrapper_macpcs/INST_1_PCS_core/INST_tx_path/INST_txsequence_counter
-# ** Warning: NUMERIC_STD."=": metavalue detected, returning FALSE
-#    Time: 0 ps  Iteration: 0  Instance: /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_tx_path/INST_txsequence_counter
-# Break key hit
-# Break in Process FSM_COMB at ../rtl/PCS/lane_reordering.vhd line 105
-# Stopped at ../rtl/PCS/lane_reordering.vhd line 105
-# Simulation Breakpoint: Break in Process FSM_COMB at ../rtl/PCS/lane_reordering.vhd line 105
-# MACRO ./run.do PAUSED at line 85
-# End time: 15:06:53 on Jun 02,2017, Elapsed time: 0:04:23
-# Errors: 24, Warnings: 45

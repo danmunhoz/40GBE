@@ -297,7 +297,7 @@ begin
             pcs_2_header_out => pcs_2_header_out,
 
             pcs_3_data_out   => pcs_3_data_out,
-            pcs_3_header_out => pcs_3_header_outls
+            pcs_3_header_out => pcs_3_header_out
           );
 
           inst_wrapper_macpcs: wrapper_macpcs_rx port map(
