@@ -54,10 +54,10 @@ architecture behav_sync_lane of sync_lane is
   constant SYNC_LANE3_HIGH : std_logic_vector(23 downto 0) := "010111011000011011000010";
   signal logical_lane_int  : std_logic_vector(2 downto 0);
 begin
-  logical_lane_int <= "000" when data_in(63 downto 40) = SYNC_LANE0_HIGH and data_in(23 downto 0) = SYNC_LANE0_LOW else
-                      "001" when data_in(63 downto 40) = SYNC_LANE1_HIGH and data_in(23 downto 0) = SYNC_LANE1_LOW else
-                      "010" when data_in(63 downto 40) = SYNC_LANE2_HIGH and data_in(23 downto 0) = SYNC_LANE2_LOW else
-                      "011" when data_in(63 downto 40) = SYNC_LANE3_HIGH and data_in(23 downto 0) = SYNC_LANE3_LOW else
+  logical_lane_int <= "000" when data_in(63 downto 40) = SYNC_LANE0_HIGH and data_in(31 downto 8) = SYNC_LANE0_LOW else
+                      "001" when data_in(63 downto 40) = SYNC_LANE1_HIGH and data_in(31 downto 8) = SYNC_LANE1_LOW else
+                      "010" when data_in(63 downto 40) = SYNC_LANE2_HIGH and data_in(31 downto 8) = SYNC_LANE2_LOW else
+                      "011" when data_in(63 downto 40) = SYNC_LANE3_HIGH and data_in(31 downto 8) = SYNC_LANE3_LOW else
                       "100";
   sync_ok <= '0' when logical_lane_int = "100" else '1';
   logical_lane <= logical_lane_int;
@@ -210,7 +210,7 @@ begin
   reg_skew_header_3:    entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>lane_3_header_in, Q=>barreira_skew.header_3);
 
   --==============================================================================
-  -- second_stage - CHECKS BIP 
+  -- second_stage - CHECKS BIP
   --==============================================================================
 
 end behav_lane_reorder;

@@ -14,7 +14,7 @@
 #include <limits>
 
 //#define PKTS_BTW_SYNC 16383
-#define PKTS_BTW_SYNC 30
+#define PKTS_BTW_SYNC 4
 
 /* SYNC_LANEx_LOW BIP SYNC_LANEx_HIGH BIP */
 #define SYNC_LANE0_LOW  "100100000111011001000111"    // 0x907647
@@ -166,16 +166,13 @@ SC_MODULE(pkt_buffer) {
         **  10-LOW PART OF AN ALIGNMENT BLOCK, BIP, HIGH PART OF AN ALIGNMENT BLOCK, NOT(BIP)
         */
 
-        lane0 << "10-" << SYNC_LANE0_LOW  << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << endl;
+        lane0 << "10-" << SYNC_LANE0_HIGH << lane0_bip << SYNC_LANE0_LOW << ~lane0_bip << endl;
 
-        lane1 << "10-" <<
-         SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << endl;
+        lane1 << "10-" << SYNC_LANE1_HIGH << lane1_bip << SYNC_LANE1_LOW << ~lane1_bip << endl;
 
-        lane2 << "10-" <<
-         SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << endl;
+        lane2 << "10-" << SYNC_LANE2_HIGH << lane2_bip << SYNC_LANE2_LOW << ~lane2_bip << endl;
 
-        lane3 << "10-" <<
-         SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip << endl;
+        lane3 << "10-" << SYNC_LANE3_HIGH << lane3_bip << SYNC_LANE3_LOW << ~lane3_bip << endl;
 
         block_counter = 0;
          }

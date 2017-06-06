@@ -17,25 +17,50 @@ add wave -noupdate -expand -group MII(MAC->PCS) -radix hexadecimal /Top/tb_xgt4/
 add wave -noupdate /Top/tb_xgt4/start_fifo
 add wave -noupdate -radix binary /Top/tb_xgt4/inst_wrapper_macpcs/INST_PCS_core/tx_header_out
 add wave -noupdate -radix hexadecimal /Top/tb_xgt4/inst_wrapper_macpcs/INST_PCS_core/tx_data_out
-add wave -noupdate -divider RX
-add wave -noupdate /Top/rx_xgt4/start_fifo
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/async_reset_n
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/reset_tx_n
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/reset_rx_n
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/reset_tx_done
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/reset_rx_done
-add wave -noupdate -expand -group {PCS IN (int. externa)} /Top/rx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_rx_path/rx_header_valid_in
-add wave -noupdate -expand -group {PCS IN (int. externa)} /Top/rx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_rx_path/rx_data_valid_in
-add wave -noupdate -expand -group {PCS IN (int. externa)} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_rx_path/rx_header_in
-add wave -noupdate -expand -group {PCS IN (int. externa)} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_rx_path/rx_data_in
-add wave -noupdate -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/xgmii_rxc
-add wave -noupdate -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/xgmii_rxd
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_rx_path/rxlf
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_PCS_core/rx_fifo_spill
+add wave -noupdate -divider fiber
+add wave -noupdate -expand -group FIBER -radix binary /Top/fiber/header_out_0
+add wave -noupdate -expand -group FIBER -radix hexadecimal /Top/fiber/block_out_0
+add wave -noupdate -expand -group FIBER -radix binary /Top/fiber/header_out_1
+add wave -noupdate -expand -group FIBER -radix hexadecimal /Top/fiber/block_out_1
+add wave -noupdate -expand -group FIBER -radix binary /Top/fiber/header_out_2
+add wave -noupdate -expand -group FIBER -radix hexadecimal /Top/fiber/block_out_2
+add wave -noupdate -expand -group FIBER -radix binary /Top/fiber/header_out_3
+add wave -noupdate -expand -group FIBER -radix hexadecimal /Top/fiber/block_out_3
+add wave -noupdate -divider REORDER
+add wave -noupdate -expand -group LANE_REORDER -radix binary /Top/rx_xgt4/inst_lane_reorder/logical_lane_0_int
+add wave -noupdate -expand -group LANE_REORDER -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_0_header_in
+add wave -noupdate -expand -group LANE_REORDER -radix hexadecimal /Top/rx_xgt4/inst_lane_reorder/lane_0_data_in
+add wave -noupdate -expand -group LANE_REORDER -radix binary /Top/rx_xgt4/inst_lane_reorder/logical_lane_1_int
+add wave -noupdate -expand -group LANE_REORDER -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_1_header_in
+add wave -noupdate -expand -group LANE_REORDER -radix hexadecimal /Top/rx_xgt4/inst_lane_reorder/lane_1_data_in
+add wave -noupdate -expand -group LANE_REORDER -radix binary /Top/rx_xgt4/inst_lane_reorder/logical_lane_2_int
+add wave -noupdate -expand -group LANE_REORDER -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_2_header_in
+add wave -noupdate -expand -group LANE_REORDER -radix hexadecimal /Top/rx_xgt4/inst_lane_reorder/lane_2_data_in
+add wave -noupdate -expand -group LANE_REORDER -radix binary /Top/rx_xgt4/inst_lane_reorder/logical_lane_3_int
+add wave -noupdate -expand -group LANE_REORDER -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_3_header_in
+add wave -noupdate -expand -group LANE_REORDER -radix hexadecimal /Top/rx_xgt4/inst_lane_reorder/lane_3_data_in
+add wave -noupdate -expand -group LANE_REORDER /Top/rx_xgt4/inst_lane_reorder/barreira_skew
+add wave -noupdate -expand -group LANE_REORDER /Top/rx_xgt4/inst_lane_reorder/sync_ok_0
+add wave -noupdate -expand -group LANE_REORDER /Top/rx_xgt4/inst_lane_reorder/sync_ok_1
+add wave -noupdate -expand -group LANE_REORDER /Top/rx_xgt4/inst_lane_reorder/sync_ok_2
+add wave -noupdate -expand -group LANE_REORDER /Top/rx_xgt4/inst_lane_reorder/sync_ok_3
+add wave -noupdate -expand -group LANE_REORDER /Top/rx_xgt4/inst_lane_reorder/pcs_0_header_out
+add wave -noupdate -expand -group LANE_REORDER /Top/rx_xgt4/inst_lane_reorder/pcs_0_data_out
+add wave -noupdate -expand -group LANE_REORDER /Top/rx_xgt4/inst_lane_reorder/pcs_1_header_out
+add wave -noupdate -expand -group LANE_REORDER /Top/rx_xgt4/inst_lane_reorder/pcs_1_data_out
+add wave -noupdate -expand -group LANE_REORDER /Top/rx_xgt4/inst_lane_reorder/pcs_2_header_out
+add wave -noupdate -expand -group LANE_REORDER /Top/rx_xgt4/inst_lane_reorder/pcs_2_data_out
+add wave -noupdate -expand -group LANE_REORDER /Top/rx_xgt4/inst_lane_reorder/pcs_3_header_out
+add wave -noupdate -expand -group LANE_REORDER /Top/rx_xgt4/inst_lane_reorder/pcs_3_data_out
+add wave -noupdate -expand -group LANE_0 -radix hexadecimal /Top/rx_xgt4/inst_lane_reorder/lane_0/data_in
+add wave -noupdate -expand -group LANE_0 -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_0/header_in
+add wave -noupdate -expand -group LANE_0 -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_0/logical_lane
+add wave -noupdate -expand -group LANE_0 -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_0/logical_lane_int
+add wave -noupdate -expand -group LANE_0 /Top/rx_xgt4/inst_lane_reorder/lane_0/sync_ok
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {387200 ps} 0}
+WaveRestoreCursors {{Cursor 1} {120900 ps} 0}
 quietly wave cursor active 1
-configure wave -namecolwidth 810
+configure wave -namecolwidth 452
 configure wave -valuecolwidth 144
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
@@ -49,4 +74,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {206084 ps} {295819 ps}
+WaveRestoreZoom {740826 ps} {803115 ps}

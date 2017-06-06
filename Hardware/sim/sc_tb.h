@@ -140,25 +140,45 @@ SC_MODULE(Top) {
     rx_xgt4_inst->reset_in_mii_rx(reset_mii_rx);
     rx_xgt4_inst->pkt_rx_data(block_from_mac_rx);
 
+    // rx_xgt4_inst->rx_lane_0_header_valid_in(rx_header_valid_in);
+    // rx_xgt4_inst->rx_lane_0_header_in(header_from_xgt4);
+    // rx_xgt4_inst->rx_lane_0_data_valid_in(rx_data_valid_in);
+    // rx_xgt4_inst->rx_lane_0_data_in(block_from_xgt4);
+    //
+    // rx_xgt4_inst->rx_lane_1_header_valid_in(rx_header_valid_in);
+    // rx_xgt4_inst->rx_lane_1_header_in(header_from_xgt4);
+    // rx_xgt4_inst->rx_lane_1_data_valid_in(rx_data_valid_in);
+    // rx_xgt4_inst->rx_lane_1_data_in(block_from_xgt4);
+    //
+    // rx_xgt4_inst->rx_lane_2_header_valid_in(rx_header_valid_in);
+    // rx_xgt4_inst->rx_lane_2_header_in(header_from_xgt4);
+    // rx_xgt4_inst->rx_lane_2_data_valid_in(rx_data_valid_in);
+    // rx_xgt4_inst->rx_lane_2_data_in(block_from_xgt4);
+    //
+    // rx_xgt4_inst->rx_lane_3_header_valid_in(rx_header_valid_in);
+    // rx_xgt4_inst->rx_lane_3_header_in(header_from_xgt4);
+    // rx_xgt4_inst->rx_lane_3_data_valid_in(rx_data_valid_in);
+    // rx_xgt4_inst->rx_lane_3_data_in(block_from_xgt4);
+
     rx_xgt4_inst->rx_lane_0_header_valid_in(rx_header_valid_in);
-    rx_xgt4_inst->rx_lane_0_header_in(header_from_xgt4);
+    rx_xgt4_inst->rx_lane_0_header_in(header_out_0);
     rx_xgt4_inst->rx_lane_0_data_valid_in(rx_data_valid_in);
-    rx_xgt4_inst->rx_lane_0_data_in(block_from_xgt4);
+    rx_xgt4_inst->rx_lane_0_data_in(block_out_0);
 
     rx_xgt4_inst->rx_lane_1_header_valid_in(rx_header_valid_in);
-    rx_xgt4_inst->rx_lane_1_header_in(header_from_xgt4);
+    rx_xgt4_inst->rx_lane_1_header_in(header_out_1);
     rx_xgt4_inst->rx_lane_1_data_valid_in(rx_data_valid_in);
-    rx_xgt4_inst->rx_lane_1_data_in(block_from_xgt4);
+    rx_xgt4_inst->rx_lane_1_data_in(block_out_1);
 
     rx_xgt4_inst->rx_lane_2_header_valid_in(rx_header_valid_in);
-    rx_xgt4_inst->rx_lane_2_header_in(header_from_xgt4);
+    rx_xgt4_inst->rx_lane_2_header_in(header_out_2);
     rx_xgt4_inst->rx_lane_2_data_valid_in(rx_data_valid_in);
-    rx_xgt4_inst->rx_lane_2_data_in(block_from_xgt4);
+    rx_xgt4_inst->rx_lane_2_data_in(block_out_2);
 
     rx_xgt4_inst->rx_lane_3_header_valid_in(rx_header_valid_in);
-    rx_xgt4_inst->rx_lane_3_header_in(header_from_xgt4);
+    rx_xgt4_inst->rx_lane_3_header_in(header_out_3);
     rx_xgt4_inst->rx_lane_3_data_valid_in(rx_data_valid_in);
-    rx_xgt4_inst->rx_lane_3_data_in(block_from_xgt4);
+    rx_xgt4_inst->rx_lane_3_data_in(block_out_3);
 
 
     rx_xgt4_inst->pkt_rx_eop(pkt_rx_eop);

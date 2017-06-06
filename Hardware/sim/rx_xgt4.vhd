@@ -125,16 +125,6 @@ architecture behav of rx_xgt4 is
       clock           : in std_logic;
       reset           : in std_logic;
 
-      -- lane_0_data_valid_in : in std_logic;
-      -- lane_1_data_valid_in : in std_logic;
-      -- lane_2_data_valid_in : in std_logic;
-      -- lane_3_data_valid_in : in std_logic;
-
-      -- lane_0_header_valid_in : in std_logic;
-      -- lane_1_header_valid_in : in std_logic;
-      -- lane_2_header_valid_in : in std_logic;
-      -- lane_3_header_valid_in : in std_logic;
-
       lane_0_data_in  : in std_logic_vector(63 downto 0);
       lane_1_data_in  : in std_logic_vector(63 downto 0);
       lane_2_data_in  : in std_logic_vector(63 downto 0);

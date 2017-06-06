@@ -191,7 +191,8 @@ SC_MODULE(fiber) {
     }
 
     SC_METHOD(buffer_lanes);
-    sensitive<<clock_in;
+    dont_initialize();
+    sensitive<<clock_in.pos();
 
 
   }
