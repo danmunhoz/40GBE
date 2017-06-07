@@ -20,7 +20,7 @@ architecture regn of regnbit is
 begin
   process(ck, rst)
   begin
-       if rst = '1' then
+       if rst = '0' then
               Q <= INIT_VALUE(size-1 downto 0);
        elsif ck'event and ck = '0' then
            if ce = '1' then
@@ -29,6 +29,22 @@ begin
        end if;
   end process;
 end regn;
+
+--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-- BIP CHECKER MODULE
+--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+library ieee;
+use ieee.std_logic_1164.all;
+entity bip_calculator is
+  port(
+    data_in      : in std_logic_vector(63 downto 0);
+    header_in    : in std_logic_vector(1 downto 0);
+    bip_ok       : out std_logic
+  );
+end entity;
+architecture behav_bip_calculator of bip_calculator is
+begin
+end behav_bip_calculator;
 
 --++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 -- SYNC BLOCK MODULE
@@ -82,12 +98,14 @@ architecture behav_last_lane_reg of last_lane_reg is
 begin
   process(ck) is
   begin
-    if(ck'event and ck ='1') then
-      if(sync_ok = '1') then
-        lane_reg <= logical_lane;
-      else
-        lane_reg <= lane_reg;
-      end if;
+    if(rst = '0') then
+      lane_reg <= (others =>'0');
+    elsif(ck'event and ck ='1') then
+        if(sync_ok = '1') then
+          lane_reg <= logical_lane;
+        else
+          lane_reg <= lane_reg;
+        end if;
     end if;
   end process;
   logical_lane_reg <= lane_reg;
