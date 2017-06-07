@@ -39,6 +39,7 @@ entity bip_calculator is
   port(
     data_in      : in std_logic_vector(63 downto 0);
     header_in    : in std_logic_vector(1 downto 0);
+    enable       : in std_logic;
     bip_ok       : out std_logic
   );
 end entity;
@@ -230,5 +231,12 @@ begin
   --==============================================================================
   -- second_stage - CHECKS BIP
   --==============================================================================
+
+  --calcula BIP
+  bip_lane_0: entity work.bip_calculator port map (enable => , data_in => , header_in => , bip_ok => );
+  bip_lane_1: entity work.bip_calculator port map (enable => , data_in => , header_in => , bip_ok => );
+  bip_lane_2: entity work.bip_calculator port map (enable => , data_in => , header_in => , bip_ok => );
+  bip_lane_3: entity work.bip_calculator port map (enable => , data_in => , header_in => , bip_ok => );
+  --descarta bloco de sync (e todos até a chegada do primeiro block sync)
 
 end behav_lane_reorder;
