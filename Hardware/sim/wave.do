@@ -27,29 +27,30 @@ add wave -noupdate -expand -group FIBER -radix hexadecimal /Top/fiber/block_out_
 add wave -noupdate -expand -group FIBER -radix binary /Top/fiber/header_out_3
 add wave -noupdate -expand -group FIBER -radix hexadecimal /Top/fiber/block_out_3
 add wave -noupdate -divider REORDER
-add wave -noupdate /Top/rx_xgt4/inst_lane_reorder/sync_ok_2
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix unsigned /Top/rx_xgt4/inst_lane_reorder/logical_lane_0/logical_lane_reg
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/logical_lane_0_int
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_0_header_in
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix hexadecimal /Top/rx_xgt4/inst_lane_reorder/lane_0_data_in
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix unsigned /Top/rx_xgt4/inst_lane_reorder/logical_lane_1/logical_lane_reg
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/logical_lane_1_int
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_1_header_in
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix hexadecimal /Top/rx_xgt4/inst_lane_reorder/lane_1_data_in
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix unsigned /Top/rx_xgt4/inst_lane_reorder/logical_lane_2/logical_lane_reg
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/logical_lane_2_int
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_2_header_in
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix hexadecimal /Top/rx_xgt4/inst_lane_reorder/lane_2_data_in
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix unsigned /Top/rx_xgt4/inst_lane_reorder/logical_lane_3/logical_lane_reg
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/logical_lane_3_int
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_3_header_in
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -radix hexadecimal /Top/rx_xgt4/inst_lane_reorder/lane_3_data_in
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE /Top/rx_xgt4/inst_lane_reorder/sync_ok_0
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE /Top/rx_xgt4/inst_lane_reorder/sync_ok_1
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE /Top/rx_xgt4/inst_lane_reorder/sync_ok_3
-add wave -noupdate -expand -group LANE_REORDER -expand -group FIRST_STAGE -childformat {{/Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_0 -radix hexadecimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_1 -radix hexadecimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_2 -radix hexadecimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_3 -radix hexadecimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_0 -radix binary} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_1 -radix binary} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_2 -radix binary} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_3 -radix binary} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_0 -radix decimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_1 -radix decimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_2 -radix decimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_3 -radix decimal}} -expand -subitemconfig {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_0 {-radix hexadecimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_1 {-radix hexadecimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_2 {-radix hexadecimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_3 {-radix hexadecimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_0 {-radix binary} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_1 {-radix binary} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_2 {-radix binary} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_3 {-radix binary} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_0 {-radix decimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_1 {-radix decimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_2 {-radix decimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_3 {-radix decimal}} /Top/rx_xgt4/inst_lane_reorder/barreira_skew
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix unsigned /Top/rx_xgt4/inst_lane_reorder/logical_lane_0/logical_lane_reg
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/logical_lane_0_int
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_0_header_in
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix hexadecimal /Top/rx_xgt4/inst_lane_reorder/lane_0_data_in
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix unsigned /Top/rx_xgt4/inst_lane_reorder/logical_lane_1/logical_lane_reg
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/logical_lane_1_int
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_1_header_in
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix hexadecimal /Top/rx_xgt4/inst_lane_reorder/lane_1_data_in
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix unsigned /Top/rx_xgt4/inst_lane_reorder/logical_lane_2/logical_lane_reg
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/logical_lane_2_int
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_2_header_in
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix hexadecimal /Top/rx_xgt4/inst_lane_reorder/lane_2_data_in
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix unsigned /Top/rx_xgt4/inst_lane_reorder/logical_lane_3/logical_lane_reg
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/logical_lane_3_int
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix binary /Top/rx_xgt4/inst_lane_reorder/lane_3_header_in
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -radix hexadecimal /Top/rx_xgt4/inst_lane_reorder/lane_3_data_in
+add wave -noupdate -expand -group LANE_REORDER -group FIRST_STAGE -childformat {{/Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_0 -radix hexadecimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_1 -radix hexadecimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_2 -radix hexadecimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_3 -radix hexadecimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_0 -radix binary} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_1 -radix binary} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_2 -radix binary} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_3 -radix binary} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_0 -radix decimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_1 -radix decimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_2 -radix decimal} {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_3 -radix decimal}} -subitemconfig {/Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_0 {-height 16 -radix hexadecimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_1 {-height 16 -radix hexadecimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_2 {-height 16 -radix hexadecimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.data_3 {-height 16 -radix hexadecimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_0 {-height 16 -radix binary} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_1 {-height 16 -radix binary} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_2 {-height 16 -radix binary} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.header_3 {-height 16 -radix binary} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_0 {-height 16 -radix decimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_1 {-height 16 -radix decimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_2 {-height 16 -radix decimal} /Top/rx_xgt4/inst_lane_reorder/barreira_skew.logical_lane_3 {-height 16 -radix decimal}} /Top/rx_xgt4/inst_lane_reorder/barreira_skew
+add wave -noupdate -expand -group LANE_REORDER -group SECOND_STAGE /Top/rx_xgt4/inst_lane_reorder/barreira_bip
+add wave -noupdate -expand -group LANE_REORDER -group SECOND_STAGE /Top/rx_xgt4/inst_lane_reorder/enable_lane_0
+add wave -noupdate -expand -group LANE_REORDER -group SECOND_STAGE /Top/rx_xgt4/inst_lane_reorder/enable_lane_1
+add wave -noupdate -expand -group LANE_REORDER -group SECOND_STAGE /Top/rx_xgt4/inst_lane_reorder/enable_lane_2
+add wave -noupdate -expand -group LANE_REORDER -group SECOND_STAGE /Top/rx_xgt4/inst_lane_reorder/enable_lane_3
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {44800 ps} 0}
+WaveRestoreCursors {{Cursor 1} {15475 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 452
 configure wave -valuecolwidth 144
@@ -65,4 +66,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {13312 ps} {75601 ps}
+WaveRestoreZoom {359429 ps} {421718 ps}
