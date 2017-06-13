@@ -14,7 +14,7 @@
 #include <limits>
 
 //#define PKTS_BTW_SYNC 16383
-#define PKTS_BTW_SYNC 16
+#define PKTS_BTW_SYNC 32
 
 /* SYNC_LANEx_LOW BIP SYNC_LANEx_HIGH BIP */
 #define SYNC_LANE0_LOW  "100100000111011001000111"    // 0x907647
@@ -53,26 +53,6 @@ SC_MODULE(pkt_buffer) {
   ofstream lane1;
   ofstream lane2;
   ofstream lane3;
-
-  // std::pair<std::string, std::string> splitHeaderBlock(std::string val) {
-  //     std::string arg;
-  //     std::string::size_type pos = val.find('-');
-  //     if(val.npos != pos) {
-  //         arg = val.substr(pos + 1);
-  //         val = val.substr(0, pos);
-  //     }
-  //     return std::make_pair(val, arg);
-  // }
-
-  // std::ifstream& GotoLine(std::ifstream& file, unsigned int num){
-  //   std::string s;
-  //   // file.seekg(std::ios::beg);
-  //   for(int i=0; i <= num; i++){
-  //       //file.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-  //       std::getline(file, s);
-  //   }
-  //   return file;
-  // }
 
   void bip_calculator (sc_lv<8 > *lane_bip, const sc_lv<64 > block_in_lv, const sc_lv<2 > header_in_lv) {
     sc_bit aux;
