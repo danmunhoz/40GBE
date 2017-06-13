@@ -278,20 +278,20 @@ architecture behav_lane_reorder of lane_reorder is
     signal bip_lane_2_int : std_logic;
     signal bip_lane_3_int : std_logic;
 
-    signal xbar_data_out_0 : std_logic_vector(63 downto 0);
-    signal xbar_data_out_1 : std_logic_vector(63 downto 0);
-    signal xbar_data_out_2 : std_logic_vector(63 downto 0);
-    signal xbar_data_out_3 : std_logic_vector(63 downto 0);
-
-    signal xbar_header_out_0 : std_logic_vector(1 downto 0);
-    signal xbar_header_out_1 : std_logic_vector(1 downto 0);
-    signal xbar_header_out_2 : std_logic_vector(1 downto 0);
-    signal xbar_header_out_3 : std_logic_vector(1 downto 0);
-
     signal wen_0_int : std_logic;
     signal wen_1_int : std_logic;
     signal wen_2_int : std_logic;
     signal wen_3_int : std_logic;
+
+    signal shuffle_in_0 : std_logic_vector(65 downto 0);
+    signal shuffle_in_1 : std_logic_vector(65 downto 0);
+    signal shuffle_in_2 : std_logic_vector(65 downto 0);
+    signal shuffle_in_3 : std_logic_vector(65 downto 0);
+
+    signal shuffle_out_0 : std_logic_vector(65 downto 0);
+    signal shuffle_out_1 : std_logic_vector(65 downto 0);
+    signal shuffle_out_2 : std_logic_vector(65 downto 0);
+    signal shuffle_out_3 : std_logic_vector(65 downto 0);
 
     signal almost_f_0,almost_e_0,empty_0,full_0 : std_logic;
     signal fifo_out_0 : std_logic_vector(65 downto 0);
@@ -417,51 +417,27 @@ begin
   reg_bip_logic_lane_3: entity work.regnbit generic map (size=>3)  port map (ck=>clock, rst=>reset, ce=>'1', D=>barreira_skew.logical_lane_3,  Q=>barreira_bip.logical_lane_3);
 
   --==============================================================================
-  -- third_stage - CROSS-BAR
+  -- third_stage - SHUFFLE NETWORK
   --==============================================================================
-  xbar_data_out_0 <= barreira_bip.data_0 when barreira_bip.logical_lane_0 = "000" else
-                     barreira_bip.data_1 when barreira_bip.logical_lane_0 = "001" else
-                     barreira_bip.data_2 when barreira_bip.logical_lane_0 = "010" else
-                     barreira_bip.data_3 when barreira_bip.logical_lane_0 = "011" else
-                     (others=>'0');
-  xbar_header_out_0 <= barreira_bip.header_0 when barreira_bip.logical_lane_0 = "000" else
-                       barreira_bip.header_1 when barreira_bip.logical_lane_0 = "001" else
-                       barreira_bip.header_2 when barreira_bip.logical_lane_0 = "010" else
-                       barreira_bip.header_3 when barreira_bip.logical_lane_0 = "011" else
-                       (others=>'0');
+  shuffle_in_0 <= (barreira_bip.header_0 & barreira_bip.data_0);
+  shuffle_in_1 <= (barreira_bip.header_1 & barreira_bip.data_1);
+  shuffle_in_2 <= (barreira_bip.header_2 & barreira_bip.data_2);
+  shuffle_in_3 <= (barreira_bip.header_3 & barreira_bip.data_3);
 
-  xbar_data_out_1 <= barreira_bip.data_0 when barreira_bip.logical_lane_1 = "000" else
-                     barreira_bip.data_1 when barreira_bip.logical_lane_1 = "001" else
-                     barreira_bip.data_2 when barreira_bip.logical_lane_1 = "010" else
-                     barreira_bip.data_3 when barreira_bip.logical_lane_1 = "011" else
-                     (others=>'0');
-  xbar_header_out_1 <= barreira_bip.header_0 when barreira_bip.logical_lane_1 = "000" else
-                       barreira_bip.header_1 when barreira_bip.logical_lane_1 = "001" else
-                       barreira_bip.header_2 when barreira_bip.logical_lane_1 = "010" else
-                       barreira_bip.header_3 when barreira_bip.logical_lane_1 = "011" else
-                       (others=>'0');
-
-  xbar_data_out_2 <= barreira_bip.data_0 when barreira_bip.logical_lane_2 = "000" else
-                     barreira_bip.data_1 when barreira_bip.logical_lane_2 = "001" else
-                     barreira_bip.data_2 when barreira_bip.logical_lane_2 = "010" else
-                     barreira_bip.data_3 when barreira_bip.logical_lane_2 = "011" else
-                     (others=>'0');
-  xbar_header_out_2 <= barreira_bip.header_0 when barreira_bip.logical_lane_2 = "000" else
-                       barreira_bip.header_1 when barreira_bip.logical_lane_2 = "001" else
-                       barreira_bip.header_2 when barreira_bip.logical_lane_2 = "010" else
-                       barreira_bip.header_3 when barreira_bip.logical_lane_2 = "011" else
-                       (others=>'0');
-
-  xbar_data_out_3 <= barreira_bip.data_0 when barreira_bip.logical_lane_3 = "000" else
-                     barreira_bip.data_1 when barreira_bip.logical_lane_3 = "001" else
-                     barreira_bip.data_2 when barreira_bip.logical_lane_3 = "010" else
-                     barreira_bip.data_3 when barreira_bip.logical_lane_3 = "011" else
-                     (others=>'0');
-  xbar_header_out_3 <= barreira_bip.header_0 when barreira_bip.logical_lane_3 = "000" else
-                       barreira_bip.header_1 when barreira_bip.logical_lane_3 = "001" else
-                       barreira_bip.header_2 when barreira_bip.logical_lane_3 = "010" else
-                       barreira_bip.header_3 when barreira_bip.logical_lane_3 = "011" else
-                       (others=>'0');
+  shuffle_lanes: entity work.shuffle port map (
+      in_0   => shuffle_in_0,
+      in_1   => shuffle_in_1,
+      in_2   => shuffle_in_2,
+      in_3   => shuffle_in_3,
+      lane_0 => (barreira_bip.logical_lane_0(1 downto 0)),
+      lane_1 => (barreira_bip.logical_lane_1(1 downto 0)),
+      lane_2 => (barreira_bip.logical_lane_2(1 downto 0)),
+      lane_3 => (barreira_bip.logical_lane_3(1 downto 0)),
+      out_0  => shuffle_out_0,
+      out_1  => shuffle_out_1,
+      out_2  => shuffle_out_2,
+      out_3  => shuffle_out_3
+  );
 
   wen_0_int <= '0' when barreira_bip.is_sync_0 = '1' else '1';
   wen_1_int <= '0' when barreira_bip.is_sync_1 = '1' else '1';
@@ -470,21 +446,21 @@ begin
 
   reg_xbar_read_lanes: entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>barreira_bip.read_from_fifos, Q=>barreira_xbar.read_from_fifos);
 
-  reg_xbar_data_0:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>xbar_data_out_0,    Q=>barreira_xbar.data_0);
-  reg_xbar_header_0:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>xbar_header_out_0,  Q=>barreira_xbar.header_0);
+  reg_xbar_data_0:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_0(63 downto 0),  Q=>barreira_xbar.data_0);
+  reg_xbar_header_0:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_0(65 downto 64), Q=>barreira_xbar.header_0);
   reg_xbar_wen_0:        entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>wen_0_int, Q=>barreira_xbar.wen_0);
 
-  reg_xbar_data_1:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>xbar_data_out_1,    Q=>barreira_xbar.data_1);
-  reg_xbar_header_1:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>xbar_header_out_1,  Q=>barreira_xbar.header_1);
+  reg_xbar_data_1:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_1(63 downto 0),  Q=>barreira_xbar.data_1);
+  reg_xbar_header_1:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_1(65 downto 64), Q=>barreira_xbar.header_1);
   reg_xbar_wen_1:        entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>wen_1_int, Q=>barreira_xbar.wen_1);
 
 
-  reg_xbar_data_2:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>xbar_data_out_2,    Q=>barreira_xbar.data_2);
-  reg_xbar_header_2:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>xbar_header_out_2,  Q=>barreira_xbar.header_2);
+  reg_xbar_data_2:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_2(63 downto 0),  Q=>barreira_xbar.data_2);
+  reg_xbar_header_2:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_2(65 downto 64), Q=>barreira_xbar.header_2);
   reg_xbar_wen_2:        entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>wen_2_int, Q=>barreira_xbar.wen_2);
 
-  reg_xbar_data_3:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>xbar_data_out_3,    Q=>barreira_xbar.data_3);
-  reg_xbar_header_3:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>xbar_header_out_3,  Q=>barreira_xbar.header_3);
+  reg_xbar_data_3:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_3(63 downto 0),  Q=>barreira_xbar.data_3);
+  reg_xbar_header_3:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_3(65 downto 64), Q=>barreira_xbar.header_3);
   reg_xbar_wen_3:        entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>wen_3_int, Q=>barreira_xbar.wen_3);
 
 
@@ -514,7 +490,7 @@ begin
     WREN        => barreira_xbar.wen_0
   );
 
-  fifo_in_0 <= barreira_bip.header_0 & barreira_bip.data_0;
+  fifo_in_0 <= barreira_xbar.header_0 & barreira_xbar.data_0;
   pcs_0_header_out <= fifo_out_0(65 downto 64);
   pcs_0_data_out <= fifo_out_0(63 downto 0);
 
@@ -533,13 +509,13 @@ begin
 
     DI          => fifo_in_1,
     RDCLK       => clock,
-    RDEN        => barreira_xbar.read_from_fifos, --USAR ESSE SINAL CERTO!!!
+    RDEN        => barreira_xbar.read_from_fifos,
     RST         => reset_n,
     WRCLK       => clock,
     WREN        => barreira_xbar.wen_1
   );
 
-  fifo_in_1 <= barreira_bip.header_1 & barreira_bip.data_1;
+  fifo_in_1 <= barreira_xbar.header_1 & barreira_xbar.data_1;
   pcs_1_header_out <= fifo_out_1(65 downto 64);
   pcs_1_data_out <= fifo_out_1(63 downto 0);
 
@@ -564,7 +540,7 @@ begin
     WREN        => barreira_xbar.wen_2
   );
 
-  fifo_in_2 <= barreira_bip.header_2 & barreira_bip.data_2;
+  fifo_in_2 <= barreira_xbar.header_2 & barreira_xbar.data_2;
   pcs_2_header_out <= fifo_out_2(65 downto 64);
   pcs_2_data_out <= fifo_out_2(63 downto 0);
 
@@ -589,7 +565,7 @@ begin
     WREN        => barreira_xbar.wen_3
   );
 
-  fifo_in_3 <= barreira_bip.header_3 & barreira_bip.data_3;
+  fifo_in_3 <= barreira_xbar.header_3 & barreira_xbar.data_3;
   pcs_3_header_out <= fifo_out_3(65 downto 64);
   pcs_3_data_out <= fifo_out_3(63 downto 0);
 end behav_lane_reorder;

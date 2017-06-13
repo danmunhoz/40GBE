@@ -69,11 +69,14 @@ vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator.vhd
 
 vcom -novopt tb_xgt4.vhd
 vcom -novopt rx_xgt4.vhd
+vcom -novopt ../rtl/PCS/shuffle.vhd
 vcom -novopt ../rtl/PCS/lane_reordering.vhd
 
 scgenmod tb_xgt4 > tb_xgt4.h
 scgenmod rx_xgt4 > rx_xgt4.h
 scgenmod lane_reorder > lane_reorder.h
+scgenmod shuffle > shuffle.h
+
 
 sccom scoreboard.cpp
 sccom pkt_buffer.cpp
