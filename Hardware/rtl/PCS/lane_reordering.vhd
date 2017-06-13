@@ -59,23 +59,6 @@ begin
 end reg;
 
 --++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
--- BIP CHECKER MODULE
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-library ieee;
-use ieee.std_logic_1164.all;
-entity bip_calculator is
-  port(
-    data_in      : in std_logic_vector(63 downto 0);
-    header_in    : in std_logic_vector(1 downto 0);
-    enable       : in std_logic;
-    bip_ok       : out std_logic
-  );
-end entity;
-architecture behav_bip_calculator of bip_calculator is
-begin
-end behav_bip_calculator;
-
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 -- SYNC BLOCK MODULE
 --++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 library ieee;
