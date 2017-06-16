@@ -8,7 +8,7 @@
 #include <fstream>
 #include <time.h>
 
-#define PICK_RANDOM_FILES 1
+#define PICK_RANDOM_ORDER 1
 
 SC_MODULE(fiber) {
 
@@ -26,10 +26,10 @@ SC_MODULE(fiber) {
   sc_out<sc_lv<64 > > block_out_3;
   sc_out<sc_lv<2 > >  header_out_3;
 
-  ifstream lane0;
-  ifstream lane1;
-  ifstream lane2;
-  ifstream lane3;
+  ifstream lanes[4];
+  ifstream lanes_shuffled[4];
+
+
 
   std::pair<std::string, std::string> splitHeaderBlock(std::string val) {
       std::string arg;
@@ -64,8 +64,8 @@ SC_MODULE(fiber) {
     sc_lv<64 > block_out_3_int;
 
 
-    if( lane0.is_open() ) {
-      if( lane0 >> line0 ) {
+    if( lanes_shuffled[0].is_open() ) {
+      if( lanes_shuffled[0] >> line0 ) {
         std::pair<std::string, std::string> pr0 = splitHeaderBlock(line0);
         //cout << "LINE1: " << "Header: " << pr0.first << " Block: " << pr0.second << endl;
 
@@ -78,11 +78,11 @@ SC_MODULE(fiber) {
         cout << "[fiber 0] Header = " << header_out_0 << " Block = " << block_out_0 << endl;
       }
     } else {
-      cout << "[fiber 0]FALHOU LANE 0" << endl;
+      cout << "[fiber 0]FALHOU lanes 0" << endl;
     }
 
-    if( lane1.is_open() ) {
-      if( lane1 >> line1 ) {
+    if( lanes_shuffled[1].is_open() ) {
+      if( lanes_shuffled[1] >> line1 ) {
         std::pair<std::string, std::string> pr1 = splitHeaderBlock(line1);
         //cout << "LINE1: " << "Header: " << pr1.first << " Block: " << pr1.second << endl;
 
@@ -95,11 +95,11 @@ SC_MODULE(fiber) {
         cout << "[fiber 1] Header = " << header_out_1 << " Block = " << block_out_1 << endl;
       }
     } else {
-      cout << "[fiber 1]FALHOU LANE 1" << endl;
+      cout << "[fiber 1]FALHOU lanes 1" << endl;
     }
 
-    if( lane2.is_open() ) {
-      if( lane2 >> line2 ) {
+    if( lanes_shuffled[2].is_open() ) {
+      if( lanes_shuffled[2] >> line2 ) {
         std::pair<std::string, std::string> pr2 = splitHeaderBlock(line2);
         //cout << "LINE2: " << "Header: " << pr2.first << " Block: " << pr2.second << endl;
 
@@ -112,11 +112,11 @@ SC_MODULE(fiber) {
         cout << "[fiber 2] Header = " << header_out_2 << " Block = " << block_out_2 << endl;
       }
     } else {
-      cout << "[fiber 2]FALHOU LANE 2" << endl;
+      cout << "[fiber 2]FALHOU lanes 2" << endl;
     }
 
-    if( lane3.is_open() ) {
-      if( lane3 >> line3 ) {
+    if( lanes_shuffled[3].is_open() ) {
+      if( lanes_shuffled[3] >> line3 ) {
         std::pair<std::string, std::string> pr3 = splitHeaderBlock(line3);
         //cout << "LINE3: " << "Header: " << pr3.first << " Block: " << pr3.second << endl;
 
@@ -129,82 +129,62 @@ SC_MODULE(fiber) {
         cout << "[fiber 3] Header = " << header_out_3 << " Block = " << block_out_3 << endl;
       }
     } else {
-      cout << "[fiber 3]FALHOU LANE 3" << endl;
+      cout << "[fiber 3]FALHOU lanes 3" << endl;
     }
   }
 
 
   SC_CTOR(fiber) {
 
-    ifstream random_files[4];
-    // ifstream file_a, file_b, file_c, file_d;
-
-    // random_files[0].open("lane0_rx.txt");
-
-    random_files[0].open("lane0_rx.txt");
-    if (random_files[0].is_open()){
-      cout << "[fiber] File lane0.txt opened." << endl;
+    lanes[0].open("lane0_rx.txt");
+    if (lanes[0].is_open()){
+      cout << "[fiber] File lanes[0].txt opened." << endl;
     } else {
-      cout << "[fiber] ERROR opening lane0.txt" << endl;
+      cout << "[fiber] ERROR opening lanes[0].txt" << endl;
     }
 
-    random_files[1].open("lane1_rx.txt");
-    if (random_files[1].is_open()){
-      cout << "[fiber] File lane1.txt opened." << endl;
+    lanes[1].open("lane1_rx.txt");
+    if (lanes[1].is_open()){
+      cout << "[fiber] File lanes[1].txt opened." << endl;
     } else {
-      cout << "[fiber] ERROR opening lane1.txt" << endl;
+      cout << "[fiber] ERROR opening lanes[1].txt" << endl;
     }
 
-    random_files[2].open("lane2_rx.txt");
-    if (random_files[2].is_open()){
-      cout << "[fiber] File lane2.txt opened." << endl;
+    lanes[2].open("lane2_rx.txt");
+    if (lanes[2].is_open()){
+      cout << "[fiber] File lanes[2].txt opened." << endl;
     } else {
-      cout << "[fiber] ERROR opening lane2.txt" << endl;
+      cout << "[fiber] ERROR opening lanes[2].txt" << endl;
     }
 
-    random_files[3].open("lane3_rx.txt");
-    if (random_files[3].is_open()){
-      cout << "[fiber] File lane3.txt opened." << endl;
+    lanes[3].open("lane3_rx.txt");
+    if (lanes[3].is_open()){
+      cout << "[fiber] File lanes[3].txt opened." << endl;
     } else {
-      cout << "[fiber] ERROR opening lane3.txt" << endl;
+      cout << "[fiber] ERROR opening lanes[3].txt" << endl;
     }
 
-    if (PICK_RANDOM_FILES) {
-      std::random_shuffle(&random_files[0],&random_files[3]);
+    int size = sizeof(ifstream);
+    if(PICK_RANDOM_ORDER) {
+      srand ( (unsigned int) time (0) );
+      int r;
+      int used_lanes[4] = {0};
+      for(int i = 4; i > 0; i --) {
+        r = rand() % i;
+        if (used_lanes[r] == 1) {
+          for(int j=0; j < 4; j++) {
+            if (used_lanes[j] == 0)
+              r = j;
+            }
+        }
+        memcpy (&lanes_shuffled[4 - i], &lanes[r], size);
+        used_lanes[r] = 1;
+      }
+    } else {
+      for(int i = 0;i < 4;i++) {
+        memcpy (&lanes_shuffled[i], &lanes[i], size);
+      }
     }
-
-    lane0 = random_files[0];
-    lane1 = random_files[1];
-    lane2 = random_files[2];
-    lane3 = random_files[3];
-
-    // lane0.open("lane0_rx.txt");
-    // if (lane0.is_open()){
-    //   cout << "[fiber] File lane0.txt opened." << endl;
-    // } else {
-    //   cout << "[fiber] ERROR opening lane0.txt" << endl;
-    // }
-    //
-    // lane1.open("lane1_rx.txt");
-    // if (lane1.is_open()){
-    //   cout << "[fiber] File lane1.txt opened." << endl;
-    // } else {
-    //   cout << "[fiber] ERROR opening lane1.txt" << endl;
-    // }
-    //
-    // lane2.open("lane2_rx.txt");
-    // if (lane2.is_open()){
-    //   cout << "[fiber] File lane2.txt opened." << endl;
-    // } else {
-    //   cout << "[fiber] ERROR opening lane2.txt" << endl;
-    // }
-    //
-    // lane3.open("lane3_rx.txt");
-    // if (lane3.is_open()){
-    //   cout << "[fiber] File lane3.txt opened." << endl;
-    // } else {
-    //   cout << "[fiber] ERROR opening lane3.txt" << endl;
-    // }
 
     SC_METHOD(buffer_lanes);
     dont_initialize();
@@ -213,10 +193,10 @@ SC_MODULE(fiber) {
 
   ~fiber () {
     cout << "End of simulation!" << endl;
-    lane0.close();
-    lane1.close();
-    lane2.close();
-    lane3.close();
+    for(int i=0; i < 4; i++) {
+      lanes_shuffled[i].close();
+      lanes[i].close();
+    }
   }
 
 };
