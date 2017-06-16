@@ -1,63 +1,3 @@
-library ieee;
-use ieee.std_logic_1164.all;
-
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
--- Generic register
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-library IEEE;
-use IEEE.std_logic_1164.all;
-
-entity regnbit is
-           generic(
-           size : integer := 32;
-           INIT_VALUE : STD_LOGIC_VECTOR(63 downto 0) := (others=>'0') );
-           port(  ck, rst, ce : in std_logic;
-                  D : in  STD_LOGIC_VECTOR (size-1 downto 0);
-                  Q : out STD_LOGIC_VECTOR (size-1 downto 0)
-               );
-end regnbit;
-architecture regn of regnbit is
-begin
-  process(ck, rst)
-  begin
-       if rst = '0' then
-              Q <= INIT_VALUE(size-1 downto 0);
-       elsif ck'event and ck = '0' then
-           if ce = '1' then
-              Q <= D;
-           end if;
-       end if;
-  end process;
-end regn;
-
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
--- Bit register
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-library IEEE;
-use IEEE.std_logic_1164.all;
-
-entity reg_bit is
-           generic(
-              INIT_VALUE : std_logic := '0' );
-           port(  ck, rst, ce : in std_logic;
-                  D : in  std_logic;
-                  Q : out std_logic
-               );
-end reg_bit;
-architecture reg of reg_bit is
-begin
-  process(ck, rst)
-  begin
-       if rst = '0' then
-              Q <= INIT_VALUE;
-       elsif ck'event and ck = '0' then
-           if ce = '1' then
-              Q <= D;
-           end if;
-       end if;
-  end process;
-end reg;
-
 --++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 -- SYNC BLOCK MODULE
 --++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -368,10 +308,18 @@ begin
   enable_lane_3 <= '0' when barreira_skew.logical_lane_3 = "100" else '1';
 
   -- calcula BIP
-  reg_bip_lane_0: entity work.bip_calculator port map (enable => enable_lane_0, data_in => barreira_skew.data_0, header_in => barreira_skew.header_0, bip_ok => bip_lane_0_int);
-  reg_bip_lane_1: entity work.bip_calculator port map (enable => enable_lane_1, data_in => barreira_skew.data_1, header_in => barreira_skew.header_1, bip_ok => bip_lane_1_int);
-  reg_bip_lane_2: entity work.bip_calculator port map (enable => enable_lane_2, data_in => barreira_skew.data_2, header_in => barreira_skew.header_2, bip_ok => bip_lane_2_int);
-  reg_bip_lane_3: entity work.bip_calculator port map (enable => enable_lane_3, data_in => barreira_skew.data_3, header_in => barreira_skew.header_3, bip_ok => bip_lane_3_int);
+  bip_calculator_0: entity work.bip_calculator port map (clk => clock, rst => reset, enable => enable_lane_0,
+           data_in => barreira_skew.data_0, header_in => barreira_skew.header_0, is_sync => barreira_skew.is_sync_0, bip_ok => bip_lane_0_int);
+
+  bip_calculator_1: entity work.bip_calculator port map (clk => clock, rst => reset, enable => enable_lane_1,
+           data_in => barreira_skew.data_1, header_in => barreira_skew.header_1, is_sync => barreira_skew.is_sync_1, bip_ok => bip_lane_1_int);
+
+  bip_calculator_2: entity work.bip_calculator port map (clk => clock, rst => reset, enable => enable_lane_2,
+           data_in => barreira_skew.data_2, header_in => barreira_skew.header_2, is_sync => barreira_skew.is_sync_2, bip_ok => bip_lane_2_int);
+
+  bip_calculator_3: entity work.bip_calculator port map (clk => clock, rst => reset, enable => enable_lane_3,
+           data_in => barreira_skew.data_3, header_in => barreira_skew.header_3, is_sync => barreira_skew.is_sync_3, bip_ok => bip_lane_3_int);
+
 
   reg_bip_read_lanes: entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>read_from_fifos_int, Q=>barreira_bip.read_from_fifos);
 
