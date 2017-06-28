@@ -55,43 +55,47 @@ SC_MODULE(pkt_buffer) {
   ofstream lane3;
 
   void bip_calculator (sc_lv<8 > *lane_bip, const sc_lv<64 > block_in_lv, const sc_lv<2 > header_in_lv) {
+    // cout << "BIP_CALC PKT_BUFFER" << block_in_lv << endl;
+    // cout << "BIP_CALC PKT_BUFFER" << *lane_bip << endl;
     sc_bit aux;
-
     // int aux_little = 63;
 
     sc_lv<64 > block_in_lv_little;
 
-     block_in_lv_little.range(0,63) =  block_in_lv;
+    block_in_lv_little.range(0,63) =  block_in_lv;
+    // block_in_lv_little =  block_in_lv;
 
      //cout << "Bloco N   inv:" << header_in_lv << "-" << block_in_lv << endl;
      //cout << "Bloco invertd:" << header_in_lv << "-" << block_in_lv_little << endl;
 
-    cout << " Block in: " << block_in_lv << endl;
-    cout << " Block lt: " << block_in_lv_little << endl;
-    cout << " Headr in: " << header_in_lv << endl;
+    // cout << " Block in: " << block_in_lv << endl;
+    // cout << " Block lt: " << block_in_lv_little << endl;
+    // cout << " Headr in: " << header_in_lv << endl;
 
     for (int i = 0; i <8; i++) {
       for (int j=0; j<8; j++) {
-        cout << " (j*8)+i: "<< ((j*8)+i) << " bit: " <<  block_in_lv_little.get_bit((j*8)+i) << " To M:"<< i << endl;
+        // cout << " (j*8)+i: "<< ((j*8)+i) << " bit: " <<  block_in_lv_little.get_bit((j*8)+i) << " To M:"<< i << endl;
         aux = block_in_lv_little.get_bit((j*8)+i);
         (*lane_bip)[i] = (*lane_bip)[i] ^ aux;
-        cout << " Lane bip(" << i << "): " << (*lane_bip)[i] << endl;
+        // lane_bip[i] = lane_bip[i] ^ aux;
+        // cout << " Lane bip(" << i << "): " << (*lane_bip)[i] << endl;
         aux = 0;
       }
       if (i == 3) {
-        aux = header_in_lv.get_bit(1);
-        (*lane_bip)[i] = (*lane_bip)[i] ^ aux;
-        aux = 0;
-        cout << " header: "<< header_in_lv.get_bit(1) << " To M:"<< i << endl;
-      }
-      else if (i == 4 ) {
         aux = header_in_lv.get_bit(0);
         (*lane_bip)[i] = (*lane_bip)[i] ^ aux;
         aux = 0;
-        cout << " header: "<< header_in_lv.get_bit(0) << " To M:"<< i << endl;
+        // cout << " header: "<< header_in_lv.get_bit(1) << " To M:"<< i << endl;
+      }
+      else if (i == 4 ) {
+        aux = header_in_lv.get_bit(1);
+        (*lane_bip)[i] = (*lane_bip)[i] ^ aux;
+        aux = 0;
+        // cout << " header: "<< header_in_lv.get_bit(0) << " To M:"<< i << endl;
       }
     }
     // cout << " Block: " << header_in_lv << "-" << block_in_lv << " lane_bip: " << (*lane_bip) << endl;
+    // cout << "LANE0_BIP_bip " << (*lane_bip) << endl;
   }
 
   void rx() {
@@ -101,19 +105,25 @@ SC_MODULE(pkt_buffer) {
     sc_lv<64 > block_in_lv = block_in;
     sc_lv<2 > header_in_lv = header_in;
 
+    sc_lv<64 > blk_temp;
+    sc_lv<2 >  hdr_temp;
+    std::stringstream str_temp;
+
     static sc_lv<8 > lane0_bip;
     static sc_lv<8 > lane1_bip;
     static sc_lv<8 > lane2_bip;
     static sc_lv<8 > lane3_bip;
 
-    if ( data_valid_in == SC_LOGIC_1 ) {
+    static int first = 0;
+    if (first == 0) {
+        first ++;
+        lane0_bip = "00000000";
+        lane1_bip = "00000000";
+        lane2_bip = "00000000";
+        lane3_bip = "00000000";
+    }
 
-      // if (block_counter == 0) {
-      //   lane0_bip = "00000000";
-      //   lane1_bip = "00000000";
-      //   lane2_bip = "00000000";
-      //   lane3_bip = "00000000";
-      // }
+    if ( data_valid_in == SC_LOGIC_1 ) {
 
       buffer << header_in << "-" << block_in;
 
@@ -123,7 +133,10 @@ SC_MODULE(pkt_buffer) {
         case 0:
           lane0 << buffer.str() << endl;
           block_counter++;
+          cout << "LANE0_BIP_call " << lane0_bip << endl;
           bip_calculator (&lane0_bip, block_in_lv, header_in_lv);
+          cout << "LANE0_BIP " << header_in_lv << "-" << block_in_lv << endl;
+          cout << "LANE0_BIP_ret " << lane0_bip << endl;
           break;
         case 1:
           lane1 << buffer.str() << endl;
@@ -168,15 +181,37 @@ SC_MODULE(pkt_buffer) {
         */
 
         lane0 << "10-" << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << endl;
+        str_temp << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip;
+        blk_temp = str_temp.str().c_str();
+        hdr_temp = "10";
+        lane0_bip = "00000000";
+        bip_calculator (&lane0_bip, blk_temp, hdr_temp);
+        cout << "LANE0_BIP " << hdr_temp << "-" << blk_temp << endl;
+        cout << "LANE0_BIP " << lane0_bip << endl;
 
         lane1 << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << endl;
+        str_temp << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane0_bip;
+        blk_temp = str_temp.str().c_str();
+        hdr_temp = "10";
+        lane1_bip = "00000000";
+        bip_calculator (&lane1_bip, blk_temp, hdr_temp);
 
         lane2 << "10-" << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << endl;
+        str_temp << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane0_bip;
+        blk_temp = str_temp.str().c_str();
+        hdr_temp = "10";
+        lane2_bip = "00000000";
+        bip_calculator (&lane2_bip, block_in_lv, hdr_temp);
 
         lane3 << "10-" << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip << endl;
+        str_temp << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane0_bip;
+        blk_temp = str_temp.str().c_str();
+        hdr_temp = "10";
+        lane3_bip = "00000000";
+        bip_calculator (&lane3_bip, blk_temp, hdr_temp);
 
         block_counter = 0;
-         }
+       }
       }
     }
 
