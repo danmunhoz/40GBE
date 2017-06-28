@@ -57,20 +57,41 @@ SC_MODULE(pkt_buffer) {
   void bip_calculator (sc_lv<8 > *lane_bip, const sc_lv<64 > block_in_lv, const sc_lv<2 > header_in_lv) {
     sc_bit aux;
 
+    // int aux_little = 63;
+
+    sc_lv<64 > block_in_lv_little;
+
+     block_in_lv_little.range(0,63) =  block_in_lv;
+
+     //cout << "Bloco N   inv:" << header_in_lv << "-" << block_in_lv << endl;
+     //cout << "Bloco invertd:" << header_in_lv << "-" << block_in_lv_little << endl;
+
+    cout << " Block in: " << block_in_lv << endl;
+    cout << " Block lt: " << block_in_lv_little << endl;
+    cout << " Headr in: " << header_in_lv << endl;
+
     for (int i = 0; i <8; i++) {
-      for (int j = 0; j<8; j++) {
-        aux = block_in_lv.get_bit((j*8)+i);
+      for (int j=0; j<8; j++) {
+        cout << " (j*8)+i: "<< ((j*8)+i) << " bit: " <<  block_in_lv_little.get_bit((j*8)+i) << " To M:"<< i << endl;
+        aux = block_in_lv_little.get_bit((j*8)+i);
         (*lane_bip)[i] = (*lane_bip)[i] ^ aux;
+        cout << " Lane bip(" << i << "): " << (*lane_bip)[i] << endl;
+        aux = 0;
       }
       if (i == 3) {
-        aux = header_in_lv.get_bit(0);
-        (*lane_bip)[i] = (*lane_bip)[i] ^ aux;
-      }
-      else if (i == 4 ) {
         aux = header_in_lv.get_bit(1);
         (*lane_bip)[i] = (*lane_bip)[i] ^ aux;
+        aux = 0;
+        cout << " header: "<< header_in_lv.get_bit(1) << " To M:"<< i << endl;
+      }
+      else if (i == 4 ) {
+        aux = header_in_lv.get_bit(0);
+        (*lane_bip)[i] = (*lane_bip)[i] ^ aux;
+        aux = 0;
+        cout << " header: "<< header_in_lv.get_bit(0) << " To M:"<< i << endl;
       }
     }
+    // cout << " Block: " << header_in_lv << "-" << block_in_lv << " lane_bip: " << (*lane_bip) << endl;
   }
 
   void rx() {
@@ -87,12 +108,12 @@ SC_MODULE(pkt_buffer) {
 
     if ( data_valid_in == SC_LOGIC_1 ) {
 
-      if (block_counter == 0) {
-        lane0_bip = "00000000";
-        lane1_bip = "00000000";
-        lane2_bip = "00000000";
-        lane3_bip = "00000000";
-      }
+      // if (block_counter == 0) {
+      //   lane0_bip = "00000000";
+      //   lane1_bip = "00000000";
+      //   lane2_bip = "00000000";
+      //   lane3_bip = "00000000";
+      // }
 
       buffer << header_in << "-" << block_in;
 
@@ -146,13 +167,13 @@ SC_MODULE(pkt_buffer) {
         **  10-LOW PART OF AN ALIGNMENT BLOCK, BIP, HIGH PART OF AN ALIGNMENT BLOCK, NOT(BIP)
         */
 
-        lane0 << "10-" << SYNC_LANE0_HIGH << lane0_bip << SYNC_LANE0_LOW << ~lane0_bip << endl;
+        lane0 << "10-" << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << endl;
 
-        lane1 << "10-" << SYNC_LANE1_HIGH << lane1_bip << SYNC_LANE1_LOW << ~lane1_bip << endl;
+        lane1 << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << endl;
 
-        lane2 << "10-" << SYNC_LANE2_HIGH << lane2_bip << SYNC_LANE2_LOW << ~lane2_bip << endl;
+        lane2 << "10-" << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << endl;
 
-        lane3 << "10-" << SYNC_LANE3_HIGH << lane3_bip << SYNC_LANE3_LOW << ~lane3_bip << endl;
+        lane3 << "10-" << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip << endl;
 
         block_counter = 0;
          }

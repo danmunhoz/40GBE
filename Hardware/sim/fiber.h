@@ -8,7 +8,7 @@
 #include <fstream>
 #include <time.h>
 
-#define PICK_RANDOM_ORDER 1
+#define PICK_RANDOM_ORDER 0
 
 SC_MODULE(fiber) {
 

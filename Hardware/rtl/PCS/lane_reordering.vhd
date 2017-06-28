@@ -22,10 +22,10 @@ architecture behav_sync_lane of sync_lane is
   constant SYNC_LANE3_HIGH : std_logic_vector(23 downto 0) := "010111011000011011000010";
   signal logical_lane_int  : std_logic_vector(2 downto 0);
 begin
-  logical_lane_int <= "000" when data_in(63 downto 40) = SYNC_LANE0_HIGH and data_in(31 downto 8) = SYNC_LANE0_LOW else
-                      "001" when data_in(63 downto 40) = SYNC_LANE1_HIGH and data_in(31 downto 8) = SYNC_LANE1_LOW else
-                      "010" when data_in(63 downto 40) = SYNC_LANE2_HIGH and data_in(31 downto 8) = SYNC_LANE2_LOW else
-                      "011" when data_in(63 downto 40) = SYNC_LANE3_HIGH and data_in(31 downto 8) = SYNC_LANE3_LOW else
+  logical_lane_int <= "000" when data_in(63 downto 40) = SYNC_LANE0_LOW and data_in(31 downto 8) = SYNC_LANE0_HIGH else
+                      "001" when data_in(63 downto 40) = SYNC_LANE1_LOW and data_in(31 downto 8) = SYNC_LANE1_HIGH else
+                      "010" when data_in(63 downto 40) = SYNC_LANE2_LOW and data_in(31 downto 8) = SYNC_LANE2_HIGH else
+                      "011" when data_in(63 downto 40) = SYNC_LANE3_LOW and data_in(31 downto 8) = SYNC_LANE3_HIGH else
                       "100";
   sync_ok <= '0' when logical_lane_int = "100" else '1';
   logical_lane <= logical_lane_int;
@@ -51,7 +51,7 @@ begin
   process(ck) is
   begin
     if(rst = '0') then
-      lane_reg <= (others =>'0');
+      lane_reg <= "100";
     elsif(ck'event and ck ='1') then
         if(sync_ok = '1') then
           lane_reg <= logical_lane;
