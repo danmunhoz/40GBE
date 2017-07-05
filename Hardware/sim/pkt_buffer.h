@@ -61,7 +61,6 @@ SC_MODULE(pkt_buffer) {
     sc_lv<64 > block_in_lv_little;
 
     block_in_lv_little.range(0,63) =  block_in_lv;
-    // block_in_lv_little =  block_in_lv;
     if (debug)
       cout << "CALC_BIP_call: " << header_in_lv << block_in_lv << endl;
 
@@ -133,10 +132,7 @@ SC_MODULE(pkt_buffer) {
         case 0:
           lane0 << buffer.str() << endl;
           block_counter++;
-          cout << "LANE0_BIP_call " << lane0_bip << endl;
-          cout << "LANE0_BIP_call " << header_in << block_in << endl;
-          bip_calculator (&lane0_bip, block_in, header_in, 1);
-          cout << "LANE0_BIP_ret: " << lane0_bip << endl << endl;
+          bip_calculator (&lane0_bip, block_in, header_in, 0);
           break;
         case 1:
           lane1 << buffer.str() << endl;
@@ -185,10 +181,10 @@ SC_MODULE(pkt_buffer) {
         blk_temp = str_temp.str().c_str();
         hdr_temp = "10";
         lane0_bip = "00000000";
-        cout << "LANE0_BIP " << hdr_temp << "-" << blk_temp << endl;
-        cout << "LANE0_BIP " << lane0_bip << endl;
-        bip_calculator (&lane0_bip, blk_temp, hdr_temp, 1);
-        cout << "LANE0_BIP_ret: " << lane0_bip << endl << endl;
+        // cout << "LANE0_BIP " << hdr_temp << "-" << blk_temp << endl;
+        // cout << "LANE0_BIP " << lane0_bip << endl;
+        bip_calculator (&lane0_bip, blk_temp, hdr_temp, 0);
+        // cout << "LANE0_BIP_ret: " << lane0_bip << endl << endl;
 
         lane1 << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << endl;
         str_temp << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane0_bip;
@@ -249,9 +245,6 @@ SC_MODULE(pkt_buffer) {
 
     SC_METHOD(rx);
     sensitive<<clock_in161.pos();
-
-    // SC_METHOD(tx);
-    // sensitive<<clock_in161;
 
   }
 

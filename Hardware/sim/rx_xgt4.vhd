@@ -121,31 +121,33 @@ architecture behav of rx_xgt4 is
     signal pcs_2_header_out : std_logic_vector(1 downto 0);
     signal pcs_3_header_out : std_logic_vector(1 downto 0);
 
-  component lane_reorder port(
-      clock           : in std_logic;
-      reset           : in std_logic;
+    signal valid_in : std_logic;
 
-      lane_0_data_in  : in std_logic_vector(63 downto 0);
-      lane_1_data_in  : in std_logic_vector(63 downto 0);
-      lane_2_data_in  : in std_logic_vector(63 downto 0);
-      lane_3_data_in  : in std_logic_vector(63 downto 0);
-
-      lane_0_header_in  : in std_logic_vector(1 downto 0);
-      lane_1_header_in  : in std_logic_vector(1 downto 0);
-      lane_2_header_in  : in std_logic_vector(1 downto 0);
-      lane_3_header_in  : in std_logic_vector(1 downto 0);
-
-      pcs_0_data_out  : out std_logic_vector(63 downto 0);
-      pcs_1_data_out  : out std_logic_vector(63 downto 0);
-      pcs_2_data_out  : out std_logic_vector(63 downto 0);
-      pcs_3_data_out  : out std_logic_vector(63 downto 0);
-
-      pcs_0_header_out  : out std_logic_vector(1 downto 0);
-      pcs_1_header_out  : out std_logic_vector(1 downto 0);
-      pcs_2_header_out  : out std_logic_vector(1 downto 0);
-      pcs_3_header_out  : out std_logic_vector(1 downto 0)
-  );
-  end component;
+  -- component lane_reorder port(
+  --     clock           : in std_logic;
+  --     reset           : in std_logic;
+  --
+  --     lane_0_data_in  : in std_logic_vector(63 downto 0);
+  --     lane_1_data_in  : in std_logic_vector(63 downto 0);
+  --     lane_2_data_in  : in std_logic_vector(63 downto 0);
+  --     lane_3_data_in  : in std_logic_vector(63 downto 0);
+  --
+  --     lane_0_header_in  : in std_logic_vector(1 downto 0);
+  --     lane_1_header_in  : in std_logic_vector(1 downto 0);
+  --     lane_2_header_in  : in std_logic_vector(1 downto 0);
+  --     lane_3_header_in  : in std_logic_vector(1 downto 0);
+  --
+  --     pcs_0_data_out  : out std_logic_vector(63 downto 0);
+  --     pcs_1_data_out  : out std_logic_vector(63 downto 0);
+  --     pcs_2_data_out  : out std_logic_vector(63 downto 0);
+  --     pcs_3_data_out  : out std_logic_vector(63 downto 0);
+  --
+  --     pcs_0_header_out  : out std_logic_vector(1 downto 0);
+  --     pcs_1_header_out  : out std_logic_vector(1 downto 0);
+  --     pcs_2_header_out  : out std_logic_vector(1 downto 0);
+  --     pcs_3_header_out  : out std_logic_vector(1 downto 0)
+  -- );
+  -- end component;
 
   component wrapper_macpcs_rx port(
           -- Clocks
@@ -259,36 +261,48 @@ begin
 
           start_fifo <= '0', '1' after 65 ns;
 
+          valid_in <= '0', '1' after 127 ns;
+
+          -- Por enquanto...
+          lane_0_header_valid_in  <= valid_in;
+          lane_0_data_valid_in    <= valid_in;
+          lane_1_header_valid_in  <= valid_in;
+          lane_1_data_valid_in    <= valid_in;
+          lane_2_header_valid_in  <= valid_in;
+          lane_2_data_valid_in    <= valid_in;
+          lane_3_header_valid_in  <= valid_in;
+          lane_3_data_valid_in    <= valid_in;
+
           -- INST WRAPPER
-          -- POR ENQUANTO DO LADO DO WRAPPER...
-          inst_lane_reorder: lane_reorder port map(
-            clock => clk_156,
-            reset => reset_in,
-
-            lane_0_header_in  => rx_lane_0_header_in,
-            lane_0_data_in    => rx_lane_0_data_in,
-
-            lane_1_data_in    => rx_lane_1_data_in,
-            lane_1_header_in  => rx_lane_1_header_in,
-
-            lane_2_data_in    => rx_lane_2_data_in,
-            lane_2_header_in  => rx_lane_2_header_in,
-
-            lane_3_data_in    => rx_lane_3_data_in,
-            lane_3_header_in  => rx_lane_3_header_in,
-
-            pcs_0_data_out   => pcs_0_data_out,
-            pcs_0_header_out => pcs_0_header_out,
-
-            pcs_1_data_out   => pcs_1_data_out,
-            pcs_1_header_out => pcs_1_header_out,
-
-            pcs_2_data_out   => pcs_2_data_out,
-            pcs_2_header_out => pcs_2_header_out,
-
-            pcs_3_data_out   => pcs_3_data_out,
-            pcs_3_header_out => pcs_3_header_out
-          );
+          -- POR ENQUANTO AO LADO DO WRAPPER...
+          -- inst_lane_reorder: lane_reorder port map(
+          --   clock => clk_156,
+          --   reset => reset_in,
+          --
+          --   lane_0_header_in  => rx_lane_0_header_in,
+          --   lane_0_data_in    => rx_lane_0_data_in,
+          --
+          --   lane_1_data_in    => rx_lane_1_data_in,
+          --   lane_1_header_in  => rx_lane_1_header_in,
+          --
+          --   lane_2_data_in    => rx_lane_2_data_in,
+          --   lane_2_header_in  => rx_lane_2_header_in,
+          --
+          --   lane_3_data_in    => rx_lane_3_data_in,
+          --   lane_3_header_in  => rx_lane_3_header_in,
+          --
+          --   pcs_0_data_out   => pcs_0_data_out,
+          --   pcs_0_header_out => pcs_0_header_out,
+          --
+          --   pcs_1_data_out   => pcs_1_data_out,
+          --   pcs_1_header_out => pcs_1_header_out,
+          --
+          --   pcs_2_data_out   => pcs_2_data_out,
+          --   pcs_2_header_out => pcs_2_header_out,
+          --
+          --   pcs_3_data_out   => pcs_3_data_out,
+          --   pcs_3_header_out => pcs_3_header_out
+          -- );
 
           inst_wrapper_macpcs: wrapper_macpcs_rx port map(
             -- Clocks
@@ -311,24 +325,24 @@ begin
 
             -- PCS IN
             rx_lane_0_header_valid_in    => lane_0_header_valid_in,
-            rx_lane_0_header_in          => lane_0_header_in,
             rx_lane_0_data_valid_in      => lane_0_data_valid_in,
-            rx_lane_0_data_in            => lane_0_data_in,
+            rx_lane_0_header_in          => rx_lane_0_header_in,
+            rx_lane_0_data_in            => rx_lane_0_data_in,
 
             rx_lane_1_header_valid_in    => lane_1_header_valid_in,
-            rx_lane_1_header_in          => lane_1_header_in,
             rx_lane_1_data_valid_in      => lane_1_data_valid_in,
-            rx_lane_1_data_in            => lane_1_data_in,
+            rx_lane_1_header_in          => rx_lane_1_header_in,
+            rx_lane_1_data_in            => rx_lane_1_data_in,
 
             rx_lane_2_header_valid_in    => lane_2_header_valid_in,
-            rx_lane_2_header_in          => lane_2_header_in,
             rx_lane_2_data_valid_in      => lane_2_data_valid_in,
-            rx_lane_2_data_in            => lane_2_data_in,
+            rx_lane_2_header_in          => rx_lane_2_header_in,
+            rx_lane_2_data_in            => rx_lane_2_data_in,
 
             rx_lane_3_header_valid_in    => lane_3_header_valid_in,
-            rx_lane_3_header_in          => lane_3_header_in,
             rx_lane_3_data_valid_in      => lane_3_data_valid_in,
-            rx_lane_3_data_in            => lane_3_data_in,
+            rx_lane_3_header_in          => rx_lane_3_header_in,
+            rx_lane_3_data_in            => rx_lane_3_data_in,
 
             -- PCS OUT
             tx_data_out        => tx_data_out,
