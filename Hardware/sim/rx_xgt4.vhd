@@ -274,35 +274,6 @@ begin
           lane_3_data_valid_in    <= valid_in;
 
           -- INST WRAPPER
-          -- POR ENQUANTO AO LADO DO WRAPPER...
-          -- inst_lane_reorder: lane_reorder port map(
-          --   clock => clk_156,
-          --   reset => reset_in,
-          --
-          --   lane_0_header_in  => rx_lane_0_header_in,
-          --   lane_0_data_in    => rx_lane_0_data_in,
-          --
-          --   lane_1_data_in    => rx_lane_1_data_in,
-          --   lane_1_header_in  => rx_lane_1_header_in,
-          --
-          --   lane_2_data_in    => rx_lane_2_data_in,
-          --   lane_2_header_in  => rx_lane_2_header_in,
-          --
-          --   lane_3_data_in    => rx_lane_3_data_in,
-          --   lane_3_header_in  => rx_lane_3_header_in,
-          --
-          --   pcs_0_data_out   => pcs_0_data_out,
-          --   pcs_0_header_out => pcs_0_header_out,
-          --
-          --   pcs_1_data_out   => pcs_1_data_out,
-          --   pcs_1_header_out => pcs_1_header_out,
-          --
-          --   pcs_2_data_out   => pcs_2_data_out,
-          --   pcs_2_header_out => pcs_2_header_out,
-          --
-          --   pcs_3_data_out   => pcs_3_data_out,
-          --   pcs_3_header_out => pcs_3_header_out
-          -- );
 
           inst_wrapper_macpcs: wrapper_macpcs_rx port map(
             -- Clocks
