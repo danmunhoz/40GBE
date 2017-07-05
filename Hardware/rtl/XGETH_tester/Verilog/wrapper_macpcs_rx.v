@@ -170,6 +170,16 @@ module wrapper_macpcs_rx(
     wire            async_reset_n;
 
 
+    (* syn_keep = "true"*) wire [1:0]   pcs_0_header_out;
+    (* syn_keep = "true"*) wire [63:0]  pcs_0_data_out;
+    (* syn_keep = "true"*) wire [1:0]   pcs_1_header_out;
+    (* syn_keep = "true"*) wire [63:0]  pcs_1_data_out;
+    (* syn_keep = "true"*) wire [1:0]   pcs_2_header_out;
+    (* syn_keep = "true"*) wire [63:0]  pcs_2_data_out;
+    (* syn_keep = "true"*) wire [1:0]   pcs_3_header_out;
+    (* syn_keep = "true"*) wire [63:0]  pcs_3_data_out;
+
+
     // MAC/PCS XGMII Interconnection
     (* syn_keep = "true"*) wire [7:0]  xgmii_txc_lane_0;
     (* syn_keep = "true"*) wire [63:0] xgmii_txd_lane_0;
@@ -193,6 +203,37 @@ module wrapper_macpcs_rx(
 
     assign dump_xgmii_rxc = xgmii_rxc_lane_0;
     assign dump_xgmii_rxd = xgmii_rxd_lane_0;
+
+    lane_reorder INST_lane_reorder
+    (
+      .clock (clk_156),
+      .reset (reset_rx_n),
+
+      .lane_0_data_in    (rx_lane_0_data_in[63:0]),
+      .lane_0_header_in  (rx_lane_0_header_in[1:0]),
+
+      .lane_1_data_in    (rx_lane_1_data_in[63:0]),
+      .lane_1_header_in  (rx_lane_1_header_in[1:0]),
+
+      .lane_2_data_in    (rx_lane_2_data_in[63:0]),
+      .lane_2_header_in  (rx_lane_2_header_in[1:0]),
+
+      .lane_3_data_in    (rx_lane_3_data_in[63:0]),
+      .lane_3_header_in  (rx_lane_3_header_in[1:0]),
+
+      .pcs_0_header_out (pcs_0_header_out[1:0]),
+      .pcs_0_data_out   (pcs_0_data_out[63:0]),
+
+      .pcs_1_header_out (pcs_1_header_out[1:0]),
+      .pcs_1_data_out   (pcs_1_data_out[63:0]),
+
+      .pcs_2_header_out (pcs_2_header_out[1:0]),
+      .pcs_2_data_out   (pcs_2_data_out[63:0]),
+
+      .pcs_3_header_out (pcs_3_header_out[1:0]),
+      .pcs_3_data_out   (pcs_3_data_out[63:0])
+
+    );
 
     PCS_core INST_0_PCS_core
     (
@@ -221,9 +262,9 @@ module wrapper_macpcs_rx(
         .seed_A             (seed_A),
         .seed_B             (seed_B),
         .rx_header_valid_in (rx_lane_0_header_valid_in),
-        .rx_header_in       (rx_lane_0_header_in[1:0]),
+        .rx_header_in       (pcs_0_header_out[1:0]),
         .rx_data_valid_in   (rx_lane_0_data_valid_in),
-        .rx_data_in         (rx_lane_0_data_in[63:0]),
+        .rx_data_in         (pcs_0_data_out[63:0]),
         .hi_ber             (hi_ber),
         .blk_lock           (blk_lock),
         .linkstatus         (linkstatus),
@@ -271,9 +312,9 @@ module wrapper_macpcs_rx(
         .seed_A             (seed_A),
         .seed_B             (seed_B),
         .rx_header_valid_in (rx_lane_1_header_valid_in),
-        .rx_header_in       (rx_lane_1_header_in[1:0]),
+        .rx_header_in       (pcs_1_header_out[1:0]),
         .rx_data_valid_in   (rx_lane_1_data_valid_in),
-        .rx_data_in         (rx_lane_1_data_in[63:0]),
+        .rx_data_in         (pcs_1_data_out[63:0]),
         .hi_ber             (hi_ber),
         .blk_lock           (blk_lock),
         .linkstatus         (linkstatus),
@@ -288,8 +329,8 @@ module wrapper_macpcs_rx(
         .tx_header_out      (tx_header_out[1:0]),
         .rxgearboxslip_out  (rxgearboxslip_out),
         .tx_sequence_out    (tx_sequence_out),
-        .xgmii_txc          (xgmii_txc_lane_1),
-        .xgmii_txd          (xgmii_txd_lane_1),
+        .xgmii_txc          (xgmii_txc_lane_0), // MII do zero POR ENQUANTO
+        .xgmii_txd          (xgmii_txd_lane_0), // MII do zero POR ENQUANTO
         .xgmii_rxd          (xgmii_rxd_lane_1),
         .xgmii_rxc          (xgmii_rxc_lane_1)
     );
@@ -321,9 +362,9 @@ module wrapper_macpcs_rx(
         .seed_A             (seed_A),
         .seed_B             (seed_B),
         .rx_header_valid_in (rx_lane_2_header_valid_in),
-        .rx_header_in       (rx_lane_2_header_in[1:0]),
+        .rx_header_in       (pcs_2_header_out[1:0]),
         .rx_data_valid_in   (rx_lane_2_data_valid_in),
-        .rx_data_in         (rx_lane_2_data_in[63:0]),
+        .rx_data_in         (pcs_2_data_out[63:0]),
         .hi_ber             (hi_ber),
         .blk_lock           (blk_lock),
         .linkstatus         (linkstatus),
@@ -338,8 +379,8 @@ module wrapper_macpcs_rx(
         .tx_header_out      (tx_header_out[1:0]),
         .rxgearboxslip_out  (rxgearboxslip_out),
         .tx_sequence_out    (tx_sequence_out),
-        .xgmii_txc          (xgmii_txc_lane_2),
-        .xgmii_txd          (xgmii_txd_lane_2),
+        .xgmii_txc          (xgmii_txc_lane_0), // MII do zero POR ENQUANTO
+        .xgmii_txd          (xgmii_txd_lane_0), // MII do zero POR ENQUANTO
         .xgmii_rxd          (xgmii_rxd_lane_2),
         .xgmii_rxc          (xgmii_rxc_lane_2)
     );
@@ -371,9 +412,9 @@ module wrapper_macpcs_rx(
         .seed_A             (seed_A),
         .seed_B             (seed_B),
         .rx_header_valid_in (rx_lane_3_header_valid_in),
-        .rx_header_in       (rx_lane_3_header_in[1:0]),
+        .rx_header_in       (pcs_3_header_out[1:0]),
         .rx_data_valid_in   (rx_lane_3_data_valid_in),
-        .rx_data_in         (rx_lane_3_data_in[63:0]),
+        .rx_data_in         (pcs_3_data_out[63:0]),
         .hi_ber             (hi_ber),
         .blk_lock           (blk_lock),
         .linkstatus         (linkstatus),
@@ -388,8 +429,8 @@ module wrapper_macpcs_rx(
         .tx_header_out      (tx_header_out[1:0]),
         .rxgearboxslip_out  (rxgearboxslip_out),
         .tx_sequence_out    (tx_sequence_out),
-        .xgmii_txc          (xgmii_txc_lane_3),
-        .xgmii_txd          (xgmii_txd_lane_3),
+        .xgmii_txc          (xgmii_txc_lane_0), // MII do zero POR ENQUANTO
+        .xgmii_txd          (xgmii_txd_lane_0), // MII do zero POR ENQUANTO
         .xgmii_rxd          (xgmii_rxd_lane_3),
         .xgmii_rxc          (xgmii_rxc_lane_3)
     );

@@ -32,7 +32,7 @@ begin
 end behav_sync_lane;
 
 --++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
--- SYNC BLOCK COUNTER MODULE
+-- LANE NUMBER REG MODULE
 --++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 library ieee;
 use ieee.std_logic_1164.all;
@@ -275,7 +275,6 @@ begin
     logical_lane => logical_lane_3_int, logical_lane_reg => barreira_skew.logical_lane_3);
 
   -- read_from_fifos_int <= '0' when () else '1';
-  -- reg_skew_read: entity work.regnbit port map (ck=>clock, rst=>reset, ce=>'1', D=>read_from_fifos_int, Q=>barreira_skew.read_from_fifos);
 
   reg_skew_data_0:      entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>lane_0_data_in,   Q=>barreira_skew.data_0);
   reg_skew_header_0:    entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>lane_0_header_in, Q=>barreira_skew.header_0);
@@ -415,7 +414,7 @@ begin
 
     DI          => fifo_in_0,
     RDCLK       => clock,
-    RDEN        => barreira_xbar.read_from_fifos, --USAR ESSE SINAL CERTO!!!
+    RDEN        => barreira_xbar.read_from_fifos,
     RST         => reset_n,
     WRCLK       => clock,
     WREN        => barreira_xbar.wen_0
@@ -465,7 +464,7 @@ begin
 
     DI          => fifo_in_2,
     RDCLK       => clock,
-    RDEN        => barreira_xbar.read_from_fifos, --USAR ESSE SINAL CERTO!!!
+    RDEN        => barreira_xbar.read_from_fifos,
     RST         => reset_n,
     WRCLK       => clock,
     WREN        => barreira_xbar.wen_2
@@ -490,7 +489,7 @@ begin
 
     DI          => fifo_in_3,
     RDCLK       => clock,
-    RDEN        => barreira_xbar.read_from_fifos, --USAR ESSE SINAL CERTO!!!
+    RDEN        => barreira_xbar.read_from_fifos,
     RST         => reset_n,
     WRCLK       => clock,
     WREN        => barreira_xbar.wen_3

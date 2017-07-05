@@ -102,8 +102,6 @@ begin
   last_bip(0) <= ( bip_out_old(0)  xor sync_block_old_old(7)   xor sync_block_old_old(15) xor sync_block_old_old(23) xor sync_block_old_old(31)
                                     xor sync_block_old_old(39)  xor sync_block_old_old(47) xor sync_block_old_old(55) xor sync_block_old_old(63));
 
-
-
   -- seta o valor BIP esta OK
   bip_ok <= '1' when (last_bip = data_in(24 to 31)) else '0';
 
