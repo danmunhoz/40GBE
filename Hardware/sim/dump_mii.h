@@ -47,8 +47,10 @@ public:
 inline void dump_mii::dump() {
   sc_lv<8> aux;
   aux = mii_c;
-  if(dump_file.is_open() && (aux.to_uint() != 0xff) && (aux.to_uint() != 0x11)) {
-    dump_file << mii_c << "-" << mii_d << endl;
+  if(reset_n == SC_LOGIC_1) {
+    if(dump_file.is_open() && (aux.to_uint() != 0xff) && (aux.to_uint() != 0x11)) {
+      dump_file << mii_c << "-" << mii_d << endl;
+    }
   }
 }
 

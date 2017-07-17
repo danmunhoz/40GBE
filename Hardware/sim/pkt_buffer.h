@@ -131,21 +131,25 @@ SC_MODULE(pkt_buffer) {
       switch (lane) {
         case 0:
           lane0 << buffer.str() << endl;
+          cout << buffer.str() << endl;
           block_counter++;
           bip_calculator (&lane0_bip, block_in, header_in, 0);
           break;
         case 1:
           lane1 << buffer.str() << endl;
+          cout << buffer.str() << endl;
           block_counter++;
           bip_calculator (&lane1_bip, block_in, header_in);
           break;
         case 2:
           lane2 << buffer.str() << endl;
+          cout << buffer.str() << endl;
           block_counter++;
           bip_calculator (&lane2_bip, block_in, header_in);
           break;
         case 3:
           lane3 << buffer.str() << endl;
+          cout << buffer.str() << endl;
           block_counter++;
           bip_calculator (&lane3_bip, block_in, header_in);
           break;
@@ -245,6 +249,7 @@ SC_MODULE(pkt_buffer) {
 
     SC_METHOD(rx);
     sensitive<<clock_in161.pos();
+    dont_initialize();
 
   }
 

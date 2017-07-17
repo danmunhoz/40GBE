@@ -9,9 +9,9 @@
 // Description: This is a Descrambler to be used in an 66/64 decoder.
 //              This Descrambler is capable of processing 64-bit words
 //              provided by the block synchronizer
-// 
 //
-// Verification: I-Functional verification of the DeScrambler was done twice 
+//
+// Verification: I-Functional verification of the DeScrambler was done twice
 //               1- Simulating Scrambler/Descrambler loop
 //               2- Simulating Encoder-Scrambler / Descrambler-Decoder loop
 //
@@ -69,27 +69,34 @@
 
 `include "definitions.v"
 
-module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en, blk_lock, jtest_errc, RXD_Sync, DeScr_RXD, clk, rstb);
-    
+module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
+                  blk_lock, jtest_errc, RXD_Sync, DeScr_RXD, clk, rstb,
+                  rx_old_header_in, rx_old_data_in );
+
     input write_enable;
     input [65:0] RXD_Sync ; wire [65:0] RXD_Sync ;
     input        bypass_descram ; wire bypass_descram ;
     input        clr_jtest_errc;
-    input        rx_jtm_en; wire rx_jtm_en;  
+    input        rx_jtm_en; wire rx_jtm_en;
     input        clk ; wire clk ;
     input        rstb ; wire rstb ;
-    input        blk_lock;wire blk_lock;
+    input        blk_lock; wire blk_lock;
+
+    input [1:0]   rx_old_header_in;
+    input [63:0]  rx_old_data_in;
+
     output [65:0] DeScr_RXD ; reg [65:0] DeScr_RXD ;
     output [15:0] jtest_errc; reg [15:0] jtest_errc;
+
     reg [63:0]    jtm_data;
-    reg           jtm_lock; 
+    reg           jtm_lock;
     reg [6:0]     blk_ctr;
-    reg [1:0]     zero_ctr, ones_ctr, LF_ctr, LF_bar_ctr; 
+    reg [1:0]     zero_ctr, ones_ctr, LF_ctr, LF_bar_ctr;
     reg [57:0]    DeScrambler_Register;
     reg [63:0]    RXD_input;
     reg [1:0]     RX_Sync_header;
     wire [63:0]   DeScr_wire;
-    reg           jtm_d_neq_0, jtm_d_neq_1, jtm_d_neq_lf, jtm_d_neq_lfb; 
+    reg           jtm_d_neq_0, jtm_d_neq_1, jtm_d_neq_lf, jtm_d_neq_lfb;
     reg           jtm_err_bit;
 
 
@@ -170,60 +177,60 @@ module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en, blk_l
 
 
     // This is the jitter test mode
-    
-	
+
+
     always  @(posedge clk or negedge rstb)
         if (!rstb) begin
-	        jtm_d_neq_0	  <= 1'b0; 
-	        jtm_d_neq_1	  <= 1'b0; 
-	        jtm_d_neq_lf  <= 1'b0; 
-	        jtm_d_neq_lfb <= 1'b0; 
-	        jtm_err_bit <= 1'b0; 
+	        jtm_d_neq_0	  <= 1'b0;
+	        jtm_d_neq_1	  <= 1'b0;
+	        jtm_d_neq_lf  <= 1'b0;
+	        jtm_d_neq_lfb <= 1'b0;
+	        jtm_err_bit <= 1'b0;
         end
         else begin
-	        
-	        if (jtm_data != 64'h0) 
-	            jtm_d_neq_0	  <= 1'b1; 
-	        else 
-	            jtm_d_neq_0	  <= 1'b0; 
-	        
-	        if (jtm_data != 64'hFFFFFFFFFFFFFFFF) 
+
+	        if (jtm_data != 64'h0)
+	            jtm_d_neq_0	  <= 1'b1;
+	        else
+	            jtm_d_neq_0	  <= 1'b0;
+
+	        if (jtm_data != 64'hFFFFFFFFFFFFFFFF)
 	            jtm_d_neq_1	  <= 1'b1;
-	        else  
+	        else
 	            jtm_d_neq_1	  <= 1'b0;
-	        
-	        if (jtm_data != `PCS_LF_OS) 
+
+	        if (jtm_data != `PCS_LF_OS)
 	            jtm_d_neq_lf  <= 1'b1;
-	        else 
+	        else
 	            jtm_d_neq_lf  <= 1'b0;
-	        
-	        if (jtm_data != ~`PCS_LF_OS) 
-	            jtm_d_neq_lfb <= 1'b1; 
-	        else 
-	            jtm_d_neq_lfb <= 1'b0;  
-            
-	        jtm_err_bit <= jtm_d_neq_0 & jtm_d_neq_1 & jtm_d_neq_lf & jtm_d_neq_lfb ; 			 
-	        
+
+	        if (jtm_data != ~`PCS_LF_OS)
+	            jtm_d_neq_lfb <= 1'b1;
+	        else
+	            jtm_d_neq_lfb <= 1'b0;
+
+	        jtm_err_bit <= jtm_d_neq_0 & jtm_d_neq_1 & jtm_d_neq_lf & jtm_d_neq_lfb ;
+
         end
 
     always @(posedge clk or negedge rstb)
         if (!rstb) begin
-	        zero_ctr  <= 2'h3; 
-            ones_ctr  <= 2'h3; 
-            LF_ctr    <= 2'h3;   
-            LF_bar_ctr <= 2'h3; 
+	        zero_ctr  <= 2'h3;
+            ones_ctr  <= 2'h3;
+            LF_ctr    <= 2'h3;
+            LF_bar_ctr <= 2'h3;
             blk_ctr <= 7'h7F;
-	        jtm_lock   <= 1'b0; 
+	        jtm_lock   <= 1'b0;
 	        jtm_data <= 64'h1;
 	        jtest_errc <= 16'h0;
         end
-        else if ( write_enable ) begin 
+        else if ( write_enable ) begin
             if (!rx_jtm_en) begin
-	            zero_ctr  <= 2'h3; 
-                ones_ctr  <= 2'h3; 
-                LF_ctr    <= 2'h3;   
+	            zero_ctr  <= 2'h3;
+                ones_ctr  <= 2'h3;
+                LF_ctr    <= 2'h3;
                 LF_bar_ctr <= 2'h3;
-	            blk_ctr <= 7'h7F;   
+	            blk_ctr <= 7'h7F;
 	            jtm_lock   <= 1'b0;
 	            jtm_data <= 64'h1;
 	            jtest_errc <= 16'h0;
@@ -246,10 +253,10 @@ module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en, blk_l
 	            end
 	            else if (jtm_lock && !clr_jtest_errc) begin
 	                blk_ctr <= blk_ctr - 1;
-                    if (jtm_err_bit == 1'b1) 
+                    if (jtm_err_bit == 1'b1)
                         if ((jtest_errc != 16'hffff) && (blk_ctr != 7'h0) )
                             jtest_errc <= jtest_errc + 1;
-	                
+
 	            end
 	            else begin
 	                jtest_errc <= 16'h0;
@@ -258,14 +265,14 @@ module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en, blk_l
         end // if ( write_enable )
 
     // This is the normal mode of operation
-    
+
     always @(posedge clk or negedge rstb)
         if (!rstb) begin
             DeScrambler_Register[57:0] <= 58'h3;
             RXD_input[63:0] <= 64'h0;
             RX_Sync_header <= 2'b01;
             DeScr_RXD[65:0] <= 66'h79;
-        end      
+        end
         else if ( write_enable ) begin
             if (bypass_descram) begin
                 RXD_input[63:0] <= RXD_Sync[65:2];
@@ -276,16 +283,16 @@ module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en, blk_l
       	        RXD_input[63:0] <= RXD_Sync[65:2];
                 RX_Sync_header <= RXD_Sync[1:0];
       	        DeScr_RXD[65:0] <= {DeScr_wire[63:0],RX_Sync_header[1:0]};
-	            
+
                 DeScrambler_Register[57] <= RXD_input[6];
                 DeScrambler_Register[56] <= RXD_input[7];
                 DeScrambler_Register[55] <= RXD_input[8];
                 DeScrambler_Register[54] <= RXD_input[9];
                 DeScrambler_Register[53] <= RXD_input[10];
-	            DeScrambler_Register[52] <= RXD_input[11];
+	              DeScrambler_Register[52] <= RXD_input[11];
                 DeScrambler_Register[51] <= RXD_input[12];
                 DeScrambler_Register[50] <= RXD_input[13];
-	            
+
                 DeScrambler_Register[49] <= RXD_input[14];
                 DeScrambler_Register[48] <= RXD_input[15];
                 DeScrambler_Register[47] <= RXD_input[16];
@@ -294,7 +301,7 @@ module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en, blk_l
                 DeScrambler_Register[44] <= RXD_input[19];
                 DeScrambler_Register[43] <= RXD_input[20];
                 DeScrambler_Register[42] <= RXD_input[21];
-	            
+
                 DeScrambler_Register[41] <= RXD_input[22];
                 DeScrambler_Register[40] <= RXD_input[23];
                 DeScrambler_Register[39] <= RXD_input[24];
@@ -303,7 +310,7 @@ module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en, blk_l
                 DeScrambler_Register[36] <= RXD_input[27];
                 DeScrambler_Register[35] <= RXD_input[28];
                 DeScrambler_Register[34] <= RXD_input[29];
-	            
+
                 DeScrambler_Register[33] <= RXD_input[30];
                 DeScrambler_Register[32] <= RXD_input[31];
                 DeScrambler_Register[31] <= RXD_input[32];
@@ -312,7 +319,7 @@ module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en, blk_l
                 DeScrambler_Register[28] <= RXD_input[35];
                 DeScrambler_Register[27] <= RXD_input[36];
                 DeScrambler_Register[26] <= RXD_input[37];
-	            
+
                 DeScrambler_Register[25] <= RXD_input[38];
                 DeScrambler_Register[24] <= RXD_input[39];
                 DeScrambler_Register[23] <= RXD_input[40];
@@ -321,7 +328,7 @@ module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en, blk_l
                 DeScrambler_Register[20] <= RXD_input[43];
                 DeScrambler_Register[19] <= RXD_input[44];
                 DeScrambler_Register[18] <= RXD_input[45];
-	            
+
                 DeScrambler_Register[17] <= RXD_input[46];
                 DeScrambler_Register[16] <= RXD_input[47];
                 DeScrambler_Register[15] <= RXD_input[48];
@@ -330,7 +337,7 @@ module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en, blk_l
                 DeScrambler_Register[12] <= RXD_input[51];
                 DeScrambler_Register[11] <= RXD_input[52];
                 DeScrambler_Register[10] <= RXD_input[53];
-	            
+
                 DeScrambler_Register[9] <= RXD_input[54];
                 DeScrambler_Register[8] <= RXD_input[55];
                 DeScrambler_Register[7] <= RXD_input[56];
@@ -343,13 +350,5 @@ module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en, blk_l
                 DeScrambler_Register[0] <= RXD_input[63];
             end // else: !if(bypass_descram)
         end
-    
+
 endmodule // descramble
-
-
-
-
-
-
-
-

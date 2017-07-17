@@ -63,73 +63,83 @@ SC_MODULE(fiber) {
     sc_lv<2 >  header_out_3_int;
     sc_lv<64 > block_out_3_int;
 
+    if (reset_in == SC_LOGIC_1) {       // RESET ativo baixo
+        if( lanes_shuffled[0].is_open() ) {
+          if( lanes_shuffled[0] >> line0 ) {
+            std::pair<std::string, std::string> pr0 = splitHeaderBlock(line0);
+            //cout << "LINE1: " << "Header: " << pr0.first << " Block: " << pr0.second << endl;
 
-    if( lanes_shuffled[0].is_open() ) {
-      if( lanes_shuffled[0] >> line0 ) {
-        std::pair<std::string, std::string> pr0 = splitHeaderBlock(line0);
-        //cout << "LINE1: " << "Header: " << pr0.first << " Block: " << pr0.second << endl;
+            header_out_0_int = pr0.first.c_str();
+            block_out_0_int  = pr0.second.c_str();
 
-        header_out_0_int = pr0.first.c_str();
-        block_out_0_int  = pr0.second.c_str();
+            header_out_0 = header_out_0_int;
+            block_out_0 = block_out_0_int;
 
-        header_out_0 = header_out_0_int;
-        block_out_0 = block_out_0_int;
+            cout << "[fiber 0] Header = " << header_out_0 << " Block = " << block_out_0 << endl;
+          }
+        } else {
+          cout << "[fiber 0]FALHOU lanes 0" << endl;
+        }
 
-        cout << "[fiber 0] Header = " << header_out_0 << " Block = " << block_out_0 << endl;
-      }
+        if( lanes_shuffled[1].is_open() ) {
+          if( lanes_shuffled[1] >> line1 ) {
+            std::pair<std::string, std::string> pr1 = splitHeaderBlock(line1);
+            //cout << "LINE1: " << "Header: " << pr1.first << " Block: " << pr1.second << endl;
+
+            header_out_1_int = pr1.first.c_str();
+            block_out_1_int  = pr1.second.c_str();
+
+            header_out_1 = header_out_1_int;
+            block_out_1 = block_out_1_int;
+
+            cout << "[fiber 1] Header = " << header_out_1 << " Block = " << block_out_1 << endl;
+          }
+        } else {
+          cout << "[fiber 1]FALHOU lanes 1" << endl;
+        }
+
+        if( lanes_shuffled[2].is_open() ) {
+          if( lanes_shuffled[2] >> line2 ) {
+            std::pair<std::string, std::string> pr2 = splitHeaderBlock(line2);
+            //cout << "LINE2: " << "Header: " << pr2.first << " Block: " << pr2.second << endl;
+
+            header_out_2_int = pr2.first.c_str();
+            block_out_2_int  = pr2.second.c_str();
+
+            header_out_2 = header_out_2_int;
+            block_out_2 = block_out_2_int;
+
+            cout << "[fiber 2] Header = " << header_out_2 << " Block = " << block_out_2 << endl;
+          }
+        } else {
+          cout << "[fiber 2]FALHOU lanes 2" << endl;
+        }
+
+        if( lanes_shuffled[3].is_open() ) {
+          if( lanes_shuffled[3] >> line3 ) {
+            std::pair<std::string, std::string> pr3 = splitHeaderBlock(line3);
+            //cout << "LINE3: " << "Header: " << pr3.first << " Block: " << pr3.second << endl;
+
+            header_out_3_int = pr3.first.c_str();
+            block_out_3_int  = pr3.second.c_str();
+
+            header_out_3 = header_out_3_int;
+            block_out_3 = block_out_3_int;
+
+            cout << "[fiber 3] Header = " << header_out_3 << " Block = " << block_out_3 << endl;
+          }
+        } else {
+          cout << "[fiber 3]FALHOU lanes 3" << endl;
+        }
     } else {
-      cout << "[fiber 0]FALHOU lanes 0" << endl;
-    }
-
-    if( lanes_shuffled[1].is_open() ) {
-      if( lanes_shuffled[1] >> line1 ) {
-        std::pair<std::string, std::string> pr1 = splitHeaderBlock(line1);
-        //cout << "LINE1: " << "Header: " << pr1.first << " Block: " << pr1.second << endl;
-
-        header_out_1_int = pr1.first.c_str();
-        block_out_1_int  = pr1.second.c_str();
-
-        header_out_1 = header_out_1_int;
-        block_out_1 = block_out_1_int;
-
-        cout << "[fiber 1] Header = " << header_out_1 << " Block = " << block_out_1 << endl;
-      }
-    } else {
-      cout << "[fiber 1]FALHOU lanes 1" << endl;
-    }
-
-    if( lanes_shuffled[2].is_open() ) {
-      if( lanes_shuffled[2] >> line2 ) {
-        std::pair<std::string, std::string> pr2 = splitHeaderBlock(line2);
-        //cout << "LINE2: " << "Header: " << pr2.first << " Block: " << pr2.second << endl;
-
-        header_out_2_int = pr2.first.c_str();
-        block_out_2_int  = pr2.second.c_str();
-
-        header_out_2 = header_out_2_int;
-        block_out_2 = block_out_2_int;
-
-        cout << "[fiber 2] Header = " << header_out_2 << " Block = " << block_out_2 << endl;
-      }
-    } else {
-      cout << "[fiber 2]FALHOU lanes 2" << endl;
-    }
-
-    if( lanes_shuffled[3].is_open() ) {
-      if( lanes_shuffled[3] >> line3 ) {
-        std::pair<std::string, std::string> pr3 = splitHeaderBlock(line3);
-        //cout << "LINE3: " << "Header: " << pr3.first << " Block: " << pr3.second << endl;
-
-        header_out_3_int = pr3.first.c_str();
-        block_out_3_int  = pr3.second.c_str();
-
-        header_out_3 = header_out_3_int;
-        block_out_3 = block_out_3_int;
-
-        cout << "[fiber 3] Header = " << header_out_3 << " Block = " << block_out_3 << endl;
-      }
-    } else {
-      cout << "[fiber 3]FALHOU lanes 3" << endl;
+      header_out_0 = "00";
+      block_out_0  = "0000000000000000000000000000000000000000000000000000000000000000";
+      header_out_1 = "00";
+      block_out_1  = "0000000000000000000000000000000000000000000000000000000000000000";
+      header_out_2 = "00";
+      block_out_2  = "0000000000000000000000000000000000000000000000000000000000000000";
+      header_out_3 = "00";
+      block_out_3  = "0000000000000000000000000000000000000000000000000000000000000000";
     }
   }
 

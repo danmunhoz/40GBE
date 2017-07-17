@@ -84,6 +84,10 @@ module  R_TYPE_Decode (rstb156, clk156, DeScr_RXD, R_TYPE, rx_data, rx_control);
 
     reg           coded39dt36_seq,coded39dt36_ones,coded39dt36_zers,coded35dt32_seq ,coded35dt32_ones;
 
+    // FOR DEBUG ONLY
+    wire [15:0] block_type_dec_r_15dt0;
+    assign block_type_dec_r_15dt0 = block_type_dec_r[15:0];
+
 PCS_to_XGMII Con_7(DeScr_RXD_reg[65:59],C_7);
 PCS_to_XGMII Con_6(DeScr_RXD_reg[58:52],C_6);
 PCS_to_XGMII Con_5(DeScr_RXD_reg[51:45],C_5);
@@ -127,12 +131,12 @@ always @(posedge clk156 or negedge rstb156)
     if (!rstb156)
         begin
             DeScr_RXD_reg <= {`PCS_idle,`PCS_idle,`PCS_idle,`PCS_idle,`PCS_idle,`PCS_idle,`PCS_idle,`PCS_idle,`Type_1, `Sync_cont};
-            
+
             sync_header <=2'b01;
             coded_data[63:0] <= {`PCS_idle,`PCS_idle,`PCS_idle,`PCS_idle,`PCS_idle,`PCS_idle,`PCS_idle,`PCS_idle,`Type_1};
             decoded_data[63:0] <= {`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle};
 
-            err_7t7 <=0; 
+            err_7t7 <=0;
             err_6t7 <=0;
             err_5t7 <=0;
             err_4t7 <=0;
@@ -141,7 +145,7 @@ always @(posedge clk156 or negedge rstb156)
             err_1t7 <=0;
             err_0t7 <=0;
             err_0t3 <=0;
-            
+
             coded39dt36_seq <= 1'b0;
             coded39dt36_ones <= 1'b0;
             coded39dt36_zers <= 1'b0;
@@ -158,17 +162,17 @@ always @(posedge clk156 or negedge rstb156)
             coded_data[63:0] <= DeScr_RXD_reg[65:2];
 
             decoded_data[63:0] <= {C_7, C_6, C_5, C_4, C_3, C_2, C_1, C_0};
-            
+
             if (DeScr_RXD_reg[41:38] == `PCS_Sequence_OS) // coded_data[39:36]
                 coded39dt36_seq <= 1'b1;
             else
                 coded39dt36_seq <= 1'b0;
-            
+
             if (DeScr_RXD_reg[41:38] == 4'b1111) // coded_data[39:36]
                 coded39dt36_ones <= 1'b1;
             else
                 coded39dt36_ones <= 1'b0;
-            
+
             if (DeScr_RXD_reg[41:38] == 4'b0000) // coded_data[39:36]
                 coded39dt36_zers <= 1'b1;
             else
@@ -178,12 +182,12 @@ always @(posedge clk156 or negedge rstb156)
                 coded35dt32_seq <= 1'b1;
             else
                 coded35dt32_seq <= 1'b0;
-            
+
             if (DeScr_RXD_reg[37:34] == 4'b1111) // coded_data[35:32]
                 coded35dt32_ones <= 1'b1;
             else
                 coded35dt32_ones <= 1'b0;
-            
+
             block_type_dec_r <= block_type_dec;
 
             err_0t7 <= err_7_0 | err_6_0 | err_5_0 | err_4_0 | err_3_0 | err_2_0 | err_1_0 | err_0_0;
@@ -224,19 +228,19 @@ always @(posedge clk156 or negedge rstb156)
                                 (decoded_data[23:16] == `XGMII_error) ||
                                 (decoded_data[15:8]  == `XGMII_error) ||
                                 (decoded_data[7:0]   == `XGMII_error)
-                                ) 
+                                )
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= `EBLOCK_R;
                                     R_TYPE <= `E;
                                 end // if ( err_7 || err_6 || err_5 || err_4 || err_3 || err_2 || err_1 || err_0 ||...
-                            else if ( err_0t7 ) 
+                            else if ( err_0t7 )
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= `EBLOCK_R;
-                                    R_TYPE <= `E;    
+                                    R_TYPE <= `E;
                                 end
-                            else 
+                            else
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= decoded_data;
@@ -244,19 +248,19 @@ always @(posedge clk156 or negedge rstb156)
                                 end
                         end
                         16'h0002: begin
-                            if ( err_0t3 || ( !coded39dt36_seq && !coded39dt36_ones) ) 
+                            if ( err_0t3 || ( !coded39dt36_seq && !coded39dt36_ones) )
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= `EBLOCK_R;
                                     R_TYPE <= `E;
                                 end
-                            else if (coded39dt36_seq ) 
+                            else if (coded39dt36_seq )
                                 begin
                                     rx_data <= {coded_data[63:40],`XGMII_Sequence_OS,decoded_data[31:0]};
                                     rx_control <= 8'h1f;
-                                    R_TYPE <= `C;  
+                                    R_TYPE <= `C;
                                 end
-                            else 
+                            else
                                 begin
                                     rx_data <= {coded_data[63:40],`XGMII_reserved_6,decoded_data[31:0]}; //Latch!!!fixed
                                     rx_control <= 8'h1f;
@@ -264,7 +268,7 @@ always @(posedge clk156 or negedge rstb156)
                                 end
                         end
                         16'h0004: begin
-                            if ( err_0t3 ) 
+                            if ( err_0t3 )
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= `EBLOCK_R;
@@ -278,22 +282,22 @@ always @(posedge clk156 or negedge rstb156)
                                 end
                         end
                         16'h0008: begin
-                            if ( !coded39dt36_zers  || (!coded35dt32_seq  && !coded35dt32_ones )) 
+                            if ( !coded39dt36_zers  || (!coded35dt32_seq  && !coded35dt32_ones ))
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= `EBLOCK_R;
                                     R_TYPE <= `E;
                                 end
-                            else if (coded35dt32_seq ) 
+                            else if (coded35dt32_seq )
                                 begin
                                     rx_control <= 8'h11;
                                     rx_data <= {coded_data[63:40],`XGMII_start,coded_data[31:8],`XGMII_Sequence_OS};
-                                    R_TYPE <= `S;   
+                                    R_TYPE <= `S;
                                 end
-                            else 
+                            else
                                 begin
                                     rx_data <= {coded_data[63:40],`XGMII_start,coded_data[31:8],`XGMII_reserved_6}; //Latch!fixed
-                                    rx_control <= 8'h11;   
+                                    rx_control <= 8'h11;
                                     R_TYPE <= `S;
                                 end
                         end
@@ -304,13 +308,13 @@ always @(posedge clk156 or negedge rstb156)
                                     rx_data <= `EBLOCK_R;
                                     R_TYPE <= `E;
                                 end
-                            else if ( coded39dt36_seq && coded35dt32_seq ) 
+                            else if ( coded39dt36_seq && coded35dt32_seq )
                                 begin
                                     rx_data <= {coded_data[63:40],`XGMII_Sequence_OS,coded_data[31:8],`XGMII_Sequence_OS};
                                     R_TYPE <= `C;
                                     rx_control <= 8'h11;
                                 end
-                            else if ( coded39dt36_seq && coded35dt32_ones) 
+                            else if ( coded39dt36_seq && coded35dt32_ones)
                                 begin
                                     rx_data <= {coded_data[63:40],`XGMII_Sequence_OS,coded_data[31:8],`XGMII_reserved_6};
                                     R_TYPE <= `C;
@@ -320,50 +324,50 @@ always @(posedge clk156 or negedge rstb156)
                                 begin
                                     rx_data <= {coded_data[63:40],`XGMII_reserved_6,coded_data[31:8],`XGMII_Sequence_OS};
                                     R_TYPE <= `C;
-                                    rx_control <= 8'h11;   
+                                    rx_control <= 8'h11;
                                 end
-                            else 
+                            else
                                 begin
                                     rx_data <= {coded_data[63:40],`XGMII_reserved_6,coded_data[31:8],`XGMII_reserved_6}; // LATCH!!!fixed
                                     R_TYPE <= `C;
                                     rx_control <= 8'h11;
                                 end
                         end
-                        
+
                         16'h0020: begin
                             rx_control <= 8'h01;
                             rx_data <= {coded_data[63:8],`XGMII_start};
                             R_TYPE <= `S;
                         end
                         16'h0040: begin
-                            if ( err_4t7 || (!coded35dt32_seq && !coded35dt32_ones )) 
+                            if ( err_4t7 || (!coded35dt32_seq && !coded35dt32_ones ))
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= `EBLOCK_R;
                                     R_TYPE <= `E;
                                 end
-                            else if (coded35dt32_seq) 
+                            else if (coded35dt32_seq)
                                 begin
                                     rx_data <= {decoded_data[63:32],coded_data[31:8],`XGMII_Sequence_OS};  //Latch!fixed
                                     R_TYPE <= `C;
-                                    rx_control <= 8'hf1;   
+                                    rx_control <= 8'hf1;
                                 end
-                            else 
+                            else
                                 begin
                                     rx_data <= {decoded_data[63:32],coded_data[31:8],`XGMII_reserved_6}; //Latch!fixed
                                     R_TYPE <= `C;
                                     rx_control <= 8'hf1;
                                 end
                         end
-                        
+
                         16'h0080: begin
-                            if (  err_1t7 ) 
+                            if (  err_1t7 )
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= `EBLOCK_R;
                                     R_TYPE <= `E;
                                 end
-                            else 
+                            else
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= {decoded_data[63:8], `XGMII_terminate};
@@ -371,13 +375,13 @@ always @(posedge clk156 or negedge rstb156)
                                 end
                         end
                         16'h0100: begin
-                            if (  err_2t7 ) 
+                            if (  err_2t7 )
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= `EBLOCK_R;
                                     R_TYPE <= `E;
                                 end
-                            else 
+                            else
                                 begin
                                     rx_control <= 8'hfe;
                                     rx_data <= {decoded_data[63:16],`XGMII_terminate, coded_data[15:8]};
@@ -385,13 +389,13 @@ always @(posedge clk156 or negedge rstb156)
                                 end
                         end
                         16'h0200: begin
-                            if (  err_3t7 ) 
+                            if (  err_3t7 )
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= `EBLOCK_R;
                                     R_TYPE <= `E;
                                 end
-                            else 
+                            else
                                 begin
                                     rx_control <= 8'hfc;
                                     rx_data <= {decoded_data[63:24],`XGMII_terminate, coded_data[23:8]};
@@ -399,13 +403,13 @@ always @(posedge clk156 or negedge rstb156)
                                 end
                         end
                         16'h0400: begin
-                            if ( err_4t7  ) 
+                            if ( err_4t7  )
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= `EBLOCK_R;
                                     R_TYPE <= `E;
                                 end
-                            else 
+                            else
                                 begin
                                     rx_control <= 8'hf8;
                                     rx_data <= {decoded_data[63:32],`XGMII_terminate, coded_data[31:8]};
@@ -413,13 +417,13 @@ always @(posedge clk156 or negedge rstb156)
                                 end
                         end
                         16'h0800: begin
-                            if ( err_5t7 ) 
+                            if ( err_5t7 )
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= `EBLOCK_R;
                                     R_TYPE <= `E;
                                 end
-                            else 
+                            else
                                 begin
                                     rx_control <= 8'hf0;
                                     rx_data <= {decoded_data[63:40],`XGMII_terminate, coded_data[39:8]};
@@ -427,13 +431,13 @@ always @(posedge clk156 or negedge rstb156)
                                 end
                         end
                         16'h1000: begin
-                            if (  err_6t7 ) 
+                            if (  err_6t7 )
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= `EBLOCK_R;
                                     R_TYPE <= `E;
                                 end
-                            else 
+                            else
                                 begin
                                     rx_control <= 8'he0;
                                     rx_data <= {decoded_data[63:48],`XGMII_terminate, coded_data[47:8]};
@@ -441,13 +445,13 @@ always @(posedge clk156 or negedge rstb156)
                                 end
                         end
                         16'h2000: begin
-                            if ( err_7t7 ) 
+                            if ( err_7t7 )
                                 begin
                                     rx_control <= 8'hff;
                                     rx_data <= `EBLOCK_R;
                                     R_TYPE <= `E;
                                 end
-                            else 
+                            else
                                 begin
                                     rx_control <= 8'hc0;
                                     rx_data <= {decoded_data[63:56],`XGMII_terminate, coded_data[55:8]};
@@ -475,5 +479,3 @@ always @(posedge clk156 or negedge rstb156)
         endcase
     end
 endmodule
-
-

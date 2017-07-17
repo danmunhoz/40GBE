@@ -62,10 +62,13 @@
 
 `include "definitions.v"
 
-module  RX_FSM (clk156, rstb156, errd_blks, lpbk, clear_errblk,  hi_ber, blk_lock, bypass_66decoder, rx_data, rx_control, rxcontrol, rxdata, R_TYPE, DeScr_RXD, rxlf);
+module  RX_FSM (clk156, rstb156, errd_blks, lpbk, clear_errblk,  hi_ber,
+                blk_lock, bypass_66decoder, rx_data, rx_control, rxcontrol,
+                rxdata, R_TYPE, DeScr_RXD, rxlf, start_in, start_out);
+
     input clk156 ; wire clk156 ;
     input rstb156 ; wire rstb156 ;
-    input [63:0] DeScr_RXD; wire [63:0] DeScr_RXD; 
+    input [63:0] DeScr_RXD; wire [63:0] DeScr_RXD;
     input        clear_errblk; wire clear_errblk;
     input        hi_ber ; wire hi_ber ;
     input        blk_lock ; wire blk_lock ;
@@ -74,11 +77,13 @@ module  RX_FSM (clk156, rstb156, errd_blks, lpbk, clear_errblk,  hi_ber, blk_loc
     input [7:0]  rx_control ; wire [7:0] rx_control ;
     input [2:0]  R_TYPE ; wire [2:0] R_TYPE ;
     input        lpbk; wire lpbk;
+    input        start_in; wire start_in;
 
     output       rxlf; reg rxlf;
     output [7:0] rxcontrol ; reg [7:0] rxcontrol ;
     output [63:0] rxdata ; reg [63:0] rxdata ;
     output [7:0]  errd_blks; reg [7:0] errd_blks;
+    output        start_out; reg start_out;
 
 
     reg [2:0]     Current_state, Next_state;
@@ -90,7 +95,7 @@ module  RX_FSM (clk156, rstb156, errd_blks, lpbk, clear_errblk,  hi_ber, blk_loc
 always @(posedge clk156 or negedge rstb156)
     if (!rstb156)
         rxlf <= 1'b0;
-    else if (Current_state == `RX_INIT) 
+    else if (Current_state == `RX_INIT)
         rxlf <= 1'b1;
     else
         rxlf <= 1'b0;
@@ -106,6 +111,7 @@ always @(posedge clk156 or negedge rstb156)
         next_control <= 8'hff;
         rxdata <= `LBLOCK_R;
         rxcontrol <= 8'h11;
+        start_out <= 1'b0;
     end
     else if (hi_ber && !lpbk) begin
         Current_state <= `RX_INIT;
@@ -115,7 +121,7 @@ always @(posedge clk156 or negedge rstb156)
         next_TYPE <= `C;
         next_Code <= {`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle};
         next_control <= 8'hff;
-        
+
         rxdata <= `LBLOCK_R;
         rxcontrol <= 8'h11;
     end
@@ -127,7 +133,7 @@ always @(posedge clk156 or negedge rstb156)
         next_TYPE <= `C;
         next_Code <= {`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle,`XGMII_idle};
         next_control <= 8'hff;
-        
+
         rxdata <= `LBLOCK_R;
         rxcontrol <= 8'h11;
     end
@@ -158,17 +164,24 @@ always@(posedge clk156 or negedge rstb156) //jg changed to posedge clk 7/17/02
         errd_blks <= 8'h0;
     else if ((!bypass_66decoder) && (!hi_ber || lpbk) && (blk_lock || lpbk)) begin
         if (!clear_errblk) begin
-            if  ((Next_state == `RX_E) && (errd_blks != 8'hff)) 
+            if  ((Next_state == `RX_E) && (errd_blks != 8'hff))
                 errd_blks <= errd_blks + 1;
         end
         else
             errd_blks <= 8'h0;
     end
 
-always @(Current_state or Code or Control or TYPE or next_TYPE ) 
+always @(TYPE) begin
+  if (TYPE == `S)
+    start_out <= 1'b1;
+  else
+    start_out <= 1'b0;  
+end
+
+always @(Current_state or Code or Control or TYPE or next_TYPE )
     case (Current_state)
         `RX_INIT: begin
-            if (TYPE == `S)
+            if (TYPE == `S || start_in == 1'b1)
                 Next_state = `RX_D;
             else
                 if (TYPE == `C)
@@ -214,7 +227,7 @@ always @(Current_state or Code or Control or TYPE or next_TYPE )
                         Next_state = `RX_T;
                     else
                         Next_state = `RX_E;
-        end      
+        end
         default: Next_state = `RX_INIT;
     endcase
 

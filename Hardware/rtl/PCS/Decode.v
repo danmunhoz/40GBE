@@ -3,7 +3,7 @@
 //
 // FileName: Decode.v
 //
-// 
+//
 //------------------------------------------------------------------------------
 
 module Decode (
@@ -45,6 +45,9 @@ module Decode (
     wire [7:0]    rx_control;
     wire [63:0]   rx_data;
 
+    wire start_in;
+    wire start_out;
+
 R_TYPE_Decode  R_TYPE_Decode(
                              //  input ports
                              .rstb156(rstb156),
@@ -69,10 +72,12 @@ RX_FSM  RX_FSM(
                .rx_control(rx_control[7:0]),
                .R_TYPE(R_TYPE[2:0]),
                .DeScr_RXD(DeScr_RXD[65:2]),
+               .start_in(start_in),
                //  output ports
                .errd_blks(errd_blks[7:0]),
                .rxcontrol(rxcontrol[7:0]),
                .rxdata(rxdata[63:0]),
+               .start_out(start_out),
                .rxlf(rxlf)
                );
 

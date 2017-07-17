@@ -459,3 +459,85 @@
 # End of Stack Trace
 
 
+# Current time Fri Jul  7 14:51:58 2017
+# ModelSim Stack Trace
+# Program = vsim
+# Id = "10.3c"
+# Version = "2014.07"
+# Date = "Jul 18 2014"
+# Platform = linux_x86_64
+# --> START OF USERCODE
+# 0    0x00007ffff7110428: 'raise + 0x38' in '/lib/x86_64-linux-gnu/libc.so.6'
+# 1    0x00007ffff711202a: 'abort + 0x16a' in '/lib/x86_64-linux-gnu/libc.so.6'
+# <-- END OF USERCODE
+# 2    0x00007ffff71527ea: '<unknown (@0x7ffff71527ea)>'
+# 3    0x00007ffff715b37a: '<unknown (@0x7ffff715b37a)>'
+# --> START OF USERCODE
+# 4    0x00007ffff715f53c: 'free + 0x4c' in '/lib/x86_64-linux-gnu/libc.so.6'
+# 5    0x00007ffff25bcf6e: 'std::basic_filebuf<char, std::char_traits<char> >::_M_destroy_internal_buffer() + 0x1e' in '/soft64/mentor/ferramentas/modelsim/10.3c/modeltech/gcc-4.5.0-linux_x86_64/lib64/libstdc++.so.6'
+# 6    0x00007ffff25bdaa4: 'std::basic_filebuf<char, std::char_traits<char> >::close() + 0x64' in '/soft64/mentor/ferramentas/modelsim/10.3c/modeltech/gcc-4.5.0-linux_x86_64/lib64/libstdc++.so.6'
+# 7    0x00007ffff25bf05d: 'std::basic_ifstream<char, std::char_traits<char> >::close() + 0xd' in '/soft64/mentor/ferramentas/modelsim/10.3c/modeltech/gcc-4.5.0-linux_x86_64/lib64/libstdc++.so.6'
+# 8    0x00007ffff28d6ea2: 'fiber::~fiber() + 0xb2' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 9    0x00007ffff28d71fe: 'fiber::~fiber() + 0x18' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 10   0x00007ffff28d9937: 'Top::~Top() + 0x173' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 11   0x00007ffff28da08a: 'Top::~Top() + 0x18' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 12   0x00007ffff28ee0f3: 'sc_core::scmti_delete_module(void*) + 0x13' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# <-- END OF USERCODE
+# 13   0x000000000080b521: '<unknown (@0x80b521)>'
+# 14   0x000000000053c010: '<unknown (@0x53c010)>'
+# 15   0x00000000007ac58e: '<unknown (@0x7ac58e)>'
+# End of Stack Trace
+
+
+# Current time Fri Jul  7 14:53:34 2017
+# ModelSim Stack Trace
+# Program = vsim
+# Id = "10.3c"
+# Version = "2014.07"
+# Date = "Jul 18 2014"
+# Platform = linux_x86_64
+# --> START OF USERCODE
+# 0    0x00007ffff7110428: 'raise + 0x38' in '/lib/x86_64-linux-gnu/libc.so.6'
+# 1    0x00007ffff711202a: 'abort + 0x16a' in '/lib/x86_64-linux-gnu/libc.so.6'
+# <-- END OF USERCODE
+# 2    0x00007ffff71527ea: '<unknown (@0x7ffff71527ea)>'
+# 3    0x00007ffff715b37a: '<unknown (@0x7ffff715b37a)>'
+# --> START OF USERCODE
+# 4    0x00007ffff715f53c: 'free + 0x4c' in '/lib/x86_64-linux-gnu/libc.so.6'
+# 5    0x00007ffff25bcf6e: 'std::basic_filebuf<char, std::char_traits<char> >::_M_destroy_internal_buffer() + 0x1e' in '/soft64/mentor/ferramentas/modelsim/10.3c/modeltech/gcc-4.5.0-linux_x86_64/lib64/libstdc++.so.6'
+# 6    0x00007ffff25bdaa4: 'std::basic_filebuf<char, std::char_traits<char> >::close() + 0x64' in '/soft64/mentor/ferramentas/modelsim/10.3c/modeltech/gcc-4.5.0-linux_x86_64/lib64/libstdc++.so.6'
+# 7    0x00007ffff25bf05d: 'std::basic_ifstream<char, std::char_traits<char> >::close() + 0xd' in '/soft64/mentor/ferramentas/modelsim/10.3c/modeltech/gcc-4.5.0-linux_x86_64/lib64/libstdc++.so.6'
+# 8    0x00007ffff28d6ea2: 'fiber::~fiber() + 0xb2' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 9    0x00007ffff28d71fe: 'fiber::~fiber() + 0x18' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 10   0x00007ffff28d9937: 'Top::~Top() + 0x173' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 11   0x00007ffff28da08a: 'Top::~Top() + 0x18' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 12   0x00007ffff28ee0f3: 'sc_core::scmti_delete_module(void*) + 0x13' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# <-- END OF USERCODE
+# 13   0x000000000080b521: '<unknown (@0x80b521)>'
+# 14   0x000000000053c010: '<unknown (@0x53c010)>'
+# 15   0x00000000008d261f: '<unknown (@0x8d261f)>'
+# 16   0x00000000008d2a35: '<unknown (@0x8d2a35)>'
+# 17   0x000000000142e4af: '<unknown (@0x142e4af)>'
+# 18   0x000000000142f669: '<unknown (@0x142f669)>'
+# 19   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 20   0x000000000147a95f: '<unknown (@0x147a95f)>'
+# 21   0x0000000001430983: '<unknown (@0x1430983)>'
+# 22   0x000000000143b814: '<unknown (@0x143b814)>'
+# 23   0x000000000142f669: '<unknown (@0x142f669)>'
+# 24   0x0000000001471e2a: '<unknown (@0x1471e2a)>'
+# 25   0x000000000147ac80: '<unknown (@0x147ac80)>'
+# 26   0x000000000142e053: '<unknown (@0x142e053)>'
+# 27   0x0000000001440b18: '<unknown (@0x1440b18)>'
+# 28   0x000000000142f669: '<unknown (@0x142f669)>'
+# 29   0x00000000014302b6: '<unknown (@0x14302b6)>'
+# 30   0x0000000001430636: '<unknown (@0x1430636)>'
+# 31   0x00000000011548bc: '<unknown (@0x11548bc)>'
+# 32   0x000000000148b681: '<unknown (@0x148b681)>'
+# 33   0x00000000014d4a11: '<unknown (@0x14d4a11)>'
+# 34   0x00000000014a113d: '<unknown (@0x14a113d)>'
+# 35   0x00000000014a1475: '<unknown (@0x14a1475)>'
+# 36   0x0000000001343e76: '<unknown (@0x1343e76)>'
+# 37   0x00000000008b991b: '<unknown (@0x8b991b)>'
+# End of Stack Trace
+
+

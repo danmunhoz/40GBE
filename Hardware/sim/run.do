@@ -90,10 +90,9 @@ sccom -link -B/usr/bin/
 vsim -novopt work.glbl work.Top -t 1ps
 
 do wave.do
-#do wave_bip.do
 run 800 ns
 
-exec python scoreboard.py
+#exec python scoreboard.py
 exec cp lane0.txt lane0_rx.txt
 exec cp lane1.txt lane1_rx.txt
 exec cp lane2.txt lane2_rx.txt

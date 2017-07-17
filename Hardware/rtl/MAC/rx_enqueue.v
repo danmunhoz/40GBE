@@ -534,22 +534,22 @@ function [2:0] bit_cnt4;
 input   [3:0]   bits;
     begin
     case (bits)
-    0:  bit_cnt4 = 0;
-    1:  bit_cnt4 = 1;
-    2:  bit_cnt4 = 1;
-    3:  bit_cnt4 = 2;
-    4:  bit_cnt4 = 1;
-    5:  bit_cnt4 = 2;
-    6:  bit_cnt4 = 2;
-    7:  bit_cnt4 = 3;
-    8:  bit_cnt4 = 1;
-    9:  bit_cnt4 = 2;
-    10: bit_cnt4 = 2;
-    11: bit_cnt4 = 3;
-    12: bit_cnt4 = 2;
-    13: bit_cnt4 = 3;
-    14: bit_cnt4 = 3;
-    15: bit_cnt4 = 4;
+      0:  bit_cnt4 = 0;
+      1:  bit_cnt4 = 1;
+      2:  bit_cnt4 = 1;
+      3:  bit_cnt4 = 2;
+      4:  bit_cnt4 = 1;
+      5:  bit_cnt4 = 2;
+      6:  bit_cnt4 = 2;
+      7:  bit_cnt4 = 3;
+      8:  bit_cnt4 = 1;
+      9:  bit_cnt4 = 2;
+      10: bit_cnt4 = 2;
+      11: bit_cnt4 = 3;
+      12: bit_cnt4 = 2;
+      13: bit_cnt4 = 3;
+      14: bit_cnt4 = 3;
+      15: bit_cnt4 = 4;
     endcase
     end
 endfunction

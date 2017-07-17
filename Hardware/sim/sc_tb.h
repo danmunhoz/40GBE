@@ -196,14 +196,17 @@ SC_MODULE(Top) {
     pkt_buffer_inst->data_valid_in(rx_data_valid_in);
 
     dump_mii_tx_inst->clock_in(iclock156);
+    dump_mii_tx_inst->reset_n(reset);
     dump_mii_tx_inst->mii_c(dump_xgmii_txc);
     dump_mii_tx_inst->mii_d(dump_xgmii_txd);
 
     dump_mii_rx_inst->clock_in(iclock156);
+    dump_mii_rx_inst->reset_n(reset);
     dump_mii_rx_inst->mii_c(dump_xgmii_rxc);
     dump_mii_rx_inst->mii_d(dump_xgmii_rxd);
 
     fiber_inst->clock_in(iclock161);
+    fiber_inst->reset_in(reset);
     fiber_inst->block_out_0(block_out_0);
     fiber_inst->header_out_0(header_out_0);
     fiber_inst->block_out_1(block_out_1);
@@ -247,7 +250,12 @@ SC_MODULE(Top) {
 
   }
   ~Top () {
-    delete tb_xgt4_inst, rx_xgt4_inst, scoreboard_inst;
+    // delete tb_xgt4_inst;
+    // delete rx_xgt4_inst;
+    // delete scoreboard_inst;
+    // delete pkt_buffer_inst;
+    // delete dump_mii_rx_inst;
+    // delete fiber_inst;
   }
 
 };
