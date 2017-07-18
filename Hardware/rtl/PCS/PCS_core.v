@@ -190,6 +190,8 @@ rx_path INST_rx_path(   // Input Ports
                         .rx_header_in       (rx_header_in[1:0]),
                         .rx_data_valid_in   (rx_data_valid_in),
                         .rx_data_in         (rx_data_in[63:0]),
+                        .rx_old_header_in   (rx_old_header_in),
+                        .rx_old_data_in     (rx_old_data_in),
 
                         // Output Ports
                         .xgmii_rxc          (xgmii_rxc[7:0]),

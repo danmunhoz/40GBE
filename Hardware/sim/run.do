@@ -15,6 +15,7 @@ vcom -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE
 
 #vlog -novopt PCS/*.v
 vlog -novopt ../rtl/PCS/descramble.v
+vlog -novopt ../rtl/PCS/descramble_rx.v
 vlog -novopt ../rtl/PCS/tx_path.v
 vlog -novopt ../rtl/PCS/RX_FSM.v
 vlog -novopt ../rtl/PCS/T_TYPE_Encode.v
@@ -24,6 +25,7 @@ vlog -novopt ../rtl/PCS/opt_fifo_new.v
 vlog -novopt ../rtl/PCS/TX_FSM.v
 vlog -novopt ../rtl/PCS/defines_PCS.v
 vlog -novopt ../rtl/PCS/rx_path.v
+vlog -novopt ../rtl/PCS/rx_path_rx.v
 vlog -novopt ../rtl/PCS/PCS_to_XGMII.v
 vlog -novopt ../rtl/PCS/definitions.v
 vlog -novopt ../rtl/PCS/scramble.v
@@ -32,6 +34,7 @@ vlog -novopt ../rtl/PCS/Encode.v
 vlog -novopt ../rtl/PCS/Decode.v
 vlog -novopt ../rtl/PCS/frame_sync.v
 vlog -novopt ../rtl/PCS/PCS_core.v
+vlog -novopt ../rtl/PCS/PCS_core_rx.v
 
 #vlog -novopt MAC/*.v
 vlog -novopt ../rtl/MAC/fault_sm.v
@@ -89,7 +92,7 @@ sccom -link -B/usr/bin/
 
 vsim -novopt work.glbl work.Top -t 1ps
 
-do wave.do
+do wave_desc.do
 run 800 ns
 
 #exec python scoreboard.py

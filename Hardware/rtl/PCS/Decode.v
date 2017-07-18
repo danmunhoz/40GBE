@@ -48,6 +48,9 @@ module Decode (
     wire start_in;
     wire start_out;
 
+    // For now
+    assign start_in = 1'b0;
+    
 R_TYPE_Decode  R_TYPE_Decode(
                              //  input ports
                              .rstb156(rstb156),

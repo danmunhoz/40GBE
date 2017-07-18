@@ -208,7 +208,7 @@ module wrapper_macpcs_rx(
     assign dump_xgmii_rxd = xgmii_rxd_lane_0;
 
     // Register for lane 0 old block
-    always @ (posedge clk_156 or async_reset_n) begin
+    always @ (posedge rx_clk_161_13 or async_reset_n) begin
       if (!async_reset_n) begin
         old_header_0 <= 2'b0;
         old_data_0   <= 64'h0000000000000000;
@@ -221,7 +221,7 @@ module wrapper_macpcs_rx(
 
     lane_reorder INST_lane_reorder
     (
-      .clock (clk_156),
+      .clock (rx_clk_161_13),
       .reset (reset_rx_n),
 
       .lane_0_data_in    (rx_lane_0_data_in[63:0]),
@@ -250,7 +250,7 @@ module wrapper_macpcs_rx(
 
     );
 
-    PCS_core INST_0_PCS_core
+    PCS_core_rx INST_0_PCS_core
     (
         // CLOCKS
         .clk156             (clk_156),
@@ -303,7 +303,7 @@ module wrapper_macpcs_rx(
         .rx_old_data_in    (old_data_0)
     );
 
-    PCS_core INST_1_PCS_core
+    PCS_core_rx INST_1_PCS_core
     (
         // CLOCKS
         .clk156             (clk_156),
@@ -356,7 +356,7 @@ module wrapper_macpcs_rx(
         .rx_old_data_in    (pcs_0_data_out[63:0])
     );
 
-    PCS_core INST_2_PCS_core
+    PCS_core_rx INST_2_PCS_core
     (
         // CLOCKS
         .clk156             (clk_156),
@@ -406,10 +406,10 @@ module wrapper_macpcs_rx(
         .xgmii_rxc          (xgmii_rxc_lane_2),
 
         .rx_old_header_in  (pcs_1_header_out[1:0]),
-        .rx_old_data_in    (pcs_0_data_out[63:0])
+        .rx_old_data_in    (pcs_1_data_out[63:0])
     );
 
-    PCS_core INST_3_PCS_core
+    PCS_core_rx INST_3_PCS_core
     (
         // CLOCKS
         .clk156             (clk_156),
@@ -458,7 +458,7 @@ module wrapper_macpcs_rx(
         .xgmii_rxd          (xgmii_rxd_lane_3),
         .xgmii_rxc          (xgmii_rxc_lane_3),
 
-        .rx_old_header_in  (pcs_1_header_out[1:0]),
+        .rx_old_header_in  (pcs_2_header_out[1:0]),
         .rx_old_data_in    (pcs_2_data_out[63:0])
     );
 

@@ -70,8 +70,7 @@
 `include "definitions.v"
 
 module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
-                  blk_lock, jtest_errc, RXD_Sync, DeScr_RXD, clk, rstb,
-                  rx_old_header_in, rx_old_data_in );
+                  blk_lock, jtest_errc, RXD_Sync, DeScr_RXD, clk, rstb );
 
     input write_enable;
     input [65:0] RXD_Sync ; wire [65:0] RXD_Sync ;
@@ -81,9 +80,6 @@ module descramble(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
     input        clk ; wire clk ;
     input        rstb ; wire rstb ;
     input        blk_lock; wire blk_lock;
-
-    input [1:0]   rx_old_header_in;
-    input [63:0]  rx_old_data_in;
 
     output [65:0] DeScr_RXD ; reg [65:0] DeScr_RXD ;
     output [15:0] jtest_errc; reg [15:0] jtest_errc;

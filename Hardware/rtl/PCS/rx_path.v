@@ -64,6 +64,7 @@ module rx_path (/*AUTOARG*/
                 bypass_66decoder, bypass_descram, clear_ber_cnt, clear_errblk,
                 clk156, lpbk, arstb, rx_jtm_en, rx_clk161,
                 rx_header_in, rx_data_in, rx_header_valid_in, rx_data_valid_in,
+                rx_old_header_in, rx_old_data_in,
 
 		        // Outputs
 		        ber_cnt, blk_lock, jtest_errc_out, errd_blks, hi_ber, rxlf,
@@ -85,6 +86,9 @@ module rx_path (/*AUTOARG*/
     input [63:0]    rx_data_in;
     input           rx_header_valid_in;
     input           rx_data_valid_in;
+
+    input [1:0]   rx_old_header_in;
+    input [63:0]  rx_old_data_in;
 
     //For Testbench use
 		input					start_fifo;
