@@ -92,15 +92,17 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
     reg           jtm_lock;
     reg [6:0]     blk_ctr;
     reg [1:0]     zero_ctr, ones_ctr, LF_ctr, LF_bar_ctr;
-    reg [57:0]    DeScrambler_Register;
     reg [63:0]    RXD_input;
     reg [1:0]     RX_Sync_header;
     wire [63:0]   DeScr_wire;
     reg           jtm_d_neq_0, jtm_d_neq_1, jtm_d_neq_lf, jtm_d_neq_lfb;
     reg           jtm_err_bit;
 
-    wire [65:0]   rx_old_block = {rx_old_data_in,rx_old_header_in};
+    // wire [65:0]   rx_old_block = {rx_old_data_in,rx_old_header_in};
+    wire [63:0]   rx_old_block = rx_old_data_in;
     wire [57:0]   rx_old_block_desc;
+
+    wire [63:0] RXD_data_sync = RXD_Sync[65:2];
 
     assign rx_old_block_desc[57] = rx_old_block[6];
     assign rx_old_block_desc[56] = rx_old_block[7];
@@ -171,77 +173,77 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
 
 
 
-    assign DeScr_wire[0] = RXD_input[0]^rx_old_block_desc[38]^rx_old_block_desc[57];
-    assign DeScr_wire[1] = RXD_input[1]^rx_old_block_desc[37]^rx_old_block_desc[56];
-    assign DeScr_wire[2] = RXD_input[2]^rx_old_block_desc[36]^rx_old_block_desc[55];
-    assign DeScr_wire[3] = RXD_input[3]^rx_old_block_desc[35]^rx_old_block_desc[54];
-    assign DeScr_wire[4] = RXD_input[4]^rx_old_block_desc[34]^rx_old_block_desc[53];
-    assign DeScr_wire[5] = RXD_input[5]^rx_old_block_desc[33]^rx_old_block_desc[52];
-    assign DeScr_wire[6] = RXD_input[6]^rx_old_block_desc[32]^rx_old_block_desc[51];
-    assign DeScr_wire[7] = RXD_input[7]^rx_old_block_desc[31]^rx_old_block_desc[50];
+    assign DeScr_wire[0] = RXD_data_sync[0]^rx_old_block_desc[38]^rx_old_block_desc[57];
+    assign DeScr_wire[1] = RXD_data_sync[1]^rx_old_block_desc[37]^rx_old_block_desc[56];
+    assign DeScr_wire[2] = RXD_data_sync[2]^rx_old_block_desc[36]^rx_old_block_desc[55];
+    assign DeScr_wire[3] = RXD_data_sync[3]^rx_old_block_desc[35]^rx_old_block_desc[54];
+    assign DeScr_wire[4] = RXD_data_sync[4]^rx_old_block_desc[34]^rx_old_block_desc[53];
+    assign DeScr_wire[5] = RXD_data_sync[5]^rx_old_block_desc[33]^rx_old_block_desc[52];
+    assign DeScr_wire[6] = RXD_data_sync[6]^rx_old_block_desc[32]^rx_old_block_desc[51];
+    assign DeScr_wire[7] = RXD_data_sync[7]^rx_old_block_desc[31]^rx_old_block_desc[50];
 
-    assign  DeScr_wire[8]  = RXD_input[8]^rx_old_block_desc[30]^rx_old_block_desc[49];
-    assign  DeScr_wire[9]  = RXD_input[9]^rx_old_block_desc[29]^rx_old_block_desc[48];
-    assign  DeScr_wire[10] = RXD_input[10]^rx_old_block_desc[28]^rx_old_block_desc[47];
-    assign  DeScr_wire[11] = RXD_input[11]^rx_old_block_desc[27]^rx_old_block_desc[46];
-    assign  DeScr_wire[12] = RXD_input[12]^rx_old_block_desc[26]^rx_old_block_desc[45];
-    assign  DeScr_wire[13] = RXD_input[13]^rx_old_block_desc[25]^rx_old_block_desc[44];
-    assign  DeScr_wire[14] = RXD_input[14]^rx_old_block_desc[24]^rx_old_block_desc[43];
-    assign  DeScr_wire[15] = RXD_input[15]^rx_old_block_desc[23]^rx_old_block_desc[42];
+    assign  DeScr_wire[8]  = RXD_data_sync[8]^rx_old_block_desc[30]^rx_old_block_desc[49];
+    assign  DeScr_wire[9]  = RXD_data_sync[9]^rx_old_block_desc[29]^rx_old_block_desc[48];
+    assign  DeScr_wire[10] = RXD_data_sync[10]^rx_old_block_desc[28]^rx_old_block_desc[47];
+    assign  DeScr_wire[11] = RXD_data_sync[11]^rx_old_block_desc[27]^rx_old_block_desc[46];
+    assign  DeScr_wire[12] = RXD_data_sync[12]^rx_old_block_desc[26]^rx_old_block_desc[45];
+    assign  DeScr_wire[13] = RXD_data_sync[13]^rx_old_block_desc[25]^rx_old_block_desc[44];
+    assign  DeScr_wire[14] = RXD_data_sync[14]^rx_old_block_desc[24]^rx_old_block_desc[43];
+    assign  DeScr_wire[15] = RXD_data_sync[15]^rx_old_block_desc[23]^rx_old_block_desc[42];
 
-    assign  DeScr_wire[16] = RXD_input[16]^rx_old_block_desc[22]^rx_old_block_desc[41];
-    assign  DeScr_wire[17] = RXD_input[17]^rx_old_block_desc[21]^rx_old_block_desc[40];
-    assign  DeScr_wire[18] = RXD_input[18]^rx_old_block_desc[20]^rx_old_block_desc[39];
-    assign  DeScr_wire[19] = RXD_input[19]^rx_old_block_desc[19]^rx_old_block_desc[38];
-    assign  DeScr_wire[20] = RXD_input[20]^rx_old_block_desc[18]^rx_old_block_desc[37];
-    assign  DeScr_wire[21] = RXD_input[21]^rx_old_block_desc[17]^rx_old_block_desc[36];
-    assign  DeScr_wire[22] = RXD_input[22]^rx_old_block_desc[16]^rx_old_block_desc[35];
-    assign  DeScr_wire[23] = RXD_input[23]^rx_old_block_desc[15]^rx_old_block_desc[34];
+    assign  DeScr_wire[16] = RXD_data_sync[16]^rx_old_block_desc[22]^rx_old_block_desc[41];
+    assign  DeScr_wire[17] = RXD_data_sync[17]^rx_old_block_desc[21]^rx_old_block_desc[40];
+    assign  DeScr_wire[18] = RXD_data_sync[18]^rx_old_block_desc[20]^rx_old_block_desc[39];
+    assign  DeScr_wire[19] = RXD_data_sync[19]^rx_old_block_desc[19]^rx_old_block_desc[38];
+    assign  DeScr_wire[20] = RXD_data_sync[20]^rx_old_block_desc[18]^rx_old_block_desc[37];
+    assign  DeScr_wire[21] = RXD_data_sync[21]^rx_old_block_desc[17]^rx_old_block_desc[36];
+    assign  DeScr_wire[22] = RXD_data_sync[22]^rx_old_block_desc[16]^rx_old_block_desc[35];
+    assign  DeScr_wire[23] = RXD_data_sync[23]^rx_old_block_desc[15]^rx_old_block_desc[34];
 
-    assign  DeScr_wire[24] = RXD_input[24]^rx_old_block_desc[14]^rx_old_block_desc[33];
-    assign  DeScr_wire[25] = RXD_input[25]^rx_old_block_desc[13]^rx_old_block_desc[32];
-    assign  DeScr_wire[26] = RXD_input[26]^rx_old_block_desc[12]^rx_old_block_desc[31];
-    assign  DeScr_wire[27] = RXD_input[27]^rx_old_block_desc[11]^rx_old_block_desc[30];
-    assign  DeScr_wire[28] = RXD_input[28]^rx_old_block_desc[10]^rx_old_block_desc[29];
-    assign  DeScr_wire[29] = RXD_input[29]^rx_old_block_desc[9]^rx_old_block_desc[28];
-    assign  DeScr_wire[30] = RXD_input[30]^rx_old_block_desc[8]^rx_old_block_desc[27];
-    assign  DeScr_wire[31] = RXD_input[31]^rx_old_block_desc[7]^rx_old_block_desc[26];
+    assign  DeScr_wire[24] = RXD_data_sync[24]^rx_old_block_desc[14]^rx_old_block_desc[33];
+    assign  DeScr_wire[25] = RXD_data_sync[25]^rx_old_block_desc[13]^rx_old_block_desc[32];
+    assign  DeScr_wire[26] = RXD_data_sync[26]^rx_old_block_desc[12]^rx_old_block_desc[31];
+    assign  DeScr_wire[27] = RXD_data_sync[27]^rx_old_block_desc[11]^rx_old_block_desc[30];
+    assign  DeScr_wire[28] = RXD_data_sync[28]^rx_old_block_desc[10]^rx_old_block_desc[29];
+    assign  DeScr_wire[29] = RXD_data_sync[29]^rx_old_block_desc[9]^rx_old_block_desc[28];
+    assign  DeScr_wire[30] = RXD_data_sync[30]^rx_old_block_desc[8]^rx_old_block_desc[27];
+    assign  DeScr_wire[31] = RXD_data_sync[31]^rx_old_block_desc[7]^rx_old_block_desc[26];
 
-    assign  DeScr_wire[32] = RXD_input[32]^rx_old_block_desc[6]^rx_old_block_desc[25];
-    assign  DeScr_wire[33] = RXD_input[33]^rx_old_block_desc[5]^rx_old_block_desc[24];
-    assign  DeScr_wire[34] = RXD_input[34]^rx_old_block_desc[4]^rx_old_block_desc[23];
-    assign  DeScr_wire[35] = RXD_input[35]^rx_old_block_desc[3]^rx_old_block_desc[22];
-    assign  DeScr_wire[36] = RXD_input[36]^rx_old_block_desc[2]^rx_old_block_desc[21];
-    assign  DeScr_wire[37] = RXD_input[37]^rx_old_block_desc[1]^rx_old_block_desc[20];
-    assign  DeScr_wire[38] = RXD_input[38]^rx_old_block_desc[0]^rx_old_block_desc[19];
+    assign  DeScr_wire[32] = RXD_data_sync[32]^rx_old_block_desc[6]^rx_old_block_desc[25];
+    assign  DeScr_wire[33] = RXD_data_sync[33]^rx_old_block_desc[5]^rx_old_block_desc[24];
+    assign  DeScr_wire[34] = RXD_data_sync[34]^rx_old_block_desc[4]^rx_old_block_desc[23];
+    assign  DeScr_wire[35] = RXD_data_sync[35]^rx_old_block_desc[3]^rx_old_block_desc[22];
+    assign  DeScr_wire[36] = RXD_data_sync[36]^rx_old_block_desc[2]^rx_old_block_desc[21];
+    assign  DeScr_wire[37] = RXD_data_sync[37]^rx_old_block_desc[1]^rx_old_block_desc[20];
+    assign  DeScr_wire[38] = RXD_data_sync[38]^rx_old_block_desc[0]^rx_old_block_desc[19];
 
-    assign  DeScr_wire[39] = RXD_input[39]^RXD_input[0]^rx_old_block_desc[18];
-    assign  DeScr_wire[40] = RXD_input[40]^RXD_input[1]^rx_old_block_desc[17];
-    assign  DeScr_wire[41] = RXD_input[41]^RXD_input[2]^rx_old_block_desc[16];
-    assign  DeScr_wire[42] = RXD_input[42]^RXD_input[3]^rx_old_block_desc[15];
-    assign  DeScr_wire[43] = RXD_input[43]^RXD_input[4]^rx_old_block_desc[14];
-    assign  DeScr_wire[44] = RXD_input[44]^RXD_input[5]^rx_old_block_desc[13];
-    assign  DeScr_wire[45] = RXD_input[45]^RXD_input[6]^rx_old_block_desc[12];
-    assign  DeScr_wire[46] = RXD_input[46]^RXD_input[7]^rx_old_block_desc[11];
-    assign  DeScr_wire[47] = RXD_input[47]^RXD_input[8]^rx_old_block_desc[10];
+    assign  DeScr_wire[39] = RXD_data_sync[39]^RXD_data_sync[0]^rx_old_block_desc[18];
+    assign  DeScr_wire[40] = RXD_data_sync[40]^RXD_data_sync[1]^rx_old_block_desc[17];
+    assign  DeScr_wire[41] = RXD_data_sync[41]^RXD_data_sync[2]^rx_old_block_desc[16];
+    assign  DeScr_wire[42] = RXD_data_sync[42]^RXD_data_sync[3]^rx_old_block_desc[15];
+    assign  DeScr_wire[43] = RXD_data_sync[43]^RXD_data_sync[4]^rx_old_block_desc[14];
+    assign  DeScr_wire[44] = RXD_data_sync[44]^RXD_data_sync[5]^rx_old_block_desc[13];
+    assign  DeScr_wire[45] = RXD_data_sync[45]^RXD_data_sync[6]^rx_old_block_desc[12];
+    assign  DeScr_wire[46] = RXD_data_sync[46]^RXD_data_sync[7]^rx_old_block_desc[11];
+    assign  DeScr_wire[47] = RXD_data_sync[47]^RXD_data_sync[8]^rx_old_block_desc[10];
 
-    assign  DeScr_wire[48] = RXD_input[48]^RXD_input[9]^rx_old_block_desc[9];
-    assign  DeScr_wire[49] = RXD_input[49]^RXD_input[10]^rx_old_block_desc[8];
-    assign  DeScr_wire[50] = RXD_input[50]^RXD_input[11]^rx_old_block_desc[7];
-    assign  DeScr_wire[51] = RXD_input[51]^RXD_input[12]^rx_old_block_desc[6];
-    assign  DeScr_wire[52] = RXD_input[52]^RXD_input[13]^rx_old_block_desc[5];
-    assign  DeScr_wire[53] = RXD_input[53]^RXD_input[14]^rx_old_block_desc[4];
-    assign  DeScr_wire[54] = RXD_input[54]^RXD_input[15]^rx_old_block_desc[3];
+    assign  DeScr_wire[48] = RXD_data_sync[48]^RXD_data_sync[9]^rx_old_block_desc[9];
+    assign  DeScr_wire[49] = RXD_data_sync[49]^RXD_data_sync[10]^rx_old_block_desc[8];
+    assign  DeScr_wire[50] = RXD_data_sync[50]^RXD_data_sync[11]^rx_old_block_desc[7];
+    assign  DeScr_wire[51] = RXD_data_sync[51]^RXD_data_sync[12]^rx_old_block_desc[6];
+    assign  DeScr_wire[52] = RXD_data_sync[52]^RXD_data_sync[13]^rx_old_block_desc[5];
+    assign  DeScr_wire[53] = RXD_data_sync[53]^RXD_data_sync[14]^rx_old_block_desc[4];
+    assign  DeScr_wire[54] = RXD_data_sync[54]^RXD_data_sync[15]^rx_old_block_desc[3];
 
-    assign  DeScr_wire[55] = RXD_input[55]^RXD_input[16]^rx_old_block_desc[2];
-    assign  DeScr_wire[56] = RXD_input[56]^RXD_input[17]^rx_old_block_desc[1];
-    assign  DeScr_wire[57] = RXD_input[57]^RXD_input[18]^rx_old_block_desc[0];
-    assign  DeScr_wire[58] = RXD_input[58]^RXD_input[19]^RXD_input[0];
-    assign  DeScr_wire[59] = RXD_input[59]^RXD_input[20]^RXD_input[1];
-    assign  DeScr_wire[60] = RXD_input[60]^RXD_input[21]^RXD_input[2];
-    assign  DeScr_wire[61] = RXD_input[61]^RXD_input[22]^RXD_input[3];
-    assign  DeScr_wire[62] = RXD_input[62]^RXD_input[23]^RXD_input[4];
-    assign  DeScr_wire[63] = RXD_input[63]^RXD_input[24]^RXD_input[5];
+    assign  DeScr_wire[55] = RXD_data_sync[55]^RXD_data_sync[16]^rx_old_block_desc[2];
+    assign  DeScr_wire[56] = RXD_data_sync[56]^RXD_data_sync[17]^rx_old_block_desc[1];
+    assign  DeScr_wire[57] = RXD_data_sync[57]^RXD_data_sync[18]^rx_old_block_desc[0];
+    assign  DeScr_wire[58] = RXD_data_sync[58]^RXD_data_sync[19]^RXD_data_sync[0];
+    assign  DeScr_wire[59] = RXD_data_sync[59]^RXD_data_sync[20]^RXD_data_sync[1];
+    assign  DeScr_wire[60] = RXD_data_sync[60]^RXD_data_sync[21]^RXD_data_sync[2];
+    assign  DeScr_wire[61] = RXD_data_sync[61]^RXD_data_sync[22]^RXD_data_sync[3];
+    assign  DeScr_wire[62] = RXD_data_sync[62]^RXD_data_sync[23]^RXD_data_sync[4];
+    assign  DeScr_wire[63] = RXD_data_sync[63]^RXD_data_sync[24]^RXD_data_sync[5];
 
 
 
@@ -337,7 +339,7 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
 
     always @(posedge clk or negedge rstb)
         if (!rstb) begin
-            DeScrambler_Register[57:0] <= 58'h3;
+            //DeScrambler_Register[57:0] <= 58'h3;
             RXD_input[63:0] <= 64'h0;
             RX_Sync_header <= 2'b01;
             DeScr_RXD[65:0] <= 66'h79;
@@ -349,9 +351,10 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
                 DeScr_RXD[65:0] <= {RXD_input[63:0],RX_Sync_header};
             end
             else begin
-      	        RXD_input[63:0] <= RXD_Sync[65:2];
+      	        // RXD_input[63:0] <= RXD_Sync[65:2];
                 RX_Sync_header <= RXD_Sync[1:0];
-      	        DeScr_RXD[65:0] <= {DeScr_wire[63:0],RX_Sync_header[1:0]};
+      	        //DeScr_RXD[65:0] <= {DeScr_wire[63:0],RX_Sync_header[1:0]};
+                DeScr_RXD[65:0] <= {DeScr_wire[63:0],RXD_Sync[1:0]};
 
                 // REORDEM ESTAVA AQUI
 

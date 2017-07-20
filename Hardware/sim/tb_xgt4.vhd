@@ -328,7 +328,7 @@ begin
         wait until pkt_tx_eop = '1';
         pkt_tx_start <= '0';
         --wait;
-        wait for 18 ns;
+        wait for 32 ns;
         pkt_tx_start <= '1';
         wait until pkt_tx_eop = '1';
         pkt_tx_start <= '0';

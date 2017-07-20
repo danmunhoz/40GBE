@@ -175,13 +175,13 @@ always @(TYPE) begin
   if (TYPE == `S)
     start_out <= 1'b1;
   else
-    start_out <= 1'b0;  
+    start_out <= 1'b0;
 end
 
 always @(Current_state or Code or Control or TYPE or next_TYPE )
     case (Current_state)
         `RX_INIT: begin
-            if (TYPE == `S || start_in == 1'b1)
+            if (TYPE == `S)
                 Next_state = `RX_D;
             else
                 if (TYPE == `C)
