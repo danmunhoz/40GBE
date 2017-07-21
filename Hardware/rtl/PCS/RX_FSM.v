@@ -202,7 +202,8 @@ always @(Current_state or Code or Control or TYPE or next_TYPE )
             if (TYPE == `D)
                 Next_state = `RX_D;
             else
-                if ( (TYPE == `T) && ((next_TYPE == `S) || (next_TYPE == `C)))
+                // if ( (TYPE == `T) && ((next_TYPE == `S) || (next_TYPE == `C)))
+                if (TYPE == `T)
                     Next_state = `RX_T;
                 else
                     Next_state = `RX_E;
