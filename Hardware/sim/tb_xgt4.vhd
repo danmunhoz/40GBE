@@ -322,7 +322,7 @@ begin
 
       -- wait for 144 ns;
       --
-      for i in 0 to 2 loop
+      for i in 0 to 3 loop
         wait for 48 ns;
         pkt_tx_start <= '1';
         wait until pkt_tx_eop = '1';
@@ -332,9 +332,9 @@ begin
         pkt_tx_start <= '1';
         wait until pkt_tx_eop = '1';
         pkt_tx_start <= '0';
-        wait;
+        -- wait;
       end loop;
-
+      wait;
     end process;
 
 end behav;

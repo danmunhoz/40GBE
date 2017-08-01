@@ -18,6 +18,7 @@ vlog -novopt ../rtl/PCS/descramble.v
 vlog -novopt ../rtl/PCS/descramble_rx.v
 vlog -novopt ../rtl/PCS/tx_path.v
 vlog -novopt ../rtl/PCS/RX_FSM.v
+vlog -novopt ../rtl/PCS/RX_FSM_rx.v
 vlog -novopt ../rtl/PCS/T_TYPE_Encode.v
 vlog -novopt ../rtl/PCS/timescale.v
 vlog -novopt ../rtl/PCS/XGMII_to_PCS.v
@@ -32,6 +33,7 @@ vlog -novopt ../rtl/PCS/scramble.v
 vlog -novopt ../rtl/PCS/R_TYPE_Decode.v
 vlog -novopt ../rtl/PCS/Encode.v
 vlog -novopt ../rtl/PCS/Decode.v
+vlog -novopt ../rtl/PCS/Decode_rx.v
 vlog -novopt ../rtl/PCS/frame_sync.v
 vlog -novopt ../rtl/PCS/PCS_core.v
 vlog -novopt ../rtl/PCS/PCS_core_rx.v
@@ -92,8 +94,8 @@ sccom -link -B/usr/bin/
 
 vsim -novopt work.glbl work.Top -t 1ps
 
-do wave_desc.do
-run 800 ns
+do wave.do
+run 1000 ns
 
 #exec python scoreboard.py
 exec cp lane0.txt lane0_rx.txt

@@ -62,9 +62,9 @@
 
 `include "definitions.v"
 
-module  RX_FSM (clk156, rstb156, errd_blks, lpbk, clear_errblk,  hi_ber,
+module  RX_FSM_rx (clk156, rstb156, errd_blks, lpbk, clear_errblk,  hi_ber,
                 blk_lock, bypass_66decoder, rx_data, rx_control, rxcontrol,
-                rxdata, R_TYPE, DeScr_RXD, rxlf);
+                rxdata, R_TYPE, DeScr_RXD, rxlf, terminate_in, terminate_out);
 
     input clk156 ; wire clk156 ;
     input rstb156 ; wire rstb156 ;
@@ -77,11 +77,13 @@ module  RX_FSM (clk156, rstb156, errd_blks, lpbk, clear_errblk,  hi_ber,
     input [7:0]  rx_control ; wire [7:0] rx_control ;
     input [2:0]  R_TYPE ; wire [2:0] R_TYPE ;
     input        lpbk; wire lpbk;
+    input        terminate_in; wire terminate_in;
 
     output       rxlf; reg rxlf;
     output [7:0] rxcontrol ; reg [7:0] rxcontrol ;
     output [63:0] rxdata ; reg [63:0] rxdata ;
     output [7:0]  errd_blks; reg [7:0] errd_blks;
+    output        terminate_out; reg terminate_out;
 
 
     reg [2:0]     Current_state, Next_state;
@@ -109,6 +111,7 @@ always @(posedge clk156 or negedge rstb156)
         next_control <= 8'hff;
         rxdata <= `LBLOCK_R;
         rxcontrol <= 8'h11;
+        terminate_out <= 1'b0;
     end
     else if (hi_ber && !lpbk) begin
         Current_state <= `RX_INIT;
@@ -168,7 +171,18 @@ always@(posedge clk156 or negedge rstb156) //jg changed to posedge clk 7/17/02
             errd_blks <= 8'h0;
     end
 
-always @(Current_state or Code or Control or TYPE or next_TYPE )
+// Rise terminate flag for others FSMs
+always @(TYPE or negedge rstb156) begin
+  if (!rstb156)
+    terminate_out <= 1'b0;
+  else
+    if (TYPE == `T)
+      terminate_out <= 1'b1;
+    else
+      terminate_out <= 1'b0;
+end
+
+always @(Current_state or Code or Control or TYPE or next_TYPE or posedge terminate_in)
     case (Current_state)
         `RX_INIT: begin
             if (TYPE == `S)
@@ -189,13 +203,21 @@ always @(Current_state or Code or Control or TYPE or next_TYPE )
                     Next_state = `RX_E;
         end
         `RX_D: begin
-            if (TYPE == `D)
-                Next_state = `RX_D;
+            // if (TYPE == `D)
+            //     Next_state = `RX_D;
+            // else
+            //     // if ( (TYPE == `T) && ((next_TYPE == `S) || (next_TYPE == `C)))
+            //     if ((TYPE == `T) || (terminate_in == 1'b1))
+            //         Next_state = `RX_T;
+            //     else
+            //         Next_state = `RX_E;
+            if ((TYPE == `T) || (terminate_in == 1'b1))
+                Next_state = `RX_T;
             else
-                if ( (TYPE == `T) && ((next_TYPE == `S) || (next_TYPE == `C)))
-                    Next_state = `RX_T;
-                else
-                    Next_state = `RX_E;
+              if(TYPE == `D)
+                  Next_state = `RX_D;
+              else
+                  Next_state = `RX_E;
         end
         `RX_T: begin
             if (TYPE == `C)
@@ -213,7 +235,8 @@ always @(Current_state or Code or Control or TYPE or next_TYPE )
                 if (TYPE == `C)
                     Next_state = `RX_C;
                 else
-                    if ((TYPE == `T) && ((next_TYPE == `S) || (next_TYPE == `C)))
+                    // if ((TYPE == `T) && ((next_TYPE == `S) || (next_TYPE == `C)))
+                    if ((TYPE == `T) || (terminate_in == 1'b1))
                         Next_state = `RX_T;
                     else
                         Next_state = `RX_E;

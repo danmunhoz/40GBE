@@ -172,6 +172,16 @@ module wrapper_macpcs_rx(
     reg [63:0]      old_data_0;
     reg [1:0]       old_header_0;
 
+    wire            terminate_out_0;
+    wire            terminate_out_1;
+    wire            terminate_out_2;
+    wire            terminate_out_3;
+
+    wire            terminate_in_0  = 1'b0;
+    wire            terminate_in_1  = terminate_out_0;
+    wire            terminate_in_2  = (terminate_out_0 || terminate_out_1);
+    wire            terminate_in_3  = (terminate_out_0 || terminate_out_1 || terminate_out_2);
+
 
     (* syn_keep = "true"*) wire [1:0]   pcs_0_header_out;
     (* syn_keep = "true"*) wire [63:0]  pcs_0_data_out;
@@ -299,8 +309,11 @@ module wrapper_macpcs_rx(
         .xgmii_rxd          (xgmii_rxd_lane_0),
         .xgmii_rxc          (xgmii_rxc_lane_0),
 
-        .rx_old_header_in  (old_header_0),
-        .rx_old_data_in    (old_data_0)
+        .rx_old_header_in   (old_header_0),
+        .rx_old_data_in     (old_data_0),
+
+        .terminate_in       (terminate_in_0),
+        .terminate_out      (terminate_out_0)
     );
 
     PCS_core_rx INST_1_PCS_core
@@ -352,8 +365,11 @@ module wrapper_macpcs_rx(
         .xgmii_rxd          (xgmii_rxd_lane_1),
         .xgmii_rxc          (xgmii_rxc_lane_1),
 
-        .rx_old_header_in  (pcs_0_header_out[1:0]),
-        .rx_old_data_in    (pcs_0_data_out[63:0])
+        .rx_old_header_in   (pcs_0_header_out[1:0]),
+        .rx_old_data_in     (pcs_0_data_out[63:0]),
+
+        .terminate_in       (terminate_in_1),
+        .terminate_out      (terminate_out_1)
     );
 
     PCS_core_rx INST_2_PCS_core
@@ -405,8 +421,11 @@ module wrapper_macpcs_rx(
         .xgmii_rxd          (xgmii_rxd_lane_2),
         .xgmii_rxc          (xgmii_rxc_lane_2),
 
-        .rx_old_header_in  (pcs_1_header_out[1:0]),
-        .rx_old_data_in    (pcs_1_data_out[63:0])
+        .rx_old_header_in   (pcs_1_header_out[1:0]),
+        .rx_old_data_in     (pcs_1_data_out[63:0]),
+
+        .terminate_in       (terminate_in_2),
+        .terminate_out      (terminate_out_2)
     );
 
     PCS_core_rx INST_3_PCS_core
@@ -458,8 +477,11 @@ module wrapper_macpcs_rx(
         .xgmii_rxd          (xgmii_rxd_lane_3),
         .xgmii_rxc          (xgmii_rxc_lane_3),
 
-        .rx_old_header_in  (pcs_2_header_out[1:0]),
-        .rx_old_data_in    (pcs_2_data_out[63:0])
+        .rx_old_header_in   (pcs_2_header_out[1:0]),
+        .rx_old_data_in     (pcs_2_data_out[63:0]),
+
+        .terminate_in       (terminate_in_3),
+        .terminate_out      (terminate_out_3)
     );
 
 

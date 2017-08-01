@@ -31,6 +31,7 @@ module Decode (
     wire         hi_ber;
     input        rstb156;
     wire         rstb156;
+
 //  output ports
     output       rxlf;
     wire         rxlf;
@@ -40,17 +41,12 @@ module Decode (
     wire [7:0]   rxcontrol;
     output [63:0] rxdata;
     wire [63:0]   rxdata;
+
 //  local signals
     wire [2:0]    R_TYPE;
     wire [7:0]    rx_control;
     wire [63:0]   rx_data;
 
-    wire start_in;
-    wire start_out;
-
-    // For now
-    assign start_in = 1'b0;
-    
 R_TYPE_Decode  R_TYPE_Decode(
                              //  input ports
                              .rstb156(rstb156),
@@ -75,12 +71,10 @@ RX_FSM  RX_FSM(
                .rx_control(rx_control[7:0]),
                .R_TYPE(R_TYPE[2:0]),
                .DeScr_RXD(DeScr_RXD[65:2]),
-               .start_in(start_in),
                //  output ports
                .errd_blks(errd_blks[7:0]),
                .rxcontrol(rxcontrol[7:0]),
                .rxdata(rxdata[63:0]),
-               .start_out(start_out),
                .rxlf(rxlf)
                );
 
