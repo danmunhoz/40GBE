@@ -280,8 +280,8 @@ begin
             clk_156             => clk_156,
             tx_clk_161_13       => clk_161,
             rx_clk_161_13       => clk_161,
-            clk_xgmii_rx        => clk_xgmii_rx,
-            clk_xgmii_tx        => clk_xgmii_tx,
+            clk_xgmii_rx        => clk_156,
+            clk_xgmii_tx        => clk_156,
 
             -- Resets
             async_reset_n       => reset_in,

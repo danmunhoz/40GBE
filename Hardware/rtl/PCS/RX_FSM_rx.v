@@ -185,7 +185,7 @@ end
 always @(Current_state or Code or Control or TYPE or next_TYPE or posedge terminate_in)
     case (Current_state)
         `RX_INIT: begin
-            if (TYPE == `S)
+            if (TYPE == `S || TYPE == `D)
                 Next_state = `RX_D;
             else
                 if (TYPE == `C)
@@ -194,30 +194,28 @@ always @(Current_state or Code or Control or TYPE or next_TYPE or posedge termin
                     Next_state = `RX_E;
         end
         `RX_C: begin
-            if (TYPE == `S)
-                Next_state = `RX_D;
+            if (terminate_in == 1'b1)
+              Next_state = `RX_INIT;
             else
-                if (TYPE == `C)
-                    Next_state = `RX_C;
+                if (TYPE == `S || TYPE == `D)
+                    Next_state = `RX_D;
                 else
-                    Next_state = `RX_E;
+                    if (TYPE == `C)
+                        Next_state = `RX_C;
+                    else
+                        Next_state = `RX_E;
         end
         `RX_D: begin
-            // if (TYPE == `D)
-            //     Next_state = `RX_D;
-            // else
-            //     // if ( (TYPE == `T) && ((next_TYPE == `S) || (next_TYPE == `C)))
-            //     if ((TYPE == `T) || (terminate_in == 1'b1))
-            //         Next_state = `RX_T;
-            //     else
-            //         Next_state = `RX_E;
-            if ((TYPE == `T) || (terminate_in == 1'b1))
-                Next_state = `RX_T;
+            if (terminate_in == 1'b1)
+                Next_state = `RX_INIT;
             else
-              if(TYPE == `D)
-                  Next_state = `RX_D;
+              if (TYPE == `T)
+                  Next_state = `RX_T;
               else
-                  Next_state = `RX_E;
+                if(TYPE == `D)
+                    Next_state = `RX_D;
+                else
+                    Next_state = `RX_E;
         end
         `RX_T: begin
             if (TYPE == `C)
@@ -229,17 +227,19 @@ always @(Current_state or Code or Control or TYPE or next_TYPE or posedge termin
                     Next_state = `RX_T;
         end
         `RX_E: begin
-            if (TYPE == `D)
-                Next_state = `RX_D;
+            if (terminate_in == 1'b1)
+                Next_state = `RX_INIT;
             else
-                if (TYPE == `C)
-                    Next_state = `RX_C;
+                if (TYPE == `D || TYPE == `S )
+                    Next_state = `RX_D;
                 else
-                    // if ((TYPE == `T) && ((next_TYPE == `S) || (next_TYPE == `C)))
-                    if ((TYPE == `T) || (terminate_in == 1'b1))
-                        Next_state = `RX_T;
+                    if (TYPE == `C)
+                        Next_state = `RX_C;
                     else
-                        Next_state = `RX_E;
+                        if (TYPE == `T)
+                            Next_state = `RX_T;
+                        else
+                            Next_state = `RX_E;
         end
         default: Next_state = `RX_INIT;
     endcase

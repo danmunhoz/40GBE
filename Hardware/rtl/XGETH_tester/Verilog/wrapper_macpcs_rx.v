@@ -531,7 +531,7 @@ module wrapper_macpcs_rx(
         .xgmii_rxc_2        (xgmii_rxc_lane_2),
         .xgmii_rxd_2        (xgmii_rxd_lane_2),
         .xgmii_rxc_3        (xgmii_rxc_lane_3),
-        .xgmii_rxd_3        (xgmii_rxd_lane_4)
+        .xgmii_rxd_3        (xgmii_rxd_lane_3)
     );
 
 endmodule
