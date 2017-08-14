@@ -77,6 +77,7 @@ vcom -novopt rx_xgt4.vhd
 vcom -novopt ../rtl/PCS/register.vhd
 vcom -novopt ../rtl/PCS/shuffle.vhd
 vcom -novopt ../rtl/PCS/bip_calculator.vhd
+vcom -novopt ../rtl/PCS/reorder_fifo.vhd
 vcom -novopt ../rtl/PCS/lane_reordering.vhd
 
 
@@ -94,7 +95,7 @@ sccom -link -B/usr/bin/
 
 vsim -novopt work.glbl work.Top -t 1ps
 
-do wave_mac.do
+do wave_fifo.do
 run 1000 ns
 
 #exec python scoreboard.py

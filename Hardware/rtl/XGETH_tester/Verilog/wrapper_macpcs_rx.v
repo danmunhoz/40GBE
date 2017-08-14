@@ -224,8 +224,8 @@ module wrapper_macpcs_rx(
         old_data_0   <= 64'h0000000000000000;
       end
       else begin
-      old_header_0 <= pcs_3_header_out[1:0];
-      old_data_0   <= pcs_3_data_out[63:0];
+        old_header_0 <= pcs_3_header_out[1:0];
+        old_data_0   <= pcs_3_data_out[63:0];
       end
     end
 

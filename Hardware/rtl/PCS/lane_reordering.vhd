@@ -399,100 +399,79 @@ begin
   --==============================================================================
   -- descarta bloco de sync
 
-  fifo_0 : entity work.FIFO_DUALCLOCK_MACRO
-  generic map ( DATA_WIDTH => 66, FIFO_SIZE => "36Kb")
-  port map(
-    ALMOSTEMPTY => almost_e_0,
-    ALMOSTFULL  => almost_f_0,
-    DO          => fifo_out_0,
-    EMPTY       => empty_0,
-    FULL        => full_0,
-    RDCOUNT     => RDCOUNT_0,
-    RDERR       => open,
-    WRCOUNT     => WRCOUNT_0,
-    WRERR       => open,
+  fifo_0 : entity work.reorder_fifo
+  port map (
+ 				clk       	=> 	clock,
+				rst        	=> 	reset,
+				wen 				=> 	barreira_xbar.wen_0,
+				data_in    	=> 	fifo_in_0,
+				full       	=> 	full_0,
+				almost_f   	=> 	almost_f_0,
 
-    DI          => fifo_in_0,
-    RDCLK       => clock,
-    RDEN        => barreira_xbar.read_from_fifos,
-    RST         => reset_n,
-    WRCLK       => clock,
-    WREN        => barreira_xbar.wen_0
+				ren					=>	barreira_xbar.read_from_fifos,
+				data_out    =>	fifo_out_0,
+				empty       =>	empty_0,
+				almost_e    =>	almost_e_0
   );
 
   fifo_in_0 <= barreira_xbar.header_0 & barreira_xbar.data_0;
   pcs_0_header_out <= fifo_out_0(65 downto 64);
   pcs_0_data_out <= fifo_out_0(63 downto 0);
 
-  fifo_1 : entity work.FIFO_DUALCLOCK_MACRO
-  generic map ( DATA_WIDTH => 66, FIFO_SIZE => "36Kb")
-  port map(
-    ALMOSTEMPTY => almost_e_1,
-    ALMOSTFULL  => almost_f_1,
-    DO          => fifo_out_1,
-    EMPTY       => empty_1,
-    FULL        => full_1,
-    RDCOUNT     => RDCOUNT_1,
-    RDERR       => open,
-    WRCOUNT     => WRCOUNT_1,
-    WRERR       => open,
 
-    DI          => fifo_in_1,
-    RDCLK       => clock,
-    RDEN        => barreira_xbar.read_from_fifos,
-    RST         => reset_n,
-    WRCLK       => clock,
-    WREN        => barreira_xbar.wen_1
+  fifo_1 : entity work.reorder_fifo
+  port map (
+			clk       	=> 	clock,
+ 			rst        	=> 	reset,
+ 			wen 				=> 	barreira_xbar.wen_1,
+ 			data_in    	=> 	fifo_in_1,
+ 			full       	=> 	full_1,
+ 			almost_f   	=> 	almost_f_1,
+
+ 			ren					=>	barreira_xbar.read_from_fifos,
+ 			data_out    =>	fifo_out_1,
+ 			empty       =>	empty_1,
+ 			almost_e    =>	almost_e_1
   );
 
   fifo_in_1 <= barreira_xbar.header_1 & barreira_xbar.data_1;
   pcs_1_header_out <= fifo_out_1(65 downto 64);
   pcs_1_data_out <= fifo_out_1(63 downto 0);
 
-  fifo_2 : entity work.FIFO_DUALCLOCK_MACRO
-  generic map ( DATA_WIDTH => 66, FIFO_SIZE => "36Kb")
-  port map(
-    ALMOSTEMPTY => almost_e_2,
-    ALMOSTFULL  => almost_f_2,
-    DO          => fifo_out_2,
-    EMPTY       => empty_2,
-    FULL        => full_2,
-    RDCOUNT     => RDCOUNT_2,
-    RDERR       => open,
-    WRCOUNT     => WRCOUNT_2,
-    WRERR       => open,
 
-    DI          => fifo_in_2,
-    RDCLK       => clock,
-    RDEN        => barreira_xbar.read_from_fifos,
-    RST         => reset_n,
-    WRCLK       => clock,
-    WREN        => barreira_xbar.wen_2
+  fifo_2 : entity work.reorder_fifo
+  port map (
+ 				clk       	=> 	clock,
+				rst        	=> 	reset,
+				wen 				=> 	barreira_xbar.wen_2,
+				data_in    	=> 	fifo_in_2,
+				full       	=> 	full_2,
+				almost_f   	=> 	almost_f_2,
+
+				ren					=>	barreira_xbar.read_from_fifos,
+				data_out    =>	fifo_out_2,
+				empty       =>	empty_2,
+				almost_e    =>	almost_e_2
   );
 
   fifo_in_2 <= barreira_xbar.header_2 & barreira_xbar.data_2;
   pcs_2_header_out <= fifo_out_2(65 downto 64);
   pcs_2_data_out <= fifo_out_2(63 downto 0);
 
-  fifo_3 : entity work.FIFO_DUALCLOCK_MACRO
-  generic map ( DATA_WIDTH => 66, FIFO_SIZE => "36Kb")
-  port map(
-    ALMOSTEMPTY => almost_e_3,
-    ALMOSTFULL  => almost_f_3,
-    DO          => fifo_out_3,
-    EMPTY       => empty_3,
-    FULL        => full_3,
-    RDCOUNT     => RDCOUNT_3,
-    RDERR       => open,
-    WRCOUNT     => WRCOUNT_3,
-    WRERR       => open,
 
-    DI          => fifo_in_3,
-    RDCLK       => clock,
-    RDEN        => barreira_xbar.read_from_fifos,
-    RST         => reset_n,
-    WRCLK       => clock,
-    WREN        => barreira_xbar.wen_3
+  fifo_3 : entity work.reorder_fifo
+  port map (
+ 				clk       	=> 	clock,
+				rst        	=> 	reset,
+				wen 				=> 	barreira_xbar.wen_3,
+				data_in    	=> 	fifo_in_3,
+				full       	=> 	full_3,
+				almost_f   	=> 	almost_f_3,
+
+				ren					=>	barreira_xbar.read_from_fifos,
+				data_out    =>	fifo_out_3,
+				empty       =>	empty_3,
+				almost_e    =>	almost_e_3
   );
 
   fifo_in_3 <= barreira_xbar.header_3 & barreira_xbar.data_3;
