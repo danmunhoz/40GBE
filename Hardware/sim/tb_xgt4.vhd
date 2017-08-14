@@ -171,6 +171,10 @@ begin
     rx_data_valid_in <= '0','1' after 65 ns;
     rx_header_valid_in <= '0','1' after 65 ns;
 
+    -- Loopback no PCS para observar Encode.v funcionando em cond. normais
+    header_out <= rx_header_in;
+    data_out <= rx_data_in;
+
 -- INST WRAPPER
     inst_wrapper_macpcs : wrapper_macpcs port map(
         -- Clocks
@@ -201,16 +205,16 @@ begin
         dump_xgmii_txd => dump_xgmii_txd,
 
         -- PCS IN
+        -- Loopback no PCS para observar Encode.v funcionando em cond. normais
         rx_header_valid_in  => rx_header_valid_in,
         rx_header_in        => rx_header_in,
         rx_data_valid_in    => rx_data_valid_in,
         rx_data_in          => rx_data_in,
 
         -- PCS OUT
-        -- tx_data_out        => tx_data_out,
-        -- tx_header_out      => tx_header_out,
-        tx_data_out        => data_out,
-        tx_header_out      => header_out,
+        -- Loopback no PCS para observar Encode.v funcionando em cond. normais
+        tx_data_out        => rx_data_in,
+        tx_header_out      => rx_header_in,
         rxgearboxslip_out  => rxgearboxslip_out,
         tx_sequence_out    => tx_sequence_out,
 
@@ -308,6 +312,7 @@ begin
 
         payload_type        => (others=>'0'),
         payload_cycles      => (others=>'0'),
+        -- payload_cycles      => x"0000000A",
         payload_last_size   => (others=>'0'),
         pkt_lost_counter    => open
     );
@@ -317,19 +322,19 @@ begin
 
       -- wait for 144 ns;
       --
-      -- for i in 0 to 4 loop
-        wait for 48 ns;
+      for i in 0 to 3 loop
+        wait for 56 ns;
         pkt_tx_start <= '1';
         wait until pkt_tx_eop = '1';
         pkt_tx_start <= '0';
         --wait;
-        wait for 18 ns;
-        pkt_tx_start <= '1';
-        wait until pkt_tx_eop = '1';
-        pkt_tx_start <= '0';
-        wait;
-      --end loop;
-
+        -- wait for 32 ns;
+        -- pkt_tx_start <= '1';
+        -- wait until pkt_tx_eop = '1';
+        -- pkt_tx_start <= '0';
+        -- wait;
+      end loop;
+      wait;
     end process;
 
 end behav;

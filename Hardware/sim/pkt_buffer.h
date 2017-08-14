@@ -14,7 +14,7 @@
 #include <limits>
 
 //#define PKTS_BTW_SYNC 16383
-#define PKTS_BTW_SYNC 30
+#define PKTS_BTW_SYNC 32
 
 /* SYNC_LANEx_LOW BIP SYNC_LANEx_HIGH BIP */
 #define SYNC_LANE0_LOW  "100100000111011001000111"    // 0x907647
@@ -54,65 +54,75 @@ SC_MODULE(pkt_buffer) {
   ofstream lane2;
   ofstream lane3;
 
-  // std::pair<std::string, std::string> splitHeaderBlock(std::string val) {
-  //     std::string arg;
-  //     std::string::size_type pos = val.find('-');
-  //     if(val.npos != pos) {
-  //         arg = val.substr(pos + 1);
-  //         val = val.substr(0, pos);
-  //     }
-  //     return std::make_pair(val, arg);
-  // }
+  void bip_calculator (sc_lv<8 > *lane_bip, const sc_lv<64 > block_in_lv, const sc_lv<2 > header_in_lv, int debug = 0) {
 
-  // std::ifstream& GotoLine(std::ifstream& file, unsigned int num){
-  //   std::string s;
-  //   // file.seekg(std::ios::beg);
-  //   for(int i=0; i <= num; i++){
-  //       //file.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-  //       std::getline(file, s);
-  //   }
-  //   return file;
-  // }
+    sc_logic aux;
 
-  void bip_calculator (sc_lv<8 > *lane_bip, const sc_lv<64 > block_in_lv, const sc_lv<2 > header_in_lv) {
-    sc_bit aux;
+    sc_lv<64 > block_in_lv_little;
+
+    block_in_lv_little.range(0,63) =  block_in_lv;
+    if (debug)
+      cout << "CALC_BIP_call: " << header_in_lv << block_in_lv << endl;
+
+    if (debug)
+      cout << "CALC_BIP_call: " << endl;
 
     for (int i = 0; i <8; i++) {
-      for (int j = 0; j<8; j++) {
-        aux = block_in_lv.get_bit((j*8)+i);
+      for (int j=0; j<8; j++) {
+        aux = block_in_lv_little.get_bit((j*8)+i);
         (*lane_bip)[i] = (*lane_bip)[i] ^ aux;
+        if(debug)
+          cout << "(" << ((j*8)+i) << ")" << aux << " | -> bip bit:" << i << endl;
+        aux = 0;
       }
       if (i == 3) {
         aux = header_in_lv.get_bit(0);
         (*lane_bip)[i] = (*lane_bip)[i] ^ aux;
+        if(debug)
+          cout << "(h0)" << aux << " | -> bip bit:" << i << endl;
+        aux = 0;
       }
       else if (i == 4 ) {
         aux = header_in_lv.get_bit(1);
         (*lane_bip)[i] = (*lane_bip)[i] ^ aux;
+        if(debug)
+          cout << "(h1)" << aux << " | -> bip bit:" << i << endl;
+        aux = 0;
       }
     }
+    if(debug)
+      cout << endl;
   }
 
   void rx() {
     std::stringstream buffer;
     int lane = 0;
 
-    sc_lv<64 > block_in_lv = block_in;
-    sc_lv<2 > header_in_lv = header_in;
+    sc_lv<64 > block_in_lv;
+    sc_lv<2 > header_in_lv;
+
+    block_in_lv = block_in;
+    header_in_lv = header_in;
+
+    sc_lv<64 > blk_temp;
+    sc_lv<2 >  hdr_temp;
+    std::stringstream str_temp;
 
     static sc_lv<8 > lane0_bip;
     static sc_lv<8 > lane1_bip;
     static sc_lv<8 > lane2_bip;
     static sc_lv<8 > lane3_bip;
 
-    if ( data_valid_in == SC_LOGIC_1 ) {
-
-      if (block_counter == 0) {
+    static int first = 0;
+    if (first == 0) {
+        first ++;
         lane0_bip = "00000000";
         lane1_bip = "00000000";
         lane2_bip = "00000000";
         lane3_bip = "00000000";
-      }
+    }
+
+    if ( data_valid_in == SC_LOGIC_1 ) {
 
       buffer << header_in << "-" << block_in;
 
@@ -121,23 +131,27 @@ SC_MODULE(pkt_buffer) {
       switch (lane) {
         case 0:
           lane0 << buffer.str() << endl;
+          cout << buffer.str() << endl;
           block_counter++;
-          bip_calculator (&lane0_bip, block_in_lv, header_in_lv);
+          bip_calculator (&lane0_bip, block_in, header_in, 0);
           break;
         case 1:
           lane1 << buffer.str() << endl;
+          cout << buffer.str() << endl;
           block_counter++;
-          bip_calculator (&lane1_bip, block_in_lv, header_in_lv);
+          bip_calculator (&lane1_bip, block_in, header_in);
           break;
         case 2:
           lane2 << buffer.str() << endl;
+          cout << buffer.str() << endl;
           block_counter++;
-          bip_calculator (&lane2_bip, block_in_lv, header_in_lv);
+          bip_calculator (&lane2_bip, block_in, header_in);
           break;
         case 3:
           lane3 << buffer.str() << endl;
+          cout << buffer.str() << endl;
           block_counter++;
-          bip_calculator (&lane3_bip, block_in_lv, header_in_lv);
+          bip_calculator (&lane3_bip, block_in, header_in);
           break;
         default:
           cout << "Wrong mode operation!" << endl;
@@ -166,149 +180,76 @@ SC_MODULE(pkt_buffer) {
         **  10-LOW PART OF AN ALIGNMENT BLOCK, BIP, HIGH PART OF AN ALIGNMENT BLOCK, NOT(BIP)
         */
 
-        lane0 << "10-" << SYNC_LANE0_LOW  << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << endl;
+        lane0 << "10-" << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << endl;
+        str_temp << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip;
+        blk_temp = str_temp.str().c_str();
+        hdr_temp = "10";
+        lane0_bip = "00000000";
+        // cout << "LANE0_BIP " << hdr_temp << "-" << blk_temp << endl;
+        // cout << "LANE0_BIP " << lane0_bip << endl;
+        bip_calculator (&lane0_bip, blk_temp, hdr_temp, 0);
+        // cout << "LANE0_BIP_ret: " << lane0_bip << endl << endl;
 
-        lane1 << "10-" <<
-         SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << endl;
+        lane1 << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << endl;
+        str_temp << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane0_bip;
+        blk_temp = str_temp.str().c_str();
+        hdr_temp = "10";
+        lane1_bip = "00000000";
+        bip_calculator (&lane1_bip, blk_temp, hdr_temp);
 
-        lane2 << "10-" <<
-         SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << endl;
+        lane2 << "10-" << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << endl;
+        str_temp << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane0_bip;
+        blk_temp = str_temp.str().c_str();
+        hdr_temp = "10";
+        lane2_bip = "00000000";
+        bip_calculator (&lane2_bip, block_in_lv, hdr_temp);
 
-        lane3 << "10-" <<
-         SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip << endl;
+        lane3 << "10-" << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip << endl;
+        str_temp << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane0_bip;
+        blk_temp = str_temp.str().c_str();
+        hdr_temp = "10";
+        lane3_bip = "00000000";
+        bip_calculator (&lane3_bip, blk_temp, hdr_temp);
 
         block_counter = 0;
-         }
+       }
       }
     }
-
-  // void tx() {
-    // static int lineNumber = 0;
-    // static int open = 0;
-    // std::pair<std::string, std::string> pr0;
-    // std::string line0;
-    // std::string line1;
-    // std::string line2;
-    // std::string line3;
-    // static ifstream lane0_local;
-    // static ifstream lane1_local;
-    // static ifstream lane2_local;
-    // static ifstream lane3_local;
-    //
-    // cout << "VAI ABRIR 0" << endl;
-    // lane0_local.open("lane0.txt");
-    // if (!lane0_local.is_open()){
-    //   cout << "ERROR opening lane0.txt at tx()" << endl;
-    // } else {
-    //   cout << "ABRI O LANE0.TXT" << endl;
-    // }
-    //
-    // lane1_local.open("lane1.txt");
-    // if (!lane1_local.is_open()){
-    //   cout << "ERROR opening lane1.txt at tx()" << endl;
-    // }
-    //
-    // lane2_local.open("lane2.txt");
-    // if (!lane2_local.is_open()){
-    //   cout << "ERROR opening lane2.txt at tx()" << endl;
-    // }
-    //
-    // lane3_local.open("lane3.txt");
-    // if (!lane2_local.is_open()){
-    //   cout << "ERROR opening lane3.txt at tx()" << endl;
-    // }
-    //
-    // if( lane0 ) {
-    //   cout << "File:" << lane0_local << endl;
-    //   GotoLine(lane0_local,lineNumber);
-    //   // if( std::getline(lane0_local, line0) ) {
-    //   if( lane0_local >> line0 ) {
-    //     cout << "File:" << lane0_local << endl;
-    //     std::pair<std::string, std::string> pr1 = splitHeaderBlock(line1);
-    //     cout << "LINE1: " << "Header: " << pr1.first << " Block: " << pr1.second << endl;
-    //   }
-    // } else {
-    //   cout << "File:" << lane0_local << endl;
-    //   cout << "FALHOU LANE 0" << endl;
-    // }
-    //
-    // if( lane1 ) {
-    //   GotoLine(lane1_local,lineNumber);
-    //   // if( std::getline(lane1_local, line1) ) {
-    //   if ( lane1_local >> line1 ) {
-    //       std::pair<std::string, std::string> pr1 = splitHeaderBlock(line1);
-    //       cout << "LINE1: " << "Header: " << pr1.first << " Block: " << pr1.second << endl;
-    //   }
-    // }
-    //
-    // if( lane2 ) {
-    //   GotoLine(lane2_local,lineNumber);
-    //   // if( std::getline(lane2_local, line2) ) {
-    //   if(lane2_local >> line2) {
-    //       std::pair<std::string, std::string> pr2 = splitHeaderBlock(line2);
-    //       cout << "LINE2: " << "Header: " << pr2.first << " Block: " << pr2.second << endl;
-    //   }
-    // }
-    //
-    // if( lane3 ) {
-    //   GotoLine(lane3_local,lineNumber);
-    //   // if( std::getline(lane3_local, line3) ) {
-    //   if ( lane3_local >> line3 ) {
-    //       std::pair<std::string, std::string> pr3 = splitHeaderBlock(line3);
-    //       cout << "LINE3: " << "Header: " << pr3.first << " Block: " << pr3.second << endl;
-    //   }
-    // }
-    //
-    // cout << "Line #"<<lineNumber<<endl;
-    // lineNumber++;
-    //
-    // lane0_local.close();
-    // lane1_local.close();
-    // lane2_local.close();
-    // lane3_local.close();
-    //
-    // lane0_local.clear();
-    // lane1_local.clear();
-    // lane2_local.clear();
-    // lane3_local.clear();
-  // }
 
   SC_CTOR(pkt_buffer) {
     block_counter = 0;
 
     lane0.open("lane0.txt");
     if (lane0.is_open()){
-      cout << "File lane0.txt opened." << endl;
+      cout << "[pkt_buffer] File lane0.txt opened." << endl;
     } else {
-      cout << "ERROR opening lane0.txt" << endl;
+      cout << "[pkt_buffer] ERROR opening lane0.txt" << endl;
     }
 
     lane1.open("lane1.txt");
     if (lane1.is_open()){
-      cout << "File lane1.txt opened." << endl;
+      cout << "[pkt_buffer] File lane1.txt opened." << endl;
     } else {
-      cout << "ERROR opening lane1.txt" << endl;
+      cout << "[pkt_buffer] ERROR opening lane1.txt" << endl;
     }
 
     lane2.open("lane2.txt");
     if (lane2.is_open()){
-      cout << "File lane2.txt opened." << endl;
+      cout << "[pkt_buffer] File lane2.txt opened." << endl;
     } else {
-      cout << "ERROR opening lane2.txt" << endl;
+      cout << "[pkt_buffer] ERROR opening lane2.txt" << endl;
     }
 
     lane3.open("lane3.txt");
     if (lane3.is_open()){
-      cout << "File lane3.txt opened." << endl;
+      cout << "[pkt_buffer] File lane3.txt opened." << endl;
     } else {
-      cout << "ERROR opening lane3.txt" << endl;
+      cout << "[pkt_buffer] ERROR opening lane3.txt" << endl;
     }
 
     SC_METHOD(rx);
-    sensitive<<clock_in161;
-
-    // SC_METHOD(tx);
-    // sensitive<<clock_in161;
+    sensitive<<clock_in161.pos();
+    dont_initialize();
 
   }
 

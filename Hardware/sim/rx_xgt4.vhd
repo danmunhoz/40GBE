@@ -17,10 +17,25 @@ entity rx_xgt4 is
       reset_in_mii_rx : in std_logic;
 
       --entrada do PCS
-      rx_header_valid_in  : in  std_logic;
-      rx_header_in        : in  std_logic_vector(1 downto 0);
-      rx_data_valid_in    : in  std_logic;
-      rx_data_in          : in  std_logic_vector(63 downto 0);
+      rx_lane_0_header_valid_in  : in  std_logic;
+      rx_lane_0_header_in        : in  std_logic_vector(1 downto 0);
+      rx_lane_0_data_valid_in    : in  std_logic;
+      rx_lane_0_data_in          : in  std_logic_vector(63 downto 0);
+
+      rx_lane_1_header_valid_in  : in  std_logic;
+      rx_lane_1_header_in        : in  std_logic_vector(1 downto 0);
+      rx_lane_1_data_valid_in    : in  std_logic;
+      rx_lane_1_data_in          : in  std_logic_vector(63 downto 0);
+
+      rx_lane_2_header_valid_in  : in  std_logic;
+      rx_lane_2_header_in        : in  std_logic_vector(1 downto 0);
+      rx_lane_2_data_valid_in    : in  std_logic;
+      rx_lane_2_data_in          : in  std_logic_vector(63 downto 0);
+
+      rx_lane_3_header_valid_in  : in  std_logic;
+      rx_lane_3_header_in        : in  std_logic_vector(1 downto 0);
+      rx_lane_3_data_valid_in    : in  std_logic;
+      rx_lane_3_data_in          : in  std_logic_vector(63 downto 0);
 
 
       -- XMAC Outputs
@@ -56,12 +71,6 @@ architecture behav of rx_xgt4 is
   	signal	reset_tx_n          : std_logic;
   	signal	reset_rx_n          : std_logic;
 
-  		-- PCS Data Inputs
-  	--signal	rx_header_in        : std_logic_vector(1 downto 0);
-  	--signal	rx_data_in          : std_logic_vector(63 downto 0);
-  	--signal	rx_data_valid_in    : std_logic;
-  	--signal	rx_header_valid_in  : std_logic;
-
   		-- PCS Data Outputs
   	signal	tx_data_out         : std_logic_vector(63 downto 0);
   	signal	tx_header_out       : std_logic_vector(1 downto 0);
@@ -76,16 +85,69 @@ architecture behav of rx_xgt4 is
     signal  pkt_tx_sop          :  std_logic;
     signal  pkt_tx_val          :  std_logic;
 
---      -- echo generator
---      signal pkt_tx_data : std_logic_vector(63 downto    --  --pkt recebido pelo MAC
---    --  data_out   		      : out	std_logic_vector(63 downto 0);
---    --  header_out 		      : out std_logic_vector(1 downto 0) 0);
---      signal pkt_tx_start, pkt_tx_val, pkt_tx_sop, pkt_tx_eop, pkt_tx_full : std_logic;
     signal pkt_tx_full :std_logic;
---      signal pkt_tx_mod : std_logic_vector(2 downto 0);
+
     signal reset_in_pcs : std_logic;
 
     signal start_fifo : std_logic;
+
+    signal lane_0_header_valid_in  : std_logic;
+    signal lane_0_header_in        : std_logic_vector(1 downto 0);
+    signal lane_0_data_valid_in    : std_logic;
+    signal lane_0_data_in          : std_logic_vector(63 downto 0);
+
+    signal lane_1_header_valid_in  : std_logic;
+    signal lane_1_header_in        : std_logic_vector(1 downto 0);
+    signal lane_1_data_valid_in    : std_logic;
+    signal lane_1_data_in          : std_logic_vector(63 downto 0);
+
+    signal lane_2_header_valid_in  : std_logic;
+    signal lane_2_header_in        : std_logic_vector(1 downto 0);
+    signal lane_2_data_valid_in    : std_logic;
+    signal lane_2_data_in          : std_logic_vector(63 downto 0);
+
+    signal lane_3_header_valid_in  : std_logic;
+    signal lane_3_header_in        : std_logic_vector(1 downto 0);
+    signal lane_3_data_valid_in    : std_logic;
+    signal lane_3_data_in          : std_logic_vector(63 downto 0);
+
+    signal pcs_0_data_out : std_logic_vector(63 downto 0);
+    signal pcs_1_data_out : std_logic_vector(63 downto 0);
+    signal pcs_2_data_out : std_logic_vector(63 downto 0);
+    signal pcs_3_data_out : std_logic_vector(63 downto 0);
+
+    signal pcs_1_header_out : std_logic_vector(1 downto 0);
+    signal pcs_0_header_out : std_logic_vector(1 downto 0);
+    signal pcs_2_header_out : std_logic_vector(1 downto 0);
+    signal pcs_3_header_out : std_logic_vector(1 downto 0);
+
+    signal valid_in : std_logic;
+
+  -- component lane_reorder port(
+  --     clock           : in std_logic;
+  --     reset           : in std_logic;
+  --
+  --     lane_0_data_in  : in std_logic_vector(63 downto 0);
+  --     lane_1_data_in  : in std_logic_vector(63 downto 0);
+  --     lane_2_data_in  : in std_logic_vector(63 downto 0);
+  --     lane_3_data_in  : in std_logic_vector(63 downto 0);
+  --
+  --     lane_0_header_in  : in std_logic_vector(1 downto 0);
+  --     lane_1_header_in  : in std_logic_vector(1 downto 0);
+  --     lane_2_header_in  : in std_logic_vector(1 downto 0);
+  --     lane_3_header_in  : in std_logic_vector(1 downto 0);
+  --
+  --     pcs_0_data_out  : out std_logic_vector(63 downto 0);
+  --     pcs_1_data_out  : out std_logic_vector(63 downto 0);
+  --     pcs_2_data_out  : out std_logic_vector(63 downto 0);
+  --     pcs_3_data_out  : out std_logic_vector(63 downto 0);
+  --
+  --     pcs_0_header_out  : out std_logic_vector(1 downto 0);
+  --     pcs_1_header_out  : out std_logic_vector(1 downto 0);
+  --     pcs_2_header_out  : out std_logic_vector(1 downto 0);
+  --     pcs_3_header_out  : out std_logic_vector(1 downto 0)
+  -- );
+  -- end component;
 
   component wrapper_macpcs_rx port(
           -- Clocks
@@ -119,11 +181,26 @@ architecture behav of rx_xgt4 is
           jtm_dps_1           : in  std_logic;
           seed_A              : in  std_logic_vector(57 downto 0);
           seed_B              : in  std_logic_vector(57 downto 0);
-          --
-          rx_header_valid_in  : in  std_logic;
-          rx_header_in        : in  std_logic_vector(1 downto 0);
-          rx_data_valid_in    : in  std_logic;
-          rx_data_in          : in  std_logic_vector(63 downto 0);
+
+          rx_lane_0_header_valid_in    : in  std_logic;
+          rx_lane_0_header_in          : in  std_logic_vector(1 downto 0);
+          rx_lane_0_data_valid_in      : in  std_logic;
+          rx_lane_0_data_in            : in  std_logic_vector(63 downto 0);
+
+          rx_lane_1_header_valid_in    : in  std_logic;
+          rx_lane_1_header_in          : in  std_logic_vector(1 downto 0);
+          rx_lane_1_data_valid_in      : in  std_logic;
+          rx_lane_1_data_in            : in  std_logic_vector(63 downto 0);
+
+          rx_lane_2_header_valid_in    : in  std_logic;
+          rx_lane_2_header_in          : in  std_logic_vector(1 downto 0);
+          rx_lane_2_data_valid_in      : in  std_logic;
+          rx_lane_2_data_in            : in  std_logic_vector(63 downto 0);
+
+          rx_lane_3_header_valid_in    : in  std_logic;
+          rx_lane_3_header_in          : in  std_logic_vector(1 downto 0);
+          rx_lane_3_data_valid_in      : in  std_logic;
+          rx_lane_3_data_in            : in  std_logic_vector(63 downto 0);
 
           -- PCS Outputs
           hi_ber              : out  std_logic;
@@ -158,15 +235,15 @@ architecture behav of rx_xgt4 is
           wb_stb_i            : in  std_logic;
           wb_we_i             : in  std_logic;
 
-        -- XMAC Outputs
-        pkt_rx_avail        : out  std_logic;
-        pkt_rx_data         : out  std_logic_vector(63 downto 0);
-        pkt_rx_eop          : out  std_logic;
-        pkt_rx_err          : out  std_logic;
-        pkt_rx_mod          : out  std_logic_vector(2 downto 0);
-        pkt_rx_sop          : out  std_logic;
-        pkt_rx_val          : out  std_logic;
-        pkt_tx_full         : out  std_logic;
+          -- XMAC Outputs
+          pkt_rx_avail        : out  std_logic;
+          pkt_rx_data         : out  std_logic_vector(63 downto 0);
+          pkt_rx_eop          : out  std_logic;
+          pkt_rx_err          : out  std_logic;
+          pkt_rx_mod          : out  std_logic_vector(2 downto 0);
+          pkt_rx_sop          : out  std_logic;
+          pkt_rx_val          : out  std_logic;
+          pkt_tx_full         : out  std_logic;
 
           -- Wishbone (MAC)
           wb_ack_o            : out  std_logic;
@@ -184,97 +261,122 @@ begin
 
           start_fifo <= '0', '1' after 65 ns;
 
-  -- INST WRAPPER
-      inst_wrapper_macpcs : wrapper_macpcs_rx port map(
-          -- Clocks
-          clk_156             => clk_156,
-          tx_clk_161_13       => clk_161,
-          rx_clk_161_13       => clk_161,
-          clk_xgmii_rx        => clk_xgmii_rx,
-          clk_xgmii_tx        => clk_xgmii_tx,
+          valid_in <= '0', '1' after 127 ns;
 
-          -- Resets
-          --async_reset_n       => async_reset_n,
-          async_reset_n       => reset_in,
-          -- reset_tx_n          => reset_tx_n,
-          -- reset_rx_n          => reset_rx_n,
-          reset_tx_n          => reset_in_pcs,
-          reset_rx_n          => reset_in_pcs,
-          reset_tx_done       => reset_in_mii_tx,
-          reset_rx_done       => reset_in_mii_rx,
+          -- Por enquanto...
+          lane_0_header_valid_in  <= valid_in;
+          lane_0_data_valid_in    <= valid_in;
+          lane_1_header_valid_in  <= valid_in;
+          lane_1_data_valid_in    <= valid_in;
+          lane_2_header_valid_in  <= valid_in;
+          lane_2_data_valid_in    <= valid_in;
+          lane_3_header_valid_in  <= valid_in;
+          lane_3_data_valid_in    <= valid_in;
 
-          start_fifo => start_fifo,
-          dump_xgmii_rxc => dump_xgmii_rxc,
-          dump_xgmii_rxd => dump_xgmii_rxd,
+          -- INST WRAPPER
 
-          -- PCS IN
-          rx_header_valid_in  => rx_header_valid_in,
-          rx_header_in        => rx_header_in,
-          rx_data_valid_in    => rx_data_valid_in,
-          rx_data_in          => rx_data_in,
+          inst_wrapper_macpcs: wrapper_macpcs_rx port map(
+            -- Clocks
+            clk_156             => clk_156,
+            tx_clk_161_13       => clk_161,
+            rx_clk_161_13       => clk_161,
+            clk_xgmii_rx        => clk_156,
+            clk_xgmii_tx        => clk_156,
 
-          -- PCS OUT
-          tx_data_out        => tx_data_out,
-          tx_header_out      => tx_header_out,
-          rxgearboxslip_out  => rxgearboxslip_out,
-          tx_sequence_out    => tx_sequence_out,
+            -- Resets
+            async_reset_n       => reset_in,
+            reset_tx_n          => reset_in_pcs,
+            reset_rx_n          => reset_in_pcs,
+            reset_tx_done       => reset_in_mii_tx,
+            reset_rx_done       => reset_in_mii_rx,
 
-          -- MAC
-          pkt_rx_data     => pkt_rx_data,
-          pkt_rx_avail    => pkt_rx_avail,
-          pkt_rx_eop      => pkt_rx_eop,
-          pkt_rx_err      => pkt_rx_err,
-          pkt_rx_mod      => pkt_rx_mod,
-          pkt_rx_sop      => pkt_rx_sop,
-          pkt_rx_val      => pkt_rx_val,
-          pkt_tx_full     => pkt_tx_full,
+            start_fifo => start_fifo,
+            dump_xgmii_rxc => dump_xgmii_rxc,
+            dump_xgmii_rxd => dump_xgmii_rxd,
 
-        --  -- MAC Outputs
-          pkt_rx_ren      => pkt_rx_ren,
-          pkt_tx_data     => pkt_tx_data,
-          pkt_tx_eop      => pkt_tx_eop,
-          pkt_tx_mod      => pkt_tx_mod,
-          pkt_tx_sop      => pkt_tx_sop,
-          pkt_tx_val      => pkt_tx_val,
+            -- PCS IN
+            rx_lane_0_header_valid_in    => lane_0_header_valid_in,
+            rx_lane_0_data_valid_in      => lane_0_data_valid_in,
+            rx_lane_0_header_in          => rx_lane_0_header_in,
+            rx_lane_0_data_in            => rx_lane_0_data_in,
 
-          -- PCS Inputs
-          rx_jtm_en           => '0',
-          bypass_descram      => '0',
-          bypass_scram        => '0',
-          bypass_66decoder    => '0',
-          bypass_66encoder    => '0',
-          clear_errblk        => '0',
-          clear_ber_cnt       => '0',
-          tx_jtm_en           => '0',
-          jtm_dps_0           => '0',
-          jtm_dps_1           => '0',
-          seed_A              => (others=>'0'),
-          seed_B              => (others=>'0'),
+            rx_lane_1_header_valid_in    => lane_1_header_valid_in,
+            rx_lane_1_data_valid_in      => lane_1_data_valid_in,
+            rx_lane_1_header_in          => rx_lane_1_header_in,
+            rx_lane_1_data_in            => rx_lane_1_data_in,
 
-          -- PCS Outputs
-          hi_ber              => open,
-          blk_lock            => open,
-          linkstatus          => open,
-          rx_fifo_spill       => open,
-          tx_fifo_spill       => open,
-          rxlf                => open,
-          txlf                => open,
-          ber_cnt             => open,
-          errd_blks           => open,
-          jtest_errc          => open,
+            rx_lane_2_header_valid_in    => lane_2_header_valid_in,
+            rx_lane_2_data_valid_in      => lane_2_data_valid_in,
+            rx_lane_2_header_in          => rx_lane_2_header_in,
+            rx_lane_2_data_in            => rx_lane_2_data_in,
 
-          -- Wishbone Inputs (MAC)
-          wb_adr_i            => (others=>'0'),
-          wb_clk_i            => '0',
-          wb_cyc_i            => '0',
-          wb_dat_i            => (others=>'0'),
-          wb_stb_i            => '0',
-          wb_we_i             => '0',
+            rx_lane_3_header_valid_in    => lane_3_header_valid_in,
+            rx_lane_3_data_valid_in      => lane_3_data_valid_in,
+            rx_lane_3_header_in          => rx_lane_3_header_in,
+            rx_lane_3_data_in            => rx_lane_3_data_in,
 
-          -- Wishbone Outputs (MAC)
-          wb_ack_o            => open,
-          wb_dat_o            => open,
-          wb_int_o            => open
+            -- PCS OUT
+            tx_data_out        => tx_data_out,
+            tx_header_out      => tx_header_out,
+            rxgearboxslip_out  => rxgearboxslip_out,
+            tx_sequence_out    => tx_sequence_out,
+
+            -- MAC
+            pkt_rx_data     => pkt_rx_data,
+            pkt_rx_avail    => pkt_rx_avail,
+            pkt_rx_eop      => pkt_rx_eop,
+            pkt_rx_err      => pkt_rx_err,
+            pkt_rx_mod      => pkt_rx_mod,
+            pkt_rx_sop      => pkt_rx_sop,
+            pkt_rx_val      => pkt_rx_val,
+            pkt_tx_full     => pkt_tx_full,
+
+           -- MAC Outputs
+            pkt_rx_ren      => pkt_rx_ren,
+            pkt_tx_data     => pkt_tx_data,
+            pkt_tx_eop      => pkt_tx_eop,
+            pkt_tx_mod      => pkt_tx_mod,
+            pkt_tx_sop      => pkt_tx_sop,
+            pkt_tx_val      => pkt_tx_val,
+
+            -- PCS Inputs
+            rx_jtm_en           => '0',
+            bypass_descram      => '0',
+            bypass_scram        => '0',
+            bypass_66decoder    => '0',
+            bypass_66encoder    => '0',
+            clear_errblk        => '0',
+            clear_ber_cnt       => '0',
+            tx_jtm_en           => '0',
+            jtm_dps_0           => '0',
+            jtm_dps_1           => '0',
+            seed_A              => (others=>'0'),
+            seed_B              => (others=>'0'),
+
+            -- PCS Outputs
+            hi_ber              => open,
+            blk_lock            => open,
+            linkstatus          => open,
+            rx_fifo_spill       => open,
+            tx_fifo_spill       => open,
+            rxlf                => open,
+            txlf                => open,
+            ber_cnt             => open,
+            errd_blks           => open,
+            jtest_errc          => open,
+
+            -- Wishbone Inputs (MAC)
+            wb_adr_i            => (others=>'0'),
+            wb_clk_i            => '0',
+            wb_cyc_i            => '0',
+            wb_dat_i            => (others=>'0'),
+            wb_stb_i            => '0',
+            wb_we_i             => '0',
+
+            -- Wishbone Outputs (MAC)
+            wb_ack_o            => open,
+            wb_dat_o            => open,
+            wb_int_o            => open
       );
 
 end behav;

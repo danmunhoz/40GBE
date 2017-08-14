@@ -72,6 +72,17 @@ add wave -noupdate -group {Lane Reorder} -expand -group OUTPUT -radix binary /To
 add wave -noupdate -group {Lane Reorder} -expand -group OUTPUT -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_data_out
 add wave -noupdate -group {Lane Reorder} -expand -group OUTPUT -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_header_out
 add wave -noupdate -group {Lane Reorder} -expand -group OUTPUT -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_data_out
+add wave -noupdate -divider FIFO_in
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/clk
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/rst
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/wen
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/data_in
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/full
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/almost_f
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/ren
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/data_out
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/empty
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/almost_e
 add wave -noupdate -divider PCSs
 add wave -noupdate -expand -group PCS_0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/rx_header_valid_in
 add wave -noupdate -expand -group PCS_0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/rx_data_valid_in
@@ -205,7 +216,7 @@ add wave -noupdate -group RX_ENQUEUE_MAC -expand -group EQ_1 -radix hexadecimal 
 add wave -noupdate -group RX_ENQUEUE_MAC -expand -group EQ_1 -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_xge_mac/rx_eq1/rxhfifo_wstatus
 add wave -noupdate -group RX_ENQUEUE_MAC -expand -group EQ_1 /Top/rx_xgt4/inst_wrapper_macpcs/INST_xge_mac/rx_eq1/curr_state
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {361541 ps} 0}
+WaveRestoreCursors {{Cursor 1} {45504 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 872
 configure wave -valuecolwidth 148
@@ -221,4 +232,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {335588 ps} {396618 ps}
+WaveRestoreZoom {0 ps} {61030 ps}

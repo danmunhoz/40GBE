@@ -3,7 +3,7 @@
 //
 // FileName: Decode.v
 //
-// 
+//
 //------------------------------------------------------------------------------
 
 module Decode (
@@ -31,6 +31,7 @@ module Decode (
     wire         hi_ber;
     input        rstb156;
     wire         rstb156;
+
 //  output ports
     output       rxlf;
     wire         rxlf;
@@ -40,6 +41,7 @@ module Decode (
     wire [7:0]   rxcontrol;
     output [63:0] rxdata;
     wire [63:0]   rxdata;
+
 //  local signals
     wire [2:0]    R_TYPE;
     wire [7:0]    rx_control;

@@ -59,7 +59,7 @@
 
 `include "definitions.v"
 
-module PCS_core  (  /*AUTOARG*/
+module PCS_core_rx  (  /*AUTOARG*/
                     // Inputs
                     clk156, tx_clk161, rx_clk161,
                     arstb, reset_tx_n, reset_rx_n,
@@ -67,11 +67,11 @@ module PCS_core  (  /*AUTOARG*/
                     clear_errblk, clear_ber_cnt, tx_jtm_en, jtm_dps_0, jtm_dps_1,
                     seed_A, seed_B, xgmii_txc, xgmii_txd,
                     rx_header_valid_in, rx_header_in, rx_data_valid_in, rx_data_in,
-                    rx_old_header_in, rx_old_data_in,
+                    rx_old_header_in, rx_old_data_in, terminate_in,
                     // Outputs
                     jtest_errc, ber_cnt, hi_ber, blk_lock, linkstatus, rx_fifo_spill,
                     tx_fifo_spill, rxlf, txlf, errd_blks, xgmii_rxc, xgmii_rxd,
-                    tx_data_out, tx_header_out, tx_sequence_out, rxgearboxslip_out,
+                    tx_data_out, tx_header_out, tx_sequence_out, rxgearboxslip_out, terminate_out,
                     // Para uso do Testbench
         						start_fifo
                     );
@@ -108,6 +108,8 @@ module PCS_core  (  /*AUTOARG*/
     input [1:0]   rx_old_header_in;
     input [63:0]  rx_old_data_in;
     // Do we need extra valid_ins??
+    input          terminate_in;
+    wire           terminate_in;
 
 
     //For Testbench use
@@ -130,6 +132,9 @@ module PCS_core  (  /*AUTOARG*/
     output        rxgearboxslip_out;
     output [6:0]  tx_sequence_out;
 
+    output         terminate_out;
+    wire           terminate_out;
+
 
 
     wire          txpclkn_int;
@@ -149,7 +154,6 @@ module PCS_core  (  /*AUTOARG*/
     wire [63:0]   rx_data_in;
     wire [6:0]    tx_sequence_out;
     wire          rxgearboxslip_out;
-
 
 
 tx_path INST_tx_path(   // Inputs
@@ -174,7 +178,7 @@ tx_path INST_tx_path(   // Inputs
                         .start_fifo         (start_fifo)
                         );
 
-rx_path INST_rx_path(   // Input Ports
+rx_path_rx INST_rx_path(   // Input Ports
                         .clk156             (clk156),
                         .rx_clk161          (rx_clk161),
                         .arstb              (reset_rx_n),
@@ -192,6 +196,7 @@ rx_path INST_rx_path(   // Input Ports
                         .rx_data_in         (rx_data_in[63:0]),
                         .rx_old_header_in   (rx_old_header_in),
                         .rx_old_data_in     (rx_old_data_in),
+                        .terminate_in       (terminate_in),
 
                         // Output Ports
                         .xgmii_rxc          (xgmii_rxc[7:0]),
@@ -205,6 +210,7 @@ rx_path INST_rx_path(   // Input Ports
                         .rxlf               (rxlf),
                         .errd_blks          (errd_blks),
                         .rxgearboxslip_out  (rxgearboxslip_out),
+                        .terminate_out      (terminate_out),
                         .start_fifo         (start_fifo)
                         );
 
