@@ -542,7 +542,7 @@ module wrapper_macpcs_rx(
     (
       	.clk_156			      (clk_156),
         .clk_312			      (clk_161),   //Por enquanto...
-      	.rst 			          (reset_rx_n),
+      	.rst_n 	            (reset_rx_n),
 
       	.xgmii_rxc_0	      (xgmii_rxc_lane_0),
       	.xgmii_rxd_0	      (xgmii_rxd_lane_0),
