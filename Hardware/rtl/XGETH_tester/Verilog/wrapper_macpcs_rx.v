@@ -217,6 +217,9 @@ module wrapper_macpcs_rx(
     assign dump_xgmii_rxc = xgmii_rxc_lane_0;
     assign dump_xgmii_rxd = xgmii_rxd_lane_0;
 
+    wire tatata;
+    wire tata2;
+
     // Register for lane 0 old block
     always @ (posedge rx_clk_161_13 or async_reset_n) begin
       if (!async_reset_n) begin
