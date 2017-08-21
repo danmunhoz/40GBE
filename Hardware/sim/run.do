@@ -65,6 +65,9 @@ vlog -novopt ../rtl/MAC/generic_fifo_ctrl.v
 vlog -novopt ../rtl/MAC/rx_enqueue.v
 vlog -novopt ../rtl/MAC/xge_mac.v
 
+vcom -novopt ../rtl/PCS/register.vhd
+vcom -novopt ../rtl/PCS_interface_MAC/mii_shift_register.vhd
+vcom -novopt ../rtl/PCS_interface_MAC/core_interface.vhd
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs_rx.v
 
@@ -74,7 +77,6 @@ vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator.vhd
 
 vcom -novopt tb_xgt4.vhd
 vcom -novopt rx_xgt4.vhd
-vcom -novopt ../rtl/PCS/register.vhd
 vcom -novopt ../rtl/PCS/shuffle.vhd
 vcom -novopt ../rtl/PCS/bip_calculator.vhd
 vcom -novopt ../rtl/PCS/reorder_fifo.vhd
@@ -95,7 +97,8 @@ sccom -link -B/usr/bin/
 
 vsim -novopt work.glbl work.Top -t 1ps
 
-do wave_fifo.do
+#do wave_fifo.do
+do wave_interface_mac.do
 run 1000 ns
 
 #exec python scoreboard.py
