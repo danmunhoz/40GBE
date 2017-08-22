@@ -29,6 +29,8 @@ architecture behav_core_interface of core_interface is
 
   begin
 
+    ctrl_reg_shift <= "000", "010" after 50 ns, "100" after 90 ns;
+
     shift_reg: entity work.mii_shift_register port map(
           clk           => clk_156,
           rst_n         => rst_n,
