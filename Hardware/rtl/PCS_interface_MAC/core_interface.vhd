@@ -26,6 +26,7 @@ architecture behav_core_interface of core_interface is
     signal shift_reg_out_1     : std_logic_vector(255 downto 0);
 
   begin
+
     shift_reg: entity work.mii_shift_register port map(
           clk           => clk_156,
           rst_n         => rst_n,
