@@ -21,7 +21,7 @@ entity core_interface is
 end entity;
 
 architecture behav_core_interface of core_interface is
-    signal shift_reg_ctrl      : std_logic;
+    signal shift_reg_ctrl      : std_logic_vector(1 downto 0);
     signal shift_reg_out_0     : std_logic_vector(255 downto 0);
     signal shift_reg_out_1     : std_logic_vector(255 downto 0);
     signal ctrl_reg_shift      : std_logic_vector(2 downto 0);
@@ -30,6 +30,21 @@ architecture behav_core_interface of core_interface is
   begin
 
     ctrl_reg_shift <= "000", "010" after 50 ns, "100" after 90 ns;
+
+    controller: entity work.control port map(
+          clk         => clk_156,
+          rst_n       => rst_n,
+          xgmii_rxc_0 => xgmii_rxc_0,
+          xgmii_rxd_0 => xgmii_rxd_0,
+          xgmii_rxc_1 => xgmii_rxc_1,
+          xgmii_rxd_1 => xgmii_rxd_1,
+          xgmii_rxc_2 => xgmii_rxc_2,
+          xgmii_rxd_2 => xgmii_rxd_2,
+          xgmii_rxc_3 => xgmii_rxc_3,
+          xgmii_rxd_3 => xgmii_rxd_3,
+          ctrl_delay  => shift_reg_ctrl,
+          shift_out   => ctrl_reg_shift
+    );
 
     shift_reg: entity work.mii_shift_register port map(
           clk           => clk_156,

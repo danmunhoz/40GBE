@@ -37,6 +37,7 @@ vlog -novopt ../rtl/PCS/Decode_rx.v
 vlog -novopt ../rtl/PCS/frame_sync.v
 vlog -novopt ../rtl/PCS/PCS_core.v
 vlog -novopt ../rtl/PCS/PCS_core_rx.v
+vcom -novopt ../rtl/PCS/register.vhd
 
 #vlog -novopt MAC/*.v
 vlog -novopt ../rtl/MAC/fault_sm.v
@@ -65,10 +66,12 @@ vlog -novopt ../rtl/MAC/generic_fifo_ctrl.v
 vlog -novopt ../rtl/MAC/rx_enqueue.v
 vlog -novopt ../rtl/MAC/xge_mac.v
 
-vcom -novopt ../rtl/PCS/register.vhd
+vcom -novopt ../rtl/PCS_interface_MAC/defines.vhd
+vcom -novopt ../rtl/PCS_interface_MAC/control.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/mii_shift_register.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/mii_shifter.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/core_interface.vhd
+
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs_rx.v
 
