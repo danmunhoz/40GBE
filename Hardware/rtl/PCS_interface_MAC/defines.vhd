@@ -9,7 +9,7 @@ package interface_defs is
   constant SFD        : std_logic_vector(7 downto 0) := x"d5";
   constant START      : std_logic_vector(7 downto 0) := x"fb";
   constant TERMINATE  : std_logic_vector(7 downto 0) := x"fd";
-  constant ERROR      : std_logic_vector(7 downto 0) := x"fe";
+  constant ERROR_MII  : std_logic_vector(7 downto 0) := x"fe";
 
   subtype LANE0 is natural range 7 downto 0;
   subtype LANE1 is natural range 15 downto 8;
@@ -19,5 +19,5 @@ package interface_defs is
   subtype LANE5 is natural range 47 downto 40;
   subtype LANE6 is natural range 55 downto 48;
   subtype LANE7 is natural range 63 downto 56;
-  
+
 end interface_defs;
