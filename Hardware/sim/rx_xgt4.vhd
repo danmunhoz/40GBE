@@ -257,7 +257,7 @@ begin
           clk_156 <= clock_in156;
           clk_161 <= clock_in161;
 
-          reset_in_pcs <= '0', '1' after 35 ns;
+          reset_in_pcs <= '0', '1' after 40 ns;
 
           start_fifo <= '0', '1' after 65 ns;
 
