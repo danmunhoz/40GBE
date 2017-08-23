@@ -21,14 +21,19 @@ entity core_interface is
 end entity;
 
 architecture behav_core_interface of core_interface is
+<<<<<<< HEAD
     signal shift_reg_ctrl      : std_logic_vector(1 downto 0);
+=======
+    signal shift_reg_ctrl      : std_logic_vector(  1 downto 0);
+    signal ctrl_reg_shift      : std_logic_vector(  2 downto 0);
+>>>>>>> 7da2d4ce42fd5990d15798d1667b8a57b081411e
     signal shift_reg_out_0     : std_logic_vector(255 downto 0);
     signal shift_reg_out_1     : std_logic_vector(255 downto 0);
-    signal ctrl_reg_shift      : std_logic_vector(2 downto 0);
     signal shifter_out         : std_logic_vector(255 downto 0);
 
   begin
 
+    shift_reg_ctrl <= "00","11" after 50 ns;       -- apenas teste
     ctrl_reg_shift <= "000", "010" after 50 ns, "100" after 90 ns;
 
     controller: entity work.control port map(
