@@ -27,6 +27,7 @@ architecture behav_control of control is
   signal sop_location      : std_logic_vector(3 downto 0);
   signal eop_location      : std_logic_vector(7 downto 0);
   signal shift_calc        : std_logic_vector(2 downto 0);
+  signal shift_out_int     : std_logic_vector(2 downto 0);
 
 begin
 
@@ -63,7 +64,7 @@ begin
         sop_location <= "0101";
 
       -- MII from PCS 3
-      elsif (xgmii_rxc_3(0) = '1' and xgmii_rxd_3(LANE4) = START) then
+      elsif (xgmii_rxc_3(0) = '1' and xgmii_rxd_3(LANE0) = START) then
         -- SOP on LANE 0 of PCS 3 -> word 6
         sop_location <= "0110";
       elsif (xgmii_rxc_3(4) = '1' and xgmii_rxd_3(LANE4) = START) then
@@ -210,20 +211,30 @@ begin
         when x"1C" | x"1D" | x"1E" | x"1F" => shift_calc <= (sop_location(2 downto 0) + 1) - 7;
         when others => null;
       end case;
+
+      -- default
+    else
+      shift_calc <= (others=>'0');
     end if;
 
   end process;
 
   -- Process to keep shift value between SOPs
-  shift_out_reg: process (clk, rst_n)
+  shift_out_reg: process (clk, rst_n, sop_location, shift_out_int, shift_calc)
   begin
-    if (rst_n = '1') then
-      shift_out <= (others=>'0');
-    elsif clk'event and clk='1' then
+    if (rst_n = '0') then
+      shift_out_int <= (others=>'0');
+    elsif clk='1' then
       if sop_location /= "1000" then
-        shift_out <= shift_calc;
+        shift_out_int <= shift_calc;
+      else
+        shift_out_int <= shift_out_int;
       end if;
+    else
+        shift_out_int <= shift_out_int;
     end if;
   end process;
+
+  shift_out <= shift_out_int;
 
 end architecture;
