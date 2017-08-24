@@ -21,20 +21,13 @@ entity core_interface is
 end entity;
 
 architecture behav_core_interface of core_interface is
-<<<<<<< HEAD
-    signal shift_reg_ctrl      : std_logic_vector(1 downto 0);
-=======
-    signal shift_reg_ctrl      : std_logic_vector(  1 downto 0);
-    signal ctrl_reg_shift      : std_logic_vector(  2 downto 0);
->>>>>>> 7da2d4ce42fd5990d15798d1667b8a57b081411e
+    signal ctrl_mux_delay      : std_logic_vector(  1 downto 0);
+    signal ctrl_shift_reg      : std_logic_vector(  2 downto 0);
     signal shift_reg_out_0     : std_logic_vector(255 downto 0);
     signal shift_reg_out_1     : std_logic_vector(255 downto 0);
     signal shifter_out         : std_logic_vector(255 downto 0);
 
   begin
-
-    shift_reg_ctrl <= "00","11" after 50 ns;       -- apenas teste
-    ctrl_reg_shift <= "000", "010" after 50 ns, "100" after 90 ns;
 
     controller: entity work.control port map(
           clk         => clk_156,
@@ -47,8 +40,8 @@ architecture behav_core_interface of core_interface is
           xgmii_rxd_2 => xgmii_rxd_2,
           xgmii_rxc_3 => xgmii_rxc_3,
           xgmii_rxd_3 => xgmii_rxd_3,
-          ctrl_delay  => shift_reg_ctrl,
-          shift_out   => ctrl_reg_shift
+          ctrl_delay  => ctrl_mux_delay,
+          shift_out   => ctrl_shift_reg
     );
 
     shift_reg: entity work.mii_shift_register port map(
@@ -62,7 +55,7 @@ architecture behav_core_interface of core_interface is
           xgmii_rxd_2   => xgmii_rxd_2,
           xgmii_rxc_3   => xgmii_rxc_3,
           xgmii_rxd_3   => xgmii_rxd_3,
-          ctrl          => shift_reg_ctrl,
+          ctrl          => ctrl_mux_delay,
           out_0         => shift_reg_out_0,
           out_1         => shift_reg_out_1
 
@@ -73,7 +66,7 @@ architecture behav_core_interface of core_interface is
           rst_n           => rst_n,
           in_1            => shift_reg_out_1,
           in_0            => shift_reg_out_0,
-          ctrl_reg_shift  => ctrl_reg_shift,
+          ctrl_reg_shift  => ctrl_shift_reg,
           out_data        => shifter_out
     );
 

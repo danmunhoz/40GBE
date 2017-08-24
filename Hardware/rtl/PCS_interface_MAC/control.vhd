@@ -31,8 +31,8 @@ architecture behav_control of control is
 begin
 
   -- Making things clear:
-  -- LANEs from 0 to 7 are the eight bytes for each MII  data interface.
-  -- WORDs from 0 to 7 are the eight 32bits words for all four MIIs connected
+  -- LANEs from 0 to 7 are the eight bytes for each MII data interface.
+  -- WORDs from 0 to 7 are the eight 32bits words for all four MIIs in use
 
 
   -- sop_finder: process(xgmii_rxc_0, xgmii_rxd_0, xgmii_rxc_1, xgmii_rxd_1,
