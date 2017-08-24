@@ -35,14 +35,9 @@ begin
   -- WORDs from 0 to 7 are the eight 32bits words for all four MIIs in use
 
 
-  -- sop_finder: process(xgmii_rxc_0, xgmii_rxd_0, xgmii_rxc_1, xgmii_rxd_1,
-  --                     xgmii_rxc_2, xgmii_rxd_2, xgmii_rxc_3, xgmii_rxd_3)
-  sop_finder: process(clk, rst_n)
+  sop_finder: process(xgmii_rxc_0, xgmii_rxd_0, xgmii_rxc_1, xgmii_rxd_1,
+                      xgmii_rxc_2, xgmii_rxd_2, xgmii_rxc_3, xgmii_rxd_3)
   begin
-    if (rst_n = '1') then
-      sop_location <= "1000";
-    elsif clk'event and clk = '1' then
-
       -- MII from PCS 0
       if (xgmii_rxc_0(0) = '1' and xgmii_rxd_0(LANE0) = START) then
         -- SOP on LANE 0 of PCS 0 -> word 0
@@ -79,18 +74,13 @@ begin
         -- No SOP this time...
         sop_location <= "1000";
       end if;
-
-    end if;
-
   end process;
 
   -- TERMINATE can appear in any byte of any MII
-  eop_finder: process(clk, rst_n)
+  -- eop_finder: process(clk, rst_n)
+  eop_finder: process(xgmii_rxc_0, xgmii_rxd_0, xgmii_rxc_1, xgmii_rxd_1,
+                      xgmii_rxc_2, xgmii_rxd_2, xgmii_rxc_3, xgmii_rxd_3)
   begin
-    if (rst_n = '1') then
-      eop_location <= "00100000";
-    elsif clk'event and clk = '1' then
-      -- MII from PCS 0
       if (xgmii_rxc_0(0) = '1' and xgmii_rxd_0(LANE0) = TERMINATE) then
         eop_location <= x"00";
       elsif (xgmii_rxc_0(1) = '1' and xgmii_rxd_0(LANE1) = TERMINATE) then
@@ -166,7 +156,6 @@ begin
         -- No EOP this time...
         eop_location <= "00100000";
       end if;
-    end if;
   end process;
 
   -- When there is SOP/EOP on the last lane, tell shift_reg to use delay_reg
