@@ -101,7 +101,7 @@ sccom -link -B/usr/bin/
 
 vsim -novopt work.glbl work.Top -t 1ps
 
-do wave.do
+do wave_MII_Interface.do
 run 1000 ns
 
 #exec python scoreboard.py

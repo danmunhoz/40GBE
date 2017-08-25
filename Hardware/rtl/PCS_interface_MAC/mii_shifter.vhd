@@ -6,7 +6,6 @@ entity mii_shifter is
   -- INPUTS
       clk             : in std_logic;
       rst_n           : in std_logic;
-
       in_1            : in std_logic_vector(255 downto 0);
       in_0            : in std_logic_vector(255 downto 0);
 
@@ -22,43 +21,16 @@ architecture behav_mii_shifter of mii_shifter is
 
   begin
 
-    out_data <= in_0(255 downto 0)                          when ctrl_reg_shift = "000" else
-                in_0(255 downto 32)  & in_1(255 downto 224) when ctrl_reg_shift = "001" else
-                in_0(255 downto 64)  & in_1(255 downto 192) when ctrl_reg_shift = "010" else
-                in_0(255 downto 96)  & in_1(255 downto 160) when ctrl_reg_shift = "011" else
-                in_0(255 downto 128) & in_1(255 downto 128) when ctrl_reg_shift = "100" else
-                in_0(255 downto 160) & in_1(255 downto 96)  when ctrl_reg_shift = "101" else
-                in_0(255 downto 192) & in_1(255 downto 64)  when ctrl_reg_shift = "110" else
-                in_0(255 downto 224) & in_1(255 downto 32)  when ctrl_reg_shift = "111";
+    out_data <= in_0(255 downto 0)                         when ctrl_reg_shift = "000" else --certo
+                in_1(223 downto 0)  & in_0(255 downto 224) when ctrl_reg_shift = "001" else --certo
 
+                in_1(191 downto 0)  & in_0(255 downto 192) when ctrl_reg_shift = "010" else
+                in_1(159 downto 0)  & in_0(255 downto 160) when ctrl_reg_shift = "011" else
 
+                in_1( 127 downto 0) & in_0(255 downto 128) when ctrl_reg_shift = "100" else
+                in_1(  95 downto 0) & in_0(255 downto 96)  when ctrl_reg_shift = "101" else
 
-    --shifter :process(ctrl_reg_shift)
-                --begin
-                  --case ctrl_reg_shift is
-
-                      --when "000" => out_data <= in_0(255 downto 0);
-                      --when "001" => out_data <= in_0(255 downto 32)  & in_1(255 downto 224);
-                      --when "010" => out_data <= in_0(255 downto 64)  & in_1(255 downto 192);
-                      --when "011" => out_data <= in_0(255 downto 96)  & in_1(255 downto 160);
-                      --when "100" => out_data <= in_0(255 downto 128) & in_1(255 downto 128);
-                      --when "101" => out_data <= in_0(255 downto 160) & in_1(255 downto 96);
-                      --when "110" => out_data <= in_0(255 downto 192) & in_1(255 downto 64);
-                      --when "111" => out_data <= in_0(255 downto 224) & in_1(255 downto 32);
-                      --when others => out_data <= (others => '0');
-
-                  --end case;
-              --end process;
-
+                in_1( 63 downto 0)  & in_0(255 downto 64)  when ctrl_reg_shift = "110" else
+                in_1( 31 downto 0)  & in_0(255 downto 32)  when ctrl_reg_shift = "111";
 
   end behav_mii_shifter;
-
-  --when "000" => out_data <= in_0(255 downto 0);
-  --when "001" => out_data <= in_0(255 downto 31)  & in_1(255 downto 223);
-  --when "010" => out_data <= in_0(255 downto 63)  & in_1(255 downto 191);
-  --when "011" => out_data <= in_0(255 downto 95)  & in_1(255 downto 159);
-  --when "100" => out_data <= in_0(255 downto 127) & in_1(255 downto 127);
-  --when "101" => out_data <= in_0(255 downto 159) & in_1(255 downto 95);
-  --when "110" => out_data <= in_0(255 downto 191) & in_1(255 downto 63);
-  --when "111" => out_data <= in_0(255 downto 223) & in_1(255 downto 31);
-  --when others => out_data <= (others => '0');
