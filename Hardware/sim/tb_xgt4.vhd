@@ -311,8 +311,8 @@ begin
         valid_seed          => '1',
 
         payload_type        => (others=>'0'),
-        payload_cycles      => (others=>'0'),
-        -- payload_cycles      => x"0000000A",
+        -- payload_cycles      => (others=>'0'),
+        payload_cycles      => x"0000000A",
         payload_last_size   => (others=>'0'),
         pkt_lost_counter    => open
     );

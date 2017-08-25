@@ -62,6 +62,7 @@ add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/ins
 add wave -noupdate -expand -group Controller -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/sop_location
 add wave -noupdate -expand -group Controller -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/eop_location
 add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/shift_calc
+add wave -noupdate -expand -group Controller /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/wen_fifo_reg
 add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/xgmii_rxc_0
 add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/xgmii_rxd_0
 add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/xgmii_rxc_1
@@ -94,4 +95,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {316808 ps} {364506 ps}
+WaveRestoreZoom {954687 ps} {1002385 ps}

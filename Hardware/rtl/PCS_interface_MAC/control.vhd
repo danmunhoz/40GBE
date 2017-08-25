@@ -8,8 +8,8 @@ use work.interface_defs.all;
 
 entity control is
   port (
-    clk         : in std_logic;
-    rst_n       : in std_logic;
+    clk         : in  std_logic;
+    rst_n       : in  std_logic;
     xgmii_rxc_0 : in  std_logic_vector( 7 downto 0);
     xgmii_rxd_0 : in  std_logic_vector(63 downto 0);
     xgmii_rxc_1 : in  std_logic_vector( 7 downto 0);
@@ -19,7 +19,8 @@ entity control is
     xgmii_rxc_3 : in  std_logic_vector( 7 downto 0);
     xgmii_rxd_3 : in  std_logic_vector(63 downto 0);
     ctrl_delay  : out std_logic_vector( 1 downto 0);
-    shift_out   : out std_logic_vector(2 downto 0)
+    shift_out   : out std_logic_vector(2 downto 0);
+    wen_fifo    : out std_logic
   );
 end entity;
 
@@ -28,6 +29,7 @@ architecture behav_control of control is
   signal eop_location      : std_logic_vector(7 downto 0);
   signal shift_calc        : std_logic_vector(2 downto 0);
   signal shift_out_int     : std_logic_vector(2 downto 0);
+  signal wen_fifo_reg      : std_logic;
 
 begin
 
@@ -78,7 +80,6 @@ begin
   end process;
 
   -- TERMINATE can appear in any byte of any MII
-  -- eop_finder: process(clk, rst_n)
   eop_finder: process(xgmii_rxc_0, xgmii_rxd_0, xgmii_rxc_1, xgmii_rxd_1,
                       xgmii_rxc_2, xgmii_rxd_2, xgmii_rxc_3, xgmii_rxd_3)
   begin
@@ -161,11 +162,10 @@ begin
 
   -- When there is SOP/EOP on the last lane, tell shift_reg to use delay_reg
   -- 00 : Words 6 and 7 bypass delay
-  -- 01 : Word 6 delayed and word 7 bypass
+  -- 01 : Word 6 delayed and word 7 bypassed
   -- 10 : Words 6 and 7 delayed
   -- 11 : Never happens
 
-  -- ctrl_delay_mux: ctrl_delay <= '1' when sop_location = "0111" or (eop_location >= x"18" and eop_location <= x"1F") else '0';
   ctrl_delay_mux: ctrl_delay <= "01" when sop_location = "0111" or (eop_location >= x"18" and eop_location <= x"1F") else
                                 "10" when sop_location = "0110" or (eop_location >= x"18" and eop_location <= x"1F") else -- Verificar eop
                                 "00";
@@ -182,14 +182,9 @@ begin
         when "0100" => shift_calc <= "101";
         when "0101" => shift_calc <= "110";
         when "0110" => shift_calc <= "111";
-        when "0111" => shift_calc <= "001";
+        when "0111" => shift_calc <= "000";
         when others => null;
       end case;
-    -- Doesnt metter when there is only EOP!
-    -- elsif sop_location = "1000" and eop_location /= "100000" then
-    --   case eop_location is
-    --     when x"00" | x"01" | x"02" | x"03" => shift_calc <=
-    --   end case;
     -- SOP & EOP
     elsif sop_location /= "1000" and eop_location /= "00100000" then
       case eop_location is
@@ -211,7 +206,6 @@ begin
         when x"1C" | x"1D" | x"1E" | x"1F" => shift_calc <= (sop_location(2 downto 0) + 1) - 7;
         when others => null;
       end case;
-
       -- default
     else
       shift_calc <= (others=>'0');
@@ -219,8 +213,30 @@ begin
 
   end process;
 
+  -- Process to control fifo write enable
+  wen_fifo_proc: process (clk, rst_n)
+  begin
+    if (rst_n = '0') then
+      wen_fifo_reg <= '0';
+    elsif clk'event and clk = '1' then
+
+      -- SOP: start writing
+      if sop_location /= "1000" and wen_fifo_reg = '0' then
+        wen_fifo_reg <= '1';
+
+      -- EOP: stop writing
+      elsif eop_location /= "00100000" and wen_fifo_reg = '1' then
+        wen_fifo_reg <= '0';
+
+      end if;
+    end if;
+
+  end process;
+
+  wen_fifo <= wen_fifo_reg;
+
   -- Process to keep shift value between SOPs
-  shift_out_reg: process (clk, rst_n, sop_location, shift_out_int, shift_calc)
+  shift_out_reg: process (clk, rst_n, sop_location, shift_calc)
   begin
     if (rst_n = '0') then
       shift_out_int <= (others=>'0');
