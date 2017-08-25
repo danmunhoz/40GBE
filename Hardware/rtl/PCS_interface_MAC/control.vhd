@@ -29,7 +29,10 @@ architecture behav_control of control is
   signal eop_location      : std_logic_vector(7 downto 0);
   signal shift_calc        : std_logic_vector(2 downto 0);
   signal shift_out_int     : std_logic_vector(2 downto 0);
+  signal shift_out_reg     : std_logic_vector(2 downto 0);
+  signal shift_out_reg_reg : std_logic_vector(2 downto 0);
   signal wen_fifo_reg      : std_logic;
+  signal wen_fifo_reg_reg  : std_logic;
 
 begin
 
@@ -219,11 +222,9 @@ begin
     if (rst_n = '0') then
       wen_fifo_reg <= '0';
     elsif clk'event and clk = '1' then
-
       -- SOP: start writing
       if sop_location /= "1000" and wen_fifo_reg = '0' then
         wen_fifo_reg <= '1';
-
       -- EOP: stop writing
       elsif eop_location /= "00100000" and wen_fifo_reg = '1' then
         wen_fifo_reg <= '0';
@@ -233,10 +234,8 @@ begin
 
   end process;
 
-  wen_fifo <= wen_fifo_reg;
-
   -- Process to keep shift value between SOPs
-  shift_out_reg: process (clk, rst_n, sop_location, shift_calc)
+  shift_out_latch: process (clk, rst_n, sop_location, shift_calc)
   begin
     if (rst_n = '0') then
       shift_out_int <= (others=>'0');
@@ -251,6 +250,20 @@ begin
     end if;
   end process;
 
-  shift_out <= shift_out_int;
+  -- Process to sync output with the shifter module
+  shift_out_sync: process (clk, rst_n)
+  begin
+    if (rst_n = '0') then
+      shift_out_reg <= (others=>'0');
+      shift_out_reg_reg <= (others=>'0');
+    elsif clk'event and clk = '1' then
+      shift_out_reg <= shift_out_int;
+      shift_out_reg_reg <= shift_out_reg;
+      wen_fifo_reg_reg <= wen_fifo_reg;
+    end if;
+  end process;
+
+  wen_fifo <= wen_fifo_reg_reg;
+  shift_out <= shift_out_reg_reg;
 
 end architecture;
