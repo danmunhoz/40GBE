@@ -3,3 +3,4 @@ Hardware/sim/work/*
 Hardware/sim/transcript
 Hardware/sim/vsim.wlf
 Hardware/sim/wave*
+Hardware/sim/*.txt
