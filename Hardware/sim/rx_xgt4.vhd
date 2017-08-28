@@ -46,10 +46,16 @@ entity rx_xgt4 is
       pkt_rx_mod          : out  std_logic_vector(2 downto 0);
       pkt_rx_sop          : out  std_logic;
       pkt_rx_val          : out  std_logic;
-      --pkt_tx_full         : out  std_logic
+      --pkt_tx_full         : out  std_logic;
 
-      dump_xgmii_rxc : out std_logic_vector(7 downto 0);
-      dump_xgmii_rxd : out std_logic_vector(63 downto 0)
+      dump_xgmii_rxc_0 : out std_logic_vector(7 downto 0);
+      dump_xgmii_rxd_0 : out std_logic_vector(63 downto 0);
+      dump_xgmii_rxc_1 : out std_logic_vector(7 downto 0);
+      dump_xgmii_rxd_1 : out std_logic_vector(63 downto 0);
+      dump_xgmii_rxc_2 : out std_logic_vector(7 downto 0);
+      dump_xgmii_rxd_2 : out std_logic_vector(63 downto 0);
+      dump_xgmii_rxc_3 : out std_logic_vector(7 downto 0);
+      dump_xgmii_rxd_3 : out std_logic_vector(63 downto 0)
 
       );
 end rx_xgt4;
@@ -123,32 +129,6 @@ architecture behav of rx_xgt4 is
 
     signal valid_in : std_logic;
 
-  -- component lane_reorder port(
-  --     clock           : in std_logic;
-  --     reset           : in std_logic;
-  --
-  --     lane_0_data_in  : in std_logic_vector(63 downto 0);
-  --     lane_1_data_in  : in std_logic_vector(63 downto 0);
-  --     lane_2_data_in  : in std_logic_vector(63 downto 0);
-  --     lane_3_data_in  : in std_logic_vector(63 downto 0);
-  --
-  --     lane_0_header_in  : in std_logic_vector(1 downto 0);
-  --     lane_1_header_in  : in std_logic_vector(1 downto 0);
-  --     lane_2_header_in  : in std_logic_vector(1 downto 0);
-  --     lane_3_header_in  : in std_logic_vector(1 downto 0);
-  --
-  --     pcs_0_data_out  : out std_logic_vector(63 downto 0);
-  --     pcs_1_data_out  : out std_logic_vector(63 downto 0);
-  --     pcs_2_data_out  : out std_logic_vector(63 downto 0);
-  --     pcs_3_data_out  : out std_logic_vector(63 downto 0);
-  --
-  --     pcs_0_header_out  : out std_logic_vector(1 downto 0);
-  --     pcs_1_header_out  : out std_logic_vector(1 downto 0);
-  --     pcs_2_header_out  : out std_logic_vector(1 downto 0);
-  --     pcs_3_header_out  : out std_logic_vector(1 downto 0)
-  -- );
-  -- end component;
-
   component wrapper_macpcs_rx port(
           -- Clocks
           clk_156             : in  std_logic;
@@ -165,8 +145,14 @@ architecture behav of rx_xgt4 is
           reset_rx_done       : in std_logic;
 
           start_fifo          : in std_logic;
-          dump_xgmii_rxc      : out std_logic_vector(7 downto 0);
-          dump_xgmii_rxd      : out std_logic_vector(63 downto 0);
+          dump_xgmii_rxc_0    : out std_logic_vector(7 downto 0);
+          dump_xgmii_rxd_0    : out std_logic_vector(63 downto 0);
+          dump_xgmii_rxc_1    : out std_logic_vector(7 downto 0);
+          dump_xgmii_rxd_1    : out std_logic_vector(63 downto 0);
+          dump_xgmii_rxc_2    : out std_logic_vector(7 downto 0);
+          dump_xgmii_rxd_2    : out std_logic_vector(63 downto 0);
+          dump_xgmii_rxc_3    : out std_logic_vector(7 downto 0);
+          dump_xgmii_rxd_3    : out std_logic_vector(63 downto 0);
 
           -- PCS Inputs
           rx_jtm_en           : in  std_logic;
@@ -290,9 +276,16 @@ begin
             reset_tx_done       => reset_in_mii_tx,
             reset_rx_done       => reset_in_mii_rx,
 
+            -- For testbench use only
             start_fifo => start_fifo,
-            dump_xgmii_rxc => dump_xgmii_rxc,
-            dump_xgmii_rxd => dump_xgmii_rxd,
+            dump_xgmii_rxc_0 => dump_xgmii_rxc_0,
+            dump_xgmii_rxd_0 => dump_xgmii_rxd_0,
+            dump_xgmii_rxc_1 => dump_xgmii_rxc_1,
+            dump_xgmii_rxd_1 => dump_xgmii_rxd_1,
+            dump_xgmii_rxc_2 => dump_xgmii_rxc_2,
+            dump_xgmii_rxd_2 => dump_xgmii_rxd_2,
+            dump_xgmii_rxc_3 => dump_xgmii_rxc_3,
+            dump_xgmii_rxd_3 => dump_xgmii_rxd_3,
 
             -- PCS IN
             rx_lane_0_header_valid_in    => lane_0_header_valid_in,

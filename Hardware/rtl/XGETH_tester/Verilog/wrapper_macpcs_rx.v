@@ -43,8 +43,14 @@ module wrapper_macpcs_rx(
                         wb_ack_o, wb_dat_o, wb_int_o,
                         // Para uso do Testbench
             						start_fifo,
-                        dump_xgmii_rxc,
-                        dump_xgmii_rxd
+                        dump_xgmii_rxc_0,
+                        dump_xgmii_rxd_0,
+                        dump_xgmii_rxc_1,
+                        dump_xgmii_rxd_1,
+                        dump_xgmii_rxc_2,
+                        dump_xgmii_rxd_2,
+                        dump_xgmii_rxc_3,
+                        dump_xgmii_rxd_3
                         );
 
     // Clocks
@@ -161,8 +167,14 @@ module wrapper_macpcs_rx(
     output          wb_int_o;
 
     // Para uso do Testbench
-    output [7:0]    dump_xgmii_rxc;
-    output [63:0]   dump_xgmii_rxd;
+    output [7:0]    dump_xgmii_rxc_0;
+    output [63:0]   dump_xgmii_rxd_0;
+    output [7:0]    dump_xgmii_rxc_1;
+    output [63:0]   dump_xgmii_rxd_1;
+    output [7:0]    dump_xgmii_rxc_2;
+    output [63:0]   dump_xgmii_rxd_2;
+    output [7:0]    dump_xgmii_rxc_3;
+    output [63:0]   dump_xgmii_rxd_3;
 
     wire            tx_clk_161_13;
     wire            rx_clk_161_13;
@@ -182,7 +194,7 @@ module wrapper_macpcs_rx(
     wire            terminate_in_2  = (terminate_out_0 || terminate_out_1);
     wire            terminate_in_3  = (terminate_out_0 || terminate_out_1 || terminate_out_2);
 
-     wire [127:0]   mac_data_in;
+    wire [127:0]   mac_data_in;
 
     (* syn_keep = "true"*) wire [1:0]   pcs_0_header_out;
     (* syn_keep = "true"*) wire [63:0]  pcs_0_data_out;
@@ -215,8 +227,14 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire [7:0]  xgmii_rxc_lane_3;
     (* syn_keep = "true"*) wire [63:0] xgmii_rxd_lane_3;
 
-    assign dump_xgmii_rxc = xgmii_rxc_lane_0;
-    assign dump_xgmii_rxd = xgmii_rxd_lane_0;
+    assign dump_xgmii_rxc_0 = xgmii_rxc_lane_0;
+    assign dump_xgmii_rxd_0 = xgmii_rxd_lane_0;
+    assign dump_xgmii_rxc_1 = xgmii_rxc_lane_1;
+    assign dump_xgmii_rxd_1 = xgmii_rxd_lane_1;
+    assign dump_xgmii_rxc_2 = xgmii_rxc_lane_2;
+    assign dump_xgmii_rxd_2 = xgmii_rxd_lane_2;
+    assign dump_xgmii_rxc_3 = xgmii_rxc_lane_3;
+    assign dump_xgmii_rxd_3 = xgmii_rxd_lane_3;
 
     // Register for lane 0 old block
     always @ (posedge rx_clk_161_13 or async_reset_n) begin

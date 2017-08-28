@@ -33,8 +33,15 @@ SC_MODULE(Top) {
   // TX
   sc_signal<sc_lv<8> >  dump_xgmii_txc;
   sc_signal<sc_lv<64> > dump_xgmii_txd;
-  sc_signal<sc_lv<8> >  dump_xgmii_rxc;
-  sc_signal<sc_lv<64> > dump_xgmii_rxd;
+
+  sc_signal<sc_lv<8> >  dump_xgmii_rxc_0;
+  sc_signal<sc_lv<64> > dump_xgmii_rxd_0;
+  sc_signal<sc_lv<8> >  dump_xgmii_rxc_1;
+  sc_signal<sc_lv<64> > dump_xgmii_rxd_1;
+  sc_signal<sc_lv<8> >  dump_xgmii_rxc_2;
+  sc_signal<sc_lv<64> > dump_xgmii_rxd_2;
+  sc_signal<sc_lv<8> >  dump_xgmii_rxc_3;
+  sc_signal<sc_lv<64> > dump_xgmii_rxd_3;
 
   sc_signal<sc_lv<64> > block_from_xgt4;
   sc_signal<sc_lv<2> >  header_from_xgt4;
@@ -94,7 +101,10 @@ SC_MODULE(Top) {
   scoreboard   * scoreboard_inst;
   pkt_buffer   * pkt_buffer_inst;
   dump_mii     * dump_mii_tx_inst;
-  dump_mii     * dump_mii_rx_inst;
+  dump_mii     * dump_mii_rx_inst_0;
+  dump_mii     * dump_mii_rx_inst_1;
+  dump_mii     * dump_mii_rx_inst_2;
+  dump_mii     * dump_mii_rx_inst_3;
   fiber        * fiber_inst;
   // lane_reorder * lane_reorder_inst;
 
@@ -115,7 +125,12 @@ SC_MODULE(Top) {
     scoreboard_inst = new scoreboard("scoreboard");
     pkt_buffer_inst = new pkt_buffer("pkt_buffer");
     dump_mii_tx_inst = new dump_mii("dump_mii_tx","dump_mii_tx.txt");
-    dump_mii_rx_inst = new dump_mii("dump_mii_rx","dump_mii_rx.txt");
+
+    dump_mii_rx_inst_0 = new dump_mii("dump_mii_rx_0","dump_mii_rx_0.txt");
+    dump_mii_rx_inst_1 = new dump_mii("dump_mii_rx_1","dump_mii_rx_1.txt");
+    dump_mii_rx_inst_2 = new dump_mii("dump_mii_rx_2","dump_mii_rx_2.txt");
+    dump_mii_rx_inst_3 = new dump_mii("dump_mii_rx_3","dump_mii_rx_3.txt");
+
     fiber_inst  = new fiber("fiber");
     // lane_reorder_inst = new lane_reorder("lane_reorder", "lane_reorder");
 
@@ -134,31 +149,17 @@ SC_MODULE(Top) {
     rx_xgt4_inst->clock_in156(iclock156);
     rx_xgt4_inst->clock_in161(iclock161);
     rx_xgt4_inst->reset_in(reset);
-    rx_xgt4_inst->dump_xgmii_rxc(dump_xgmii_rxc);
-    rx_xgt4_inst->dump_xgmii_rxd(dump_xgmii_rxd);
     rx_xgt4_inst->reset_in_mii_tx(reset_mii_tx);
     rx_xgt4_inst->reset_in_mii_rx(reset_mii_rx);
     rx_xgt4_inst->pkt_rx_data(block_from_mac_rx);
-
-    // rx_xgt4_inst->rx_lane_0_header_valid_in(rx_header_valid_in);
-    // rx_xgt4_inst->rx_lane_0_header_in(header_from_xgt4);
-    // rx_xgt4_inst->rx_lane_0_data_valid_in(rx_data_valid_in);
-    // rx_xgt4_inst->rx_lane_0_data_in(block_from_xgt4);
-    //
-    // rx_xgt4_inst->rx_lane_1_header_valid_in(rx_header_valid_in);
-    // rx_xgt4_inst->rx_lane_1_header_in(header_from_xgt4);
-    // rx_xgt4_inst->rx_lane_1_data_valid_in(rx_data_valid_in);
-    // rx_xgt4_inst->rx_lane_1_data_in(block_from_xgt4);
-    //
-    // rx_xgt4_inst->rx_lane_2_header_valid_in(rx_header_valid_in);
-    // rx_xgt4_inst->rx_lane_2_header_in(header_from_xgt4);
-    // rx_xgt4_inst->rx_lane_2_data_valid_in(rx_data_valid_in);
-    // rx_xgt4_inst->rx_lane_2_data_in(block_from_xgt4);
-    //
-    // rx_xgt4_inst->rx_lane_3_header_valid_in(rx_header_valid_in);
-    // rx_xgt4_inst->rx_lane_3_header_in(header_from_xgt4);
-    // rx_xgt4_inst->rx_lane_3_data_valid_in(rx_data_valid_in);
-    // rx_xgt4_inst->rx_lane_3_data_in(block_from_xgt4);
+    rx_xgt4_inst->dump_xgmii_rxc_0(dump_xgmii_rxc_0);
+    rx_xgt4_inst->dump_xgmii_rxd_0(dump_xgmii_rxd_0);
+    rx_xgt4_inst->dump_xgmii_rxc_1(dump_xgmii_rxc_1);
+    rx_xgt4_inst->dump_xgmii_rxd_1(dump_xgmii_rxd_1);
+    rx_xgt4_inst->dump_xgmii_rxc_2(dump_xgmii_rxc_2);
+    rx_xgt4_inst->dump_xgmii_rxd_2(dump_xgmii_rxd_2);
+    rx_xgt4_inst->dump_xgmii_rxc_3(dump_xgmii_rxc_3);
+    rx_xgt4_inst->dump_xgmii_rxd_3(dump_xgmii_rxd_3);
 
     rx_xgt4_inst->rx_lane_0_header_valid_in(rx_header_valid_in);
     rx_xgt4_inst->rx_lane_0_header_in(header_out_0);
@@ -200,10 +201,25 @@ SC_MODULE(Top) {
     dump_mii_tx_inst->mii_c(dump_xgmii_txc);
     dump_mii_tx_inst->mii_d(dump_xgmii_txd);
 
-    dump_mii_rx_inst->clock_in(iclock156);
-    dump_mii_rx_inst->reset_n(reset);
-    dump_mii_rx_inst->mii_c(dump_xgmii_rxc);
-    dump_mii_rx_inst->mii_d(dump_xgmii_rxd);
+    dump_mii_rx_inst_0->clock_in(iclock156);
+    dump_mii_rx_inst_0->reset_n(reset);
+    dump_mii_rx_inst_0->mii_c(dump_xgmii_rxc_0);
+    dump_mii_rx_inst_0->mii_d(dump_xgmii_rxd_0);
+
+    dump_mii_rx_inst_1->clock_in(iclock156);
+    dump_mii_rx_inst_1->reset_n(reset);
+    dump_mii_rx_inst_1->mii_c(dump_xgmii_rxc_1);
+    dump_mii_rx_inst_1->mii_d(dump_xgmii_rxd_1);
+
+    dump_mii_rx_inst_2->clock_in(iclock156);
+    dump_mii_rx_inst_2->reset_n(reset);
+    dump_mii_rx_inst_2->mii_c(dump_xgmii_rxc_2);
+    dump_mii_rx_inst_2->mii_d(dump_xgmii_rxd_2);
+
+    dump_mii_rx_inst_3->clock_in(iclock156);
+    dump_mii_rx_inst_3->reset_n(reset);
+    dump_mii_rx_inst_3->mii_c(dump_xgmii_rxc_3);
+    dump_mii_rx_inst_3->mii_d(dump_xgmii_rxd_3);
 
     fiber_inst->clock_in(iclock161);
     fiber_inst->reset_in(reset);

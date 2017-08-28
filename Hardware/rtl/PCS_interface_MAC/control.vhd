@@ -163,16 +163,6 @@ begin
       end if;
   end process;
 
-  -- When there is SOP/EOP on the last lane, tell shift_reg to use delay_reg
-  -- 00 : Words 6 and 7 bypass delay
-  -- 01 : Word 6 delayed and word 7 bypassed
-  -- 10 : Words 6 and 7 delayed
-  -- 11 : Never happens
-
-  ctrl_delay_mux: ctrl_delay <= "01" when sop_location = "0111" or (eop_location >= x"18" and eop_location <= x"1F") else
-                                "10" when sop_location = "0110" or (eop_location >= x"18" and eop_location <= x"1F") else -- Verificar eop
-                                "00";
-
   reg_shift_ctrl: process (sop_location, eop_location)
   begin
     -- SOP
@@ -215,6 +205,17 @@ begin
     end if;
 
   end process;
+
+
+    -- When there is SOP/EOP on the last lane, tell shift_reg to use delay_reg
+    -- 00 : Words 6 and 7 bypass delay
+    -- 01 : Word 6 delayed and word 7 bypassed
+    -- 10 : Words 6 and 7 delayed
+    -- 11 : Never happens
+
+    ctrl_delay_mux: ctrl_delay <= "01" when sop_location = "0111" or (eop_location >= x"18" and eop_location <= x"1F") else
+                                  "10" when sop_location = "0110" or (eop_location >= x"18" and eop_location <= x"1F") else -- Verificar eop
+                                  "00";
 
   -- Process to control fifo write enable
   wen_fifo_proc: process (clk, rst_n)

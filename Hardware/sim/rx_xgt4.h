@@ -34,8 +34,14 @@ public:
     sc_out<sc_lv<3> > pkt_rx_mod;
     sc_out<sc_logic> pkt_rx_sop;
     sc_out<sc_logic> pkt_rx_val;
-    sc_out<sc_lv<8> > dump_xgmii_rxc;
-    sc_out<sc_lv<64> > dump_xgmii_rxd;
+    sc_out<sc_lv<8> > dump_xgmii_rxc_0;
+    sc_out<sc_lv<64> > dump_xgmii_rxd_0;
+    sc_out<sc_lv<8> > dump_xgmii_rxc_1;
+    sc_out<sc_lv<64> > dump_xgmii_rxd_1;
+    sc_out<sc_lv<8> > dump_xgmii_rxc_2;
+    sc_out<sc_lv<64> > dump_xgmii_rxd_2;
+    sc_out<sc_lv<8> > dump_xgmii_rxc_3;
+    sc_out<sc_lv<64> > dump_xgmii_rxd_3;
 
 
     rx_xgt4(sc_module_name nm, const char* hdl_name)
@@ -68,8 +74,14 @@ public:
        pkt_rx_mod("pkt_rx_mod"),
        pkt_rx_sop("pkt_rx_sop"),
        pkt_rx_val("pkt_rx_val"),
-       dump_xgmii_rxc("dump_xgmii_rxc"),
-       dump_xgmii_rxd("dump_xgmii_rxd")
+       dump_xgmii_rxc_0("dump_xgmii_rxc_0"),
+       dump_xgmii_rxd_0("dump_xgmii_rxd_0"),
+       dump_xgmii_rxc_1("dump_xgmii_rxc_1"),
+       dump_xgmii_rxd_1("dump_xgmii_rxd_1"),
+       dump_xgmii_rxc_2("dump_xgmii_rxc_2"),
+       dump_xgmii_rxd_2("dump_xgmii_rxd_2"),
+       dump_xgmii_rxc_3("dump_xgmii_rxc_3"),
+       dump_xgmii_rxd_3("dump_xgmii_rxd_3")
     {
         elaborate_foreign_module(hdl_name);
     }
