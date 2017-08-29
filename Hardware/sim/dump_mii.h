@@ -39,7 +39,7 @@ public:
     }
 
     SC_METHOD(dump);
-    sensitive<<clock_in;
+    sensitive<<clock_in.pos();
 
   }
 
