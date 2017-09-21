@@ -11,7 +11,6 @@
 //// Description: read document x10giga_eth_tester_functional.pdf   ////
 ////                                                                ////
 ////////////////////////////////////////////////////////////////////////
-
 module wrapper_macpcs_rx(
                         //---- -------- Inputs ----------------//
 
@@ -52,7 +51,6 @@ module wrapper_macpcs_rx(
                         dump_xgmii_rxc_3,
                         dump_xgmii_rxd_3
                         );
-
     // Clocks
     input           clk_156;
     input           tx_clk_161_13;
@@ -194,7 +192,10 @@ module wrapper_macpcs_rx(
     wire            terminate_in_2  = (terminate_out_0 || terminate_out_1);
     wire            terminate_in_3  = (terminate_out_0 || terminate_out_1 || terminate_out_2);
 
-    wire [127:0]   mac_data_in;
+    wire [127:0]    mac_data_in;
+    wire            mac_sop_in;
+    wire [4:0]      mac_eop_in;
+
 
     (* syn_keep = "true"*) wire [1:0]   pcs_0_header_out;
     (* syn_keep = "true"*) wire [63:0]  pcs_0_data_out;
@@ -558,7 +559,6 @@ module wrapper_macpcs_rx(
       	.clk_156			      (clk_156),
         .clk_312			      (clk_161),   //Por enquanto...
       	.rst_n 	            (reset_rx_n),
-
       	.xgmii_rxc_0	      (xgmii_rxc_lane_0),
       	.xgmii_rxd_0	      (xgmii_rxd_lane_0),
       	.xgmii_rxc_1	      (xgmii_rxc_lane_1),
@@ -567,7 +567,10 @@ module wrapper_macpcs_rx(
       	.xgmii_rxd_2	      (xgmii_rxd_lane_2),
       	.xgmii_rxc_3	      (xgmii_rxc_lane_3),
       	.xgmii_rxd_3	      (xgmii_rxd_lane_3),
-        .mac_data           (mac_data_in)
+
+        .mac_data           (mac_data_in),
+        .mac_sop            (mac_sop_in),
+        .mac_eop            (mac_eop_in)
    );
 
 endmodule

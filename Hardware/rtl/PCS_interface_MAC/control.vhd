@@ -1,38 +1,64 @@
 library ieee;
   use ieee.std_logic_1164.all;
-  use IEEE.std_logic_unsigned.all;
-  use IEEE.numeric_std.all;
+  use ieee.numeric_std.all;
+  use ieee.std_logic_unsigned.all;
 
 use work.interface_defs.all;
 
 
 entity control is
   port (
-    clk         : in  std_logic;
-    rst_n       : in  std_logic;
-    xgmii_rxc_0 : in  std_logic_vector( 7 downto 0);
-    xgmii_rxd_0 : in  std_logic_vector(63 downto 0);
-    xgmii_rxc_1 : in  std_logic_vector( 7 downto 0);
-    xgmii_rxd_1 : in  std_logic_vector(63 downto 0);
-    xgmii_rxc_2 : in  std_logic_vector( 7 downto 0);
-    xgmii_rxd_2 : in  std_logic_vector(63 downto 0);
-    xgmii_rxc_3 : in  std_logic_vector( 7 downto 0);
-    xgmii_rxd_3 : in  std_logic_vector(63 downto 0);
-    ctrl_delay  : out std_logic_vector( 1 downto 0);
-    shift_out   : out std_logic_vector(2 downto 0);
-    wen_fifo    : out std_logic
+    clk             : in  std_logic;
+    rst_n           : in  std_logic;
+    xgmii_rxc_0     : in  std_logic_vector( 7 downto 0);
+    xgmii_rxd_0     : in  std_logic_vector(63 downto 0);
+    xgmii_rxc_1     : in  std_logic_vector( 7 downto 0);
+    xgmii_rxd_1     : in  std_logic_vector(63 downto 0);
+    xgmii_rxc_2     : in  std_logic_vector( 7 downto 0);
+    xgmii_rxd_2     : in  std_logic_vector(63 downto 0);
+    xgmii_rxc_3     : in  std_logic_vector( 7 downto 0);
+    xgmii_rxd_3     : in  std_logic_vector(63 downto 0);
+    ctrl_delay      : out std_logic_vector( 1 downto 0);
+    shift_out       : out std_logic_vector(2 downto 0);
+    eop_line_offset : out std_logic_vector(5 downto 0);
+    is_eop          : out std_logic_vector(5 downto 0);
+    is_sop          : out std_logic;
+    wen_fifo        : out std_logic
   );
 end entity;
 
 architecture behav_control of control is
-  signal sop_location      : std_logic_vector(3 downto 0);
-  signal eop_location      : std_logic_vector(7 downto 0);
-  signal shift_calc        : std_logic_vector(2 downto 0);
-  signal shift_out_int     : std_logic_vector(2 downto 0);
-  signal shift_out_reg     : std_logic_vector(2 downto 0);
-  signal shift_out_reg_reg : std_logic_vector(2 downto 0);
-  signal wen_fifo_reg      : std_logic;
-  signal wen_fifo_reg_reg  : std_logic;
+  constant NO_EOP : std_logic_vector(5 downto 0) := "100000";
+
+  signal sop_location               : std_logic_vector(3 downto 0);
+  signal eop_location               : std_logic_vector(7 downto 0);
+  signal sop_by_byte                : std_logic_vector(7 downto 0);
+  signal eop_location_reg           : std_logic_vector(7 downto 0);
+  signal eop_location_reg_reg       : std_logic_vector(7 downto 0);
+  signal shift_calc                 : std_logic_vector(2 downto 0);
+  signal shift_out_int              : std_logic_vector(2 downto 0);
+  signal shift_out_reg              : std_logic_vector(2 downto 0);
+  signal shift_out_reg_reg          : std_logic_vector(2 downto 0);
+  signal ctrl_delay_int             : std_logic_vector( 1 downto 0);
+  signal ctrl_delay_reg             : std_logic_vector( 1 downto 0);
+  signal ctrl_delay_reg_reg         : std_logic_vector( 1 downto 0);
+  signal ctrl_delay_reg_reg_reg     : std_logic_vector( 1 downto 0);
+  signal wen_fifo_reg               : std_logic;
+  signal wen_fifo_reg_reg           : std_logic;
+  signal missed_sop                 : std_logic;
+  signal missed_sop_reg             : std_logic;
+  signal sop_eop_same_cycle         : std_logic;
+  signal sop7_eop_same_cycle        : std_logic;
+  signal sop7_eop_same_cycle_reg    : std_logic;
+  signal sop_eop_same_cycle_reg     : std_logic;
+  signal sop_eop_same_cycle_reg_reg : std_logic;
+  signal sop_eop_packet             : std_logic;
+  signal is_eop_int                 : std_logic_vector(5 downto 0);
+  signal is_sop_int                 : std_logic;
+  signal is_sop_reg                 : std_logic;
+  signal is_eop_reg                 : std_logic_vector(5 downto 0);
+  signal is_sop_reg_reg             : std_logic;
+  signal is_eop_reg_reg             : std_logic_vector(5 downto 0);
 
 begin
 
@@ -40,10 +66,10 @@ begin
   -- LANEs from 0 to 7 are the eight bytes for each MII data interface.
   -- WORDs from 0 to 7 are the eight 32bits words for all four MIIs in use
 
-
   sop_finder: process(xgmii_rxc_0, xgmii_rxd_0, xgmii_rxc_1, xgmii_rxd_1,
                       xgmii_rxc_2, xgmii_rxd_2, xgmii_rxc_3, xgmii_rxd_3)
   begin
+      missed_sop <= '0';
       -- MII from PCS 0
       if (xgmii_rxc_0(0) = '1' and xgmii_rxd_0(LANE0) = START) then
         -- SOP on LANE 0 of PCS 0 -> word 0
@@ -72,9 +98,11 @@ begin
       elsif (xgmii_rxc_3(0) = '1' and xgmii_rxd_3(LANE0) = START) then
         -- SOP on LANE 0 of PCS 3 -> word 6
         sop_location <= "0110";
+        missed_sop <= '1'; --
       elsif (xgmii_rxc_3(4) = '1' and xgmii_rxd_3(LANE4) = START) then
         -- SOP on LANE 4 of PCS 3 -> word 7
         sop_location <= "0111";
+        missed_sop <= '1';
 
       else
         -- No SOP this time...
@@ -163,32 +191,58 @@ begin
       end if;
   end process;
 
+  ctrl_delay_int <= "01" when (sop_location = "0101" and eop_location /= "00100000") else
+                    "10" when (sop_location = "0100" and eop_location /= "00100000") else
+                    "00";
+
+  mux_delay_ctrl: process(clk, rst_n)
+  begin
+    if rst_n = '0' then
+      ctrl_delay_reg <= (others=>'0');
+      ctrl_delay_reg_reg <= (others=>'0');
+      ctrl_delay_reg_reg_reg <= (others=>'0');
+    elsif clk'event and clk = '1' then
+      ctrl_delay_reg_reg <= ctrl_delay_reg;
+      ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg;
+      if ctrl_delay_int /= "00" then
+        -- ctrl_delay_int updated to a valid value
+        ctrl_delay_reg <= ctrl_delay_int;
+      elsif eop_location /= "00100000" then
+        ctrl_delay_reg <= (others=>'0');
+      end if;
+    end if;
+  end process;
+
+  ctrl_delay <= ctrl_delay_reg_reg_reg;
+
   reg_shift_ctrl: process (sop_location, eop_location)
   begin
     -- SOP
     if sop_location /= "1000" and eop_location = "00100000" then
       case sop_location is
-        when "0000" => shift_calc <= "001";
-        when "0001" => shift_calc <= "010";
-        when "0010" => shift_calc <= "011";
-        when "0011" => shift_calc <= "100";
-        when "0100" => shift_calc <= "101";
-        when "0101" => shift_calc <= "110";
-        when "0110" => shift_calc <= "111";
-        when "0111" => shift_calc <= "000";
+        when "0000" => shift_calc <= "010";
+        when "0001" => shift_calc <= "011";
+        when "0010" => shift_calc <= "100";
+        when "0011" => shift_calc <= "101";
+        when "0100" => shift_calc <= "110";
+        when "0101" => shift_calc <= "111";
+        when "0110" => shift_calc <= "000";
+        when "0111" => shift_calc <= "001";
+        -- For "0111" we will write 1 to shift_calc,
+        -- but WEN will be low only enabling writing on next cycle
         when others => null;
       end case;
     -- SOP & EOP
     elsif sop_location /= "1000" and eop_location /= "00100000" then
       case eop_location is
         -- EOP at word 0
-        when x"00" | x"01" | x"02" | x"03" => shift_calc <= sop_location(2 downto 0) + 1;
+        when x"00" | x"01" | x"02" | x"03" => shift_calc <= (others=>'0');
         -- EOP at word 1
-        when x"04" | x"05" | x"06" | x"07" => shift_calc <= sop_location(2 downto 0);
+        when x"04" | x"05" | x"06" | x"07" => shift_calc <= (others=>'0');
         -- EOP at word 2
-        when x"08" | x"09" | x"0A" | x"0B" => shift_calc <= (sop_location(2 downto 0) + 1) - 2;
+        when x"08" | x"09" | x"0A" | x"0B" => shift_calc <= (others=>'0');
         -- EOP at word 3
-        when x"0C" | x"0D" | x"0E" | x"0F" => shift_calc <= (sop_location(2 downto 0) + 1) - 3;
+        when x"0C" | x"0D" | x"0E" | x"0F" => shift_calc <= "001";
         -- EOP at word 4
         when x"10" | x"11" | x"12" | x"13" => shift_calc <= (sop_location(2 downto 0) + 1) - 4;
         -- EOP at word 5
@@ -206,33 +260,75 @@ begin
 
   end process;
 
+  -- Process to calculate the SOP bnyte position
+  sop_pos_byte: process (clk, rst_n)
+  begin
+    if rst_n = '0' then
+      sop_by_byte <= (others=>'0');
+    elsif clk'event and clk = '1' then
+      if sop_location /= "1000" then
+        sop_by_byte <= "00" & (sop_location + 1) & "00";
+      end if;
+    end if;
+  end process;
 
-    -- When there is SOP/EOP on the last lane, tell shift_reg to use delay_reg
-    -- 00 : Words 6 and 7 bypass delay
-    -- 01 : Word 6 delayed and word 7 bypassed
-    -- 10 : Words 6 and 7 delayed
-    -- 11 : Never happens
+  -- Inform fifo if is SOP
+  is_sop_int <= '0' when sop_location = "1000" else '1';
 
-    ctrl_delay_mux: ctrl_delay <= "01" when sop_location = "0111" or (eop_location >= x"18" and eop_location <= x"1F") else
-                                  "10" when sop_location = "0110" or (eop_location >= x"18" and eop_location <= x"1F") else -- Verificar eop
-                                  "00";
+  -- Inform fifo where EOP is
+  is_eop_int <= eop_location(5 downto 0);
+
+  -- Inform process that a SOP and EOP happened on the same cycle
+  sop_eop_same_cycle <= '1' when sop_location /= "1000" and eop_location /= "00100000" else
+                        '0';
+  sop7_eop_same_cycle <= '1' when (sop_location /= "1000" and sop_location /= "0111") and eop_location /= "00100000" else
+                        '0';
 
   -- Process to control fifo write enable
   wen_fifo_proc: process (clk, rst_n)
   begin
-    if (rst_n = '0') then
+    if rst_n = '0' then
       wen_fifo_reg <= '0';
+      wen_fifo_reg_reg <= '0';
+      eop_location_reg <= (others=>'0');
+      eop_location_reg_reg <= (others=>'0');
+      sop_eop_same_cycle_reg <= '0';
+      sop_eop_same_cycle_reg_reg <= '0';
+      sop7_eop_same_cycle_reg <= '0';
+      sop_eop_packet <= '0';
+
     elsif clk'event and clk = '1' then
-      -- SOP: start writing
-      if sop_location /= "1000" and wen_fifo_reg = '0' then
-        wen_fifo_reg <= '1';
-      -- EOP: stop writing
-      elsif eop_location /= "00100000" and wen_fifo_reg = '1' then
-        wen_fifo_reg <= '0';
+      wen_fifo_reg_reg <= wen_fifo_reg;
+      eop_location_reg <= eop_location;
+      eop_location_reg_reg <= eop_location_reg;
+      sop_eop_same_cycle_reg <= sop_eop_same_cycle;
+      sop_eop_same_cycle_reg_reg <= sop_eop_same_cycle_reg;
+      sop7_eop_same_cycle_reg <= sop7_eop_same_cycle;
 
+      if eop_location /= "00100000" then
+        sop_eop_packet <= sop7_eop_same_cycle;
       end if;
-    end if;
 
+      -- SOP: start writing
+      if (sop_location /= "1000" and sop_location /= "0111" and sop_location /= "0110"
+          and wen_fifo_reg = '0') or missed_sop_reg = '1' or sop_eop_same_cycle_reg_reg = '1' then
+        wen_fifo_reg <= '1';
+
+      elsif sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '1' then
+        wen_fifo_reg <= '1';
+
+      -- EOP: stop writing
+      -- elsif eop_location /= "00100000" and sop_by_byte >= eop_location and ctrl_delay_reg_reg = "00" then
+      elsif eop_location /= "00100000" and sop_by_byte >= eop_location and sop_eop_packet = '0' then
+          -- Somente baixa o wen se nao usou reg_delay sop_eop_same_cycle
+          wen_fifo_reg <= '0';
+      elsif eop_location_reg /= "00100000" then
+          wen_fifo_reg <= '0';
+      elsif eop_location_reg_reg /= "00100000" then
+          wen_fifo_reg <= '0';
+      end if;
+
+    end if;
   end process;
 
   -- Process to keep shift value between SOPs
@@ -257,14 +353,30 @@ begin
     if (rst_n = '0') then
       shift_out_reg <= (others=>'0');
       shift_out_reg_reg <= (others=>'0');
+      is_sop_reg <= '0';
+      is_eop_reg <= (others=>'0');
+      is_sop_reg_reg <= '0';
+      is_eop_reg_reg <= (others=>'0');
     elsif clk'event and clk = '1' then
       shift_out_reg <= shift_out_int;
-      shift_out_reg_reg <= shift_out_reg;
-      wen_fifo_reg_reg <= wen_fifo_reg;
+      if sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '0' then
+        shift_out_reg_reg <= shift_out_reg_reg;
+      else
+        shift_out_reg_reg <= shift_out_reg;
+      end if;
+      missed_sop_reg <= missed_sop;
+      is_sop_reg <= is_sop_int;
+      is_eop_reg <= is_eop_int;
+      is_sop_reg_reg <= is_sop_reg;
+      is_eop_reg_reg <= is_eop_reg;
     end if;
   end process;
 
+  eop_line_offset <= eop_location(5 downto 0) when wen_fifo_reg = '1' else NO_EOP;
+
   wen_fifo <= wen_fifo_reg_reg;
   shift_out <= shift_out_reg_reg;
+  is_sop <= is_sop_reg_reg;
+  is_eop <= is_eop_reg_reg;
 
 end architecture;
