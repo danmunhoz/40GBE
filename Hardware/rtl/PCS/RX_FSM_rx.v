@@ -172,7 +172,7 @@ always@(posedge clk156 or negedge rstb156) //jg changed to posedge clk 7/17/02
     end
 
 // Rise terminate flag for others FSMs
-always @(TYPE or negedge rstb156) begin
+always @(TYPE or rstb156) begin
   if (!rstb156)
     terminate_out <= 1'b0;
   else
@@ -182,7 +182,8 @@ always @(TYPE or negedge rstb156) begin
       terminate_out <= 1'b0;
 end
 
-always @(Current_state or Code or Control or TYPE or next_TYPE or posedge terminate_in)
+// always @(Current_state or Code or Control or TYPE or next_TYPE or posedge terminate_in)
+always @(Current_state or Code or Control or TYPE or next_TYPE or terminate_in)
     case (Current_state)
         `RX_INIT: begin
             if (TYPE == `S || TYPE == `D)

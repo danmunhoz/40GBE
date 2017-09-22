@@ -237,7 +237,7 @@ module wrapper_macpcs_rx(
     assign dump_xgmii_rxd_3 = xgmii_rxd_lane_3;
 
     // Register for lane 0 old block
-    always @ (posedge rx_clk_161_13 or async_reset_n) begin
+    always @ (posedge rx_clk_161_13 or negedge async_reset_n) begin
       if (!async_reset_n) begin
         old_header_0 <= 2'b0;
         old_data_0   <= 64'h0000000000000000;
