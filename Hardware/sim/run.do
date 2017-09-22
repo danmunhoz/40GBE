@@ -66,10 +66,12 @@ vlog -novopt ../rtl/MAC/generic_fifo_ctrl.v
 vlog -novopt ../rtl/MAC/rx_enqueue.v
 vlog -novopt ../rtl/MAC/xge_mac.v
 
+vcom -novopt ../rtl/PCS_interface_MAC/register.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/defines.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/control.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/mii_shift_register.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/mii_shifter.vhd
+vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/core_interface.vhd
 
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v
@@ -102,6 +104,7 @@ sccom -link -B/usr/bin/
 vsim -novopt work.glbl work.Top -t 1ps
 
 do wave.do
+# do wave_interface_fifo.do
 run 1000 ns
 
 #exec python scoreboard.py
