@@ -36,7 +36,7 @@ architecture behav_core_interface of core_interface is
     signal fifo_empty          : std_logic;
     signal fifo_full           : std_logic;
     signal is_sop_control      : std_logic;
-    signal is_eop_control      : std_logic_vector(5 downto 0);
+    signal eop_addr            : std_logic_vector(5 downto 0);
 
   begin
 
@@ -53,9 +53,8 @@ architecture behav_core_interface of core_interface is
           xgmii_rxd_3     => xgmii_rxd_3,
           ctrl_delay      => ctrl_mux_delay,
           shift_out       => ctrl_shift_reg,
-          eop_line_offset => eop_line_offset,
-          is_eop          => is_eop_control,
           is_sop          => is_sop_control,
+          eop_location_out=> eop_addr,
           wen_fifo        => fifo_wen
     );
 
@@ -81,7 +80,6 @@ architecture behav_core_interface of core_interface is
     );
 
     fifo_ren <= '0', '1' after 300 ns; -- Waiting for mac
-
     fifo: entity work.ring_fifo port map(
           clk_w      => clk_156,
           clk_r      => clk_312,
@@ -89,9 +87,9 @@ architecture behav_core_interface of core_interface is
           data_in    => shifter_out,
           data_out   => mac_data,
           is_sop_in  => is_sop_control,
-          is_eop_in  => is_eop_control,
+          eop_addr_in=> eop_addr,
           is_sop_out => mac_sop,
-          is_eop_out => mac_eop,
+          eop_addr_out=> mac_eop,
           wen        => fifo_wen,
           ren        => fifo_ren,
           empty      => fifo_empty,
