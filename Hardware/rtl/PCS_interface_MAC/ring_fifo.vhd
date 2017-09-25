@@ -16,9 +16,9 @@ entity ring_fifo is
     data_in	   : in  std_logic_vector (WIDTH-1 downto 0);
     data_out   : out std_logic_vector (WIDTH/2-1 downto 0);
     is_sop_in  : in  std_logic;
-    is_eop_in  : in  std_logic_vector(5 downto 0);
+    eop_addr_in: in  std_logic_vector(5 downto 0);
     is_sop_out : out  std_logic;
-    is_eop_out : out  std_logic_vector(4 downto 0);
+    eop_addr_out: out  std_logic_vector(4 downto 0);
     wen        : in  std_logic;
 		ren	       : in  std_logic;
 		empty	     : out std_logic;
@@ -72,19 +72,19 @@ begin
           mem_high(conv_integer(w_ptr)) <= data_in(WIDTH-1 downto WIDTH/2);
           mem_low(conv_integer(w_ptr))  <= data_in(WIDTH/2-1 downto 0);
 
-          if is_eop_in(5) = '0' then
+          if eop_addr_in(5) = '0' then
             -- Valid EOP value
-            if is_eop_in(4) = '1' then
+            if eop_addr_in(4) = '1' then
               -- EOP is in the higher half
               mem_eop_bv_h(conv_integer(w_ptr)) <= '1';
               mem_eop_bv_l(conv_integer(w_ptr)) <= '0';
-              mem_eop_high(conv_integer(w_ptr)) <= is_eop_in(3 downto 0);
+              mem_eop_high(conv_integer(w_ptr)) <= eop_addr_in(3 downto 0);
               mem_eop_low(conv_integer(w_ptr)) <= (others=>'0');
             else
               -- EOP is in the lower half
               mem_eop_bv_h(conv_integer(w_ptr)) <= '0';
               mem_eop_bv_l(conv_integer(w_ptr)) <= '1';
-              mem_eop_low(conv_integer(w_ptr)) <= is_eop_in(3 downto 0);
+              mem_eop_low(conv_integer(w_ptr)) <= eop_addr_in(3 downto 0);
               mem_eop_high(conv_integer(w_ptr)) <= (others=>'0');
             end if;
           else
@@ -114,7 +114,7 @@ begin
     if rst_n = '0' then
       data_out <= (others=>'0');
       is_sop_out <= '0';
-      is_eop_out <= (others=>'0');
+      eop_addr_out <= (others=>'0');
       r_ptr_l  <= (others=>'0');
       r_ptr_h  <= (others=>'0');
       rr <= '0';
@@ -122,12 +122,12 @@ begin
       if ren = '1' then                 -- Does not check empty, will underwrite
         if rr = '0' then
           data_out <= mem_low(conv_integer(r_ptr_l));
-          is_eop_out <= mem_eop_bv_l(conv_integer(r_ptr_l)) & mem_eop_low(conv_integer(r_ptr_l));
+          eop_addr_out <= mem_eop_bv_l(conv_integer(r_ptr_l)) & mem_eop_low(conv_integer(r_ptr_l));
           is_sop_out <= mem_sop(conv_integer(r_ptr_l));
           r_ptr_l <= r_ptr_l + 1;
         else
           data_out <= mem_high(conv_integer(r_ptr_h));
-          is_eop_out <= mem_eop_bv_h(conv_integer(r_ptr_h)) & mem_eop_high(conv_integer(r_ptr_h));
+          eop_addr_out <= mem_eop_bv_h(conv_integer(r_ptr_h)) & mem_eop_high(conv_integer(r_ptr_h));
           is_sop_out <= '0';
           r_ptr_h <= r_ptr_h + 1;
         end if;

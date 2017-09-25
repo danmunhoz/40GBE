@@ -20,9 +20,8 @@ entity control is
     xgmii_rxd_3     : in  std_logic_vector(63 downto 0);
     ctrl_delay      : out std_logic_vector( 1 downto 0);
     shift_out       : out std_logic_vector(2 downto 0);
-    eop_line_offset : out std_logic_vector(5 downto 0);
-    is_eop          : out std_logic_vector(5 downto 0);
     is_sop          : out std_logic;
+    eop_location_out: out std_logic_vector(5 downto 0);
     wen_fifo        : out std_logic
   );
 end entity;
@@ -31,6 +30,7 @@ architecture behav_control of control is
   constant NO_EOP : std_logic_vector(5 downto 0) := "100000";
 
   signal sop_location               : std_logic_vector(3 downto 0);
+  signal sop_location_reg           : std_logic_vector(3 downto 0);
   signal eop_location               : std_logic_vector(7 downto 0);
   signal sop_by_byte                : std_logic_vector(7 downto 0);
   signal eop_location_reg           : std_logic_vector(7 downto 0);
@@ -53,13 +53,12 @@ architecture behav_control of control is
   signal sop_eop_same_cycle_reg     : std_logic;
   signal sop_eop_same_cycle_reg_reg : std_logic;
   signal sop_eop_packet             : std_logic;
-  signal is_eop_int                 : std_logic_vector(5 downto 0);
   signal is_sop_int                 : std_logic;
   signal is_sop_reg                 : std_logic;
-  signal is_eop_reg                 : std_logic_vector(5 downto 0);
   signal is_sop_reg_reg             : std_logic;
-  signal is_eop_reg_reg             : std_logic_vector(5 downto 0);
-
+  signal eop_location_calc          : std_logic_vector(5 downto 0);
+  signal eop_location_calc_reg      : std_logic_vector(5 downto 0);
+  signal eop_location_calc_reg_reg  : std_logic_vector(5 downto 0);
 begin
 
   -- Making things clear:
@@ -274,15 +273,79 @@ begin
 
   -- Inform fifo if is SOP
   is_sop_int <= '0' when sop_location = "1000" else '1';
-
-  -- Inform fifo where EOP is
-  is_eop_int <= eop_location(5 downto 0);
+  -- is_sop_int <= '0' when sop_location = "1000" and sop_eop_same_cycle = '0' else
+  --               '1';
+  -- Inform fifo where  EOP is
 
   -- Inform process that a SOP and EOP happened on the same cycle
   sop_eop_same_cycle <= '1' when sop_location /= "1000" and eop_location /= "00100000" else
                         '0';
   sop7_eop_same_cycle <= '1' when (sop_location /= "1000" and sop_location /= "0111") and eop_location /= "00100000" else
                         '0';
+
+  calculate_new_eop: process(rst_n, eop_location)
+begin
+  if rst_n = '0' then
+    eop_location_calc <= "100000";
+  else
+    eop_location_calc(5) <= eop_location(5);  -- atua como sinal de controle, indicando q há EOP se '0'
+    if (eop_location(5) = '0') then
+      case shift_out_reg_reg is
+        when "000" => if ctrl_delay_reg_reg_reg = "01" then
+                        eop_location_calc(4 downto 0) <= eop_location(4 downto 0) + 4;
+                      elsif ctrl_delay_reg_reg_reg = "10" then
+                      eop_location_calc(4 downto 0) <= eop_location(4 downto 0) + 8;
+                    else eop_location_calc(4 downto 0) <= eop_location(4 downto 0);
+                      end if;
+        when "001" =>if (eop_location(4 downto 0) < "0100") then
+                        eop_location_calc(4 downto 0) <= 32 - (4 - eop_location(4 downto 0));
+                      else eop_location_calc(4 downto 0) <= eop_location(4 downto 0) - 4;
+                    end if;
+        when "010" =>if (eop_location(4 downto 0) < 8) then
+                        eop_location_calc(4 downto 0) <= 32 - (8 - eop_location(4 downto 0));
+                      else eop_location_calc(4 downto 0) <= eop_location(4 downto 0) - 8;
+                    end if;
+        when "011" =>if (eop_location(4 downto 0) < 12) then
+                        eop_location_calc(4 downto 0) <= 32 - (12 - eop_location(4 downto 0));
+                      else eop_location_calc(4 downto 0) <= eop_location(4 downto 0) - 12;
+                    end if;
+        when "100" =>if (eop_location(4 downto 0) < 16) then
+                        eop_location_calc(4 downto 0) <= 32 - (16 - eop_location(4 downto 0));
+                      else eop_location_calc(4 downto 0) <= eop_location(4 downto 0) - 16;
+                    end if;
+        when "101" =>if (eop_location(4 downto 0) < 20) then
+                        eop_location_calc(4 downto 0) <= 32 - (20 - eop_location(4 downto 0));
+                      else eop_location_calc(4 downto 0) <= eop_location(4 downto 0) - 20;
+                    end if;
+        when "110" =>if (eop_location(4 downto 0) < 24) then
+                          eop_location_calc(4 downto 0) <= 32 - (24 - eop_location(4 downto 0));
+                      else eop_location_calc(4 downto 0) <= eop_location(4 downto 0) - 24;
+                    end if;
+        when "111" =>if (eop_location(4 downto 0) < 28) then
+                      eop_location_calc(4 downto 0) <= 32 - (28 - eop_location(4 downto 0));
+                    else eop_location_calc(4 downto 0) <= eop_location(4 downto 0) - 28;
+                  end if;
+        when others => NULL;
+      end case;
+    end if;
+  end if;
+end process;
+
+propagate_eop_location_calc: process(rst_n,clk)
+begin
+  if rst_n = '0' then
+    eop_location_calc_reg <= "100000";
+    eop_location_calc_reg_reg <= "100000";
+  elsif clk'event and clk='1' then
+      eop_location_calc_reg <= eop_location_calc;
+      if ctrl_delay_reg_reg_reg /= "00" then
+        eop_location_calc_reg_reg <= eop_location_calc_reg;
+      else eop_location_calc_reg_reg <= eop_location_calc;
+    end if;
+  end if;
+end process;
+
+eop_location_out <= eop_location_calc_reg_reg;
 
   -- Process to control fifo write enable
   wen_fifo_proc: process (clk, rst_n)
@@ -318,12 +381,6 @@ begin
         wen_fifo_reg <= '1';
 
       -- EOP: stop writing
-      -- elsif eop_location /= "00100000" and sop_by_byte >= eop_location and ctrl_delay_reg_reg = "00" then
-      elsif eop_location /= "00100000" and sop_by_byte >= eop_location and sop_eop_packet = '0' then
-          -- Somente baixa o wen se nao usou reg_delay sop_eop_same_cycle
-          wen_fifo_reg <= '0';
-      elsif eop_location_reg /= "00100000" then
-          wen_fifo_reg <= '0';
       elsif eop_location_reg_reg /= "00100000" then
           wen_fifo_reg <= '0';
       end if;
@@ -354,29 +411,42 @@ begin
       shift_out_reg <= (others=>'0');
       shift_out_reg_reg <= (others=>'0');
       is_sop_reg <= '0';
-      is_eop_reg <= (others=>'0');
       is_sop_reg_reg <= '0';
-      is_eop_reg_reg <= (others=>'0');
+      sop_location_reg <= (others=>'0');
     elsif clk'event and clk = '1' then
       shift_out_reg <= shift_out_int;
+      sop_location_reg <= sop_location;
+      missed_sop_reg <= missed_sop;
+
+      if (sop_location(2 downto 0) >= "100" and eop_location /= "00100000") or sop_location = "0110" or sop_location = "0111" then
+        is_sop_reg <= '0';
+      else
+        is_sop_reg <= is_sop_int;
+        if (sop_location_reg(2 downto 0) >= "100" and eop_location_reg /= "00100000") or sop_location_reg = "0110" or sop_location_reg = "0111" then
+          is_sop_reg <= '1';
+        end if;
+      end if;
+
+      if sop_eop_same_cycle_reg = '1' then
+        is_sop_reg_reg <= is_sop_reg_reg;
+      else
+        is_sop_reg_reg <= is_sop_reg;
+      end if;
+
       if sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '0' then
         shift_out_reg_reg <= shift_out_reg_reg;
+        is_sop_reg_reg <= is_sop_reg_reg;
       else
         shift_out_reg_reg <= shift_out_reg;
+        is_sop_reg_reg <= is_sop_reg;
       end if;
-      missed_sop_reg <= missed_sop;
-      is_sop_reg <= is_sop_int;
-      is_eop_reg <= is_eop_int;
-      is_sop_reg_reg <= is_sop_reg;
-      is_eop_reg_reg <= is_eop_reg;
+
     end if;
   end process;
 
-  eop_line_offset <= eop_location(5 downto 0) when wen_fifo_reg = '1' else NO_EOP;
 
   wen_fifo <= wen_fifo_reg_reg;
   shift_out <= shift_out_reg_reg;
   is_sop <= is_sop_reg_reg;
-  is_eop <= is_eop_reg_reg;
 
 end architecture;
