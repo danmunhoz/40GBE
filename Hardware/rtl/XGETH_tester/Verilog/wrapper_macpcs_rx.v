@@ -246,6 +246,10 @@ module wrapper_macpcs_rx(
     assign dump_xgmii_rxc_3 = xgmii_rxc_lane_3;
     assign dump_xgmii_rxd_3 = xgmii_rxd_lane_3;
 
+    assign mac_data = mac_data_in;
+    assign mac_eop = mac_eop_in;
+    assign mac_sop = mac_sop_in;
+
     // Register for lane 0 old block
     always @ (posedge rx_clk_161_13 or negedge async_reset_n) begin
       if (!async_reset_n) begin
