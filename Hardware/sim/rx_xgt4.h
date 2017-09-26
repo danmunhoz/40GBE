@@ -8,6 +8,7 @@ class rx_xgt4 : public sc_foreign_module
 public:
     sc_in<sc_logic> clock_in156;
     sc_in<sc_logic> clock_in161;
+    sc_in<sc_logic> clock_in312;
     sc_in<sc_logic> reset_in;
     sc_in<sc_logic> reset_in_mii_tx;
     sc_in<sc_logic> reset_in_mii_rx;
@@ -42,12 +43,16 @@ public:
     sc_out<sc_lv<64> > dump_xgmii_rxd_2;
     sc_out<sc_lv<8> > dump_xgmii_rxc_3;
     sc_out<sc_lv<64> > dump_xgmii_rxd_3;
+    sc_out<sc_lv<128> > mac_data;
+    sc_out<sc_logic> mac_sop;
+    sc_out<sc_lv<5> > mac_eop;
 
 
     rx_xgt4(sc_module_name nm, const char* hdl_name)
      : sc_foreign_module(nm),
        clock_in156("clock_in156"),
        clock_in161("clock_in161"),
+       clock_in312("clock_in312"),
        reset_in("reset_in"),
        reset_in_mii_tx("reset_in_mii_tx"),
        reset_in_mii_rx("reset_in_mii_rx"),
@@ -81,7 +86,10 @@ public:
        dump_xgmii_rxc_2("dump_xgmii_rxc_2"),
        dump_xgmii_rxd_2("dump_xgmii_rxd_2"),
        dump_xgmii_rxc_3("dump_xgmii_rxc_3"),
-       dump_xgmii_rxd_3("dump_xgmii_rxd_3")
+       dump_xgmii_rxd_3("dump_xgmii_rxd_3"),
+       mac_data("mac_data"),
+       mac_sop("mac_sop"),
+       mac_eop("mac_eop")
     {
         elaborate_foreign_module(hdl_name);
     }

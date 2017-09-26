@@ -15,7 +15,7 @@ module wrapper_macpcs_rx(
                         //---- -------- Inputs ----------------//
 
                         // Clocks
-                        clk_156, tx_clk_161_13, rx_clk_161_13, clk_xgmii_rx, clk_xgmii_tx,
+                        clk_156, tx_clk_161_13, rx_clk_161_13, clk_xgmii_rx, clk_xgmii_tx, clk_312,
                         // Resets
                         async_reset_n, reset_tx_n, reset_rx_n, reset_tx_done, reset_rx_done,
                         // PHY -> Output of PCS
@@ -49,10 +49,15 @@ module wrapper_macpcs_rx(
                         dump_xgmii_rxc_2,
                         dump_xgmii_rxd_2,
                         dump_xgmii_rxc_3,
-                        dump_xgmii_rxd_3
+                        dump_xgmii_rxd_3,
+
+                        mac_eop,
+                        mac_sop,
+                        mac_data
                         );
     // Clocks
     input           clk_156;
+    input           clk_312;
     input           tx_clk_161_13;
     input           rx_clk_161_13;
     input           clk_xgmii_rx;
@@ -232,6 +237,10 @@ module wrapper_macpcs_rx(
     output [7:0]    dump_xgmii_rxc_3;
     output [63:0]   dump_xgmii_rxd_3;
 
+    output [4:0] mac_eop;
+    output mac_sop;
+    output [127:0] mac_data;
+
     wire            tx_clk_161_13;
     wire            rx_clk_161_13;
     wire            clk_156;
@@ -353,7 +362,7 @@ module wrapper_macpcs_rx(
     core_interface INST_core_interface
     (
       	.clk_156			      (clk_156),
-        .clk_312			      (clk_161),   //Por enquanto...
+        .clk_312			      (clk_312),
       	.rst_n 	            (reset_rx_n),
       	.xgmii_rxc_0	      (xgmii_rxc_lane_0),
       	.xgmii_rxd_0	      (xgmii_rxd_lane_0),
@@ -642,5 +651,24 @@ module wrapper_macpcs_rx(
         .xgmii_rxc_3        (xgmii_rxc_lane_3),
         .xgmii_rxd_3        (xgmii_rxd_lane_3)
     );
+
+    core_interface INST_core_interface
+    (
+      	.clk_156			      (clk_156),
+        .clk_312			      (clk_312),
+      	.rst_n 	            (reset_rx_n),
+      	.xgmii_rxc_0	      (xgmii_rxc_lane_0),
+      	.xgmii_rxd_0	      (xgmii_rxd_lane_0),
+      	.xgmii_rxc_1	      (xgmii_rxc_lane_1),
+      	.xgmii_rxd_1	      (xgmii_rxd_lane_1),
+      	.xgmii_rxc_2	      (xgmii_rxc_lane_2),
+      	.xgmii_rxd_2	      (xgmii_rxd_lane_2),
+      	.xgmii_rxc_3	      (xgmii_rxc_lane_3),
+      	.xgmii_rxd_3	      (xgmii_rxd_lane_3),
+
+        .mac_data           (mac_data_in),
+        .mac_sop            (mac_sop_in),
+        .mac_eop            (mac_eop_in)
+   );
 
 endmodule

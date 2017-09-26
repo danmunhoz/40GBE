@@ -11,12 +11,14 @@
 #include "scoreboard.h"
 #include "pkt_buffer.h"
 #include "dump_mii.h"
+#include "dump_output.h"
 #include "fiber.h"
 // #include "lane_reorder.h"
 
 SC_MODULE(Top) {
   sc_clock clk_156;
   sc_clock clk_161;
+  sc_clock clk_312;
 
   sc_event reset_deactivation_event;
   sc_event reset_mii_tx_deactivation_event;
@@ -24,6 +26,8 @@ SC_MODULE(Top) {
 
   sc_signal<sc_logic> iclock156;
   sc_signal<sc_logic> iclock161;
+  sc_signal<sc_logic> iclock312;
+
   sc_signal<sc_logic> reset;
   sc_signal<sc_logic> reset_mii_tx;
   sc_signal<sc_logic> reset_mii_rx;
@@ -96,6 +100,12 @@ SC_MODULE(Top) {
   sc_signal<sc_lv<2 > > pcs_3_header_out;
 
 
+  // sinais de saida da FIFO
+  sc_signal<sc_lv<128> > mac_data;
+  sc_signal<sc_logic> mac_sop;
+  sc_signal<sc_lv<5> > mac_eop;
+
+
   tb_xgt4      * tb_xgt4_inst;
   rx_xgt4      * rx_xgt4_inst;
   scoreboard   * scoreboard_inst;
@@ -106,6 +116,7 @@ SC_MODULE(Top) {
   dump_mii     * dump_mii_rx_inst_2;
   dump_mii     * dump_mii_rx_inst_3;
   fiber        * fiber_inst;
+  dump_output  * dump_output_inst;
   // lane_reorder * lane_reorder_inst;
 
   void clock_assign();
@@ -115,7 +126,8 @@ SC_MODULE(Top) {
 
  SC_CTOR(Top): clk_156("clk_156", 6.4, SC_NS, 0.5, 0.0, SC_NS, false),
                clk_161("clk_161", 6.2, SC_NS, 0.5, 0.0, SC_NS, false),
-               iclock156("iclock156"), iclock161("iclock161"), block_from_xgt4("block_from_xgt4"), header_from_xgt4("header_from_xgt4"),
+               clk_312("clk_312", 3.2, SC_NS, 0.5, 0.0, SC_NS, false),
+               iclock156("iclock156"), iclock161("iclock161"), iclock312("iclock312"), block_from_xgt4("block_from_xgt4"), header_from_xgt4("header_from_xgt4"),
                //block_to_xgt4("block_to_xgt4"), data_valid_xgt4("data_valid_xgt4"), header_to_xgt4("header_to_xgt4"),
                data_valid_xgt4("data_valid_xgt4"), header_valid_xgt4("header_valid_xgt4"), block_from_mac_rx("block_from_mac_rx") {
 
@@ -130,6 +142,8 @@ SC_MODULE(Top) {
     dump_mii_rx_inst_1 = new dump_mii("dump_mii_rx_1","dump_mii_rx_1.txt");
     dump_mii_rx_inst_2 = new dump_mii("dump_mii_rx_2","dump_mii_rx_2.txt");
     dump_mii_rx_inst_3 = new dump_mii("dump_mii_rx_3","dump_mii_rx_3.txt");
+
+    dump_output_inst = new dump_output("dump_output", "dump_output.txt");
 
     fiber_inst  = new fiber("fiber");
     // lane_reorder_inst = new lane_reorder("lane_reorder", "lane_reorder");
@@ -146,8 +160,10 @@ SC_MODULE(Top) {
     tb_xgt4_inst->dump_xgmii_txd(dump_xgmii_txd);
     // tb_xgt4_inst->pkt_tx_start(pkt_tx_start);
 
+
     rx_xgt4_inst->clock_in156(iclock156);
     rx_xgt4_inst->clock_in161(iclock161);
+    rx_xgt4_inst->clock_in312(iclock312);
     rx_xgt4_inst->reset_in(reset);
     rx_xgt4_inst->reset_in_mii_tx(reset_mii_tx);
     rx_xgt4_inst->reset_in_mii_rx(reset_mii_rx);
@@ -188,6 +204,17 @@ SC_MODULE(Top) {
     rx_xgt4_inst->pkt_rx_sop(pkt_rx_sop);
     rx_xgt4_inst->pkt_rx_val(pkt_rx_val);
     rx_xgt4_inst->pkt_rx_avail(pkt_rx_avail);
+
+    rx_xgt4_inst->mac_data(mac_data);
+    rx_xgt4_inst->mac_sop(mac_sop);
+    rx_xgt4_inst->mac_eop(mac_eop);
+
+    // output dumped to file for comparison
+    dump_output_inst->clock_in(iclock312);
+    dump_output_inst->reset_n(reset);
+    dump_output_inst->mac_data(mac_data);
+    dump_output_inst->mac_sop(mac_sop);
+    dump_output_inst->mac_eop(mac_eop);
 
     scoreboard_inst->clock_in156(iclock156);
 
@@ -253,6 +280,7 @@ SC_MODULE(Top) {
     SC_METHOD(clock_assign);
     sensitive << clk_156.signal();
     sensitive << clk_161.signal();
+    sensitive << clk_312.signal();
     dont_initialize();
 
     SC_METHOD(reset_generator);
@@ -282,6 +310,9 @@ inline void Top::clock_assign()
 
   sc_logic clock_tmp161(clk_161.signal().read());
   iclock161.write(clock_tmp161);
+
+  sc_logic clock_tmp312(clk_312.signal().read());
+  iclock312.write(clock_tmp312);
 }
 
 inline void Top::reset_generator()
