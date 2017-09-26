@@ -114,12 +114,70 @@ module wrapper_macpcs_rx(
     output [5:0]  ber_cnt;
     output [7:0]  errd_blks;
     output [15:0] jtest_errc;
-
     output [63:0] tx_data_out;
     output [1:0]  tx_header_out;
     output        rxgearboxslip_out;
     output [6:0]  tx_sequence_out;
 
+    wire        hi_ber_0;
+    wire        blk_lock_0;
+    wire        linkstatus_0;
+    wire        rx_fifo_spill_0;
+    wire        tx_fifo_spill_0;
+    wire        rxlf_0;
+    wire        txlf_0;
+    wire [5:0]  ber_cnt_0;
+    wire [7:0]  errd_blks_0;
+    wire [15:0] jtest_errc_0;
+    wire [63:0] tx_data_out_0;
+    wire [1:0]  tx_header_out_0;
+    wire        rxgearboxslip_out_0;
+    wire [6:0]  tx_sequence_out_0;
+
+    wire        hi_ber_1;
+    wire        blk_lock_1;
+    wire        linkstatus_1;
+    wire        rx_fifo_spill_1;
+    wire        tx_fifo_spill_1;
+    wire        rxlf_1;
+    wire        txlf_1;
+    wire [5:0]  ber_cnt_1;
+    wire [7:0]  errd_blks_1;
+    wire [15:0] jtest_errc_1;
+    wire [63:0] tx_data_out_1;
+    wire [1:0]  tx_header_out_1;
+    wire        rxgearboxslip_out_1;
+    wire [6:0]  tx_sequence_out_1;
+
+    wire        hi_ber_2;
+    wire        blk_lock_2;
+    wire        linkstatus_2;
+    wire        rx_fifo_spill_2;
+    wire        tx_fifo_spill_2;
+    wire        rxlf_2;
+    wire        txlf_2;
+    wire [5:0]  ber_cnt_2;
+    wire [7:0]  errd_blks_2;
+    wire [15:0] jtest_errc_2;
+    wire [63:0] tx_data_out_2;
+    wire [1:0]  tx_header_out_2;
+    wire        rxgearboxslip_out_2;
+    wire [6:0]  tx_sequence_out_2;
+
+    wire        hi_ber_3;
+    wire        blk_lock_3;
+    wire        linkstatus_3;
+    wire        rx_fifo_spill_3;
+    wire        tx_fifo_spill_3;
+    wire        rxlf_3;
+    wire        txlf_3;
+    wire [5:0]  ber_cnt_3;
+    wire [7:0]  errd_blks_3;
+    wire [15:0] jtest_errc_3;
+    wire [63:0] tx_data_out_3;
+    wire [1:0]  tx_header_out_3;
+    wire        rxgearboxslip_out_3;
+    wire [6:0]  tx_sequence_out_3;
 
     // MAC Inputs
     (* KEEP = "true" *)
@@ -228,6 +286,7 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire [7:0]  xgmii_rxc_lane_3;
     (* syn_keep = "true"*) wire [63:0] xgmii_rxd_lane_3;
 
+    // For Testbench
     assign dump_xgmii_rxc_0 = xgmii_rxc_lane_0;
     assign dump_xgmii_rxd_0 = xgmii_rxd_lane_0;
     assign dump_xgmii_rxc_1 = xgmii_rxc_lane_1;
@@ -236,6 +295,17 @@ module wrapper_macpcs_rx(
     assign dump_xgmii_rxd_2 = xgmii_rxd_lane_2;
     assign dump_xgmii_rxc_3 = xgmii_rxc_lane_3;
     assign dump_xgmii_rxd_3 = xgmii_rxd_lane_3;
+
+    assign jtest_errc = jtest_errc_0;
+    assign ber_cnt = ber_cnt_0;
+    assign hi_ber = hi_ber_0;
+    assign blk_lock = blk_lock_0;
+    assign linkstatus = linkstatus_0;
+    assign rx_fifo_spill = rx_fifo_spill_0;
+    assign tx_fifo_spill = tx_fifo_spill_0;
+    assign rxlf = rxlf_0;
+    assign txlf = txlf_0;
+    assign errd_blks = errd_blks_0;
 
     // Register for lane 0 old block
     always @ (posedge rx_clk_161_13 or negedge async_reset_n) begin
@@ -280,6 +350,25 @@ module wrapper_macpcs_rx(
 
     );
 
+    core_interface INST_core_interface
+    (
+      	.clk_156			      (clk_156),
+        .clk_312			      (clk_161),   //Por enquanto...
+      	.rst_n 	            (reset_rx_n),
+      	.xgmii_rxc_0	      (xgmii_rxc_lane_0),
+      	.xgmii_rxd_0	      (xgmii_rxd_lane_0),
+      	.xgmii_rxc_1	      (xgmii_rxc_lane_1),
+      	.xgmii_rxd_1	      (xgmii_rxd_lane_1),
+      	.xgmii_rxc_2	      (xgmii_rxc_lane_2),
+      	.xgmii_rxd_2	      (xgmii_rxd_lane_2),
+      	.xgmii_rxc_3	      (xgmii_rxc_lane_3),
+      	.xgmii_rxd_3	      (xgmii_rxd_lane_3),
+
+        .mac_data           (mac_data_in),
+        .mac_sop            (mac_sop_in),
+        .mac_eop            (mac_eop_in)
+   );
+
     PCS_core_rx INST_0_PCS_core
     (
         // CLOCKS
@@ -310,20 +399,20 @@ module wrapper_macpcs_rx(
         .rx_header_in       (pcs_0_header_out[1:0]),
         .rx_data_valid_in   (rx_lane_0_data_valid_in),
         .rx_data_in         (pcs_0_data_out[63:0]),
-        .hi_ber             (hi_ber),
-        .blk_lock           (blk_lock),
-        .linkstatus         (linkstatus),
-        .rx_fifo_spill      (rx_fifo_spill),
-        .tx_fifo_spill      (tx_fifo_spill),
-        .rxlf               (rxlf),
-        .txlf               (txlf),
-        .ber_cnt            (ber_cnt[5:0]),
-        .errd_blks          (errd_blks[7:0]),
-        .jtest_errc         (jtest_errc[15:0]),
-        .tx_data_out        (tx_data_out[63:0]),
-        .tx_header_out      (tx_header_out[1:0]),
-        .rxgearboxslip_out  (rxgearboxslip_out),
-        .tx_sequence_out    (tx_sequence_out),
+        .hi_ber             (hi_ber_0),
+        .blk_lock           (blk_lock_0),
+        .linkstatus         (linkstatus_0),
+        .rx_fifo_spill      (rx_fifo_spill_0),
+        .tx_fifo_spill      (tx_fifo_spill_0),
+        .rxlf               (rxlf_0),
+        .txlf               (txlf_0),
+        .ber_cnt            (ber_cnt_0[5:0]),
+        .errd_blks          (errd_blks_0[7:0]),
+        .jtest_errc         (jtest_errc_0[15:0]),
+        .tx_data_out        (tx_data_out_0[63:0]),
+        .tx_header_out      (tx_header_out_0[1:0]),
+        .rxgearboxslip_out  (rxgearboxslip_out_0),
+        .tx_sequence_out    (tx_sequence_out_0),
         .xgmii_txc          (xgmii_txc_lane_0),
         .xgmii_txd          (xgmii_txd_lane_0),
         .xgmii_rxd          (xgmii_rxd_lane_0),
@@ -366,20 +455,20 @@ module wrapper_macpcs_rx(
         .rx_header_in       (pcs_1_header_out[1:0]),
         .rx_data_valid_in   (rx_lane_1_data_valid_in),
         .rx_data_in         (pcs_1_data_out[63:0]),
-        .hi_ber             (hi_ber),
-        .blk_lock           (blk_lock),
-        .linkstatus         (linkstatus),
-        .rx_fifo_spill      (rx_fifo_spill),
-        .tx_fifo_spill      (tx_fifo_spill),
-        .rxlf               (rxlf),
-        .txlf               (txlf),
-        .ber_cnt            (ber_cnt[5:0]),
-        .errd_blks          (errd_blks[7:0]),
-        .jtest_errc         (jtest_errc[15:0]),
-        .tx_data_out        (tx_data_out[63:0]),
-        .tx_header_out      (tx_header_out[1:0]),
-        .rxgearboxslip_out  (rxgearboxslip_out),
-        .tx_sequence_out    (tx_sequence_out),
+        .hi_ber             (hi_ber_1),
+        .blk_lock           (blk_lock_1),
+        .linkstatus         (linkstatus_1),
+        .rx_fifo_spill      (rx_fifo_spill_1),
+        .tx_fifo_spill      (tx_fifo_spill_1),
+        .rxlf               (rxlf_1),
+        .txlf               (txlf_1),
+        .ber_cnt            (ber_cnt_1[5:0]),
+        .errd_blks          (errd_blks_1[7:0]),
+        .jtest_errc         (jtest_errc_1[15:0]),
+        .tx_data_out        (tx_data_out_1[63:0]),
+        .tx_header_out      (tx_header_out_1[1:0]),
+        .rxgearboxslip_out  (rxgearboxslip_out_1),
+        .tx_sequence_out    (tx_sequence_out_1),
         .xgmii_txc          (xgmii_txc_lane_0), // MII do zero POR ENQUANTO
         .xgmii_txd          (xgmii_txd_lane_0), // MII do zero POR ENQUANTO
         .xgmii_rxd          (xgmii_rxd_lane_1),
@@ -422,20 +511,20 @@ module wrapper_macpcs_rx(
         .rx_header_in       (pcs_2_header_out[1:0]),
         .rx_data_valid_in   (rx_lane_2_data_valid_in),
         .rx_data_in         (pcs_2_data_out[63:0]),
-        .hi_ber             (hi_ber),
-        .blk_lock           (blk_lock),
-        .linkstatus         (linkstatus),
-        .rx_fifo_spill      (rx_fifo_spill),
-        .tx_fifo_spill      (tx_fifo_spill),
-        .rxlf               (rxlf),
-        .txlf               (txlf),
-        .ber_cnt            (ber_cnt[5:0]),
-        .errd_blks          (errd_blks[7:0]),
-        .jtest_errc         (jtest_errc[15:0]),
-        .tx_data_out        (tx_data_out[63:0]),
-        .tx_header_out      (tx_header_out[1:0]),
-        .rxgearboxslip_out  (rxgearboxslip_out),
-        .tx_sequence_out    (tx_sequence_out),
+        .hi_ber             (hi_ber_2),
+        .blk_lock           (blk_lock_2),
+        .linkstatus         (linkstatus_2),
+        .rx_fifo_spill      (rx_fifo_spill_2),
+        .tx_fifo_spill      (tx_fifo_spill_2),
+        .rxlf               (rxlf_2),
+        .txlf               (txlf_2),
+        .ber_cnt            (ber_cnt_2[5:0]),
+        .errd_blks          (errd_blks_2[7:0]),
+        .jtest_errc         (jtest_errc_2[15:0]),
+        .tx_data_out        (tx_data_out_2[63:0]),
+        .tx_header_out      (tx_header_out_2[1:0]),
+        .rxgearboxslip_out  (rxgearboxslip_out_2),
+        .tx_sequence_out    (tx_sequence_out_2),
         .xgmii_txc          (xgmii_txc_lane_0), // MII do zero POR ENQUANTO
         .xgmii_txd          (xgmii_txd_lane_0), // MII do zero POR ENQUANTO
         .xgmii_rxd          (xgmii_rxd_lane_2),
@@ -478,20 +567,20 @@ module wrapper_macpcs_rx(
         .rx_header_in       (pcs_3_header_out[1:0]),
         .rx_data_valid_in   (rx_lane_3_data_valid_in),
         .rx_data_in         (pcs_3_data_out[63:0]),
-        .hi_ber             (hi_ber),
-        .blk_lock           (blk_lock),
-        .linkstatus         (linkstatus),
-        .rx_fifo_spill      (rx_fifo_spill),
-        .tx_fifo_spill      (tx_fifo_spill),
-        .rxlf               (rxlf),
-        .txlf               (txlf),
-        .ber_cnt            (ber_cnt[5:0]),
-        .errd_blks          (errd_blks[7:0]),
-        .jtest_errc         (jtest_errc[15:0]),
-        .tx_data_out        (tx_data_out[63:0]),
-        .tx_header_out      (tx_header_out[1:0]),
-        .rxgearboxslip_out  (rxgearboxslip_out),
-        .tx_sequence_out    (tx_sequence_out),
+        .hi_ber             (hi_ber_3),
+        .blk_lock           (blk_lock_3),
+        .linkstatus         (linkstatus_3),
+        .rx_fifo_spill      (rx_fifo_spill_3),
+        .tx_fifo_spill      (tx_fifo_spill_3),
+        .rxlf               (rxlf_3),
+        .txlf               (txlf_3),
+        .ber_cnt            (ber_cnt_3[5:0]),
+        .errd_blks          (errd_blks_3[7:0]),
+        .jtest_errc         (jtest_errc_3[15:0]),
+        .tx_data_out        (tx_data_out_3[63:0]),
+        .tx_header_out      (tx_header_out_3[1:0]),
+        .rxgearboxslip_out  (rxgearboxslip_out_3),
+        .tx_sequence_out    (tx_sequence_out_3),
         .xgmii_txc          (xgmii_txc_lane_0), // MII do zero POR ENQUANTO
         .xgmii_txd          (xgmii_txd_lane_0), // MII do zero POR ENQUANTO
         .xgmii_rxd          (xgmii_rxd_lane_3),
@@ -553,24 +642,5 @@ module wrapper_macpcs_rx(
         .xgmii_rxc_3        (xgmii_rxc_lane_3),
         .xgmii_rxd_3        (xgmii_rxd_lane_3)
     );
-
-    core_interface INST_core_interface
-    (
-      	.clk_156			      (clk_156),
-        .clk_312			      (clk_161),   //Por enquanto...
-      	.rst_n 	            (reset_rx_n),
-      	.xgmii_rxc_0	      (xgmii_rxc_lane_0),
-      	.xgmii_rxd_0	      (xgmii_rxd_lane_0),
-      	.xgmii_rxc_1	      (xgmii_rxc_lane_1),
-      	.xgmii_rxd_1	      (xgmii_rxd_lane_1),
-      	.xgmii_rxc_2	      (xgmii_rxc_lane_2),
-      	.xgmii_rxd_2	      (xgmii_rxd_lane_2),
-      	.xgmii_rxc_3	      (xgmii_rxc_lane_3),
-      	.xgmii_rxd_3	      (xgmii_rxd_lane_3),
-
-        .mac_data           (mac_data_in),
-        .mac_sop            (mac_sop_in),
-        .mac_eop            (mac_eop_in)
-   );
 
 endmodule

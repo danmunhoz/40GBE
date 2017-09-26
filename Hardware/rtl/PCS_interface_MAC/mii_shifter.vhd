@@ -31,6 +31,9 @@ architecture behav_mii_shifter of mii_shifter is
                 in_0( 159 downto 0) & in_1(255 downto 160)  when ctrl_reg_shift = "101" else -- 5 desloc
 
                 in_0( 191 downto 0) & in_1(255 downto 192)  when ctrl_reg_shift = "110" else -- 6 desloc
-                in_0( 223 downto 0) & in_1(255 downto 224)  when ctrl_reg_shift = "111";    -- 7 desloc
+                in_0( 223 downto 0) & in_1(255 downto 224)  when ctrl_reg_shift = "111" else -- 7 desloc
+
+                in_1(255 downto 0); -- Default
+
 
   end behav_mii_shifter;
