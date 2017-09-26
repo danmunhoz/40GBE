@@ -107,21 +107,22 @@ architecture top of GTH_tester is
         clk_xgmii_rx        => q8_clk0_refclk_g_i,
         clk_xgmii_tx        => q8_clk0_refclk_g_i
     );
-    
+
     inst_wrapper_macpcs: wrapper_macpcs_rx port map(
       -- Clocks
-      clk_156             => clk_156,
-      tx_clk_161_13       => clk_161,
-      rx_clk_161_13       => clk_161,
-      clk_xgmii_rx        => clk_156,
-      clk_xgmii_tx        => clk_156,
+      clk_156             => q8_clk0_refclk_g_i,
+      tx_clk_161_13       => gt0_txusrclk2_i,
+      rx_clk_161_13       => gt0_txusrclk2_i,
+      clk_xgmii_rx        => q8_clk0_refclk_g_i,
+      clk_xgmii_tx        => q8_clk0_refclk_g_i,
+      clk_312             => clk_250,             // 250 POR ENQUANTO!!!!!
 
       -- Resets
-      async_reset_n       => reset_in,
-      reset_tx_n          => reset_in_pcs,
-      reset_rx_n          => reset_in_pcs,
-      reset_tx_done       => reset_in_mii_tx,
-      reset_rx_done       => reset_in_mii_rx,
+      async_reset_n       => not soft_reset_i,
+      reset_tx_n          => gt0_txresetdone_i,
+      reset_rx_n          => gt0_txresetdone_i,
+      reset_tx_done       => gt0_txfsmresetdone_i,
+      reset_rx_done       => gt0_txfsmresetdone_i,
 
       -- For testbench use only
       start_fifo => '0',

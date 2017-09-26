@@ -652,23 +652,4 @@ module wrapper_macpcs_rx(
         .xgmii_rxd_3        (xgmii_rxd_lane_3)
     );
 
-    core_interface INST_core_interface
-    (
-      	.clk_156			      (clk_156),
-        .clk_312			      (clk_312),
-      	.rst_n 	            (reset_rx_n),
-      	.xgmii_rxc_0	      (xgmii_rxc_lane_0),
-      	.xgmii_rxd_0	      (xgmii_rxd_lane_0),
-      	.xgmii_rxc_1	      (xgmii_rxc_lane_1),
-      	.xgmii_rxd_1	      (xgmii_rxd_lane_1),
-      	.xgmii_rxc_2	      (xgmii_rxc_lane_2),
-      	.xgmii_rxd_2	      (xgmii_rxd_lane_2),
-      	.xgmii_rxc_3	      (xgmii_rxc_lane_3),
-      	.xgmii_rxd_3	      (xgmii_rxd_lane_3),
-
-        .mac_data           (mac_data_in),
-        .mac_sop            (mac_sop_in),
-        .mac_eop            (mac_eop_in)
-   );
-
 endmodule

@@ -13,22 +13,23 @@ file mkdir $outputDir
 # STEP#2: setup design sources and constraints
 
 #read_vhdl [ glob ../rtl/GTH_tester.vhd ]
-#read_vhdl [ glob ../rtl/gtwizard/*.vhd ]
-#read_vhdl [ glob ../rtl/I2C/*.vhd ]
-#read_vhdl [ glob ../rtl/SerialInterface/*.vhd ]
-#read_vhdl [ glob ../rtl/utils/*.vhd ]
-#read_vhdl [ glob ../rtl/XGETH_tester/VHD/*.vhd ]
+read_vhdl [ glob ../rtl/area_timing_wrapper.vhd ]
+read_vhdl [ glob ../rtl/gtwizard/*.vhd ]
+read_vhdl [ glob ../rtl/I2C/*.vhd ]
+read_vhdl [ glob ../rtl/SerialInterface/*.vhd ]
+read_vhdl [ glob ../rtl/utils/*.vhd ]
+read_vhdl [ glob ../rtl/XGETH_tester/VHD/*.vhd ]
 read_vhdl [ glob ../rtl/PCS_interface_MAC/*.vhd ]
 read_vhdl [ glob ../rtl/PCS/*.vhd ]
-#read_ip [ glob ../rtl/ip/gtwizard_0/gtwizard_0.xci ]
-#read_ip [ glob ../rtl/ip/pcie3_7x_0/pcie3_7x_0.xci ]
-#read_verilog [ glob ../rtl/MAC/*.v ]
-#read_verilog [ glob ../rtl/PCIe/*.v ]
-#read_verilog [ glob ../rtl/PCS/*.v ]
-#read_verilog [ glob ../rtl/utils/*.v ]
-#read_verilog [ glob ../rtl/XGETH_tester/Verilog/*.v ]
-#read_xdc ../constraint/constraints.xdc
-read_xdc ../constraint/teste.xdc
+read_ip [ glob ../rtl/ip/gtwizard_0/gtwizard_0.xci ]
+read_ip [ glob ../rtl/ip/pcie3_7x_0/pcie3_7x_0.xci ]
+read_verilog [ glob ../rtl/MAC/*.v ]
+read_verilog [ glob ../rtl/PCIe/*.v ]
+read_verilog [ glob ../rtl/PCS/*.v ]
+read_verilog [ glob ../rtl/utils/*.v ]
+read_verilog [ glob ../rtl/XGETH_tester/Verilog/*.v ]
+read_xdc ../constraint/constraints.xdc
+#read_xdc ../constraint/teste.xdc
 
 
 #
@@ -41,7 +42,7 @@ set_property SEVERITY {Warning} [get_drc_checks UCIO-1]
 
 #synth_design -top GTH_tester -flatten_hierarchy none -fanout_limit 50 -fsm_extraction one_hot -no_lc -part $part
 #synth_design -top core_interface -flatten_hierarchy none -fanout_limit 50 -fsm_extraction one_hot -no_lc -part $part
-synth_design -top wrapper_macpcs_rx -flatten_hierarchy none -fanout_limit 50 -fsm_extraction one_hot -no_lc -part $part
+synth_design -top area_timing_wrapper -flatten_hierarchy none -fanout_limit 50 -fsm_extraction one_hot -no_lc -part $part
 
 write_checkpoint -force $outputDir/post_synth.dcp
 report_timing_summary -file $outputDir/post_synth_timing_summary.rpt
