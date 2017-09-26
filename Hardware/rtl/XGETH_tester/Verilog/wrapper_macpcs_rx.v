@@ -49,7 +49,11 @@ module wrapper_macpcs_rx(
                         dump_xgmii_rxc_2,
                         dump_xgmii_rxd_2,
                         dump_xgmii_rxc_3,
-                        dump_xgmii_rxd_3
+                        dump_xgmii_rxd_3,
+
+                        mac_eop,
+                        mac_sop,
+                        mac_data
                         );
     // Clocks
     input           clk_156;
@@ -173,6 +177,10 @@ module wrapper_macpcs_rx(
     output [63:0]   dump_xgmii_rxd_2;
     output [7:0]    dump_xgmii_rxc_3;
     output [63:0]   dump_xgmii_rxd_3;
+
+    output [4:0] mac_eop;
+    output mac_sop;
+    output [127:0] mac_data;
 
     wire            tx_clk_161_13;
     wire            rx_clk_161_13;

@@ -55,7 +55,11 @@ entity rx_xgt4 is
       dump_xgmii_rxc_2 : out std_logic_vector(7 downto 0);
       dump_xgmii_rxd_2 : out std_logic_vector(63 downto 0);
       dump_xgmii_rxc_3 : out std_logic_vector(7 downto 0);
-      dump_xgmii_rxd_3 : out std_logic_vector(63 downto 0)
+      dump_xgmii_rxd_3 : out std_logic_vector(63 downto 0);
+
+      mac_data : out std_logic_vector(127 downto 0);
+      mac_sop  : out std_logic;
+      mac_eop  : out std_logic_vector(4 downto 0)
 
       );
 end rx_xgt4;
@@ -213,6 +217,10 @@ architecture behav of rx_xgt4 is
           pkt_tx_sop          : in  std_logic;
           pkt_tx_val          : in  std_logic;
 
+          mac_sop             : out std_logic;
+          mac_data            : out std_logic_vector(127 downto 0);
+          mac_eop             : out std_logic_vector(4 downto 0);
+
           -- Wishbone (MAC)
           wb_adr_i            : in  std_logic_vector(7 downto 0);
           wb_clk_i            : in  std_logic;
@@ -307,6 +315,10 @@ begin
             rx_lane_3_data_valid_in      => lane_3_data_valid_in,
             rx_lane_3_header_in          => rx_lane_3_header_in,
             rx_lane_3_data_in            => rx_lane_3_data_in,
+
+            mac_sop                      => mac_sop,
+            mac_data                     => mac_data,
+            mac_eop                      => mac_eop,
 
             -- PCS OUT
             tx_data_out        => tx_data_out,

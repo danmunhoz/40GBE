@@ -42,6 +42,9 @@ public:
     sc_out<sc_lv<64> > dump_xgmii_rxd_2;
     sc_out<sc_lv<8> > dump_xgmii_rxc_3;
     sc_out<sc_lv<64> > dump_xgmii_rxd_3;
+    sc_out<sc_lv<128> > mac_data;
+    sc_out<sc_logic> mac_sop;
+    sc_out<sc_lv<5> > mac_eop;
 
 
     rx_xgt4(sc_module_name nm, const char* hdl_name)
@@ -81,7 +84,10 @@ public:
        dump_xgmii_rxc_2("dump_xgmii_rxc_2"),
        dump_xgmii_rxd_2("dump_xgmii_rxd_2"),
        dump_xgmii_rxc_3("dump_xgmii_rxc_3"),
-       dump_xgmii_rxd_3("dump_xgmii_rxd_3")
+       dump_xgmii_rxd_3("dump_xgmii_rxd_3"),
+       mac_data("mac_data"),
+       mac_sop("mac_sop"),
+       mac_eop("mac_eop")
     {
         elaborate_foreign_module(hdl_name);
     }

@@ -95,6 +95,10 @@ SC_MODULE(Top) {
   sc_signal<sc_lv<2 > > pcs_2_header_out;
   sc_signal<sc_lv<2 > > pcs_3_header_out;
 
+  sc_signal<sc_lv<128> > mac_data;
+  sc_signal<sc_logic> mac_sop;
+  sc_signal<sc_lv<5> > mac_eop;
+
 
   tb_xgt4      * tb_xgt4_inst;
   rx_xgt4      * rx_xgt4_inst;
@@ -189,6 +193,10 @@ SC_MODULE(Top) {
     rx_xgt4_inst->pkt_rx_val(pkt_rx_val);
     rx_xgt4_inst->pkt_rx_avail(pkt_rx_avail);
 
+    rx_xgt4_inst->mac_data(mac_data);
+    rx_xgt4_inst->mac_sop(mac_sop);
+    rx_xgt4_inst->mac_eop(mac_eop);
+    
     scoreboard_inst->clock_in156(iclock156);
 
     pkt_buffer_inst->clock_in161(iclock161);

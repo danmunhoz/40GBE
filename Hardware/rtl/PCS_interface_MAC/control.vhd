@@ -325,9 +325,10 @@ begin
                       eop_location_calc(4 downto 0) <= 32 - (28 - eop_location(4 downto 0));
                     else eop_location_calc(4 downto 0) <= eop_location(4 downto 0) - 28;
                   end if;
-        when others => NULL;
+        when others => eop_location_calc <= "100000";
       end case;
-    end if;
+    else eop_location_calc <= "100000";
+  end if;
   end if;
 end process;
 
