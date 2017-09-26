@@ -59,6 +59,7 @@ architecture behav_control of control is
   signal eop_location_calc          : std_logic_vector(5 downto 0);
   signal eop_location_calc_reg      : std_logic_vector(5 downto 0);
   signal eop_location_calc_reg_reg  : std_logic_vector(5 downto 0);
+  signal eop_location_calc_reg_reg_reg  : std_logic_vector(5 downto 0);
 begin
 
   -- Making things clear:
@@ -337,16 +338,18 @@ begin
   if rst_n = '0' then
     eop_location_calc_reg <= "100000";
     eop_location_calc_reg_reg <= "100000";
+    eop_location_calc_reg_reg_reg <= "100000";
   elsif clk'event and clk='1' then
       eop_location_calc_reg <= eop_location_calc;
+      eop_location_calc_reg_reg <= eop_location_calc_reg;
       if ctrl_delay_reg_reg_reg /= "00" then
-        eop_location_calc_reg_reg <= eop_location_calc_reg;
-      else eop_location_calc_reg_reg <= eop_location_calc;
+        eop_location_calc_reg_reg_reg <= eop_location_calc_reg_reg;
+      else eop_location_calc_reg_reg_reg <= eop_location_calc_reg;
     end if;
   end if;
 end process;
 
-eop_location_out <= eop_location_calc_reg_reg;
+eop_location_out <= eop_location_calc_reg_reg_reg;
 
   -- Process to control fifo write enable
   wen_fifo_proc: process (clk, rst_n)

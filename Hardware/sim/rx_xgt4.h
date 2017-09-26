@@ -8,6 +8,7 @@ class rx_xgt4 : public sc_foreign_module
 public:
     sc_in<sc_logic> clock_in156;
     sc_in<sc_logic> clock_in161;
+    sc_in<sc_logic> clock_in312;
     sc_in<sc_logic> reset_in;
     sc_in<sc_logic> reset_in_mii_tx;
     sc_in<sc_logic> reset_in_mii_rx;
@@ -51,6 +52,7 @@ public:
      : sc_foreign_module(nm),
        clock_in156("clock_in156"),
        clock_in161("clock_in161"),
+       clock_in312("clock_in312"),
        reset_in("reset_in"),
        reset_in_mii_tx("reset_in_mii_tx"),
        reset_in_mii_rx("reset_in_mii_rx"),

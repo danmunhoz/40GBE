@@ -48,6 +48,19 @@ add wave -noupdate -expand -group PCS_2 -radix hexadecimal /Top/rx_xgt4/inst_wra
 add wave -noupdate -expand -group PCS_3 -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/xgmii_rxc
 add wave -noupdate -expand -group PCS_3 -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/xgmii_rxd
 add wave -noupdate -divider -height 20 {CORE INTERFACE}
+add wave -noupdate -divider FIFO
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo/clk_w
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo/wen
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo/data_in
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo/is_sop_in
+add wave -noupdate -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo/eop_addr_in
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo/mem_low
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo/mem_high
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo/clk_r
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo/ren
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo/data_out
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo/is_sop_out
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo/eop_addr_out
 add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/xgmii_rxc_0
 add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/xgmii_rxd_0
 add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/xgmii_rxc_1
@@ -57,19 +70,16 @@ add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/ins
 add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/xgmii_rxc_3
 add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/xgmii_rxd_3
 add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/ctrl_delay
-add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/shift_out
+add wave -noupdate -expand -group Controller -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/shift_out
 add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/shift_out_int
 add wave -noupdate -expand -group Controller -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/sop_location
-add wave -noupdate -expand -group Controller -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/eop_location
+add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/eop_location
+add wave -noupdate -expand -group Controller /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/eop_location_out
 add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/shift_calc
 add wave -noupdate -expand -group Controller /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/wen_fifo_reg
-add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/xgmii_rxc_0
 add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/xgmii_rxd_0
-add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/xgmii_rxc_1
 add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/xgmii_rxd_1
-add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/xgmii_rxc_2
 add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/xgmii_rxd_2
-add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/xgmii_rxc_3
 add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/xgmii_rxd_3
 add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/ctrl
 add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/out_0
@@ -79,10 +89,10 @@ add wave -noupdate -expand -group Shifter -radix hexadecimal /Top/rx_xgt4/inst_w
 add wave -noupdate -expand -group Shifter -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shifter/ctrl_reg_shift
 add wave -noupdate -expand -group Shifter -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shifter/out_data
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {342461 ps} 0}
+WaveRestoreCursors {{Cursor 1} {331300 ps} 0}
 quietly wave cursor active 1
-configure wave -namecolwidth 759
-configure wave -valuecolwidth 448
+configure wave -namecolwidth 541
+configure wave -valuecolwidth 40
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
 configure wave -snapdistance 10
@@ -95,4 +105,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {954687 ps} {1002385 ps}
+WaveRestoreZoom {301004 ps} {345397 ps}

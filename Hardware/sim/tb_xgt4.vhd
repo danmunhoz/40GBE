@@ -12,6 +12,7 @@ entity tb_xgt4 is
   port (
     clock_in156   : in std_logic;
     clock_in161   : in std_logic;
+    clock_in312   : in std_logic;
     reset_in      : in std_logic;
     reset_in_mii_tx : in std_logic;
     reset_in_mii_rx : in std_logic;

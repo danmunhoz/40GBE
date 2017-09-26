@@ -15,7 +15,7 @@ module wrapper_macpcs_rx(
                         //---- -------- Inputs ----------------//
 
                         // Clocks
-                        clk_156, tx_clk_161_13, rx_clk_161_13, clk_xgmii_rx, clk_xgmii_tx,
+                        clk_156, tx_clk_161_13, rx_clk_161_13, clk_xgmii_rx, clk_xgmii_tx, clk_312,
                         // Resets
                         async_reset_n, reset_tx_n, reset_rx_n, reset_tx_done, reset_rx_done,
                         // PHY -> Output of PCS
@@ -57,6 +57,7 @@ module wrapper_macpcs_rx(
                         );
     // Clocks
     input           clk_156;
+    input           clk_312;
     input           tx_clk_161_13;
     input           rx_clk_161_13;
     input           clk_xgmii_rx;
@@ -565,7 +566,7 @@ module wrapper_macpcs_rx(
     core_interface INST_core_interface
     (
       	.clk_156			      (clk_156),
-        .clk_312			      (clk_161),   //Por enquanto...
+        .clk_312			      (clk_312),
       	.rst_n 	            (reset_rx_n),
       	.xgmii_rxc_0	      (xgmii_rxc_lane_0),
       	.xgmii_rxd_0	      (xgmii_rxd_lane_0),

@@ -11,7 +11,8 @@ entity rx_xgt4 is
 
       clock_in156   : in std_logic;
       clock_in161   : in std_logic;
-      reset_in            : in  std_logic;
+      clock_in312   : in std_logic;
+      reset_in      : in  std_logic;
 
       reset_in_mii_tx : in std_logic;
       reset_in_mii_rx : in std_logic;
@@ -69,6 +70,7 @@ architecture behav of rx_xgt4 is
 
   	signal	clk_156             : std_logic;
     signal	clk_161             : std_logic;
+    signal	clk_312             : std_logic;
   	signal	clk_250             : std_logic;
   	signal	tx_clk_161_13       : std_logic;
   	signal	rx_clk_161_13       : std_logic;
@@ -140,6 +142,7 @@ architecture behav of rx_xgt4 is
           rx_clk_161_13       : in  std_logic;
           clk_xgmii_rx        : in  std_logic;
           clk_xgmii_tx        : in  std_logic;
+          clk_312             : in  std_logic;
 
           -- Resets
           async_reset_n       : in  std_logic;
@@ -250,6 +253,7 @@ architecture behav of rx_xgt4 is
 begin
           clk_156 <= clock_in156;
           clk_161 <= clock_in161;
+          clk_312 <= clock_in312;
 
           reset_in_pcs <= '0', '1' after 40 ns;
 
@@ -276,6 +280,7 @@ begin
             rx_clk_161_13       => clk_161,
             clk_xgmii_rx        => clk_156,
             clk_xgmii_tx        => clk_156,
+            clk_312             => clk_312,
 
             -- Resets
             async_reset_n       => reset_in,
