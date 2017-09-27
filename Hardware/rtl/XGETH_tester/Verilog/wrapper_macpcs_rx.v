@@ -259,10 +259,8 @@ module wrapper_macpcs_rx(
     wire            terminate_in_2  = (terminate_out_0 || terminate_out_1);
     wire            terminate_in_3  = (terminate_out_0 || terminate_out_1 || terminate_out_2);
 
-    wire [127:0]    mac_data_in;
-    wire            mac_sop_in;
-    wire [4:0]      mac_eop_in;
-
+    wire            fifo_interface_full;
+    wire            fifo_interface_empty;
 
     (* syn_keep = "true"*) wire [1:0]   pcs_0_header_out;
     (* syn_keep = "true"*) wire [63:0]  pcs_0_data_out;
@@ -372,10 +370,13 @@ module wrapper_macpcs_rx(
       	.xgmii_rxd_2	      (xgmii_rxd_lane_2),
       	.xgmii_rxc_3	      (xgmii_rxc_lane_3),
       	.xgmii_rxd_3	      (xgmii_rxd_lane_3),
+        .ren                (1'b0),
 
-        .mac_data           (mac_data_in),
-        .mac_sop            (mac_sop_in),
-        .mac_eop            (mac_eop_in)
+        .mac_data           (mac_data),
+        .mac_sop            (mac_sop),
+        .mac_eop            (mac_eop),
+        .fifo_full          (fifo_interface_full),
+        .fifo_empty         (fifo_interface_empty)
    );
 
     PCS_core_rx INST_0_PCS_core
@@ -603,7 +604,7 @@ module wrapper_macpcs_rx(
     );
 
 
-    xge_mac INST_xge_mac
+    xge_mac_rx INST_xge_mac
     (   // Simple Tx-Rx interface signals
         .clk_156m25         (clk_156),
         .clk_xgmii_rx       (clk_xgmii_rx),
@@ -639,6 +640,10 @@ module wrapper_macpcs_rx(
         .wb_ack_o           (wb_ack_o),
         .wb_dat_o           (wb_dat_o),
         .wb_int_o           (wb_int_o),
+
+        .data_in_from_if    (mac_data),
+        .eop_in_from_if     (mac_eop),
+        .sop_in_from_if     (mac_sop),
 
         .xgmii_txc          (xgmii_txc_lane_0),
         .xgmii_txd          (xgmii_txd_lane_0),

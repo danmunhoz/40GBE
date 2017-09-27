@@ -9,7 +9,7 @@ route_design
 ## Optionally run optimization if there are timing violations after placement
 if {[get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup]] < 0.3} {
  puts "Found setup timing violations => running post route physical optimization"
- phys_opt_design 
+ phys_opt_design
 }
 write_checkpoint -force $outputDir/post_route.dcp
 report_route_status -file $outputDir/post_route_status.rpt
@@ -21,4 +21,4 @@ write_verilog -force $outputDir/cpu_impl_netlist.v -mode timesim -sdf_anno true
 # STEP#6: generate a bitstream
 
 write_bitstream -force $outputDir/cpu.bit
-exit
+#exit

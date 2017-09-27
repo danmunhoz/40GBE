@@ -111,7 +111,6 @@ always @(posedge clk156 or negedge rstb156)
         next_control <= 8'hff;
         rxdata <= `LBLOCK_R;
         rxcontrol <= 8'h11;
-        terminate_out <= 1'b0;
     end
     else if (hi_ber && !lpbk) begin
         Current_state <= `RX_INIT;

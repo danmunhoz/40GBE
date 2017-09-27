@@ -48,7 +48,8 @@ module xge_mac_rx(/*AUTOARG*/
   xgmii_rxd_3, xgmii_rxc_3, wb_we_i, wb_stb_i, wb_rst_i, wb_dat_i,
   wb_cyc_i, wb_clk_i, wb_adr_i, reset_xgmii_tx_n, reset_xgmii_rx_n,
   reset_156m25_n, pkt_tx_val, pkt_tx_sop, pkt_tx_mod, pkt_tx_eop,
-  pkt_tx_data, pkt_rx_ren, clk_xgmii_tx, clk_xgmii_rx, clk_156m25
+  pkt_tx_data, pkt_rx_ren, clk_xgmii_tx, clk_xgmii_rx, clk_156m25,
+  data_in_from_if, eop_in_from_if, sop_in_from_if
   );
 
 /*AUTOINPUT*/
@@ -83,6 +84,9 @@ input                   wb_rst_i;               // To sync_clk_wb0 of sync_clk_w
 input                   wb_stb_i;               // To wishbone_if0 of wishbone_if.v
 input                   wb_we_i;                // To wishbone_if0 of wishbone_if.v
 // End of automatics
+input [127:0] data_in_from_if;
+input [4:0]   eop_in_from_if;
+input         sop_in_from_if;
 
 /*AUTOOUTPUT*/
 // Beginning of automatic outputs (from unused autoinst outputs)
@@ -367,7 +371,8 @@ rx_enqueue_rx rx_eq0(/*AUTOINST*/
                   // Inputs
                   .clk_xgmii_rx         (clk_xgmii_rx),
                   .reset_xgmii_rx_n     (reset_xgmii_rx_n),
-                  .xgmii_rxd            (xgmii_rxd_0[63:0]),
+                  //.xgmii_rxd            (xgmii_rxd_0[63:0]),
+                  .xgmii_rxd            (data_in_from_if[63:0]), // PARA SINTETIZAR O WRAPPER SEM CAPAR FORA
                   .xgmii_rxc            (xgmii_rxc_0[7:0]),
                   .rxdfifo_wfull        (rxdfifo_wfull_0),
                   .rxhfifo_rdata        (rxhfifo_rdata_0[63:0]),
@@ -431,7 +436,8 @@ rx_enqueue_rx rx_eq1(/*AUTOINST*/
                   // Inputs
                   .clk_xgmii_rx         (clk_xgmii_rx),
                   .reset_xgmii_rx_n     (reset_xgmii_rx_n),
-                  .xgmii_rxd            (xgmii_rxd_1[63:0]),
+                  //.xgmii_rxd            (xgmii_rxd_1[63:0]),
+                  .xgmii_rxd            (data_in_from_if[127:64]),
                   .xgmii_rxc            (xgmii_rxc_1[7:0]),
                   .rxdfifo_wfull        (rxdfifo_wfull_1),
                   .rxhfifo_rdata        (rxhfifo_rdata_1[63:0]),
@@ -495,7 +501,8 @@ rx_enqueue_rx rx_eq2(/*AUTOINST*/
                   // Inputs
                   .clk_xgmii_rx         (clk_xgmii_rx),
                   .reset_xgmii_rx_n     (reset_xgmii_rx_n),
-                  .xgmii_rxd            (xgmii_rxd_2[63:0]),
+                  // .xgmii_rxd            (xgmii_rxd_2[63:0]),
+                  .xgmii_rxd            (data_in_from_if[63:0]),
                   .xgmii_rxc            (xgmii_rxc_2[7:0]),
                   .rxdfifo_wfull        (rxdfifo_wfull_2),
                   .rxhfifo_rdata        (rxhfifo_rdata_2[63:0]),
@@ -560,7 +567,8 @@ rx_enqueue_rx rx_eq3(/*AUTOINST*/
                   // Inputs
                   .clk_xgmii_rx         (clk_xgmii_rx),
                   .reset_xgmii_rx_n     (reset_xgmii_rx_n),
-                  .xgmii_rxd            (xgmii_rxd_3[63:0]),
+                  // .xgmii_rxd            (xgmii_rxd_3[63:0]),
+                  .xgmii_rxd            (data_in_from_if[127:64]),
                   .xgmii_rxc            (xgmii_rxc_3[7:0]),
                   .rxdfifo_wfull        (rxdfifo_wfull_3),
                   .rxhfifo_rdata        (rxhfifo_rdata_3[63:0]),

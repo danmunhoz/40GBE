@@ -284,7 +284,7 @@ begin
   sop7_eop_same_cycle <= '1' when (sop_location /= "1000" and sop_location /= "0111") and eop_location /= "00100000" else
                         '0';
 
-  calculate_new_eop: process(rst_n, eop_location)
+  calculate_new_eop: process(rst_n, eop_location,shift_out_reg_reg,ctrl_delay_reg_reg_reg)
 begin
   if rst_n = '0' then
     eop_location_calc <= "100000";
@@ -393,7 +393,7 @@ eop_location_out <= eop_location_calc_reg_reg_reg;
   end process;
 
   -- Process to keep shift value between SOPs
-  shift_out_latch: process (clk, rst_n, sop_location, shift_calc)
+  shift_out_latch: process (clk, rst_n, sop_location, shift_calc, shift_out_int)
   begin
     if (rst_n = '0') then
       shift_out_int <= (others=>'0');

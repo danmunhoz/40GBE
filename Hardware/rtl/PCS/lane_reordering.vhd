@@ -48,7 +48,7 @@ end entity;
 architecture behav_last_lane_reg of last_lane_reg is
   signal lane_reg : std_logic_vector(2 downto 0);
 begin
-  process(ck) is
+  process(ck,rst) is
   begin
     if(rst = '0') then
       lane_reg <= "100";

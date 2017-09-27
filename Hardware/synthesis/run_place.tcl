@@ -4,7 +4,9 @@ set outputDir ./output_dir
 # STEP#4: run logic optimization, placement and physical logic optimization,
 # write design checkpoint, report utilization and timing estimates
 
-opt_design
+#opt_design
+opt_design -retarget -propconst -bram_power_opt
+
 reportCriticalPaths $outputDir/post_opt_critpath_report.csv
 place_design
 report_clock_utilization -file $outputDir/clock_util.rpt
@@ -17,4 +19,3 @@ if {[get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup]] < 0.3}
 write_checkpoint -force $outputDir/post_place.dcp
 report_utilization -file $outputDir/post_place_util.rpt
 report_timing_summary -file $outputDir/post_place_timing_summary.rpt
-

@@ -15,11 +15,14 @@ entity core_interface is
       xgmii_rxd_2     : in std_logic_vector(63 downto 0);
       xgmii_rxc_3     : in std_logic_vector( 7 downto 0);
       xgmii_rxd_3     : in std_logic_vector(63 downto 0);
+      ren             : in std_logic;
 
   --OUTPUTS
       mac_data        : out std_logic_vector(127 downto 0);
       mac_sop         : out std_logic;
-      mac_eop         : out std_logic_vector(4 downto 0)
+      mac_eop         : out std_logic_vector(4 downto 0);
+      fifo_full       : out std_logic;
+      fifo_empty       : out std_logic
     );
 end entity;
 
@@ -32,9 +35,6 @@ architecture behav_core_interface of core_interface is
     signal shift_reg_out_1     : std_logic_vector(255 downto 0);
     signal shifter_out         : std_logic_vector(255 downto 0);
     signal fifo_wen            : std_logic;
-    signal fifo_ren            : std_logic;
-    signal fifo_empty          : std_logic;
-    signal fifo_full           : std_logic;
     signal is_sop_control      : std_logic;
     signal eop_addr            : std_logic_vector(5 downto 0);
 
@@ -71,29 +71,26 @@ architecture behav_core_interface of core_interface is
     );
 
     shifter: entity work.mii_shifter port map(
-          clk             => clk_156,
-          rst_n           => rst_n,
-          in_1            => shift_reg_out_1,
           in_0            => shift_reg_out_0,
+          in_1            => shift_reg_out_1,
           ctrl_reg_shift  => ctrl_shift_reg,
           out_data        => shifter_out
     );
 
-    -- fifo_ren <= '0', '1' after 300 ns; -- Waiting for mac
     fifo: entity work.ring_fifo port map(
-          clk_w      => clk_156,
-          clk_r      => clk_312,
-          rst_n      => rst_n,
-          data_in    => shifter_out,
-          data_out   => mac_data,
-          is_sop_in  => is_sop_control,
-          eop_addr_in=> eop_addr,
-          is_sop_out => mac_sop,
-          eop_addr_out=> mac_eop,
-          wen        => fifo_wen,
-          ren        => fifo_ren,
-          empty      => fifo_empty,
-          full       => fifo_full
+          clk_w        => clk_156,
+          clk_r        => clk_312,
+          rst_n        => rst_n,
+          data_in      => shifter_out,
+          is_sop_in    => is_sop_control,
+          eop_addr_in  => eop_addr,
+          data_out     => mac_data,
+          is_sop_out   => mac_sop,
+          eop_addr_out => mac_eop,
+          wen          => fifo_wen,
+          ren          => ren,
+          empty        => fifo_empty,
+          full         => fifo_full
     );
 
 end behav_core_interface;

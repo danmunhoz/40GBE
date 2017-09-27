@@ -4,8 +4,6 @@ library ieee;
 entity mii_shifter is
   port(
   -- INPUTS
-      clk             : in std_logic;
-      rst_n           : in std_logic;
       in_1            : in std_logic_vector(255 downto 0);
       in_0            : in std_logic_vector(255 downto 0);
 
