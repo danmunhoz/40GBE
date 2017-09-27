@@ -314,6 +314,9 @@ module wrapper_macpcs_rx(
     assign txlf = txlf_0;
     assign errd_blks = errd_blks_0;
 
+    assign mac_data = mac_data_in;
+    assign mac_eop = mac_eop_in;
+    assign mac_sop = mac_sop_in;
     // Register for lane 0 old block
     always @ (posedge rx_clk_161_13 or negedge async_reset_n) begin
       if (!async_reset_n) begin
