@@ -14,7 +14,7 @@ with open('dump_output.txt') as f:
                 aux = int(line[3])*8+int(line[4])*4+int(line[5])*2+int(line[6])
                 #print(aux*8)
                 #print(line[136-(aux*8):])
-                new_file.write(line[136-(aux*8):])
+                new_file.write(line[(len(line)-1)-(aux*8):])
                 escrever = 0
             else:
                 new_file.write(line[8:])

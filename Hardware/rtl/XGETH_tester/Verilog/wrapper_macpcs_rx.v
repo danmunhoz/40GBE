@@ -42,6 +42,7 @@ module wrapper_macpcs_rx(
                         wb_ack_o, wb_dat_o, wb_int_o,
                         // Para uso do Testbench
             						start_fifo,
+                        read_fifo,
                         dump_xgmii_rxc_0,
                         dump_xgmii_rxd_0,
                         dump_xgmii_rxc_1,
@@ -107,6 +108,7 @@ module wrapper_macpcs_rx(
 
     //For Testbench use
 		input					start_fifo;
+    input         read_fifo;
 
     // PCS Outputs
     output        hi_ber;
@@ -313,10 +315,7 @@ module wrapper_macpcs_rx(
     assign rxlf = rxlf_0;
     assign txlf = txlf_0;
     assign errd_blks = errd_blks_0;
-
-    assign mac_data = mac_data_in;
-    assign mac_eop = mac_eop_in;
-    assign mac_sop = mac_sop_in;
+    
     // Register for lane 0 old block
     always @ (posedge rx_clk_161_13 or negedge async_reset_n) begin
       if (!async_reset_n) begin
@@ -373,7 +372,7 @@ module wrapper_macpcs_rx(
       	.xgmii_rxd_2	      (xgmii_rxd_lane_2),
       	.xgmii_rxc_3	      (xgmii_rxc_lane_3),
       	.xgmii_rxd_3	      (xgmii_rxd_lane_3),
-        .ren                (1'b0),
+        .ren                (read_fifo),
 
         .mac_data           (mac_data),
         .mac_sop            (mac_sop),
