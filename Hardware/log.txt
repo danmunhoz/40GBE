@@ -1,0 +1,267 @@
+cd ./synthesis; make clean
+make[1]: Entering directory '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/synthesis'
+rm -rf vivado*.log
+rm -rf vivado*.jou
+rm -f fsm_encoding.os
+rm -rf .Xil
+rm -rf .cache
+rm -rf webtalk*
+rm -rf output_dir/*
+make[1]: Leaving directory '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/synthesis'
+cd ./implementation; make clean
+make[1]: Entering directory '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/implementation'
+rm -rf vivado*.jou
+rm -rf vivado*.debug
+rm -rf vivado*.str
+rm -rf webtalk*
+rm -rf *.btree
+rm -rf *.log
+rm -rf .Xil
+rm -rf .cache
+rm -rf .sim
+rm -rf output_dir/*
+make[1]: Leaving directory '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/implementation'
+rm -rf *.deb
+rm -rf vivado*.log
+rm -rf vivado*.jou
+rm -f fsm_encoding.os
+rm -rf .Xil
+rm -rf .cache
+rm -rf webtalk*
+rm -rf output_dir/*
+vivado -mode tcl -source make.tcl
+
+****** Vivado v2016.2 (64-bit)
+  **** SW Build 1577090 on Thu Jun  2 16:32:35 MDT 2016
+  **** IP Build 1577682 on Fri Jun  3 12:00:54 MDT 2016
+    ** Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+
+source make.tcl
+# source ./tclLib/config.tcl
+## set_msg_config -id {Route 35-7} -new_severity {ERROR}
+# source ./tclLib/compareSignals.tcl
+## proc compareSignals {arg1 arg2} {
+##   set hierarchy1 [split $arg1 {/}]
+##   set hierarchy2 [split $arg2 {/}]
+##   if {[expr {[llength $hierarchy1] ne [llength $hierarchy1]}]} {
+##     return [expr {[llength $hierarchy1] - [llength $hierarchy1]}]
+##   }
+## 
+##   for {set i 0} {$i < [llength $hierarchy1]} {incr i} {
+##     if {[lindex $hierarchy1 $i] == [lindex $hierarchy2 $i]} {
+##       continue
+##     }
+##     if {[regexp {(.*)\[\d+\]} [lindex $hierarchy1 $i] -> n1] && [regexp {(.*)\[\d+\]} [lindex $hierarchy2 $i] -> n2]} {
+##       if {![string equal $n1 $n2]} {
+##         return [string compare $arg1 $arg2]
+##       }
+##     }
+##     if {[regexp {.*\[(\d+)\]} [lindex $hierarchy1 $i] -> n1] && [regexp {.*\[(\d+)\]} [lindex $hierarchy2 $i] -> n2]} {
+##       return [expr {$n1 - $n2}]
+##     }
+##     if {[regexp {.*(\d+)} [lindex $hierarchy1 $i] -> n1] && [regexp {.*(\d+)} [lindex $hierarchy2 $i] -> n2]} {
+##       return [expr {$n1 - $n2}]
+##     }
+##     if {[expr {[llength [lindex $hierarchy1 $i]] ne [llength [lindex $hierarchy2 $i]]}]} {
+##       return [expr {[llength [lindex $hierarchy1 $i]] - [llength [lindex $hierarchy2 $i]]}]
+##     }
+##     return [string compare $arg1 $arg2]
+##   }
+## }
+# source ./tclLib/reportCriticalPaths.tcl
+## proc reportCriticalPaths { fileName } {
+##   # Open the specified output file in write mode
+##   set FH [open $fileName w]
+##   # Write the current date and CSV format to a file header
+##   puts $FH "#\n# File created on [clock format [clock seconds]]\n#\n"
+##   puts $FH "Startpoint,Endpoint,DelayType,Slack,#Levels,#LUTs"
+##   # Iterate through both Min and Max delay types
+##   foreach delayType {max min} {
+##     # Collect details from the 50 worst timing paths for the current analysis
+##     # (max = setup/recovery, min = hold/removal)
+##     # The $path variable contains a Timing Path object.
+##     foreach path [get_timing_paths -delay_type $delayType -max_paths 50 -nworst 1] {
+##       # Get the LUT cells of the timing paths
+##       set luts [get_cells -filter {REF_NAME =~ LUT*} -of_object $path]
+##       # Get the startpoint of the Timing Path object
+##       set startpoint [get_property STARTPOINT_PIN $path]
+##       # Get the endpoint of the Timing Path object
+##       set endpoint [get_property ENDPOINT_PIN $path]
+##       # Get the slack on the Timing Path object
+##       set slack [get_property SLACK $path]
+##       # Get the number of logic levels between startpoint and endpoint
+##       set levels [get_property LOGIC_LEVELS $path]
+##       # Save the collected path details to the CSV file
+##       puts $FH "$startpoint,$endpoint,$delayType,$slack,$levels,[llength $luts]"
+##     }
+##   }
+##   # Close the output file
+##   close $FH
+##   puts "CSV file $fileName has been created.\n"
+##   return 0
+## };
+# cd synthesis
+# source run_synth.tcl
+## set device       "xc7vx690t"
+## set package      "ffg1761"
+## set speed        "-3"
+## set part         $device$package$speed
+## set outputDir ./output_dir
+## file mkdir $outputDir
+## read_vhdl [ glob ../rtl/gtwizard/*.vhd ]
+## read_vhdl [ glob ../rtl/I2C/*.vhd ]
+## read_vhdl [ glob ../rtl/SerialInterface/*.vhd ]
+## read_vhdl [ glob ../rtl/utils/*.vhd ]
+## read_vhdl [ glob ../rtl/XGETH_tester/VHD/*.vhd ]
+## read_vhdl [ glob ../rtl/PCS_interface_MAC/*.vhd ]
+## read_vhdl [ glob ../rtl/PCS/*.vhd ]
+## read_ip [ glob ../rtl/ip/gtwizard_0/gtwizard_0.xci ]
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/data/ip'.
+## read_ip [ glob ../rtl/ip/pcie3_7x_0/pcie3_7x_0.xci ]
+## read_verilog [ glob ../rtl/MAC/*.v ]
+## read_verilog [ glob ../rtl/PCIe/*.v ]
+## read_verilog [ glob ../rtl/PCS/*.v ]
+## read_verilog [ glob ../rtl/utils/*.v ]
+## read_verilog [ glob ../rtl/XGETH_tester/Verilog/*.v ]
+## read_vhdl [ glob ../rtl/area_timing_wrapper.vhd ]
+## read_xdc ../constraint/constraints.xdc
+## set_property SEVERITY {Warning} [get_drc_checks NSTD-1]
+## set_property SEVERITY {Warning} [get_drc_checks UCIO-1]
+## synth_design -top area_timing_wrapper -flatten_hierarchy none -fanout_limit 50 -fsm_extraction one_hot -no_lc -part $part
+Command: synth_design -top area_timing_wrapper -flatten_hierarchy none -fanout_limit 50 -fsm_extraction one_hot -no_lc -part xc7vx690tffg1761-3
+Starting synth_design
+WARNING: [Vivado_Tcl 4-393] The 'Implementation' target of the following IPs are stale, please generate the output products using the generate_target or synth_ip command before running synth_design.
+/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/ip/gtwizard_0/gtwizard_0.xci
+
+WARNING: [IP_Flow 19-2162] IP 'gtwizard_0' is locked:
+* IP definition '7 Series FPGAs Transceivers Wizard (3.5)' for IP 'gtwizard_0' has a newer minor version in the IP Catalog.
+* Current project part 'xc7vx485tffg1157-1' and the part 'xc7vx690tffg1761-3' used to customize the IP 'gtwizard_0' do not match.
+Please select 'Report IP Status' from the 'Tools/Report' menu or run Tcl command 'report_ip_status' for more information.
+WARNING: [IP_Flow 19-2162] IP 'pcie3_7x_0' is locked:
+* IP definition 'Virtex-7 FPGA Gen3 Integrated Block for PCI Express (4.0)' for IP 'pcie3_7x_0' has a newer minor version in the IP Catalog.
+* Current project part 'xc7vx485tffg1157-1' and the part 'xc7vx690tffg1761-3' used to customize the IP 'pcie3_7x_0' do not match.
+Please select 'Report IP Status' from the 'Tools/Report' menu or run Tcl command 'report_ip_status' for more information.
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7vx690t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7vx690t'
+INFO: [Common 17-1223] The version limit for your license is '2016.08' and will expire in -394 days. A version limit expiration means that, although you may be able to continue to use the current version of tools or IP with this license, you will not be eligible for any updates or new releases.
+INFO: Launching helper process for spawning children vivado processes
+INFO: Helper process launched with PID 32696 
+WARNING: [Synth 8-2306] macro LOCAL_FAULT redefined [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/definitions.v:126]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FIFO_DUALCLOCK_MACRO [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/FIFO_DUALCLOCK_MACRO.v:23]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module R_TYPE_Decode [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/R_TYPE_Decode.v:67]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND2 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:15]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND2B1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:26]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND2B1L [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:37]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND2B2 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:48]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND3 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:59]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND3B1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:71]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND3B2 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:83]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND3B3 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:95]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND4 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:107]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND4B1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:120]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND4B2 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:133]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND4B3 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:146]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND4B4 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:159]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND5 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:172]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND5B1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:186]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND5B2 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:200]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND5B3 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:214]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND5B4 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:228]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AND5B5 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:242]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module AUTOBUF [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:304]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BSCANE2 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:315]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BSCAN_SPARTAN3 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:364]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BSCAN_SPARTAN3A [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:383]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BSCAN_SPARTAN6 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:404]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BSCAN_VIRTEX4 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:424]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BSCAN_VIRTEX5 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:441]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BSCAN_VIRTEX6 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:458]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUF [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:488]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFG [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:529]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFGCE [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:539]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFGCE_1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:550]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFGCTRL [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:561]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFGMUX [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:599]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFGMUX_1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:612]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFGMUX_CTRL [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:625]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFGMUX_VIRTEX4 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:639]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFGP [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:653]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFG_LB [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:683]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFH [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:693]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFHCE [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:703]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFIO [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:717]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFIO2 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:727]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFIO2FB [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:745]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFIO2_2CLK [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:756]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFIODQS [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:773]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFMR [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:786]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFMRCE [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:796]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFPLL [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:810]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFPLL_MCB [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:830]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFR [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:856]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module BUFT [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:872]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module CAPTUREE2 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:883]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module CAPTURE_SPARTAN3 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:904]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module CAPTURE_SPARTAN3A [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:914]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module CAPTURE_VIRTEX4 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:924]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module CAPTURE_VIRTEX5 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:934]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module CAPTURE_VIRTEX6 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:945]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module CARRY4 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:956]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module CFGLUT5 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:974]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module CLKDLL [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:997]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module CLKDLLE [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1019]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module CLKDLLHF [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1042]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module CRC32 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1403]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module CRC64 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1422]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module DCIRESET [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1441]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module DCM [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1451]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module DCM_ADV [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1497]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module DCM_BASE [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1568]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module DCM_CLKGEN [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1616]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module DCM_PS [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1653]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module DCM_SP [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1711]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module DNA_PORT [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1756]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module DSP48 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1770]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module DSP48A [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1843]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module DSP48A1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1917]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module DSP48E [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:1996]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module DSP48E1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2113]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module EFUSE_USR [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2242]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module EMAC [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2251]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FD [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2591]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDC [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2603]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDCE [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2616]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDCE_1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2630]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDCP [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2644]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDCPE [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2658]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDCPE_1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2673]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDCP_1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2688]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDC_1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2702]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDDRCPE [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2810]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDDRRSE [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2827]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDE [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2844]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDE_1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2857]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDP [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2870]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDPE [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2883]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDPE_1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2897]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDP_1 [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2911]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDR [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2924]
+CRITICAL WARNING: [Synth 8-2490] overwriting previous definition of module FDRE [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS/unisim_comp.v:2937]
+INFO: [Common 17-14] Message 'Synth 8-2490' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:09 . Memory (MB): peak = 1094.457 ; gain = 217.410 ; free physical = 652 ; free virtual = 9555
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-1565] actual for formal port reset_n is neither a static name nor a globally static expression [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/I2C/i2c_interface.vhd:95]
+INFO: [Synth 8-2810] unit behav_mii_shifter ignored due to previous errors [/home/korol/Desktop/40GBE_repo/40GBE/Hardware/rtl/PCS_interface_MAC/mii_shifter.vhd:18]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:10 . Memory (MB): peak = 1123.707 ; gain = 246.660 ; free physical = 622 ; free virtual = 9527
+---------------------------------------------------------------------------------
+RTL Elaboration failed
+INFO: [Common 17-83] Releasing license: Synthesis
+5 Infos, 5 Warnings, 100 Critical Warnings and 2 Errors encountered.
+synth_design failed
+Vivado% exit
+exit
+INFO: [Common 17-206] Exiting Vivado at Fri Sep 29 14:48:43 2017...

@@ -4,8 +4,9 @@ set outputDir ./output_dir
 # STEP#4: run logic optimization, placement and physical logic optimization,
 # write design checkpoint, report utilization and timing estimates
 
-#opt_design
-opt_design -retarget -propconst -bram_power_opt
+opt_design
+#no -sweep
+#opt_design -retarget -propconst -bram_power_opt
 
 reportCriticalPaths $outputDir/post_opt_critpath_report.csv
 place_design

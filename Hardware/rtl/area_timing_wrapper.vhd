@@ -921,25 +921,25 @@ architecture top of area_timing_wrapper is
       dump_xgmii_rxd_3 => open,
 
       -- PCS IN
-      rx_lane_0_header_valid_in    => BIT_0,
-      rx_lane_0_data_valid_in      => BIT_0,
-      rx_lane_0_header_in          => (others=>'0'),
-      rx_lane_0_data_in            => (others=>'0'),
+      rx_lane_0_header_valid_in    => gt0_rxheadervalid_i,
+      rx_lane_0_data_valid_in      => gt0_rxdatavalid_i,
+      rx_lane_0_header_in          => gt0_rxheader_i,
+      rx_lane_0_data_in            => gt0_rxdata_i,
 
-      rx_lane_1_header_valid_in    => BIT_0,
-      rx_lane_1_data_valid_in      => BIT_0,
-      rx_lane_1_header_in          => (others=>'0'),
-      rx_lane_1_data_in            => (others=>'0'),
+      rx_lane_1_header_valid_in    => gt1_rxheadervalid_i,
+      rx_lane_1_data_valid_in      => gt1_rxdatavalid_i,
+      rx_lane_1_header_in          => gt1_rxheader_i,
+      rx_lane_1_data_in            => gt1_rxdata_i,
 
-      rx_lane_2_header_valid_in    => BIT_0,
-      rx_lane_2_data_valid_in      => BIT_0,
-      rx_lane_2_header_in          => (others=>'0'),
-      rx_lane_2_data_in            => (others=>'0'),
+      rx_lane_2_header_valid_in    => gt2_rxheadervalid_i,
+      rx_lane_2_data_valid_in      => gt2_rxdatavalid_i,
+      rx_lane_2_header_in          => gt2_rxheader_i,
+      rx_lane_2_data_in            => gt2_rxdata_i,
 
-      rx_lane_3_header_valid_in    => BIT_0,
-      rx_lane_3_data_valid_in      => BIT_0,
-      rx_lane_3_header_in          => (others=>'0'),
-      rx_lane_3_data_in            => (others=>'0'),
+      rx_lane_3_header_valid_in    => gt3_rxheadervalid_i,
+      rx_lane_3_data_valid_in      => gt3_rxdatavalid_i,
+      rx_lane_3_header_in          => gt3_rxheader_i,
+      rx_lane_3_data_in            => gt3_rxdata_i,
 
       -- PCS OUT
       tx_data_out        => tx_data_out,

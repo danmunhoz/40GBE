@@ -237,9 +237,9 @@ module wrapper_macpcs_rx(
     output [7:0]    dump_xgmii_rxc_3;
     output [63:0]   dump_xgmii_rxd_3;
 
-    output [4:0] mac_eop;
-    output mac_sop;
-    output [127:0] mac_data;
+    (* syn_keep = "true"*) output [4:0] mac_eop;
+    (* syn_keep = "true"*) output mac_sop;
+    (* syn_keep = "true"*) output [127:0] mac_data;
 
     wire            tx_clk_161_13;
     wire            rx_clk_161_13;
@@ -314,9 +314,10 @@ module wrapper_macpcs_rx(
     assign txlf = txlf_0;
     assign errd_blks = errd_blks_0;
 
-    assign mac_data = mac_data_in;
-    assign mac_eop = mac_eop_in;
-    assign mac_sop = mac_sop_in;
+    // assign mac_data = mac_data_in;
+    // assign mac_eop = mac_eop_in;
+    // assign mac_sop = mac_sop_in;
+
     // Register for lane 0 old block
     always @ (posedge rx_clk_161_13 or negedge async_reset_n) begin
       if (!async_reset_n) begin
@@ -360,7 +361,7 @@ module wrapper_macpcs_rx(
 
     );
 
-    core_interface INST_core_interface
+    (* dont_touch = "true" *) core_interface INST_core_interface
     (
       	.clk_156			      (clk_156),
         .clk_312			      (clk_312),

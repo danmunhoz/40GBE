@@ -592,6 +592,9 @@ set_false_path -from [get_clocks -of_objects [get_pins gtwizard_0_support_i/gt_u
 set_false_path -from [get_clocks -of_objects [get_pins gtwizard_0_support_i/gt_usrclk_source/rxoutclk_mmcm3_i/mmcm_adv_inst/CLKOUT0]] -to [get_clocks q8_clk0_refclk_g_i]
 set_false_path -from [get_clocks q8_clk0_refclk_g_i] -to [get_clocks -of_objects [get_pins gtwizard_0_support_i/gt_usrclk_source/rxoutclk_mmcm0_i/mmcm_adv_inst/CLKOUT0]]
 
+# TESTEEEEEE
+set_property DONT_TOUCH true core_interface
+
 
 #
 #########################################################################################################################
@@ -648,4 +651,3 @@ set_false_path -from [get_clocks clkout0_2] -to [get_clocks userclk2]
 set_false_path -from [get_clocks clkout0_3] -to [get_clocks userclk2]
 set_false_path -from [get_clocks userclk2] -to [get_clocks q8_clk0_refclk_g_i]
 set_false_path -from [get_clocks q8_clk0_refclk_g_i] -to [get_clocks userclk2]
-
