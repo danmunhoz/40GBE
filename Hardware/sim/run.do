@@ -64,9 +64,10 @@ vlog -novopt ../rtl/MAC/wishbone_if.v
 vlog -novopt ../rtl/MAC/sync_clk_xgmii_tx.v
 vlog -novopt ../rtl/MAC/generic_fifo_ctrl.v
 vlog -novopt ../rtl/MAC/rx_enqueue.v
+vlog -novopt ../rtl/MAC/rx_enqueue_rx.v
+vlog -novopt ../rtl/MAC/xge_mac_rx.v
 vlog -novopt ../rtl/MAC/xge_mac.v
 
-vcom -novopt ../rtl/PCS_interface_MAC/register.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/defines.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/control.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/mii_shift_register.vhd

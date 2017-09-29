@@ -102,6 +102,7 @@ architecture behav of rx_xgt4 is
     signal reset_in_pcs : std_logic;
 
     signal start_fifo : std_logic;
+    signal read_fifo  : std_logic;
 
     signal lane_0_header_valid_in  : std_logic;
     signal lane_0_header_in        : std_logic_vector(1 downto 0);
@@ -152,6 +153,7 @@ architecture behav of rx_xgt4 is
           reset_rx_done       : in std_logic;
 
           start_fifo          : in std_logic;
+          read_fifo           : in std_logic;
           dump_xgmii_rxc_0    : out std_logic_vector(7 downto 0);
           dump_xgmii_rxd_0    : out std_logic_vector(63 downto 0);
           dump_xgmii_rxc_1    : out std_logic_vector(7 downto 0);
@@ -259,6 +261,8 @@ begin
 
           start_fifo <= '0', '1' after 65 ns;
 
+          read_fifo <= '0', '1' after 400 ns;
+
           valid_in <= '0', '1' after 127 ns;
 
           -- Por enquanto...
@@ -291,6 +295,7 @@ begin
 
             -- For testbench use only
             start_fifo => start_fifo,
+            read_fifo => read_fifo,
             dump_xgmii_rxc_0 => dump_xgmii_rxc_0,
             dump_xgmii_rxd_0 => dump_xgmii_rxd_0,
             dump_xgmii_rxc_1 => dump_xgmii_rxc_1,
