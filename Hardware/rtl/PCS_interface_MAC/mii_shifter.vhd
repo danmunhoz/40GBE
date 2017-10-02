@@ -11,7 +11,7 @@ entity mii_shifter is
       ctrl_reg_shift  : in std_logic_vector(2 downto 0);
 
   --OUTPUTS
-      out_data        : out std_logic_vector(255 downto 0)
+      data_out        : out std_logic_vector(255 downto 0)
       );
 end entity;
 
@@ -20,7 +20,7 @@ architecture behav_mii_shifter of mii_shifter is
   begin
 
                 --in_1(255 downto 0)                          when ctrl_reg_shift = "000" else -- 0 desloc
-    out_data <= in_0( 31 downto 0)  & in_1(255 downto  32)  when ctrl_reg_shift = "001" else -- 1 desloc
+    data_out <= in_0( 31 downto 0)  & in_1(255 downto  32)  when ctrl_reg_shift = "001" else -- 1 desloc
 
                 in_0( 63 downto 0)  & in_1(255 downto  64)  when ctrl_reg_shift = "010" else -- 2 desloc
                 in_0( 95 downto 0)  & in_1(255 downto  96)  when ctrl_reg_shift = "011" else -- 3 desloc

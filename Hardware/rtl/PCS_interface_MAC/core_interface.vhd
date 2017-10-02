@@ -34,6 +34,7 @@ architecture behav_core_interface of core_interface is
     signal shift_reg_out_0     : std_logic_vector(255 downto 0);
     signal shift_reg_out_1     : std_logic_vector(255 downto 0);
     signal shifter_out         : std_logic_vector(255 downto 0);
+    signal shifter_out_ut      : std_logic_vector(255 downto 0);
     signal fifo_wen            : std_logic;
     signal is_sop_control      : std_logic;
     signal eop_addr            : std_logic_vector(5 downto 0);
@@ -70,11 +71,18 @@ architecture behav_core_interface of core_interface is
           out_1         => shift_reg_out_1
     );
 
-    shifter: entity work.mii_shifter port map(
+    -- shifter: entity work.mii_shifter port map(
+    --       in_0            => shift_reg_out_0,
+    --       in_1            => shift_reg_out_1,
+    --       ctrl_reg_shift  => ctrl_shift_reg,
+    --       data_out        => shifter_out
+    -- );
+    shifter_ut: entity work.mii_shifter_lut port map(
           in_0            => shift_reg_out_0,
           in_1            => shift_reg_out_1,
-          ctrl_reg_shift  => ctrl_shift_reg,
-          out_data        => shifter_out
+          sel_mux         => ctrl_shift_reg,
+          -- data_out        => shifter_out_ut
+          data_out        => shifter_out
     );
 
     fifo: entity work.ring_fifo port map(
