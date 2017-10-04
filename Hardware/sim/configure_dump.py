@@ -1,4 +1,4 @@
-new_file = open('new_dump.txt', 'w')
+new_file = open('cleaned_dump_fifo.txt', 'w')
 aux = 0
 escrever = 0
 with open('dump_output.txt') as f:
@@ -18,5 +18,5 @@ with open('dump_output.txt') as f:
                 escrever = 0
             else:
                 new_file.write(line[8:])
-            
+
 new_file.close()

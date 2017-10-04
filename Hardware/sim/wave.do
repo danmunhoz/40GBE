@@ -16,6 +16,9 @@ add wave -noupdate -group MII(MAC->PCS) /Top/tb_xgt4/inst_wrapper_macpcs/xgmii_t
 add wave -noupdate -group MII(MAC->PCS) -radix hexadecimal /Top/tb_xgt4/inst_wrapper_macpcs/xgmii_txd
 add wave -noupdate -group MII(MAC->PCS) -radix hexadecimal /Top/tb_xgt4/inst_wrapper_macpcs/INST_PCS_core/tx_data_out
 add wave -noupdate -group MII(MAC->PCS) -radix binary /Top/tb_xgt4/inst_wrapper_macpcs/INST_PCS_core/tx_header_out
+add wave -noupdate -radix binary -childformat {{/Top/tb_xgt4/echo_gen_inst/packet_length(15) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(14) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(13) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(12) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(11) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(10) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(9) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(8) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(7) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(6) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(5) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(4) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(3) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(2) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(1) -radix binary} {/Top/tb_xgt4/echo_gen_inst/packet_length(0) -radix binary}} -subitemconfig {/Top/tb_xgt4/echo_gen_inst/packet_length(15) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(14) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(13) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(12) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(11) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(10) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(9) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(8) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(7) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(6) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(5) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(4) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(3) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(2) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(1) {-height 16 -radix binary} /Top/tb_xgt4/echo_gen_inst/packet_length(0) {-height 16 -radix binary}} /Top/tb_xgt4/echo_gen_inst/packet_length
+add wave -noupdate /Top/tb_xgt4/echo_gen_inst/payload_cycles
+add wave -noupdate /Top/tb_xgt4/echo_gen_inst/payload_last_size
 add wave -noupdate -divider REORDER
 add wave -noupdate -group {Lane Reorder} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/clock
 add wave -noupdate -group {Lane Reorder} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/reset
@@ -84,12 +87,8 @@ add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst
 add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/ctrl
 add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/out_0
 add wave -noupdate -expand -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shift_reg/out_1
-add wave -noupdate -expand -group Shifter -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shifter/in_1
-add wave -noupdate -expand -group Shifter -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shifter/in_0
-add wave -noupdate -expand -group Shifter -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shifter/ctrl_reg_shift
-add wave -noupdate -expand -group Shifter -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shifter/out_data
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {331300 ps} 0}
+WaveRestoreCursors {{Cursor 1} {3048 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 541
 configure wave -valuecolwidth 40
@@ -105,4 +104,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {301004 ps} {345397 ps}
+WaveRestoreZoom {0 ps} {44393 ps}

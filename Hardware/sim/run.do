@@ -73,6 +73,8 @@ vcom -novopt ../rtl/PCS_interface_MAC/control.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/mii_shift_register.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/mii_shifter.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo.vhd
+vcom -novopt ../rtl/PCS_interface_MAC/mux8.vhd
+vcom -novopt ../rtl/PCS_interface_MAC/mii_shifter_lut.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/core_interface.vhd
 
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v
