@@ -328,7 +328,7 @@ module wrapper_macpcs_rx(
       end
     end
 
-    lane_reorder INST_lane_reorder
+    (* dont_touch = "true" *) lane_reorder INST_lane_reorder
     (
       .clock (rx_clk_161_13),
       .reset (reset_rx_n),
