@@ -5,7 +5,7 @@ library ieee;
 
 entity ring_fifo is
 	generic (
-		WIDTH : integer := 256; -- 256 (Data)
+		WIDTH    : integer := 256; -- 256 (Data)
     N        : integer := 5;
     DEPTH    : integer := 32 -- where DEPTH = 2^N
 	);
