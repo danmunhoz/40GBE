@@ -88,7 +88,6 @@ begin
       mem_high_in_1_reg     <= (others=>'0');
     elsif clk_w'event and clk_w = '1' then
       wen_reg <= wen;
-      wen_reg_reg <= wen_reg;
       mem_low_in_0_reg      <= mem_low_in_0;
       mem_high_in_0_reg     <= mem_high_in_0;
       mem_low_in_1_reg      <= mem_low_in_1;
