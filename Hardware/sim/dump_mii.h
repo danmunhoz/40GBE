@@ -13,7 +13,7 @@
 #include <fstream>
 
 // Set it to zero if you wish to dump only data
-#define DUMP_CONTROL 1
+#define DUMP_CONTROL 0
 
 //SC_MODULE(dump_mii) {
 class dump_mii : public sc_module {
