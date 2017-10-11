@@ -112,6 +112,9 @@ do wave.do
 run 1000 ns
 
 #exec python scoreboard.py
+exec python clean_dump_tx.py
+exec python configure_dump.py
+
 exec cp lane0.txt lane0_rx.txt
 exec cp lane1.txt lane1_rx.txt
 exec cp lane2.txt lane2_rx.txt

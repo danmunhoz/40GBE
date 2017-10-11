@@ -1,4 +1,5 @@
 new_file = open('cleaned_dump_fifo.txt', 'w')
+new_file2 = open('cleaned_dump_fifo2.txt', 'w')
 aux = 0
 escrever = 0
 with open('dump_output.txt') as f:
@@ -20,3 +21,15 @@ with open('dump_output.txt') as f:
                 new_file.write(line[8:])
 
 new_file.close()
+
+with open('cleaned_dump_fifo.txt') as f:
+    for line in f:
+        if line[96:] != "\n":
+            new_file2.write(line[96:])
+        if line[64:96] != "\n":
+            new_file2.write(line[64:96]+"\n")
+        if line[32:64] != "\n":
+            new_file2.write(line[32:64]+"\n")
+        if line[:32] != "\n":
+            new_file2.write(line[:32]+"\n")
+new_file2.close()

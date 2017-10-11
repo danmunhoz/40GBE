@@ -11,6 +11,7 @@ escreve = 0
 sop_addr = 0
 achou_eop = 0
 new_file = open('cleaned_dump_tx.txt', 'w')
+new_file2 = open('cleaned_dump_tx2.txt', 'w')
 
 with open('dump_mii_tx.txt') as f:
     for line in f:
@@ -47,5 +48,10 @@ with open('dump_mii_tx.txt') as f:
                     
 new_file.close()
                         
-                    
-            
+with open('cleaned_dump_tx.txt') as f:
+    for line in f:
+        if line[32:] != "\n":
+            new_file2.write(line[32:])
+        if line[:32] != "\n":
+            new_file2.write(line[:32]+"\n")
+new_file2.close()
