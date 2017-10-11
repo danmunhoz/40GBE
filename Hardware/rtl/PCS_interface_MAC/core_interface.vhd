@@ -77,15 +77,9 @@ architecture behav_core_interface of core_interface is
           ctrl_reg_shift  => ctrl_shift_reg,
           data_out        => shifter_out
     );
-    -- shifter_ut: entity work.mii_shifter_lut port map(
-    --       in_0            => shift_reg_out_0,
-    --       in_1            => shift_reg_out_1,
-    --       sel_mux         => ctrl_shift_reg,
-    --       -- data_out        => shifter_out_ut
-    --       data_out        => shifter_out
-    -- );
 
-    fifo: entity work.ring_fifo port map(
+    -- fifo: entity work.ring_fifo port map(
+    fifo_b: entity work.ring_fifo_bram port map(
           clk_w        => clk_156,
           clk_r        => clk_312,
           rst_n        => rst_n,

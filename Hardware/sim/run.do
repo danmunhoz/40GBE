@@ -73,8 +73,7 @@ vcom -novopt ../rtl/PCS_interface_MAC/control.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/mii_shift_register.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/mii_shifter.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo.vhd
-vcom -novopt ../rtl/PCS_interface_MAC/mux8.vhd
-vcom -novopt ../rtl/PCS_interface_MAC/mii_shifter_lut.vhd
+vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo_bram.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/core_interface.vhd
 
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v
@@ -112,9 +111,6 @@ do wave.do
 run 1000 ns
 
 #exec python scoreboard.py
-exec python clean_dump_tx.py
-exec python configure_dump.py
-
 exec cp lane0.txt lane0_rx.txt
 exec cp lane1.txt lane1_rx.txt
 exec cp lane2.txt lane2_rx.txt
