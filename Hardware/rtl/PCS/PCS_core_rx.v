@@ -67,11 +67,12 @@ module PCS_core_rx  (  /*AUTOARG*/
                     clear_errblk, clear_ber_cnt, tx_jtm_en, jtm_dps_0, jtm_dps_1,
                     seed_A, seed_B, xgmii_txc, xgmii_txd,
                     rx_header_valid_in, rx_header_in, rx_data_valid_in, rx_data_in,
-                    rx_old_header_in, rx_old_data_in, terminate_in,
+                    rx_old_header_in, rx_old_data_in, terminate_in, start_in,
                     // Outputs
                     jtest_errc, ber_cnt, hi_ber, blk_lock, linkstatus, rx_fifo_spill,
                     tx_fifo_spill, rxlf, txlf, errd_blks, xgmii_rxc, xgmii_rxd,
-                    tx_data_out, tx_header_out, tx_sequence_out, rxgearboxslip_out, terminate_out,
+                    tx_data_out, tx_header_out, tx_sequence_out, rxgearboxslip_out,
+                    terminate_out, start_out,
                     // Para uso do Testbench
         						start_fifo
                     );
@@ -110,6 +111,8 @@ module PCS_core_rx  (  /*AUTOARG*/
     // Do we need extra valid_ins??
     input          terminate_in;
     wire           terminate_in;
+    input          start_in;
+    wire           start_in;
 
 
     //For Testbench use
@@ -134,8 +137,8 @@ module PCS_core_rx  (  /*AUTOARG*/
 
     output         terminate_out;
     wire           terminate_out;
-
-
+    output         start_out;
+    wire           start_out;
 
     wire          txpclkn_int;
     wire          txpclkp_int;
@@ -197,6 +200,7 @@ rx_path_rx INST_rx_path(   // Input Ports
                         .rx_old_header_in   (rx_old_header_in),
                         .rx_old_data_in     (rx_old_data_in),
                         .terminate_in       (terminate_in),
+                        .start_in           (start_in),
 
                         // Output Ports
                         .xgmii_rxc          (xgmii_rxc[7:0]),
@@ -211,6 +215,7 @@ rx_path_rx INST_rx_path(   // Input Ports
                         .errd_blks          (errd_blks),
                         .rxgearboxslip_out  (rxgearboxslip_out),
                         .terminate_out      (terminate_out),
+                        .start_out          (start_out),
                         .start_fifo         (start_fifo)
                         );
 

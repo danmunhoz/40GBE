@@ -98,6 +98,9 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
     reg           jtm_d_neq_0, jtm_d_neq_1, jtm_d_neq_lf, jtm_d_neq_lfb;
     reg           jtm_err_bit;
 
+    reg [63:0] DeScr_wire_r;
+    reg [1:0]  RXD_Sync_r;
+
     // wire [65:0]   rx_old_block = {rx_old_data_in,rx_old_header_in};
     wire [63:0]   rx_old_block = rx_old_data_in;
     wire [57:0]   rx_old_block_desc;
@@ -335,6 +338,16 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
 	        end
         end // if ( write_enable )
 
+  always @(posedge clk or negedge rstb)
+      if (!rstb) begin
+        DeScr_wire_r <= 66'h79;
+        RXD_Sync_r <= 2'b01;
+      end
+      else begin
+        DeScr_wire_r <= DeScr_wire;
+        RXD_Sync_r <= RXD_Sync[1:0];
+      end
+
     // This is the normal mode of operation
 
     always @(posedge clk or negedge rstb)
@@ -353,8 +366,13 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
             else begin
       	        // RXD_input[63:0] <= RXD_Sync[65:2];
                 RX_Sync_header <= RXD_Sync[1:0];
-      	        //DeScr_RXD[65:0] <= {DeScr_wire[63:0],RX_Sync_header[1:0]};
+                // Alterar proximas 2 linhas
+                // DeScr_RXD[65:0] <= {DeScr_wire[63:0],RX_Sync_header[1:0]};
                 DeScr_RXD[65:0] <= {DeScr_wire[63:0],RXD_Sync[1:0]};
+                // if (RXD_Sync[1:0] == 2'b01 && RXD_Sync_r[1:0] == 2'b10)
+                //   DeScr_RXD[65:0] <= {DeScr_wire[63:0],RXD_Sync_r[1:0]};
+                // else
+                //   DeScr_RXD[65:0] <= {DeScr_wire_r[63:0],RXD_Sync[1:0]};
 
                 // REORDEM ESTAVA AQUI
 

@@ -256,10 +256,20 @@ module wrapper_macpcs_rx(
     wire            terminate_out_2;
     wire            terminate_out_3;
 
-    wire            terminate_in_0  = 1'b0;
-    wire            terminate_in_1  = terminate_out_0;
-    wire            terminate_in_2  = (terminate_out_0 || terminate_out_1);
-    wire            terminate_in_3  = (terminate_out_0 || terminate_out_1 || terminate_out_2);
+    wire            start_out_0;
+    wire            start_out_1;
+    wire            start_out_2;
+    wire            start_out_3;
+
+    wire            terminate_in_0 = 1'b0;
+    wire            terminate_in_1 = terminate_out_0;
+    wire            terminate_in_2 = (terminate_out_0 || terminate_out_1);
+    wire            terminate_in_3 = (terminate_out_0 || terminate_out_1 || terminate_out_2);
+
+    wire            start_in_0 = (start_out_3 || start_out_1 || start_out_2);
+    wire            start_in_1 = (start_out_0 || start_out_3 || start_out_2);
+    wire            start_in_2 = (start_out_0 || start_out_1 || start_out_3);
+    wire            start_in_3 = (start_out_0 || start_out_1 || start_out_2);
 
     wire            fifo_interface_full;
     wire            fifo_interface_empty;
@@ -434,7 +444,9 @@ module wrapper_macpcs_rx(
         .rx_old_data_in     (old_data_0),
 
         .terminate_in       (terminate_in_0),
-        .terminate_out      (terminate_out_0)
+        .terminate_out      (terminate_out_0),
+        .start_in           (start_in_0),
+        .start_out          (start_out_0)
     );
 
     PCS_core_rx INST_1_PCS_core
@@ -490,7 +502,9 @@ module wrapper_macpcs_rx(
         .rx_old_data_in     (pcs_0_data_out[63:0]),
 
         .terminate_in       (terminate_in_1),
-        .terminate_out      (terminate_out_1)
+        .terminate_out      (terminate_out_1),
+        .start_in           (start_in_1),
+        .start_out          (start_out_1)
     );
 
     PCS_core_rx INST_2_PCS_core
@@ -546,7 +560,9 @@ module wrapper_macpcs_rx(
         .rx_old_data_in     (pcs_1_data_out[63:0]),
 
         .terminate_in       (terminate_in_2),
-        .terminate_out      (terminate_out_2)
+        .terminate_out      (terminate_out_2),
+        .start_in           (start_in_2),
+        .start_out          (start_out_2)
     );
 
     PCS_core_rx INST_3_PCS_core
@@ -602,7 +618,9 @@ module wrapper_macpcs_rx(
         .rx_old_data_in     (pcs_2_data_out[63:0]),
 
         .terminate_in       (terminate_in_3),
-        .terminate_out      (terminate_out_3)
+        .terminate_out      (terminate_out_3),
+        .start_in           (start_in_3),
+        .start_out          (start_out_3)
     );
 
 

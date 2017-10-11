@@ -9,9 +9,9 @@
 module Decode_rx (
                //  input ports
                DeScr_RXD, blk_lock, bypass_66decoder, lpbk,
-               clear_errblk, clk156, hi_ber, rstb156, terminate_in,
+               clear_errblk, clk156, hi_ber, rstb156, terminate_in, start_in,
                //  output ports
-               rxlf, errd_blks, rxcontrol, rxdata, terminate_out
+               rxlf, errd_blks, rxcontrol, rxdata, terminate_out, start_out
                );
 
 //  input ports
@@ -34,6 +34,8 @@ module Decode_rx (
 
     input        terminate_in;
     wire         terminate_in;
+    input        start_in;
+    wire         start_in;
 
 //  output ports
     output       rxlf;
@@ -47,6 +49,8 @@ module Decode_rx (
 
     output        terminate_out;
     wire          terminate_out;
+    output        start_out;
+    wire          start_out;
 
 //  local signals
     wire [2:0]    R_TYPE;
@@ -79,11 +83,13 @@ RX_FSM_rx  RX_FSM(
                .R_TYPE(R_TYPE[2:0]),
                .DeScr_RXD(DeScr_RXD[65:2]),
                .terminate_in(terminate_in),
+               .start_in(start_in),
                //  output ports
                .errd_blks(errd_blks[7:0]),
                .rxcontrol(rxcontrol[7:0]),
                .rxdata(rxdata[63:0]),
                .terminate_out(terminate_out),
+               .start_out(start_out),
                .rxlf(rxlf)
                );
 

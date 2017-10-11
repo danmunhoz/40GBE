@@ -64,11 +64,12 @@ module rx_path_rx (/*AUTOARG*/
                 bypass_66decoder, bypass_descram, clear_ber_cnt, clear_errblk,
                 clk156, lpbk, arstb, rx_jtm_en, rx_clk161,
                 rx_header_in, rx_data_in, rx_header_valid_in, rx_data_valid_in,
-                rx_old_header_in, rx_old_data_in, terminate_in,
+                rx_old_header_in, rx_old_data_in, terminate_in, start_in,
 
 		        // Outputs
 		        ber_cnt, blk_lock, jtest_errc_out, errd_blks, hi_ber, rxlf,
-		        spill, xgmii_rxc, xgmii_rxd, linkstatus, rxgearboxslip_out, terminate_out,
+		        spill, xgmii_rxc, xgmii_rxd, linkstatus, rxgearboxslip_out,
+            terminate_out, start_out,
             // Para uso do Testbench
 						start_fifo
 		        );
@@ -91,6 +92,7 @@ module rx_path_rx (/*AUTOARG*/
     input [63:0]    rx_old_data_in;
 
     input           terminate_in;
+    input           start_in;
 
     //For Testbench use
 		input					start_fifo;
@@ -108,6 +110,7 @@ module rx_path_rx (/*AUTOARG*/
     output          rxgearboxslip_out;
 
     output          terminate_out;
+    output          start_out;
 
     wire [15:0]     jtest_errc_out;
     wire            blk_lock;
@@ -219,7 +222,9 @@ module rx_path_rx (/*AUTOARG*/
          .rxcontrol         (xgmii_rxc[7:0]),
          .rxdata            (xgmii_rxd[63:0]),
          .terminate_in      (terminate_in),
-         .terminate_out     (terminate_out)
+         .terminate_out     (terminate_out),
+         .start_in          (start_in),
+         .start_out         (start_out)
          );
 
     assign jtest_errc_out = jtest_errc;
