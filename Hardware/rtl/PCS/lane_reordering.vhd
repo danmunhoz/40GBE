@@ -402,7 +402,7 @@ begin
   fifo_0 : entity work.reorder_fifo
   port map (
  				clk       	=> 	clock,
-				rst        	=> 	reset,
+				rst_n     	=> 	reset_n,
 				wen 				=> 	barreira_xbar.wen_0,
 				data_in    	=> 	fifo_in_0,
 				full       	=> 	full_0,
@@ -422,7 +422,7 @@ begin
   fifo_1 : entity work.reorder_fifo
   port map (
 			clk       	=> 	clock,
- 			rst        	=> 	reset,
+ 			rst_n     	=> 	reset_n,
  			wen 				=> 	barreira_xbar.wen_1,
  			data_in    	=> 	fifo_in_1,
  			full       	=> 	full_1,
@@ -442,7 +442,7 @@ begin
   fifo_2 : entity work.reorder_fifo
   port map (
  				clk       	=> 	clock,
-				rst        	=> 	reset,
+				rst_n      	=> 	reset_n,
 				wen 				=> 	barreira_xbar.wen_2,
 				data_in    	=> 	fifo_in_2,
 				full       	=> 	full_2,
@@ -462,7 +462,7 @@ begin
   fifo_3 : entity work.reorder_fifo
   port map (
  				clk       	=> 	clock,
-				rst        	=> 	reset,
+				rst_n     	=> 	reset_n,
 				wen 				=> 	barreira_xbar.wen_3,
 				data_in    	=> 	fifo_in_3,
 				full       	=> 	full_3,
