@@ -94,9 +94,9 @@ module  RX_FSM_rx (clk156, rstb156, errd_blks, lpbk, clear_errblk,  hi_ber,
     reg [7:0]     Control, next_control;
     reg [2:0]     TYPE, next_TYPE;
 
-    reg start_out_r;
+    reg start_in_r;
     reg start_out_i;
-    assign start_out = start_out_r;
+    assign start_out = start_out_i;
 
 // Detect Local Fault
 always @(posedge clk156 or negedge rstb156)
@@ -195,13 +195,13 @@ end
 
 always @ (posedge clk156 or negedge rstb156) begin
   if (!rstb156)
-    start_out_r <= 1'b0;
+    start_in_r <= 1'b0;
   else
-    start_out_r <= start_out_i;
+    start_in_r <= start_in;
 end
 
 // always @(Current_state or Code or Control or TYPE or next_TYPE or posedge terminate_in)
-always @(Current_state or Code or Control or TYPE or next_TYPE or terminate_in)
+always @(Current_state or Code or Control or TYPE or next_TYPE or terminate_in or start_in)
     case (Current_state)
         `RX_INIT: begin
             if (TYPE == `S || TYPE == `D)
@@ -217,6 +217,7 @@ always @(Current_state or Code or Control or TYPE or next_TYPE or terminate_in)
               Next_state = `RX_INIT;
             else
                 if (TYPE == `S || (TYPE == `D && start_in == 1'b1))
+                // if (TYPE == `S || TYPE == `D)
                     Next_state = `RX_D;
                 else
                     if (TYPE == `C)

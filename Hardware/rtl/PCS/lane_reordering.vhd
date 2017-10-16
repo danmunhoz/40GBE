@@ -369,10 +369,10 @@ begin
       out_3  => shuffle_out_3
   );
 
-  wen_0_int <= '0' when barreira_bip.is_sync_0 = '1' else '1';
-  wen_1_int <= '0' when barreira_bip.is_sync_1 = '1' else '1';
-  wen_2_int <= '0' when barreira_bip.is_sync_2 = '1' else '1';
-  wen_3_int <= '0' when barreira_bip.is_sync_3 = '1' else '1';
+  wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' else '1';
+  wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' else '1';
+  wen_2_int <= '0' when barreira_skew.is_sync_2 = '1' else '1';
+  wen_3_int <= '0' when barreira_skew.is_sync_3 = '1' else '1';
 
   reg_xbar_read_lanes: entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>barreira_bip.read_from_fifos, Q=>barreira_xbar.read_from_fifos);
 
