@@ -334,8 +334,8 @@ module wrapper_macpcs_rx(
     // Register for lane 0 old block
     always @ (posedge rx_clk_161_13 or negedge async_reset_n) begin
       if (!async_reset_n) begin
-        old_header_0 <= 2'b0;
-        old_data_0   <= 64'h0000000000000000;
+        old_header_0 <= 2'b01;
+        old_data_0   <= 64'h0;
       end
       else begin
         old_header_0 <= pcs_3_header_out[1:0];
