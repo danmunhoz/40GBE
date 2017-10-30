@@ -172,11 +172,8 @@ begin
     clk_161 <= clock_in161;
 
     reset_in_pcs <= '0', '1' after 35 ns;
-
     start_fifo <= '0', '1' after 65 ns;
-
     seed_val <= '1', '0' after 35 ns;
-
     rx_data_valid_in <= '0','1' after 65 ns;
     rx_header_valid_in <= '0','1' after 65 ns;
 
