@@ -95,85 +95,200 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
     reg [63:0]    RXD_input;
     reg [1:0]     RX_Sync_header;
     wire [63:0]   DeScr_wire;
+    reg [63:0]   DeScr_wire_reg;
+
     reg           jtm_d_neq_0, jtm_d_neq_1, jtm_d_neq_lf, jtm_d_neq_lfb;
     reg           jtm_err_bit;
 
-    reg [63:0] DeScr_wire_r;
-    reg [1:0]  RXD_Sync_r;
+    // wire [63:0]   rx_old_block = rx_old_data_in;
+    reg  [63:0]   rx_old_block;
 
-    // wire [65:0]   rx_old_block = {rx_old_data_in,rx_old_header_in};
-    wire [63:0]   rx_old_block = rx_old_data_in;
-    wire [57:0]   rx_old_block_desc;
+    reg  [57:0]   rx_old_block_desc;
 
-    wire [63:0] RXD_data_sync = RXD_Sync[65:2];
+    reg [63:0] RXD_data_sync;
+    reg [1:0] RXD_hdr_sync;
+    reg [1:0] RXD_hdr_sync_reg;
 
-    assign rx_old_block_desc[57] = rx_old_block[6];
-    assign rx_old_block_desc[56] = rx_old_block[7];
-    assign rx_old_block_desc[55] = rx_old_block[8];
-    assign rx_old_block_desc[54] = rx_old_block[9];
-    assign rx_old_block_desc[53] = rx_old_block[10];
-    assign rx_old_block_desc[52] = rx_old_block[11];
-    assign rx_old_block_desc[51] = rx_old_block[12];
-    assign rx_old_block_desc[50] = rx_old_block[13];
+    reg old_atual_iguais;
 
-    assign rx_old_block_desc[49] = rx_old_block[14];
-    assign rx_old_block_desc[48] = rx_old_block[15];
-    assign rx_old_block_desc[47] = rx_old_block[16];
-    assign rx_old_block_desc[46] = rx_old_block[17];
-    assign rx_old_block_desc[45] = rx_old_block[18];
-    assign rx_old_block_desc[44] = rx_old_block[19];
-    assign rx_old_block_desc[43] = rx_old_block[20];
-    assign rx_old_block_desc[42] = rx_old_block[21];
+    always @ (posedge clk or negedge rstb) begin
+      if (!rstb) begin
+        rx_old_block[63:0] <= 64'h0;
+        RXD_data_sync[63:0] <= 64'h0;
+        old_atual_iguais <= 1'b0;
+      end
+      else begin
+        rx_old_block[63:0] <= rx_old_data_in[63:0];
+        RXD_data_sync[63:0] <= RXD_Sync[65:2];
+        RXD_hdr_sync[1:0] <= RXD_Sync[1:0];
 
-    assign rx_old_block_desc[41] = rx_old_block[22];
-    assign rx_old_block_desc[40] = rx_old_block[23];
-    assign rx_old_block_desc[39] = rx_old_block[24];
-    assign rx_old_block_desc[38] = rx_old_block[25];
-    assign rx_old_block_desc[37] = rx_old_block[26];
-    assign rx_old_block_desc[36] = rx_old_block[27];
-    assign rx_old_block_desc[35] = rx_old_block[28];
-    assign rx_old_block_desc[34] = rx_old_block[29];
+        if (rx_old_data_in[63:0] == RXD_Sync[65:2]) begin
+          old_atual_iguais <= 1'b1;
+        end
+        else begin
+          old_atual_iguais <= 1'b0;
+        end
 
-    assign rx_old_block_desc[33] = rx_old_block[30];
-    assign rx_old_block_desc[32] = rx_old_block[31];
-    assign rx_old_block_desc[31] = rx_old_block[32];
-    assign rx_old_block_desc[30] = rx_old_block[33];
-    assign rx_old_block_desc[29] = rx_old_block[34];
-    assign rx_old_block_desc[28] = rx_old_block[35];
-    assign rx_old_block_desc[27] = rx_old_block[36];
-    assign rx_old_block_desc[26] = rx_old_block[37];
+      end
+    end
 
-    assign rx_old_block_desc[25] = rx_old_block[38];
-    assign rx_old_block_desc[24] = rx_old_block[39];
-    assign rx_old_block_desc[23] = rx_old_block[40];
-    assign rx_old_block_desc[22] = rx_old_block[41];
-    assign rx_old_block_desc[21] = rx_old_block[42];
-    assign rx_old_block_desc[20] = rx_old_block[43];
-    assign rx_old_block_desc[19] = rx_old_block[44];
-    assign rx_old_block_desc[18] = rx_old_block[45];
+    // always @ ( RXD_Sync or rstb or rx_old_block ) begin
+    // // always @(posedge clk or negedge rstb) begin
+    //   if (!rstb) begin
+    //     RXD_data_sync[63:0] <= 64'h0;
+    //   end
+    //   else begin
+    //     if (RXD_data_sync == rx_old_block) begin
+    //       RXD_data_sync <= RXD_data_sync;
+    //     end
+    //     else begin
+    //       RXD_data_sync[63:0] <= RXD_Sync[65:2];
+    //     end
+    //   end
+    // end
 
-    assign rx_old_block_desc[17] = rx_old_block[46];
-    assign rx_old_block_desc[16] = rx_old_block[47];
-    assign rx_old_block_desc[15] = rx_old_block[48];
-    assign rx_old_block_desc[14] = rx_old_block[49];
-    assign rx_old_block_desc[13] = rx_old_block[50];
-    assign rx_old_block_desc[12] = rx_old_block[51];
-    assign rx_old_block_desc[11] = rx_old_block[52];
-    assign rx_old_block_desc[10] = rx_old_block[53];
+    always @ ( rx_old_block or rstb or rx_old_block or RXD_data_sync) begin
+    // always @(posedge clk or negedge rstb) begin
+      if (!rstb) begin
+        rx_old_block_desc[57:0] <= 58'h3;
+      end
+      else begin
+        if (RXD_data_sync == rx_old_block) begin
+          rx_old_block_desc <= rx_old_block_desc;
+        end
+        else begin
+         rx_old_block_desc[57] <= rx_old_block[6];
+         rx_old_block_desc[56] <= rx_old_block[7];
+         rx_old_block_desc[55] <= rx_old_block[8];
+         rx_old_block_desc[54] <= rx_old_block[9];
+         rx_old_block_desc[53] <= rx_old_block[10];
+         rx_old_block_desc[52] <= rx_old_block[11];
+         rx_old_block_desc[51] <= rx_old_block[12];
+         rx_old_block_desc[50] <= rx_old_block[13];
 
-    assign rx_old_block_desc[9]  = rx_old_block[54];
-    assign rx_old_block_desc[8]  = rx_old_block[55];
-    assign rx_old_block_desc[7]  = rx_old_block[56];
-    assign rx_old_block_desc[6]  = rx_old_block[57];
-    assign rx_old_block_desc[5]  = rx_old_block[58];
-    assign rx_old_block_desc[4]  = rx_old_block[59];
-    assign rx_old_block_desc[3]  = rx_old_block[60];
-    assign rx_old_block_desc[2]  = rx_old_block[61];
-    assign rx_old_block_desc[1]  = rx_old_block[62];
-    assign rx_old_block_desc[0]  = rx_old_block[63];
+         rx_old_block_desc[49] <= rx_old_block[14];
+         rx_old_block_desc[48] <= rx_old_block[15];
+         rx_old_block_desc[47] <= rx_old_block[16];
+         rx_old_block_desc[46] <= rx_old_block[17];
+         rx_old_block_desc[45] <= rx_old_block[18];
+         rx_old_block_desc[44] <= rx_old_block[19];
+         rx_old_block_desc[43] <= rx_old_block[20];
+         rx_old_block_desc[42] <= rx_old_block[21];
 
+         rx_old_block_desc[41] <= rx_old_block[22];
+         rx_old_block_desc[40] <= rx_old_block[23];
+         rx_old_block_desc[39] <= rx_old_block[24];
+         rx_old_block_desc[38] <= rx_old_block[25];
+         rx_old_block_desc[37] <= rx_old_block[26];
+         rx_old_block_desc[36] <= rx_old_block[27];
+         rx_old_block_desc[35] <= rx_old_block[28];
+         rx_old_block_desc[34] <= rx_old_block[29];
 
+         rx_old_block_desc[33] <= rx_old_block[30];
+         rx_old_block_desc[32] <= rx_old_block[31];
+         rx_old_block_desc[31] <= rx_old_block[32];
+         rx_old_block_desc[30] <= rx_old_block[33];
+         rx_old_block_desc[29] <= rx_old_block[34];
+         rx_old_block_desc[28] <= rx_old_block[35];
+         rx_old_block_desc[27] <= rx_old_block[36];
+         rx_old_block_desc[26] <= rx_old_block[37];
 
+         rx_old_block_desc[25] <= rx_old_block[38];
+         rx_old_block_desc[24] <= rx_old_block[39];
+         rx_old_block_desc[23] <= rx_old_block[40];
+         rx_old_block_desc[22] <= rx_old_block[41];
+         rx_old_block_desc[21] <= rx_old_block[42];
+         rx_old_block_desc[20] <= rx_old_block[43];
+         rx_old_block_desc[19] <= rx_old_block[44];
+         rx_old_block_desc[18] <= rx_old_block[45];
+
+         rx_old_block_desc[17] <= rx_old_block[46];
+         rx_old_block_desc[16] <= rx_old_block[47];
+         rx_old_block_desc[15] <= rx_old_block[48];
+         rx_old_block_desc[14] <= rx_old_block[49];
+         rx_old_block_desc[13] <= rx_old_block[50];
+         rx_old_block_desc[12] <= rx_old_block[51];
+         rx_old_block_desc[11] <= rx_old_block[52];
+         rx_old_block_desc[10] <= rx_old_block[53];
+
+         rx_old_block_desc[9]  <= rx_old_block[54];
+         rx_old_block_desc[8]  <= rx_old_block[55];
+         rx_old_block_desc[7]  <= rx_old_block[56];
+         rx_old_block_desc[6]  <= rx_old_block[57];
+         rx_old_block_desc[5]  <= rx_old_block[58];
+         rx_old_block_desc[4]  <= rx_old_block[59];
+         rx_old_block_desc[3]  <= rx_old_block[60];
+         rx_old_block_desc[2]  <= rx_old_block[61];
+         rx_old_block_desc[1]  <= rx_old_block[62];
+         rx_old_block_desc[0]  <= rx_old_block[63];
+         end
+      end
+    end
+
+    // assign rx_old_block_desc[57] = rx_old_block[6];
+    // assign rx_old_block_desc[56] = rx_old_block[7];
+    // assign rx_old_block_desc[55] = rx_old_block[8];
+    // assign rx_old_block_desc[54] = rx_old_block[9];
+    // assign rx_old_block_desc[53] = rx_old_block[10];
+    // assign rx_old_block_desc[52] = rx_old_block[11];
+    // assign rx_old_block_desc[51] = rx_old_block[12];
+    // assign rx_old_block_desc[50] = rx_old_block[13];
+    //
+    // assign rx_old_block_desc[49] = rx_old_block[14];
+    // assign rx_old_block_desc[48] = rx_old_block[15];
+    // assign rx_old_block_desc[47] = rx_old_block[16];
+    // assign rx_old_block_desc[46] = rx_old_block[17];
+    // assign rx_old_block_desc[45] = rx_old_block[18];
+    // assign rx_old_block_desc[44] = rx_old_block[19];
+    // assign rx_old_block_desc[43] = rx_old_block[20];
+    // assign rx_old_block_desc[42] = rx_old_block[21];
+    //
+    // assign rx_old_block_desc[41] = rx_old_block[22];
+    // assign rx_old_block_desc[40] = rx_old_block[23];
+    // assign rx_old_block_desc[39] = rx_old_block[24];
+    // assign rx_old_block_desc[38] = rx_old_block[25];
+    // assign rx_old_block_desc[37] = rx_old_block[26];
+    // assign rx_old_block_desc[36] = rx_old_block[27];
+    // assign rx_old_block_desc[35] = rx_old_block[28];
+    // assign rx_old_block_desc[34] = rx_old_block[29];
+    //
+    // assign rx_old_block_desc[33] = rx_old_block[30];
+    // assign rx_old_block_desc[32] = rx_old_block[31];
+    // assign rx_old_block_desc[31] = rx_old_block[32];
+    // assign rx_old_block_desc[30] = rx_old_block[33];
+    // assign rx_old_block_desc[29] = rx_old_block[34];
+    // assign rx_old_block_desc[28] = rx_old_block[35];
+    // assign rx_old_block_desc[27] = rx_old_block[36];
+    // assign rx_old_block_desc[26] = rx_old_block[37];
+    //
+    // assign rx_old_block_desc[25] = rx_old_block[38];
+    // assign rx_old_block_desc[24] = rx_old_block[39];
+    // assign rx_old_block_desc[23] = rx_old_block[40];
+    // assign rx_old_block_desc[22] = rx_old_block[41];
+    // assign rx_old_block_desc[21] = rx_old_block[42];
+    // assign rx_old_block_desc[20] = rx_old_block[43];
+    // assign rx_old_block_desc[19] = rx_old_block[44];
+    // assign rx_old_block_desc[18] = rx_old_block[45];
+    //
+    // assign rx_old_block_desc[17] = rx_old_block[46];
+    // assign rx_old_block_desc[16] = rx_old_block[47];
+    // assign rx_old_block_desc[15] = rx_old_block[48];
+    // assign rx_old_block_desc[14] = rx_old_block[49];
+    // assign rx_old_block_desc[13] = rx_old_block[50];
+    // assign rx_old_block_desc[12] = rx_old_block[51];
+    // assign rx_old_block_desc[11] = rx_old_block[52];
+    // assign rx_old_block_desc[10] = rx_old_block[53];
+    //
+    // assign rx_old_block_desc[9]  = rx_old_block[54];
+    // assign rx_old_block_desc[8]  = rx_old_block[55];
+    // assign rx_old_block_desc[7]  = rx_old_block[56];
+    // assign rx_old_block_desc[6]  = rx_old_block[57];
+    // assign rx_old_block_desc[5]  = rx_old_block[58];
+    // assign rx_old_block_desc[4]  = rx_old_block[59];
+    // assign rx_old_block_desc[3]  = rx_old_block[60];
+    // assign rx_old_block_desc[2]  = rx_old_block[61];
+    // assign rx_old_block_desc[1]  = rx_old_block[62];
+    // assign rx_old_block_desc[0]  = rx_old_block[63];
 
 
     assign DeScr_wire[0] = RXD_data_sync[0]^rx_old_block_desc[38]^rx_old_block_desc[57];
@@ -338,44 +453,32 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
 	        end
         end // if ( write_enable )
 
-  always @(posedge clk or negedge rstb)
-      if (!rstb) begin
-        DeScr_wire_r <= 66'h79;
-        RXD_Sync_r <= 2'b01;
-      end
-      else begin
-        DeScr_wire_r <= DeScr_wire;
-        RXD_Sync_r <= RXD_Sync[1:0];
-      end
-
     // This is the normal mode of operation
 
     always @(posedge clk or negedge rstb)
         if (!rstb) begin
-            //DeScrambler_Register[57:0] <= 58'h3;
             RXD_input[63:0] <= 64'h0;
             RX_Sync_header <= 2'b01;
             DeScr_RXD[65:0] <= 66'h79;
+            RXD_hdr_sync_reg <= 2'b0;
+            DeScr_wire_reg <= 64'h0;
         end
         else if ( write_enable ) begin
             if (bypass_descram) begin
                 RXD_input[63:0] <= RXD_Sync[65:2];
                 RX_Sync_header <= RXD_Sync[1:0];
+                RXD_hdr_sync_reg <= RXD_hdr_sync;
                 DeScr_RXD[65:0] <= {RXD_input[63:0],RX_Sync_header};
             end
             else begin
-      	        // RXD_input[63:0] <= RXD_Sync[65:2];
                 RX_Sync_header <= RXD_Sync[1:0];
-                // Alterar proximas 2 linhas
-                // DeScr_RXD[65:0] <= {DeScr_wire[63:0],RX_Sync_header[1:0]};
-                DeScr_RXD[65:0] <= {DeScr_wire[63:0],RXD_Sync[1:0]};
-                // if (RXD_Sync[1:0] == 2'b01 && RXD_Sync_r[1:0] == 2'b10)
-                //   DeScr_RXD[65:0] <= {DeScr_wire[63:0],RXD_Sync_r[1:0]};
-                // else
-                //   DeScr_RXD[65:0] <= {DeScr_wire_r[63:0],RXD_Sync[1:0]};
-
-                // REORDEM ESTAVA AQUI
-
+                DeScr_wire_reg <= DeScr_wire;
+                RXD_hdr_sync_reg <= RXD_hdr_sync;
+                // DeScr_RXD[65:0] <= {DeScr_wire[63:0],RXD_Sync[1:0]};
+                if (old_atual_iguais == 1'b0)
+                  DeScr_RXD[65:0] <= {DeScr_wire[63:0],RXD_hdr_sync[1:0]};
+                else
+                  DeScr_RXD[65:0] <= {DeScr_wire_reg[63:0],RXD_hdr_sync_reg[1:0]};
 
             end // else: !if(bypass_descram)
         end

@@ -76,6 +76,8 @@ vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo_bram.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/core_interface.vhd
 
+vcom -novopt ../rtl/PCS/pcs_selector.vhd
+
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs_rx.v
 

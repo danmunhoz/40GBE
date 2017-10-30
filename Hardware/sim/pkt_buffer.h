@@ -54,6 +54,8 @@ SC_MODULE(pkt_buffer) {
   ofstream lane2;
   ofstream lane3;
 
+  ofstream dbg_bip;
+
   void bip_calculator (sc_lv<8 > *lane_bip, const sc_lv<64 > block_in_lv, const sc_lv<2 > header_in_lv, int debug = 0) {
 
     sc_logic aux;
@@ -82,7 +84,7 @@ SC_MODULE(pkt_buffer) {
           cout << "(h0)" << aux << " | -> bip bit:" << i << endl;
         aux = 0;
       }
-      else if (i == 4 ) {
+      else if (i == 4) {
         aux = header_in_lv.get_bit(1);
         (*lane_bip)[i] = (*lane_bip)[i] ^ aux;
         if(debug)
@@ -128,33 +130,39 @@ SC_MODULE(pkt_buffer) {
 
       lane = block_counter % 4;
 
+      // dbg_bip << "Pkt_buffer - rx: bc = " << block_counter << " lane = " << lane << " buffer = " << buffer.str() << endl;
+
       switch (lane) {
+
         case 0:
           lane0 << buffer.str() << endl;
-          cout << buffer.str() << endl;
+          // cout << buffer.str() << endl;
           block_counter++;
-          bip_calculator (&lane0_bip, block_in, header_in, 0);
+          bip_calculator (&lane0_bip, block_in, header_in);
           break;
         case 1:
           lane1 << buffer.str() << endl;
-          cout << buffer.str() << endl;
+          // cout << buffer.str() << endl;
           block_counter++;
           bip_calculator (&lane1_bip, block_in, header_in);
           break;
         case 2:
           lane2 << buffer.str() << endl;
-          cout << buffer.str() << endl;
+          // cout << buffer.str() << endl;
           block_counter++;
           bip_calculator (&lane2_bip, block_in, header_in);
           break;
         case 3:
           lane3 << buffer.str() << endl;
-          cout << buffer.str() << endl;
+          // cout << buffer.str() << endl;
           block_counter++;
           bip_calculator (&lane3_bip, block_in, header_in);
           break;
         default:
           cout << "Wrong mode operation!" << endl;
+
+        buffer.str("");
+
       }
 
       if( block_counter == PKTS_BTW_SYNC) {
@@ -211,7 +219,9 @@ SC_MODULE(pkt_buffer) {
         lane3_bip = "00000000";
         bip_calculator (&lane3_bip, blk_temp, hdr_temp);
 
-        block_counter = 0;
+        block_counter = (block_counter % 4);
+        // block_counter = 1;
+        // dbg_bip << "Pkt_buffer - bip: " << block_counter << endl;
        }
       }
     }
@@ -225,6 +235,8 @@ SC_MODULE(pkt_buffer) {
     } else {
       cout << "[pkt_buffer] ERROR opening lane0.txt" << endl;
     }
+
+    dbg_bip.open("dbg_bip.txt");
 
     lane1.open("lane1.txt");
     if (lane1.is_open()){

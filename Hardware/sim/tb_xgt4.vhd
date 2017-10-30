@@ -1,6 +1,8 @@
 library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+  use ieee.std_logic_1164.all;
+  use ieee.numeric_std.all;
+  use IEEE.std_logic_unsigned.all;
+
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 
@@ -73,6 +75,10 @@ architecture behav of tb_xgt4 is
   signal reset_in_pcs : std_logic;
 
   signal start_fifo : std_logic;
+
+  signal time_stamp_value  : std_logic_vector(47 downto 0);
+
+  signal seed_val : std_logic;
 
     component wrapper_macpcs port(
         -- Clocks
@@ -169,12 +175,23 @@ begin
 
     start_fifo <= '0', '1' after 65 ns;
 
+    seed_val <= '1', '0' after 35 ns;
+
     rx_data_valid_in <= '0','1' after 65 ns;
     rx_header_valid_in <= '0','1' after 65 ns;
 
     -- Loopback no PCS para observar Encode.v funcionando em cond. normais
     header_out <= rx_header_in;
     data_out <= rx_data_in;
+
+    counter: process (clk_156,reset_in)
+      begin
+        if(reset_in = '0') then
+          time_stamp_value <= (others=>'0');
+        elsif clk_156'event and clk_156 = '1' then
+          time_stamp_value <= time_stamp_value + 1;
+        end if;
+    end process;
 
 -- INST WRAPPER
     inst_wrapper_macpcs : wrapper_macpcs port map(
@@ -295,7 +312,8 @@ begin
         ip_destination      => x"0ABCDE02",
         packet_length       => x"05EE",
 
-        timestamp_base      => (others=>'0'),
+        -- timestamp_base      => (others=>'0'),
+        timestamp_base => time_stamp_value,
         time_stamp_flag     => '0',
 
         -- TX mac interface
@@ -307,14 +325,19 @@ begin
         pkt_tx_mod          => pkt_tx_mod,
 
         --LFSR settings
-        lfsr_seed           => (others=>'1'),
-        lfsr_polynomial     => (others=>'0'),
-        valid_seed          => '1',
+        -- lfsr_seed           => (others=>'1'),
+        lfsr_seed           => x"0000000C00000003",
+        -- lfsr_polynomial     => (others=>'0'),
+        lfsr_polynomial     => "10",
+        -- valid_seed          => '1',
+        valid_seed          => seed_val,
 
-        payload_type        => (others=>'0'),
+        -- payload_type        => (others=>'0'),
+        payload_type        => "001",
         -- payload_cycles      => (others=>'0'),
         payload_cycles      => x"00000012",
         payload_last_size   => (others=>'0'),
+        -- payload_last_size   => "0001000",
         pkt_lost_counter    => open
     );
 

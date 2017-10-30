@@ -75,7 +75,7 @@ SC_MODULE(fiber) {
             header_out_0 = header_out_0_int;
             block_out_0 = block_out_0_int;
 
-            cout << "[fiber 0] Header = " << header_out_0 << " Block = " << block_out_0 << endl;
+            // cout << "[fiber 0] Header = " << header_out_0 << " Block = " << block_out_0 << endl;
           }
         } else {
           cout << "[fiber 0]FALHOU lanes 0" << endl;
@@ -92,7 +92,7 @@ SC_MODULE(fiber) {
             header_out_1 = header_out_1_int;
             block_out_1 = block_out_1_int;
 
-            cout << "[fiber 1] Header = " << header_out_1 << " Block = " << block_out_1 << endl;
+            // cout << "[fiber 1] Header = " << header_out_1 << " Block = " << block_out_1 << endl;
           }
         } else {
           cout << "[fiber 1]FALHOU lanes 1" << endl;
@@ -109,7 +109,7 @@ SC_MODULE(fiber) {
             header_out_2 = header_out_2_int;
             block_out_2 = block_out_2_int;
 
-            cout << "[fiber 2] Header = " << header_out_2 << " Block = " << block_out_2 << endl;
+            // cout << "[fiber 2] Header = " << header_out_2 << " Block = " << block_out_2 << endl;
           }
         } else {
           cout << "[fiber 2]FALHOU lanes 2" << endl;
@@ -126,7 +126,7 @@ SC_MODULE(fiber) {
             header_out_3 = header_out_3_int;
             block_out_3 = block_out_3_int;
 
-            cout << "[fiber 3] Header = " << header_out_3 << " Block = " << block_out_3 << endl;
+            // cout << "[fiber 3] Header = " << header_out_3 << " Block = " << block_out_3 << endl;
           }
         } else {
           cout << "[fiber 3]FALHOU lanes 3" << endl;
