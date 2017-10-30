@@ -16,8 +16,12 @@ report_route_status -file $outputDir/post_route_status.rpt
 report_timing_summary -file $outputDir/post_route_timing_summary.rpt
 report_power -file $outputDir/post_route_power.rpt
 report_drc -file $outputDir/post_imp_drc.rpt
-write_verilog -force $outputDir/cpu_impl_netlist.v -mode timesim -sdf_anno true
-write_sdf $outputDir/cpu_impl_timesim.sdf
+
+#write_verilog -force $outputDir/cpu_impl_netlist.v -mode timesim -sdf_anno true
+#-include_xilinx_libs
+write_sdf -force $outputDir/cpu_impl_netlist.sdf -mode sta
+#write_verilog -force $outputDir/cpu_impl_netlist.v -mode sta
+write_verilog -force $outputDir/cpu_impl_netlist.v -mode funcsim
 
 #
 # STEP#6: generate a bitstream

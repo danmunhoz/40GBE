@@ -1,0 +1,14 @@
+#-----------------------------------------------------------
+# Vivado v2016.2 (64-bit)
+# SW Build 1577090 on Thu Jun  2 16:32:35 MDT 2016
+# IP Build 1577682 on Fri Jun  3 12:00:54 MDT 2016
+# Start of session at: Fri Oct 20 12:40:08 2017
+# Process ID: 28646
+# Current directory: /home/tanauan/Desktop/repo_40GBE/40GBE
+# Command line: vivado
+# Log file: /home/tanauan/Desktop/repo_40GBE/40GBE/vivado.log
+# Journal file: /home/tanauan/Desktop/repo_40GBE/40GBE/vivado.jou
+#-----------------------------------------------------------
+start_gui
+exit
+INFO: [Common 17-206] Exiting Vivado at Fri Oct 20 13:27:38 2017...

@@ -245,6 +245,7 @@ architecture behav_lane_reorder of lane_reorder is
     signal WRCOUNT_3 : std_logic_vector(8 downto 0);
 
 begin
+
   reset_n <= not reset;
 
   --==============================================================================

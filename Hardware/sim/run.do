@@ -4,6 +4,18 @@ if [file exists work] {
 }
 vlib work
 
+#vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/glbl.v
+#vmap secureip /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/verilog/mti_se/10.3a/lin64/secureip
+#vmap unisim /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/vhdl/mti_se/10.3a/lin64/unisim
+#vmap unimacro /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/vhdl/mti_se/10.3a/lin64/unimacro
+#vmap unisims_ver /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/verilog/mti_se/10.3a/lin64/unisims_ver
+#vmap unimacro_ver /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/verilog/mti_se/10.3a/lin64/unimacro_ver
+#vmap simprim /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/vhdl/mti_se/10.3a/lin64/simprim
+#vmap simprims_ver /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/verilog/mti_se/10.3a/lin64/simprims_ver
+#vmap xilinxcorelib /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/vhdl/mti_se/10.3a/lin64/xilinxcorelib
+#vmap xilinxcorelib_ver /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/verilog/mti_se/10.3a/lin64/xilinxcorelib_ver
+
+
 #Compiling macros
 vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/*.v
 vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/*.v

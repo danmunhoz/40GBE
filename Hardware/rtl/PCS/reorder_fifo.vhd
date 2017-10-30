@@ -74,6 +74,8 @@ architecture behav_fifo_reorder of reorder_fifo is
   signal last_w  : std_logic; -- A write happened last cycle
   signal last_r  : std_logic; -- A read happened last cycle
 
+  signal clk_n : std_logic; -- solves the fifo output delay problem...
+
 begin
 
   -- reorder_generic_fifo: generic_fifo port map(
@@ -119,6 +121,8 @@ begin
   --     WREN => wen                     -- 1-bit input write port enable
   --     );
 
+  clk_n <= not clk;
+
   FIFO_SYNC_MACRO_inst : FIFO_SYNC_MACRO
     generic map (
       DEVICE => "7SERIES",            -- Target Device: "VIRTEX5, "VIRTEX6", "7SERIES"
@@ -136,7 +140,7 @@ begin
       RDERR => read_err,        -- 1-bit output read error
       WRCOUNT => w_ptr,         -- Output write count, width determined by FIFO depth
       WRERR => write_err,       -- 1-bit output write error
-      CLK => clk,               -- 1-bit input clock
+      CLK => clk_n,               -- 1-bit input clock
       DI => data_in,            -- Input data, width defined by DATA_WIDTH parameter
       RDEN => ren,              -- 1-bit input read enable
       RST => rst_n,             -- 1-bit input reset

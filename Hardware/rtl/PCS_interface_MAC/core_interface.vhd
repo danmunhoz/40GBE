@@ -1,3 +1,9 @@
+library UNISIM;
+  use UNISIM.vcomponents.all;
+
+library UNIMACRO;
+  use unimacro.Vcomponents.all;
+  
 library ieee;
   use ieee.std_logic_1164.all;
 

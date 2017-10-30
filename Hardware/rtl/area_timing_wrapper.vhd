@@ -1,12 +1,16 @@
-
-library ieee;
-use ieee.std_logic_1164.all;
---use ieee.numeric_std.all;
 library UNISIM;
-use UNISIM.VCOMPONENTS.ALL;
+  use UNISIM.VCOMPONENTS.ALL;
+
+Library UNIMACRO;
+  use UNIMACRO.vcomponents.all;
 
 library xil_defaultlib;
-    use xil_defaultlib.common_pkg.all;
+  use xil_defaultlib.common_pkg.all;
+
+library ieee;
+  use ieee.std_logic_1164.all;
+  use ieee.std_logic_unsigned.all;
+  use ieee.numeric_std.all;
 
 entity area_timing_wrapper is
     port
@@ -16,6 +20,8 @@ entity area_timing_wrapper is
         Q8_CLK0_GTREFCLK_PAD_P_IN               : in   std_logic;                       -- 156.25 MHz SFP+ Clock P
         SYSCLK_IN_N                             : in   std_logic;                       -- 200.00 MHz System Clock N
         SYSCLK_IN_P                             : in   std_logic;                       -- 200.00 MHz System Clock P
+
+        rst_n                                   : in   std_logic;
 
         hi_ber                                  : out  std_logic;
         blk_lock                                : out  std_logic;
@@ -45,6 +51,27 @@ entity area_timing_wrapper is
         wb_stb_i                                : in  std_logic;
         wb_we_i                                 : in  std_logic;
 
+        --entrada do PCS
+        rx_lane_0_header_valid_in               : in  std_logic;
+        rx_lane_0_header_in                     : in  std_logic_vector(1 downto 0);
+        rx_lane_0_data_valid_in                 : in  std_logic;
+        rx_lane_0_data_in                       : in  std_logic_vector(63 downto 0);
+
+        rx_lane_1_header_valid_in               : in  std_logic;
+        rx_lane_1_header_in                     : in  std_logic_vector(1 downto 0);
+        rx_lane_1_data_valid_in                 : in  std_logic;
+        rx_lane_1_data_in                       : in  std_logic_vector(63 downto 0);
+
+        rx_lane_2_header_valid_in               : in  std_logic;
+        rx_lane_2_header_in                     : in  std_logic_vector(1 downto 0);
+        rx_lane_2_data_valid_in                 : in  std_logic;
+        rx_lane_2_data_in                       : in  std_logic_vector(63 downto 0);
+
+        rx_lane_3_header_valid_in               : in  std_logic;
+        rx_lane_3_header_in                     : in  std_logic_vector(1 downto 0);
+        rx_lane_3_data_valid_in                 : in  std_logic;
+        rx_lane_3_data_in                       : in  std_logic_vector(63 downto 0);
+
         -- XMAC Outputs
         pkt_rx_avail                            : out  std_logic;
         pkt_rx_data                             : out  std_logic_vector(63 downto 0);
@@ -55,12 +82,12 @@ entity area_timing_wrapper is
         pkt_rx_val                              : out  std_logic;
         pkt_tx_full                             : out  std_logic
     );
-
 end area_timing_wrapper;
 
 architecture top of area_timing_wrapper is
 
   CONSTANT BIT_0  : STD_LOGIC:= '0';
+  CONSTANT BIT_1  : STD_LOGIC:= '1';
 
   component wrapper_macpcs_rx port(
           -- Clocks
@@ -79,6 +106,7 @@ architecture top of area_timing_wrapper is
           reset_rx_done       : in std_logic;
 
           start_fifo          : in std_logic;
+          read_fifo           : in std_logic;
           dump_xgmii_rxc_0    : out std_logic_vector(7 downto 0);
           dump_xgmii_rxd_0    : out std_logic_vector(63 downto 0);
           dump_xgmii_rxc_1    : out std_logic_vector(7 downto 0);
@@ -890,27 +918,83 @@ architecture top of area_timing_wrapper is
           signal write_en_out:  std_logic;
           signal post_wr_data_out:  std_logic_vector(31 downto 0);
           signal rd_data_raw_o_in:  std_logic_vector(31 downto 0);
+
+
+          signal clk_156_int : std_logic;
+          signal clk_161_int : std_logic;
+
+          signal rst  : std_logic;
+
+          signal rx_lane_0_header_valid : std_logic;
+          signal rx_lane_0_data_valid   : std_logic;
+          signal rx_lane_0_header       : std_logic_vector(1  downto 0);
+          signal rx_lane_0_data         : std_logic_vector(63 downto 0);
+          signal rx_lane_1_header_valid : std_logic;
+          signal rx_lane_1_data_valid   : std_logic;
+          signal rx_lane_1_header       : std_logic_vector(1  downto 0);
+          signal rx_lane_1_data         : std_logic_vector(63 downto 0);
+          signal rx_lane_2_header_valid : std_logic;
+          signal rx_lane_2_data_valid   : std_logic;
+          signal rx_lane_2_header       : std_logic_vector(1  downto 0);
+          signal rx_lane_2_data         : std_logic_vector(63 downto 0);
+          signal rx_lane_3_header_valid : std_logic;
+          signal rx_lane_3_data_valid   : std_logic;
+          signal rx_lane_3_header       : std_logic_vector(1  downto 0);
+          signal rx_lane_3_data         : std_logic_vector(63 downto 0);
+
+          attribute dont_touch : string;
+          attribute dont_touch of inst_wrapper_macpcs : label is "true";
+
     begin
+
+    clk_156_int <= q8_clk0_refclk_g_i;
+    clk_161_int <= sysclk_g_i;
+    rst <= not rst_n;
+
+    rx_lane_0_header_valid <= rx_lane_0_header_valid_in;
+    rx_lane_0_data_valid   <= rx_lane_0_data_valid_in  ;
+    rx_lane_0_header       <= rx_lane_0_header_in      ;
+    rx_lane_0_data         <= rx_lane_0_data_in        ;
+    rx_lane_1_header_valid <= rx_lane_1_header_valid_in;
+    rx_lane_1_data_valid   <= rx_lane_1_data_valid_in  ;
+    rx_lane_1_header       <= rx_lane_1_header_in      ;
+    rx_lane_1_data         <= rx_lane_1_data_in        ;
+    rx_lane_2_header_valid <= rx_lane_2_header_valid_in;
+    rx_lane_2_data_valid   <= rx_lane_2_data_valid_in  ;
+    rx_lane_2_header       <= rx_lane_2_header_in      ;
+    rx_lane_2_data         <= rx_lane_2_data_in        ;
+    rx_lane_3_header_valid <= rx_lane_3_header_valid_in;
+    rx_lane_3_data_valid   <= rx_lane_3_data_valid_in  ;
+    rx_lane_3_header       <= rx_lane_3_header_in      ;
+    rx_lane_3_data         <= rx_lane_3_data_in        ;
 
     inst_wrapper_macpcs: wrapper_macpcs_rx port map(
       -- Clocks
-      clk_156             => q8_clk0_refclk_g_i,
-      tx_clk_161_13       => gt0_txusrclk2_i,
-      rx_clk_161_13       => gt0_txusrclk2_i,
-      clk_xgmii_rx        => q8_clk0_refclk_g_i,
-      clk_xgmii_tx        => q8_clk0_refclk_g_i,
+      clk_156             => clk_156_int,
+      -- tx_clk_161_13       => gt0_txusrclk2_i,
+      -- rx_clk_161_13       => gt0_txusrclk2_i,
+      tx_clk_161_13       => clk_161_int,
+      rx_clk_161_13       => clk_161_int,
+      clk_xgmii_rx        => clk_156_int,
+      clk_xgmii_tx        => clk_156_int,
       -- clk_312             => clk_250,             -- 250 POR ENQUANTO!!!!!
-      clk_312             => q8_clk0_refclk_g_i,             -- 250 POR ENQUANTO!!!!!
+      clk_312             => clk_161_int,             -- 250 POR ENQUANTO!!!!!
 
       -- Resets
-      async_reset_n       => not soft_reset_i,
-      reset_tx_n          => gt0_txresetdone_i,
-      reset_rx_n          => gt0_txresetdone_i,
-      reset_tx_done       => gt0_txfsmresetdone_i,
-      reset_rx_done       => gt0_txfsmresetdone_i,
+      -- async_reset_n       => soft_reset_i,
+      -- reset_tx_n          => gt0_txresetdone_i,
+      -- reset_rx_n          => gt0_txresetdone_i,
+      -- reset_tx_done       => gt0_txfsmresetdone_i,
+      -- reset_rx_done       => gt0_txfsmresetdone_i,
+      async_reset_n       => rst_n,
+      reset_tx_n          => rst_n,
+      reset_rx_n          => rst_n,
+      reset_tx_done       => rst,
+      reset_rx_done       => rst,
 
       -- For testbench use only
-      start_fifo       => BIT_0,
+      start_fifo       => BIT_1,
+      read_fifo        => BIT_0,
       dump_xgmii_rxc_0 => open,
       dump_xgmii_rxd_0 => open,
       dump_xgmii_rxc_1 => open,
@@ -920,26 +1004,24 @@ architecture top of area_timing_wrapper is
       dump_xgmii_rxc_3 => open,
       dump_xgmii_rxd_3 => open,
 
+      -- Placa
       -- PCS IN
-      rx_lane_0_header_valid_in    => gt0_rxheadervalid_i,
-      rx_lane_0_data_valid_in      => gt0_rxdatavalid_i,
-      rx_lane_0_header_in          => gt0_rxheader_i,
-      rx_lane_0_data_in            => gt0_rxdata_i,
-
-      rx_lane_1_header_valid_in    => gt1_rxheadervalid_i,
-      rx_lane_1_data_valid_in      => gt1_rxdatavalid_i,
-      rx_lane_1_header_in          => gt1_rxheader_i,
-      rx_lane_1_data_in            => gt1_rxdata_i,
-
-      rx_lane_2_header_valid_in    => gt2_rxheadervalid_i,
-      rx_lane_2_data_valid_in      => gt2_rxdatavalid_i,
-      rx_lane_2_header_in          => gt2_rxheader_i,
-      rx_lane_2_data_in            => gt2_rxdata_i,
-
-      rx_lane_3_header_valid_in    => gt3_rxheadervalid_i,
-      rx_lane_3_data_valid_in      => gt3_rxdatavalid_i,
-      rx_lane_3_header_in          => gt3_rxheader_i,
-      rx_lane_3_data_in            => gt3_rxdata_i,
+      rx_lane_0_header_valid_in    => rx_lane_0_header_valid,
+      rx_lane_0_data_valid_in      => rx_lane_0_data_valid  ,
+      rx_lane_0_header_in          => rx_lane_0_header      ,
+      rx_lane_0_data_in            => rx_lane_0_data        ,
+      rx_lane_1_header_valid_in    => rx_lane_1_header_valid,
+      rx_lane_1_data_valid_in      => rx_lane_1_data_valid  ,
+      rx_lane_1_header_in          => rx_lane_1_header      ,
+      rx_lane_1_data_in            => rx_lane_1_data        ,
+      rx_lane_2_header_valid_in    => rx_lane_2_header_valid,
+      rx_lane_2_data_valid_in      => rx_lane_2_data_valid  ,
+      rx_lane_2_header_in          => rx_lane_2_header      ,
+      rx_lane_2_data_in            => rx_lane_2_data        ,
+      rx_lane_3_header_valid_in    => rx_lane_3_header_valid,
+      rx_lane_3_data_valid_in      => rx_lane_3_data_valid  ,
+      rx_lane_3_header_in          => rx_lane_3_header      ,
+      rx_lane_3_data_in            => rx_lane_3_data        ,
 
       -- PCS OUT
       tx_data_out        => tx_data_out,
@@ -1389,4 +1471,5 @@ architecture top of area_timing_wrapper is
           sysclk_in => q8_clk0_refclk_g_i
 
       );
+
 end top;

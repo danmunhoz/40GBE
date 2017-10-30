@@ -29,7 +29,6 @@ read_verilog [ glob ../rtl/utils/*.v ]
 read_verilog [ glob ../rtl/XGETH_tester/Verilog/*.v ]
 read_vhdl [ glob ../rtl/area_timing_wrapper.vhd ]
 read_xdc ../constraint/constraints.xdc
-#read_xdc ../constraint/teste.xdc
 
 
 #
@@ -41,7 +40,6 @@ set_property SEVERITY {Warning} [get_drc_checks NSTD-1]
 set_property SEVERITY {Warning} [get_drc_checks UCIO-1]
 
 #synth_design -top GTH_tester -flatten_hierarchy none -fanout_limit 50 -fsm_extraction one_hot -no_lc -part $part
-#synth_design -top core_interface -flatten_hierarchy none -fanout_limit 50 -fsm_extraction one_hot -no_lc -part $part
 
 synth_design -top area_timing_wrapper -flatten_hierarchy none -fanout_limit 50 -fsm_extraction one_hot -no_lc -part $part
 

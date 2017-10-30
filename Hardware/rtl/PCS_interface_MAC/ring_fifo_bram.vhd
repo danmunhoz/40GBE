@@ -1,5 +1,6 @@
 library UNISIM;
   use UNISIM.vcomponents.all;
+
 library UNIMACRO;
   use unimacro.Vcomponents.all;
 
@@ -135,7 +136,7 @@ begin
       WRITE_MODE => "WRITE_FIRST")    -- Specify "WRITE_FIRST for asynchrononous clocks on ports
     port map(
       DO => mem_low_out_0,            -- Output read data port, width defined by READ_WIDTH parameter
-      DI => mem_low_in_0_reg,             -- Input write data port, width defined by WRITE_WIDTH parameter
+      DI => mem_low_in_0_reg,         -- Input write data port, width defined by WRITE_WIDTH parameter
       RDADDR => r_ptr_l,              -- Input read address, width defined by read port depth
       RDCLK => clk_r,                 -- 1-bit input read clock
       RDEN => ren_int_l,              -- 1-bit input read port enable
@@ -201,7 +202,7 @@ begin
     generic map (
       BRAM_SIZE => "36Kb",
       DEVICE => "7SERIES",
-      WRITE_WIDTH => 72,                         -- 64 (data) + 5 (eop location)
+      WRITE_WIDTH => 72,
       READ_WIDTH => 72,
       DO_REG => 0,
       INIT_FILE => "NONE",

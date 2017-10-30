@@ -86,25 +86,25 @@ module wrapper_macpcs_rx(
     input [57:0]  seed_A;
     input [57:0]  seed_B;
 
-    (* KEEP = "true" *) input        rx_lane_0_header_valid_in;
-    (* KEEP = "true" *) input [1:0]  rx_lane_0_header_in;
-    (* KEEP = "true" *) input        rx_lane_0_data_valid_in;
-    (* KEEP = "true" *) input [63:0] rx_lane_0_data_in;
+    (* dont_touch = "true" *) input        rx_lane_0_header_valid_in;
+    (* dont_touch = "true" *) input [1:0]  rx_lane_0_header_in;
+    (* dont_touch = "true" *) input        rx_lane_0_data_valid_in;
+    (* dont_touch = "true" *) input [63:0] rx_lane_0_data_in;
 
-    (* KEEP = "true" *) input        rx_lane_1_header_valid_in;
-    (* KEEP = "true" *) input [1:0]  rx_lane_1_header_in;
-    (* KEEP = "true" *) input        rx_lane_1_data_valid_in;
-    (* KEEP = "true" *) input [63:0] rx_lane_1_data_in;
+    (* dont_touch = "true" *) input        rx_lane_1_header_valid_in;
+    (* dont_touch = "true" *) input [1:0]  rx_lane_1_header_in;
+    (* dont_touch = "true" *) input        rx_lane_1_data_valid_in;
+    (* dont_touch = "true" *) input [63:0] rx_lane_1_data_in;
 
-    (* KEEP = "true" *) input        rx_lane_2_header_valid_in;
-    (* KEEP = "true" *) input [1:0]  rx_lane_2_header_in;
-    (* KEEP = "true" *) input        rx_lane_2_data_valid_in;
-    (* KEEP = "true" *) input [63:0] rx_lane_2_data_in;
+    (* dont_touch = "true" *) input        rx_lane_2_header_valid_in;
+    (* dont_touch = "true" *) input [1:0]  rx_lane_2_header_in;
+    (* dont_touch = "true" *) input        rx_lane_2_data_valid_in;
+    (* dont_touch = "true" *) input [63:0] rx_lane_2_data_in;
 
-    (* KEEP = "true" *) input        rx_lane_3_header_valid_in;
-    (* KEEP = "true" *) input [1:0]  rx_lane_3_header_in;
-    (* KEEP = "true" *) input        rx_lane_3_data_valid_in;
-    (* KEEP = "true" *) input [63:0] rx_lane_3_data_in;
+    (* dont_touch = "true" *) input        rx_lane_3_header_valid_in;
+    (* dont_touch = "true" *) input [1:0]  rx_lane_3_header_in;
+    (* dont_touch = "true" *) input        rx_lane_3_data_valid_in;
+    (* dont_touch = "true" *) input [63:0] rx_lane_3_data_in;
 
     //For Testbench use
 		input					start_fifo;
@@ -412,7 +412,7 @@ module wrapper_macpcs_rx(
         .fifo_empty         (fifo_interface_empty)
    );
 
-    PCS_core_rx INST_0_PCS_core
+    (* dont_touch = "true" *) PCS_core_rx INST_0_PCS_core
     (
         // CLOCKS
         .clk156             (clk_156),
@@ -470,7 +470,7 @@ module wrapper_macpcs_rx(
         .start_out          (start_out_0)
     );
 
-    PCS_core_rx INST_1_PCS_core
+    (* dont_touch = "true" *) PCS_core_rx INST_1_PCS_core
     (
         // CLOCKS
         .clk156             (clk_156),
@@ -528,7 +528,7 @@ module wrapper_macpcs_rx(
         .start_out          (start_out_1)
     );
 
-    PCS_core_rx INST_2_PCS_core
+    (* dont_touch = "true" *) PCS_core_rx INST_2_PCS_core
     (
         // CLOCKS
         .clk156             (clk_156),
@@ -586,7 +586,7 @@ module wrapper_macpcs_rx(
         .start_out          (start_out_2)
     );
 
-    PCS_core_rx INST_3_PCS_core
+    (* dont_touch = "true" *) PCS_core_rx INST_3_PCS_core
     (
         // CLOCKS
         .clk156             (clk_156),
@@ -645,7 +645,7 @@ module wrapper_macpcs_rx(
     );
 
 
-    xge_mac_rx INST_xge_mac
+    (* dont_touch = "true" *) xge_mac_rx INST_xge_mac
     (   // Simple Tx-Rx interface signals
         .clk_156m25         (clk_156),
         .clk_xgmii_rx       (clk_xgmii_rx),
