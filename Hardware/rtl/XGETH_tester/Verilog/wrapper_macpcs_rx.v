@@ -288,6 +288,15 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire [1:0]   pcs_3_header_out;
     (* syn_keep = "true"*) wire [63:0]  pcs_3_data_out;
 
+    (* syn_keep = "true"*) wire [1:0]   pcs_0_header_sel;
+    (* syn_keep = "true"*) wire [63:0]  pcs_0_data_sel;
+    (* syn_keep = "true"*) wire [1:0]   pcs_1_header_sel;
+    (* syn_keep = "true"*) wire [63:0]  pcs_1_data_sel;
+    (* syn_keep = "true"*) wire [1:0]   pcs_2_header_sel;
+    (* syn_keep = "true"*) wire [63:0]  pcs_2_data_sel;
+    (* syn_keep = "true"*) wire [1:0]   pcs_3_header_sel;
+    (* syn_keep = "true"*) wire [63:0]  pcs_3_data_sel;
+
 
     // MAC/PCS XGMII Interconnection
     (* syn_keep = "true"*) wire [7:0]  xgmii_txc_lane_0;
@@ -412,6 +421,50 @@ module wrapper_macpcs_rx(
         .fifo_empty         (fifo_interface_empty)
    );
 
+    (* dont_touch = "true" *) pcs_selector INST_0_pcs_selector (
+         .clk   			(rx_clk_161_13),
+         .rst_n       (async_reset_n),
+         .old_header	  (old_header_0),
+         .old_data	(old_data_0),
+         .header_in	    (pcs_0_header_out[1:0]),
+         .data_in	  (pcs_0_data_out[63:0]),
+         .header_out	  (pcs_0_header_sel[1:0]),
+         .data_out	(pcs_0_data_sel[63:0])
+    );
+
+    (* dont_touch = "true" *) pcs_selector INST_1_pcs_selector (
+        .clk   			(rx_clk_161_13),
+        .rst_n      (async_reset_n),
+        .old_header	  (pcs_0_header_out[1:0]),
+        .old_data	(pcs_0_data_out[63:0]),
+        .header_in	  (pcs_1_header_out[1:0]),
+        .data_in	(pcs_1_data_out[63:0]),
+        .header_out	  (pcs_1_header_sel[1:0]),
+        .data_out	(pcs_1_data_sel[63:0])
+    );
+
+   (* dont_touch = "true" *) pcs_selector INST_2_pcs_selector (
+       .clk   		 (rx_clk_161_13),
+       .rst_n      (async_reset_n),
+       .old_header	 (pcs_1_header_out[1:0]),
+       .old_data (pcs_1_data_out[63:0]),
+       .header_in	   (pcs_2_header_out[1:0]),
+       .data_in	 (pcs_2_data_out[63:0]),
+       .header_out	 (pcs_2_header_sel[1:0]),
+       .data_out (pcs_2_data_sel[63:0])
+    );
+
+    (* dont_touch = "true" *) pcs_selector INST_3_pcs_selector (
+        .clk   		  (rx_clk_161_13),
+        .rst_n      (async_reset_n),
+        .old_header	  (pcs_2_header_out[1:0]),
+        .old_data (pcs_2_data_out[63:0]),
+        .header_in	  (pcs_3_header_out[1:0]),
+        .data_in	(pcs_3_data_out[63:0]),
+        .header_out	  (pcs_3_header_sel[1:0]),
+        .data_out (pcs_3_data_sel[63:0])
+     );
+
     PCS_core_rx INST_0_PCS_core
     (
         // CLOCKS
@@ -439,8 +492,10 @@ module wrapper_macpcs_rx(
         .seed_A             (seed_A),
         .seed_B             (seed_B),
         .rx_header_valid_in (rx_lane_0_header_valid_in),
-        .rx_header_in       (pcs_0_header_out[1:0]),
         .rx_data_valid_in   (rx_lane_0_data_valid_in),
+        // .rx_header_in       (pcs_0_header_out[1:0]),
+        // .rx_data_in         (pcs_0_data_out[63:0]),
+        .rx_header_in       (pcs_0_header_out[1:0]),
         .rx_data_in         (pcs_0_data_out[63:0]),
         .hi_ber             (hi_ber_0),
         .blk_lock           (blk_lock_0),
@@ -463,6 +518,8 @@ module wrapper_macpcs_rx(
 
         .rx_old_header_in   (old_header_0),
         .rx_old_data_in     (old_data_0),
+        // .rx_old_header_in   (pcs_3_header_out[1:0]),
+        // .rx_old_data_in     (pcs_3_data_out[63:0]),
 
         .terminate_in       (terminate_in_0),
         .terminate_out      (terminate_out_0),
@@ -497,8 +554,10 @@ module wrapper_macpcs_rx(
         .seed_A             (seed_A),
         .seed_B             (seed_B),
         .rx_header_valid_in (rx_lane_1_header_valid_in),
-        .rx_header_in       (pcs_1_header_out[1:0]),
         .rx_data_valid_in   (rx_lane_1_data_valid_in),
+        // .rx_header_in       (pcs_1_header_out[1:0]),
+        // .rx_data_in         (pcs_1_data_out[63:0]),
+        .rx_header_in       (pcs_1_header_out[1:0]),
         .rx_data_in         (pcs_1_data_out[63:0]),
         .hi_ber             (hi_ber_1),
         .blk_lock           (blk_lock_1),
@@ -555,8 +614,10 @@ module wrapper_macpcs_rx(
         .seed_A             (seed_A),
         .seed_B             (seed_B),
         .rx_header_valid_in (rx_lane_2_header_valid_in),
-        .rx_header_in       (pcs_2_header_out[1:0]),
         .rx_data_valid_in   (rx_lane_2_data_valid_in),
+        // .rx_header_in       (pcs_2_header_out[1:0]),
+        // .rx_data_in         (pcs_2_data_out[63:0]),
+        .rx_header_in       (pcs_2_header_out[1:0]),
         .rx_data_in         (pcs_2_data_out[63:0]),
         .hi_ber             (hi_ber_2),
         .blk_lock           (blk_lock_2),
@@ -613,8 +674,10 @@ module wrapper_macpcs_rx(
         .seed_A             (seed_A),
         .seed_B             (seed_B),
         .rx_header_valid_in (rx_lane_3_header_valid_in),
-        .rx_header_in       (pcs_3_header_out[1:0]),
         .rx_data_valid_in   (rx_lane_3_data_valid_in),
+        // .rx_header_in       (pcs_3_header_out[1:0]),
+        // .rx_data_in         (pcs_3_data_out[63:0]),
+        .rx_header_in       (pcs_3_header_out[1:0]),
         .rx_data_in         (pcs_3_data_out[63:0]),
         .hi_ber             (hi_ber_3),
         .blk_lock           (blk_lock_3),
