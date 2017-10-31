@@ -170,6 +170,13 @@ architecture behav_lane_reorder of lane_reorder is
       read_from_fifos : std_logic;
     end record;
 
+    type out_regs is record
+      block_0   : std_logic_vector(65 downto 0);
+      block_1   : std_logic_vector(65 downto 0);
+      block_2   : std_logic_vector(65 downto 0);
+      block_3   : std_logic_vector(65 downto 0);
+    end record;
+
     type fsm_state is (S_INIT, S_END, S_SYNC, S_TRANSMIT);
     signal CURRENT_STATE, NEXT_STATE: fsm_state;
 
@@ -178,6 +185,7 @@ architecture behav_lane_reorder of lane_reorder is
     signal barreira_skew : barreira_0;
     signal barreira_bip  : barreira_1;
     signal barreira_xbar : barreira_2;
+    signal out_data      : out_regs;
 
     signal logical_lane_0_int : std_logic_vector(2 downto 0);
     signal logical_lane_1_int : std_logic_vector(2 downto 0);
@@ -410,14 +418,15 @@ begin
 				almost_f   	=> 	almost_f_0,
 
 				ren					=>	barreira_xbar.read_from_fifos,
-				data_out    =>	fifo_out_0,
+				-- data_out    =>	fifo_out_0,
+        data_out    =>	out_data.block_0,
 				empty       =>	empty_0,
 				almost_e    =>	almost_e_0
   );
 
   fifo_in_0 <= barreira_xbar.header_0 & barreira_xbar.data_0;
-  pcs_0_header_out <= fifo_out_0(65 downto 64);
-  pcs_0_data_out <= fifo_out_0(63 downto 0);
+  -- pcs_0_header_out <= fifo_out_0(65 downto 64);
+  -- pcs_0_data_out <= fifo_out_0(63 downto 0);
 
 
   fifo_1 : entity work.reorder_fifo
@@ -430,14 +439,15 @@ begin
  			almost_f   	=> 	almost_f_1,
 
  			ren					=>	barreira_xbar.read_from_fifos,
- 			data_out    =>	fifo_out_1,
+ 		  -- data_out    =>	fifo_out_1,
+      data_out    =>	out_data.block_1,
  			empty       =>	empty_1,
  			almost_e    =>	almost_e_1
   );
 
   fifo_in_1 <= barreira_xbar.header_1 & barreira_xbar.data_1;
-  pcs_1_header_out <= fifo_out_1(65 downto 64);
-  pcs_1_data_out <= fifo_out_1(63 downto 0);
+  -- pcs_1_header_out <= fifo_out_1(65 downto 64);
+  -- pcs_1_data_out <= fifo_out_1(63 downto 0);
 
 
   fifo_2 : entity work.reorder_fifo
@@ -450,14 +460,15 @@ begin
 				almost_f   	=> 	almost_f_2,
 
 				ren					=>	barreira_xbar.read_from_fifos,
-				data_out    =>	fifo_out_2,
+				-- data_out    =>	fifo_out_2,
+        data_out    =>	out_data.block_2,
 				empty       =>	empty_2,
 				almost_e    =>	almost_e_2
   );
 
   fifo_in_2 <= barreira_xbar.header_2 & barreira_xbar.data_2;
-  pcs_2_header_out <= fifo_out_2(65 downto 64);
-  pcs_2_data_out <= fifo_out_2(63 downto 0);
+  -- pcs_2_header_out <= fifo_out_2(65 downto 64);
+  -- pcs_2_data_out <= fifo_out_2(63 downto 0);
 
 
   fifo_3 : entity work.reorder_fifo
@@ -470,12 +481,25 @@ begin
 				almost_f   	=> 	almost_f_3,
 
 				ren					=>	barreira_xbar.read_from_fifos,
-				data_out    =>	fifo_out_3,
+				-- data_out    =>	fifo_out_3,
+        data_out    =>	out_data.block_3,
 				empty       =>	empty_3,
 				almost_e    =>	almost_e_3
   );
 
   fifo_in_3 <= barreira_xbar.header_3 & barreira_xbar.data_3;
-  pcs_3_header_out <= fifo_out_3(65 downto 64);
-  pcs_3_data_out <= fifo_out_3(63 downto 0);
+  -- pcs_3_header_out <= fifo_out_3(65 downto 64);
+  -- pcs_3_data_out <= fifo_out_3(63 downto 0);
+
+  reg_out_data_0:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_0(63 downto 0),  Q=>pcs_0_data_out);
+  reg_out_header_0:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_0(65 downto 64), Q=>pcs_0_header_out);
+
+  reg_out_data_1:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_1(63 downto 0),  Q=>pcs_1_data_out);
+  reg_out_header_1:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_1(65 downto 64), Q=>pcs_1_header_out);
+
+  reg_out_data_2:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_2(63 downto 0),  Q=>pcs_2_data_out);
+  reg_out_header_2:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_2(65 downto 64), Q=>pcs_2_header_out);
+
+  reg_out_data_3:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_3(63 downto 0),  Q=>pcs_3_data_out);
+  reg_out_header_3:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_3(65 downto 64), Q=>pcs_3_header_out);
 end behav_lane_reorder;
