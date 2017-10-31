@@ -100,7 +100,6 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
     reg           jtm_d_neq_0, jtm_d_neq_1, jtm_d_neq_lf, jtm_d_neq_lfb;
     reg           jtm_err_bit;
 
-    // wire [63:0]   rx_old_block = rx_old_data_in;
     reg  [63:0]   rx_old_block;
 
     reg  [57:0]   rx_old_block_desc;
