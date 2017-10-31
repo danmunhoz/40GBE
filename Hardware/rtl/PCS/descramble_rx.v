@@ -132,31 +132,15 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
       end
     end
 
-    // always @ ( RXD_Sync or rstb or rx_old_block ) begin
-    // // always @(posedge clk or negedge rstb) begin
-    //   if (!rstb) begin
-    //     RXD_data_sync[63:0] <= 64'h0;
-    //   end
-    //   else begin
-    //     if (RXD_data_sync == rx_old_block) begin
-    //       RXD_data_sync <= RXD_data_sync;
-    //     end
-    //     else begin
-    //       RXD_data_sync[63:0] <= RXD_Sync[65:2];
-    //     end
-    //   end
-    // end
-
-    always @ ( rx_old_block or rstb or rx_old_block or RXD_data_sync) begin
-    // always @(posedge clk or negedge rstb) begin
+    always @ ( rx_old_block or rstb or RXD_data_sync) begin
       if (!rstb) begin
         rx_old_block_desc[57:0] <= 58'h3;
       end
       else begin
-        if (RXD_data_sync == rx_old_block) begin
-          rx_old_block_desc <= rx_old_block_desc;
-        end
-        else begin
+        // if (RXD_data_sync == rx_old_block) begin
+        //   rx_old_block_desc <= rx_old_block_desc;
+        // end
+        // else begin
          rx_old_block_desc[57] <= rx_old_block[6];
          rx_old_block_desc[56] <= rx_old_block[7];
          rx_old_block_desc[55] <= rx_old_block[8];
@@ -221,75 +205,9 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
          rx_old_block_desc[2]  <= rx_old_block[61];
          rx_old_block_desc[1]  <= rx_old_block[62];
          rx_old_block_desc[0]  <= rx_old_block[63];
-         end
+        //  end
       end
     end
-
-    // assign rx_old_block_desc[57] = rx_old_block[6];
-    // assign rx_old_block_desc[56] = rx_old_block[7];
-    // assign rx_old_block_desc[55] = rx_old_block[8];
-    // assign rx_old_block_desc[54] = rx_old_block[9];
-    // assign rx_old_block_desc[53] = rx_old_block[10];
-    // assign rx_old_block_desc[52] = rx_old_block[11];
-    // assign rx_old_block_desc[51] = rx_old_block[12];
-    // assign rx_old_block_desc[50] = rx_old_block[13];
-    //
-    // assign rx_old_block_desc[49] = rx_old_block[14];
-    // assign rx_old_block_desc[48] = rx_old_block[15];
-    // assign rx_old_block_desc[47] = rx_old_block[16];
-    // assign rx_old_block_desc[46] = rx_old_block[17];
-    // assign rx_old_block_desc[45] = rx_old_block[18];
-    // assign rx_old_block_desc[44] = rx_old_block[19];
-    // assign rx_old_block_desc[43] = rx_old_block[20];
-    // assign rx_old_block_desc[42] = rx_old_block[21];
-    //
-    // assign rx_old_block_desc[41] = rx_old_block[22];
-    // assign rx_old_block_desc[40] = rx_old_block[23];
-    // assign rx_old_block_desc[39] = rx_old_block[24];
-    // assign rx_old_block_desc[38] = rx_old_block[25];
-    // assign rx_old_block_desc[37] = rx_old_block[26];
-    // assign rx_old_block_desc[36] = rx_old_block[27];
-    // assign rx_old_block_desc[35] = rx_old_block[28];
-    // assign rx_old_block_desc[34] = rx_old_block[29];
-    //
-    // assign rx_old_block_desc[33] = rx_old_block[30];
-    // assign rx_old_block_desc[32] = rx_old_block[31];
-    // assign rx_old_block_desc[31] = rx_old_block[32];
-    // assign rx_old_block_desc[30] = rx_old_block[33];
-    // assign rx_old_block_desc[29] = rx_old_block[34];
-    // assign rx_old_block_desc[28] = rx_old_block[35];
-    // assign rx_old_block_desc[27] = rx_old_block[36];
-    // assign rx_old_block_desc[26] = rx_old_block[37];
-    //
-    // assign rx_old_block_desc[25] = rx_old_block[38];
-    // assign rx_old_block_desc[24] = rx_old_block[39];
-    // assign rx_old_block_desc[23] = rx_old_block[40];
-    // assign rx_old_block_desc[22] = rx_old_block[41];
-    // assign rx_old_block_desc[21] = rx_old_block[42];
-    // assign rx_old_block_desc[20] = rx_old_block[43];
-    // assign rx_old_block_desc[19] = rx_old_block[44];
-    // assign rx_old_block_desc[18] = rx_old_block[45];
-    //
-    // assign rx_old_block_desc[17] = rx_old_block[46];
-    // assign rx_old_block_desc[16] = rx_old_block[47];
-    // assign rx_old_block_desc[15] = rx_old_block[48];
-    // assign rx_old_block_desc[14] = rx_old_block[49];
-    // assign rx_old_block_desc[13] = rx_old_block[50];
-    // assign rx_old_block_desc[12] = rx_old_block[51];
-    // assign rx_old_block_desc[11] = rx_old_block[52];
-    // assign rx_old_block_desc[10] = rx_old_block[53];
-    //
-    // assign rx_old_block_desc[9]  = rx_old_block[54];
-    // assign rx_old_block_desc[8]  = rx_old_block[55];
-    // assign rx_old_block_desc[7]  = rx_old_block[56];
-    // assign rx_old_block_desc[6]  = rx_old_block[57];
-    // assign rx_old_block_desc[5]  = rx_old_block[58];
-    // assign rx_old_block_desc[4]  = rx_old_block[59];
-    // assign rx_old_block_desc[3]  = rx_old_block[60];
-    // assign rx_old_block_desc[2]  = rx_old_block[61];
-    // assign rx_old_block_desc[1]  = rx_old_block[62];
-    // assign rx_old_block_desc[0]  = rx_old_block[63];
-
 
     assign DeScr_wire[0] = RXD_data_sync[0]^rx_old_block_desc[38]^rx_old_block_desc[57];
     assign DeScr_wire[1] = RXD_data_sync[1]^rx_old_block_desc[37]^rx_old_block_desc[56];

@@ -119,10 +119,21 @@ architecture arch_echo_generator of echo_generator is
   signal start_lfsr            : std_logic;
   attribute mark_debug of start_lfsr : signal is "true";
 
+  signal counter : std_logic_vector(63 downto 0); -- KOROL
+
   signal flag_lfsr_16_rem, flag_lfsr_32_rem, flag_lfsr_48_rem, flag_lfsr_8_rem, flag_lfsr_24_rem, flag_lfsr_40_rem, flag_lfsr_56_rem : std_logic;
   signal lfsr_rem : std_logic_vector(55 downto 0) := (others=>'0');
 
 begin
+  counter_proc: process (clock, reset) -- KOROL
+  begin
+    if reset = '0' then
+      counter <= (others =>'0');
+    elsif clock'event and clock = '1' then
+        counter <= counter + 1;
+    end if;
+  end process;
+
   process (clock, reset)
   begin
     if reset = '0' then
@@ -422,7 +433,9 @@ begin
         when S_PAYLOAD =>
           pkt_tx_val <= '1';
           if payload_type = 0 then --PACKET ID
-            pkt_tx_data_wire(63 downto 0) <= random(63 downto 0);
+            -- pkt_tx_data_wire(63 downto 0) <= random(63 downto 0);
+            pkt_tx_data_wire(63 downto 0) <= counter; -- KOROL
+            
           elsif payload_type = 1 then -- BERT
             if(flag_lfsr_8_rem = '1') then
               pkt_tx_data_wire(63 downto 0) <= lfsr_rem(7 downto 0) & random (63 downto 8);
@@ -944,7 +957,6 @@ lfsr_i: entity work.lfsr
       valid_seed => valid_seed,
       polynomial => lfsr_polynomial,
       data_in => random,
-      -- data_in => time_stamp_value, -- KOROL's edit
       start => start_lfsr,
       data_out => random
     );
