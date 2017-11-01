@@ -394,10 +394,10 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
                 DeScr_wire_reg <= DeScr_wire;
                 RXD_hdr_sync_reg <= RXD_hdr_sync;
                 // DeScr_RXD[65:0] <= {DeScr_wire[63:0],RXD_Sync[1:0]};
-                if (is_reg_current_equal == 1'b0)
+                // if (is_reg_current_equal == 1'b0)
                   DeScr_RXD[65:0] <= {DeScr_wire[63:0],RXD_hdr_sync[1:0]};
-                else
-                  DeScr_RXD[65:0] <= {DeScr_wire_reg[63:0],RXD_hdr_sync_reg[1:0]};
+                // else
+                  // DeScr_RXD[65:0] <= {DeScr_wire_reg[63:0],RXD_hdr_sync_reg[1:0]};
                   // DeScr_RXD[65:0] <= {DeScr_wire[63:0],2'b01};
 
             end // else: !if(bypass_descram)

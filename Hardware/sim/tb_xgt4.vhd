@@ -331,7 +331,7 @@ begin
         -- payload_type        => (others=>'0'),
         payload_type        => "000",
         -- payload_cycles      => (others=>'0'),
-        payload_cycles      => x"00000012",
+        payload_cycles      => x"00000006",
         payload_last_size   => (others=>'0'),
         -- payload_last_size   => "0001000",
         pkt_lost_counter    => open
