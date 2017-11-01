@@ -252,6 +252,11 @@ architecture behav_lane_reorder of lane_reorder is
     signal RDCOUNT_3 : std_logic_vector(8 downto 0);
     signal WRCOUNT_3 : std_logic_vector(8 downto 0);
 
+    signal fifo_wen_0 : std_logic;
+    signal fifo_wen_1 : std_logic;
+    signal fifo_wen_2 : std_logic;
+    signal fifo_wen_3 : std_logic;
+
 begin
   reset_n <= not reset;
 
@@ -407,11 +412,21 @@ begin
   --==============================================================================
   -- descarta bloco de sync
 
+  fifo_wen_0 <= '0' when (barreira_xbar.data_0 = shuffle_out_3(63 downto 0))
+                        else barreira_xbar.wen_0;
+  fifo_wen_1 <= '0' when (barreira_xbar.data_1 = barreira_xbar.data_0)
+                        else barreira_xbar.wen_1;
+  fifo_wen_2 <= '0' when (barreira_xbar.data_2 = barreira_xbar.data_1)
+                        else barreira_xbar.wen_2;
+  fifo_wen_3 <= '0' when (barreira_xbar.data_3 = barreira_xbar.data_2)
+                        else barreira_xbar.wen_3;
+
   fifo_0 : entity work.reorder_fifo
   port map (
  				clk       	=> 	clock,
 				rst_n     	=> 	reset_n,
 				wen 				=> 	barreira_xbar.wen_0,
+        -- wen 				=> 	fifo_wen_0,
 				data_in    	=> 	fifo_in_0,
 				full       	=> 	full_0,
 				almost_f   	=> 	almost_f_0,
@@ -433,6 +448,7 @@ begin
 			clk       	=> 	clock,
  			rst_n     	=> 	reset_n,
  			wen 				=> 	barreira_xbar.wen_1,
+      -- wen 				=> 	fifo_wen_1,
  			data_in    	=> 	fifo_in_1,
  			full       	=> 	full_1,
  			almost_f   	=> 	almost_f_1,
@@ -454,6 +470,7 @@ begin
  				clk       	=> 	clock,
 				rst_n      	=> 	reset_n,
 				wen 				=> 	barreira_xbar.wen_2,
+        -- wen 				=> 	fifo_wen_2,
 				data_in    	=> 	fifo_in_2,
 				full       	=> 	full_2,
 				almost_f   	=> 	almost_f_2,
@@ -475,6 +492,7 @@ begin
  				clk       	=> 	clock,
 				rst_n     	=> 	reset_n,
 				wen 				=> 	barreira_xbar.wen_3,
+        -- wen 				=> 	fifo_wen_3,
 				data_in    	=> 	fifo_in_3,
 				full       	=> 	full_3,
 				almost_f   	=> 	almost_f_3,

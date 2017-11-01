@@ -309,8 +309,8 @@ begin
         ip_destination      => x"0ABCDE02",
         packet_length       => x"05EE",
 
-        -- timestamp_base      => (others=>'0'),
-        timestamp_base => time_stamp_value,
+        timestamp_base      => (others=>'0'),
+        -- timestamp_base => time_stamp_value,
         time_stamp_flag     => '0',
 
         -- TX mac interface
@@ -322,15 +322,14 @@ begin
         pkt_tx_mod          => pkt_tx_mod,
 
         --LFSR settings
-        -- lfsr_seed           => (others=>'1'),
-        lfsr_seed           => x"0000000C00000003",
-        -- lfsr_polynomial     => (others=>'0'),
+        lfsr_seed           => (others=>'1'),
+        -- lfsr_seed           => x"0000000C00000003",
         lfsr_polynomial     => "10",
-        -- valid_seed          => '1',
-        valid_seed          => seed_val,
+        valid_seed          => '1',
+        -- valid_seed          => seed_val,
 
         -- payload_type        => (others=>'0'),
-        payload_type        => "001",
+        payload_type        => "000",
         -- payload_cycles      => (others=>'0'),
         payload_cycles      => x"00000012",
         payload_last_size   => (others=>'0'),
