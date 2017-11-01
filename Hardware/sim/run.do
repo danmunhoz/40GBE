@@ -110,7 +110,7 @@ vsim -novopt work.glbl work.Top -t 1ps
 
 do wave.do
 # do wave_interface_fifo.do
-run 1000 ns
+run 30000 ns
 
 #exec python scoreboard.py
 exec python clean_dump_fifo.py
