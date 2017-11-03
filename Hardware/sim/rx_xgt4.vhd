@@ -136,6 +136,11 @@ architecture behav of rx_xgt4 is
 
     signal valid_in : std_logic;
 
+    signal fifo_saida_empty : std_logic;
+    signal fifo_saida_full : std_logic;
+
+    signal read_as_mac : std_logic;
+
   component wrapper_macpcs_rx port(
           -- Clocks
           clk_156             : in  std_logic;
@@ -225,6 +230,8 @@ architecture behav of rx_xgt4 is
           mac_sop             : out std_logic;
           mac_data            : out std_logic_vector(127 downto 0);
           mac_eop             : out std_logic_vector(4 downto 0);
+          empty_fifo          : out std_logic;
+          full_fifo           : out std_logic;
 
           -- Wishbone (MAC)
           wb_adr_i            : in  std_logic_vector(7 downto 0);
@@ -262,6 +269,7 @@ begin
           start_fifo <= '0', '1' after 65 ns;
 
           read_fifo <= '0', '1' after 400 ns;
+          read_as_mac <= read_fifo when fifo_saida_empty = '0' else '0';
 
           valid_in <= '0', '1' after 127 ns;
 
@@ -295,7 +303,7 @@ begin
 
             -- For testbench use only
             start_fifo => start_fifo,
-            read_fifo => read_fifo,
+
             dump_xgmii_rxc_0 => dump_xgmii_rxc_0,
             dump_xgmii_rxd_0 => dump_xgmii_rxd_0,
             dump_xgmii_rxc_1 => dump_xgmii_rxc_1,
@@ -326,6 +334,9 @@ begin
             rx_lane_3_header_in          => rx_lane_3_header_in,
             rx_lane_3_data_in            => rx_lane_3_data_in,
 
+            read_fifo                    => read_as_mac,
+            empty_fifo                   => fifo_saida_empty,
+            full_fifo                    => fifo_saida_full,
             mac_sop                      => mac_sop,
             mac_data                     => mac_data,
             mac_eop                      => mac_eop,
