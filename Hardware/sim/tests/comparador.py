@@ -5,7 +5,30 @@ Created on Mon Oct 16 16:12:43 2017
 """
 import os
 n=1
-
+##############################################################
+############# EXCLUI OS ARQUIVOS DE SINALIZACAO
+##############################################################
+while(n<=8):
+    string = "sc"
+    string += str(n)
+    try:
+       with open(string+'/PASSOU.txt', 'r') as f:
+           os.remove(string+'/PASSOU.txt')
+    except IOError:
+        n=n
+        #print u'Arquivo nao encontrado2!'
+    try:
+       with open(string+'/NAO PASSOU.txt', 'r') as f:
+           os.remove(string+'/NAO PASSOU.txt')
+    except IOError:
+        n=n
+        #print u'Arquivo nao encontrado!'
+    n=n+1
+##############################################################
+############# COMPARA OS ARQUIVOS E SINALIZA O RESULTADO EM
+############# UM ARQUIVO TXT
+##############################################################
+n=1
 while(n<=8):
     string = "sc"
     string += str(n)
