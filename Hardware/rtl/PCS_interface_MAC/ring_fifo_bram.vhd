@@ -279,8 +279,8 @@ begin
           r_ptr_l <= r_ptr_l + 1;
           ren_int_l <= '1';
           ren_int_h <= '0';
-          data_out <= mem_low_out_1(68 downto 5) & mem_low_out_0;
-          eop_addr_out <= mem_low_out_1(4 downto 0);
+          data_out <= mem_low_out_1(69 downto 6) & mem_low_out_0;
+          eop_addr_out <= mem_low_out_1(5 downto 1);
           is_sop_out <= mem_low_out_1(0);
         else
           r_ptr_h <= r_ptr_h + 1;
