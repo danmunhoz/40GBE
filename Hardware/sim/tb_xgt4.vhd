@@ -331,7 +331,7 @@ begin
         -- payload_type        => (others=>'0'),
         payload_type        => "000",
         -- payload_cycles      => (others=>'0'),
-        payload_cycles      => x"00000006",
+        payload_cycles      => x"0000001F",
         payload_last_size   => (others=>'0'),
         -- payload_last_size   => "0001000",
         pkt_lost_counter    => open
@@ -342,7 +342,7 @@ begin
 
       -- wait for 144 ns;
       --
-      for i in 0 to 3 loop
+      for i in 0 to 4 loop
         wait for 56 ns;
         pkt_tx_start <= '1';
         wait until pkt_tx_eop = '1';
