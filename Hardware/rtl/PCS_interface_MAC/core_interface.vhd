@@ -3,7 +3,7 @@ library UNISIM;
 
 library UNIMACRO;
   use unimacro.Vcomponents.all;
-  
+
 library ieee;
   use ieee.std_logic_1164.all;
 
@@ -37,13 +37,17 @@ architecture behav_core_interface of core_interface is
     signal ctrl_mux_delay      : std_logic_vector(  1 downto 0);
     signal ctrl_shift_reg      : std_logic_vector(  2 downto 0);
     signal eop_line_offset     : std_logic_vector(  5 downto 0);
-    signal shift_reg_out_0     : std_logic_vector(255 downto 0);
+    -- signal shift_reg_out_0     : std_logic_vector(255 downto 0);
+    signal shift_reg_out_0     : std_logic_vector(223 downto 0);
     signal shift_reg_out_1     : std_logic_vector(255 downto 0);
     signal shifter_out         : std_logic_vector(255 downto 0);
     signal shifter_out_ut      : std_logic_vector(255 downto 0);
     signal fifo_wen            : std_logic;
     signal is_sop_control      : std_logic;
     signal eop_addr            : std_logic_vector(5 downto 0);
+
+     attribute dont_touch : string;
+     attribute dont_touch of controller,shift_reg,shifter,fifo_b : label is "true";
 
   begin
 
@@ -78,7 +82,7 @@ architecture behav_core_interface of core_interface is
     );
 
     shifter: entity work.mii_shifter port map(
-          in_0            => shift_reg_out_0,
+          in_0            => shift_reg_out_0(223 downto 0),
           in_1            => shift_reg_out_1,
           ctrl_reg_shift  => ctrl_shift_reg,
           data_out        => shifter_out

@@ -210,7 +210,7 @@ module rx_path_rx (/*AUTOARG*/
   //       .rstb              (arstb)
   //       );
 
-    opt_fifo_new  INST_RX_PATH_FIFO
+    (* dont_touch = "true" *) opt_fifo_new  INST_RX_PATH_FIFO
         (
          .readdata          (decoder_data_in[65:0]),
          .spill             (spill),

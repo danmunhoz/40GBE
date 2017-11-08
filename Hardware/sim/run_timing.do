@@ -35,6 +35,8 @@ vmap xilinxcorelib_ver /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/verilog/mt
 
 vlog -novopt ../implementation/output_dir/cpu_impl_netlist.v
 
+
+
 scgenmod area_timing_wrapper > area_timing_wrapper.h
 
 sccom dump_output.cpp
@@ -45,18 +47,24 @@ sccom -g sc_tb_timing.cpp
 sccom -link -B/usr/bin/
 
 #exec "sed -i '/INVERTED/d' ../implementation/output_dir/cpu_impl_netlist.v"
+#sed -i '/INVERTED/d' ../implementation/output_dir/cpu_impl_netlist.v // comando para capar fora os inverted.
 
-vsim -voptargs=+acc=lprn+notimingchecks -L unisims_ver -L unimacro_ver -L simprims_ver \
+#vsim -voptargs=+acc=lprn+notimingchecks -L unisims_ver -L unimacro_ver -L simprims_ver \
+
+vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 -L secureip -L xilinxcorelib work.glbl \
 -sdftyp ../implementation/output_dir/cpu_impl_netlist.sdf -sdfnowarn -sdfnoerror \
 work.Top -t 1ps
-
+do wave_t.do
+run 1000 ns
 
 #vsim -voptargs=+acc=lprn -L unisims_ver -L unimacro_ver -L simprims_ver -L unisim -L unimacro -L simprim -L secureip -L xilinxcorelib_ver -L xilinxcorelib work.glbl -sdftyp ../implementation/output_dir/cpu_impl_netlist.sdf work.Top -t 1ps
-
 
 #vsim -novopt work.glbl  work.Top -t 1ps
 # -sdfnowarn
 
-do wave.do
-run 1000 ns
+#do wave_t.do
+#run 1000 ns
+
+#vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver -L secureip -L xilinxcorelib work.glbl -sdftyp ../implementation/output_dir/cpu_impl_netlist.sdf -sdfnowarn -sdfnoerror work.Top -t 1ps
+#do wave_t.do

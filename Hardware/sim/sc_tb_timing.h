@@ -25,13 +25,16 @@ SC_MODULE(Top) {
   sc_clock clk_312_n;
 
   sc_event reset_deactivation_event;
+  sc_event start_fifo_PCS_deactivation_event;
   sc_event reset_mii_tx_deactivation_event;
   sc_event valid_rx_generator_event;
 
   sc_signal<sc_logic> iclock156;
   sc_signal<sc_logic> iclock161;
   sc_signal<sc_logic> iclock312;
+
   //tanauan
+  sc_signal<sc_logic> start_fifo_tb;
   sc_signal<sc_logic> iclock156n;
   sc_signal<sc_logic> iclock161n;
   sc_signal<sc_logic> iclock312n;
@@ -116,6 +119,7 @@ SC_MODULE(Top) {
 
   void clock_assign();
   void reset_generator();
+  void start_fifo_PCS();
   void reset_mii_tx_generator();
   void valid_rx_generator();
   //void clock_neg();
@@ -156,6 +160,7 @@ SC_MODULE(Top) {
     area_timing_wrapper_inst->SYSCLK_IN_P(iclock161); //clk 200
 
     area_timing_wrapper_inst->rst_n(reset); //clk 200
+    area_timing_wrapper_inst->start_fifo_tb(start_fifo_tb);
 
     area_timing_wrapper_inst->rx_lane_0_header_valid_in(rx_header_valid_in);
     area_timing_wrapper_inst->rx_lane_0_header_in(header_out_0);
@@ -253,6 +258,9 @@ SC_MODULE(Top) {
     SC_METHOD(reset_generator);
     sensitive << reset_deactivation_event;
 
+    SC_METHOD(start_fifo_PCS);
+    sensitive << start_fifo_PCS_deactivation_event;
+
     //tanauan
     // SC_METHOD(clock_neg);
     // sensitive << iclock156;
@@ -311,18 +319,33 @@ inline void Top::reset_generator()
     {
         first ++;
         reset.write(SC_LOGIC_0);
-        reset_deactivation_event.notify(35, SC_NS);
+        reset_deactivation_event.notify(70, SC_NS);
         // Todos juntos
         reset_mii_tx.write(SC_LOGIC_0);
         reset_mii_rx.write(SC_LOGIC_0);
     }
-    else{
+    else
+    {
         first ++;
         reset.write(SC_LOGIC_1);
         reset_mii_rx.write(SC_LOGIC_1);
-
     }
+}
 
+inline void Top::start_fifo_PCS()
+{
+  static int cont = 0;
+  if (cont == 0)
+  {
+      cont ++;
+      start_fifo_tb.write(SC_LOGIC_0);
+      start_fifo_PCS_deactivation_event.notify(150, SC_NS);
+  }
+  else
+  {
+      cont ++;
+      start_fifo_tb.write(SC_LOGIC_1);
+  }
 }
 
 inline void Top::reset_mii_tx_generator()
@@ -349,7 +372,8 @@ inline void Top::valid_rx_generator()
         f = false;
         rx_header_valid_in.write(SC_LOGIC_0);
         rx_data_valid_in.write(SC_LOGIC_0);
-        valid_rx_generator_event.notify(35, SC_NS);
+        valid_rx_generator_event.notify(45, SC_NS);
+        //valid_rx_generator_event.notify(130, SC_NS);
     }
     else {
         rx_header_valid_in.write(SC_LOGIC_1);

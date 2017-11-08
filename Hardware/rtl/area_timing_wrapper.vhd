@@ -22,6 +22,7 @@ entity area_timing_wrapper is
         SYSCLK_IN_P                             : in   std_logic;                       -- 200.00 MHz System Clock P
 
         rst_n                                   : in   std_logic;
+        start_fifo_tb                           : in   std_logic;
 
         hi_ber                                  : out  std_logic;
         blk_lock                                : out  std_logic;
@@ -943,7 +944,7 @@ architecture top of area_timing_wrapper is
           signal rx_lane_3_data         : std_logic_vector(63 downto 0);
 
           attribute dont_touch : string;
-          attribute dont_touch of inst_wrapper_macpcs : label is "true";
+          attribute dont_touch of inst_wrapper_macpcs : label is "yes";
 
     begin
 
@@ -993,8 +994,9 @@ architecture top of area_timing_wrapper is
       reset_rx_done       => rst,
 
       -- For testbench use only
-      start_fifo       => BIT_1,
-      read_fifo        => BIT_0,
+      --start_fifo       => BIT_1,
+      start_fifo       => start_fifo_tb,
+      read_fifo        => start_fifo_tb,
       dump_xgmii_rxc_0 => open,
       dump_xgmii_rxd_0 => open,
       dump_xgmii_rxc_1 => open,

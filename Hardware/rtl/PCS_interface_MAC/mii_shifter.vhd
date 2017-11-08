@@ -5,7 +5,8 @@ entity mii_shifter is
   port(
   -- INPUTS
       in_1            : in std_logic_vector(255 downto 0);
-      in_0            : in std_logic_vector(255 downto 0);
+      -- in_0            : in std_logic_vector(255 downto 0);
+      in_0            : in std_logic_vector(223 downto 0);
 
   --CTRL
       ctrl_reg_shift  : in std_logic_vector(2 downto 0);

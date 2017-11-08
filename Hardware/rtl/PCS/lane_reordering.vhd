@@ -180,7 +180,9 @@ architecture behav_lane_reorder of lane_reorder is
     type fsm_state is (S_INIT, S_END, S_SYNC, S_TRANSMIT);
     signal CURRENT_STATE, NEXT_STATE: fsm_state;
 
-    signal reset_n : std_logic;
+    signal rst_fifo : std_logic;
+    attribute dont_touch : string;
+    attribute dont_touch of rst_fifo : signal is "true";
 
     signal barreira_skew : barreira_0;
     signal barreira_bip  : barreira_1;
@@ -254,7 +256,7 @@ architecture behav_lane_reorder of lane_reorder is
 
 begin
 
-  reset_n <= not reset;
+  rst_fifo <= not reset;
 
   --==============================================================================
   -- first_stage - FIND SYNC BLOCK and ACCOUNT FOR SKEW
@@ -411,7 +413,7 @@ begin
   fifo_0 : entity work.reorder_fifo
   port map (
  				clk       	=> 	clock,
-				rst_n     	=> 	reset_n,
+				rst_n     	=> 	rst_fifo,
 				wen 				=> 	barreira_xbar.wen_0,
 				data_in    	=> 	fifo_in_0,
 				full       	=> 	full_0,
@@ -432,7 +434,7 @@ begin
   fifo_1 : entity work.reorder_fifo
   port map (
 			clk       	=> 	clock,
- 			rst_n     	=> 	reset_n,
+ 			rst_n     	=> 	rst_fifo,
  			wen 				=> 	barreira_xbar.wen_1,
  			data_in    	=> 	fifo_in_1,
  			full       	=> 	full_1,
@@ -453,7 +455,7 @@ begin
   fifo_2 : entity work.reorder_fifo
   port map (
  				clk       	=> 	clock,
-				rst_n      	=> 	reset_n,
+				rst_n      	=> 	rst_fifo,
 				wen 				=> 	barreira_xbar.wen_2,
 				data_in    	=> 	fifo_in_2,
 				full       	=> 	full_2,
@@ -474,7 +476,7 @@ begin
   fifo_3 : entity work.reorder_fifo
   port map (
  				clk       	=> 	clock,
-				rst_n     	=> 	reset_n,
+				rst_n     	=> 	rst_fifo,
 				wen 				=> 	barreira_xbar.wen_3,
 				data_in    	=> 	fifo_in_3,
 				full       	=> 	full_3,

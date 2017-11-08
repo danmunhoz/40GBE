@@ -76,6 +76,8 @@ architecture behav of ring_fifo_bram is
   signal mem_high_in_0_reg : std_logic_vector(63 downto 0);
   signal mem_high_in_1_reg : std_logic_vector(71 downto 0);
 
+  attribute dont_touch : string;
+  attribute dont_touch of BRAM_inst_l_0,BRAM_inst_l_1,BRAM_inst_h_0,BRAM_inst_h_1,regs : label is "true";
 begin
   rst <= not rst_n;
 

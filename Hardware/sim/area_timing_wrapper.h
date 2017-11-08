@@ -11,6 +11,7 @@ public:
     sc_in<sc_logic> SYSCLK_IN_N;
     sc_in<sc_logic> SYSCLK_IN_P;
     sc_in<sc_logic> rst_n;
+    sc_in<sc_logic> start_fifo_tb;
     sc_out<sc_logic> hi_ber;
     sc_out<sc_logic> blk_lock;
     sc_out<sc_logic> linkstatus;
@@ -67,6 +68,7 @@ public:
        SYSCLK_IN_N("SYSCLK_IN_N"),
        SYSCLK_IN_P("SYSCLK_IN_P"),
        rst_n("rst_n"),
+       start_fifo_tb("start_fifo_tb"),
        hi_ber("hi_ber"),
        blk_lock("blk_lock"),
        linkstatus("linkstatus"),
