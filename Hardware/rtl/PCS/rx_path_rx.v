@@ -138,6 +138,7 @@ module rx_path_rx (/*AUTOARG*/
     wire [65:0]     rxd_sync_out;
     wire [65:0]     rxd_sync_out_old;
     wire            rx_clk161;
+    wire            is_reg_current_equal;
 
 
     assign rxd_sync_out = {rx_data_in,rx_header_in};
@@ -193,7 +194,8 @@ module rx_path_rx (/*AUTOARG*/
          .clk               (rx_clk161),
          .rstb              (arstb),
          .rx_old_header_in  (rx_old_header_in),
-         .rx_old_data_in    (rx_old_data_in)
+         .rx_old_data_in    (rx_old_data_in),
+         .is_reg_current_equal (is_reg_current_equal)
          );
 
   //  descramble  INST_RX_PATH_DESCRAMBLE
@@ -219,8 +221,9 @@ module rx_path_rx (/*AUTOARG*/
          .readen            (start_fifo),
          .wclk              (rx_clk161),
          .writen            (rx_data_valid_in),
-        //  .writedata         (descram_data[65:0]),
-        .writedata         (descram_data[65:0]),
+        //  .writen            (rx_data_valid_in & !is_reg_current_equal),
+         //  .writedata         (descram_data[65:0]),
+         .writedata         (descram_data[65:0]),
          .rst               (!arstb)
          );
 

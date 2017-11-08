@@ -42,7 +42,7 @@ module wrapper_macpcs_rx(
                         wb_ack_o, wb_dat_o, wb_int_o,
                         // Para uso do Testbench
             						start_fifo,
-                        read_fifo,
+
                         dump_xgmii_rxc_0,
                         dump_xgmii_rxd_0,
                         dump_xgmii_rxc_1,
@@ -54,7 +54,10 @@ module wrapper_macpcs_rx(
 
                         mac_eop,
                         mac_sop,
-                        mac_data
+                        mac_data,
+                        read_fifo,
+                        empty_fifo,
+                        full_fifo
                         );
     // Clocks
     input           clk_156;
@@ -242,6 +245,8 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) output [4:0] mac_eop;
     (* syn_keep = "true"*) output mac_sop;
     (* syn_keep = "true"*) output [127:0] mac_data;
+    (* syn_keep = "true"*) output empty_fifo;
+    (* syn_keep = "true"*) output full_fifo;
 
     wire            tx_clk_161_13;
     wire            rx_clk_161_13;
@@ -278,6 +283,9 @@ module wrapper_macpcs_rx(
 
     wire            fifo_interface_full;
     wire            fifo_interface_empty;
+
+    assign empty_fifo = fifo_interface_empty;
+    assign full_fifo = fifo_interface_full;
 
     (* syn_keep = "true"*) wire [1:0]   pcs_0_header_out;
     (* syn_keep = "true"*) wire [63:0]  pcs_0_data_out;
@@ -417,8 +425,8 @@ module wrapper_macpcs_rx(
         .mac_data           (mac_data),
         .mac_sop            (mac_sop),
         .mac_eop            (mac_eop),
-        .fifo_full          (fifo_interface_full),
-        .fifo_empty         (fifo_interface_empty)
+        .fifo_full          (full_fifo),
+        .fifo_empty         (empty_fifo)
    );
 
     (* dont_touch = "true" *) pcs_selector INST_0_pcs_selector (

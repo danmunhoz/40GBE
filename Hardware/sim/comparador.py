@@ -14,13 +14,13 @@ str_tx = str_tx.replace('\n', '')
 str_fifo = str_fifo.replace('\n', '')
 
 print('Tamanho Entrada: ',len(str_tx))
-print('Tamanho Saída FIFO: ',len(str_fifo))
+print('Tamanho Saida FIFO: ',len(str_fifo))
 
 for i in range(len(str_tx)):
     if str_tx[i] == str_fifo[i]:
         print('passou')
     else:
-        print('Não passou')
+        print('Nao passou')
         print(i)
         print("TX: "+ str_tx[i])
         print("FIFO: "+ str_fifo[i])

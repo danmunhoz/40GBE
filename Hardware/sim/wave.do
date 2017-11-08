@@ -47,22 +47,11 @@ add wave -noupdate -expand -group {Lane Reorder} -group OUTPUT -radix hexadecima
 add wave -noupdate -divider PCSs
 add wave -noupdate -expand -group PCS_0 -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/xgmii_rxc
 add wave -noupdate -expand -group PCS_0 -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/xgmii_rxd
-add wave -noupdate -expand -group PCS_0 -expand -group desc /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/RXD_Sync
-add wave -noupdate -expand -group PCS_0 -expand -group desc /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/rx_old_header_in
-add wave -noupdate -expand -group PCS_0 -expand -group desc /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/rx_old_data_in
-add wave -noupdate -expand -group PCS_0 -expand -group desc /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/RXD_Sync_desc
-add wave -noupdate -expand -group PCS_0 -expand -group desc /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/DeScr_wire
-add wave -noupdate -expand -group PCS_0 -expand -group desc /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/DeScr_RXD
 add wave -noupdate -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/Code
 add wave -noupdate -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/rx_data
 add wave -noupdate -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/coded_data
 add wave -noupdate -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/DeScr_RXD_reg
 add wave -noupdate -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/DeScr_RXD
-add wave -noupdate -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/RX_Sync_header
-add wave -noupdate -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/DeScr_RXD
-add wave -noupdate -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/RXD_Sync
-add wave -noupdate -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/DeScr_wire_r
-add wave -noupdate -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/RXD_Sync_r
 add wave -noupdate -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_in
 add wave -noupdate -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_out
 add wave -noupdate -expand -group PCS_0 -group dbg -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/sync_header
@@ -147,25 +136,22 @@ add wave -noupdate -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper
 add wave -noupdate -group Shifter -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shifter/in_1
 add wave -noupdate -group Shifter -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shifter/in_0
 add wave -noupdate -group Shifter -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shifter/ctrl_reg_shift
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/BRAM_inst_l_0/WE
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/BRAM_inst_l_0/WREN
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/BRAM_inst_l_0/DI
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/w_ptr
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/r_ptr_l
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/ren_int_l
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/r_ptr_h
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/ren_int_h
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/mem_low_in_0
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/mem_low_in_1
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/mem_low_out_0
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/mem_low_out_1
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/mem_high_in_0
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/mem_high_in_1
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/mem_high_out_0
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/mem_high_out_1
+add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/rst_n
+add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/clk_w
+add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/wen
+add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/data_in
+add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/is_sop_in
+add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/eop_addr_in
+add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/clk_r
+add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/ren
+add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/data_out
+add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/is_sop_out
+add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/eop_addr_out
+add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/empty
+add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/full
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {62543 ps} 0} {{Cursor 2} {342316 ps} 0}
-quietly wave cursor active 1
+WaveRestoreCursors {{Cursor 1} {62543 ps} 0} {{Cursor 2} {29948019 ps} 0}
+quietly wave cursor active 2
 configure wave -namecolwidth 787
 configure wave -valuecolwidth 181
 configure wave -justifyvalue left
@@ -180,4 +166,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {20261 ps} {86132 ps}
+WaveRestoreZoom {29561955 ps} {29627826 ps}

@@ -71,7 +71,7 @@
 
 module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
                   blk_lock, jtest_errc, RXD_Sync, DeScr_RXD, clk, rstb,
-                  rx_old_header_in, rx_old_data_in );
+                  rx_old_header_in, rx_old_data_in, is_reg_current_equal);
 
     input write_enable;
     input [65:0] RXD_Sync ; wire [65:0] RXD_Sync ;
@@ -87,6 +87,8 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
 
     output [65:0] DeScr_RXD ; reg [65:0] DeScr_RXD ;
     output [15:0] jtest_errc; reg [15:0] jtest_errc;
+
+    output is_reg_current_equal;
 
     reg [63:0]    jtm_data;
     reg           jtm_lock;
@@ -108,13 +110,13 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
     reg [1:0] RXD_hdr_sync;
     reg [1:0] RXD_hdr_sync_reg;
 
-    reg old_atual_iguais;
+    reg is_reg_current_equal;
 
     always @ (posedge clk or negedge rstb) begin
       if (!rstb) begin
         rx_old_block[63:0] <= 64'h0;
         RXD_data_sync[63:0] <= 64'h0;
-        old_atual_iguais <= 1'b0;
+        is_reg_current_equal <= 1'b0;
       end
       else begin
         rx_old_block[63:0] <= rx_old_data_in[63:0];
@@ -122,10 +124,10 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
         RXD_hdr_sync[1:0] <= RXD_Sync[1:0];
 
         if (rx_old_data_in[63:0] == RXD_Sync[65:2]) begin
-          old_atual_iguais <= 1'b1;
+          is_reg_current_equal <= 1'b1;
         end
         else begin
-          old_atual_iguais <= 1'b0;
+          is_reg_current_equal <= 1'b0;
         end
 
       end
@@ -392,10 +394,11 @@ module descramble_rx(clr_jtest_errc, write_enable, bypass_descram, rx_jtm_en,
                 DeScr_wire_reg <= DeScr_wire;
                 RXD_hdr_sync_reg <= RXD_hdr_sync;
                 // DeScr_RXD[65:0] <= {DeScr_wire[63:0],RXD_Sync[1:0]};
-                if (old_atual_iguais == 1'b0)
+                // if (is_reg_current_equal == 1'b0)
                   DeScr_RXD[65:0] <= {DeScr_wire[63:0],RXD_hdr_sync[1:0]};
-                else
-                  DeScr_RXD[65:0] <= {DeScr_wire_reg[63:0],RXD_hdr_sync_reg[1:0]};
+                // else
+                  // DeScr_RXD[65:0] <= {DeScr_wire_reg[63:0],RXD_hdr_sync_reg[1:0]};
+                  // DeScr_RXD[65:0] <= {DeScr_wire[63:0],2'b01};
 
             end // else: !if(bypass_descram)
         end
