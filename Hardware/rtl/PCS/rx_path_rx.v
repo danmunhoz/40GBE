@@ -181,7 +181,7 @@ module rx_path_rx (/*AUTOARG*/
 
    // assign linkstatus = blk_lock;
 
-    descramble_rx  INST_RX_PATH_DESCRAMBLE_OLD
+    descramble_rx  INST_RX_PATH_DESCRAMBLE
         (
          .clr_jtest_errc    (1'b0),
          .write_enable      (rx_data_valid_in),

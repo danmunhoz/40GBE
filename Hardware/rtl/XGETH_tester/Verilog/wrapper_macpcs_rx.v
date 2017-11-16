@@ -284,6 +284,11 @@ module wrapper_macpcs_rx(
     wire            fifo_interface_full;
     wire            fifo_interface_empty;
 
+    wire            fifo_reorder_empty_0;
+    wire            fifo_reorder_empty_1;
+    wire            fifo_reorder_empty_2;
+    wire            fifo_reorder_empty_3;
+
     assign empty_fifo = fifo_interface_empty;
     assign full_fifo = fifo_interface_full;
 
@@ -403,7 +408,12 @@ module wrapper_macpcs_rx(
       .pcs_2_data_out   (pcs_2_data_out[63:0]),
 
       .pcs_3_header_out (pcs_3_header_out[1:0]),
-      .pcs_3_data_out   (pcs_3_data_out[63:0])
+      .pcs_3_data_out   (pcs_3_data_out[63:0]),
+
+      .fifo_empty_0 (fifo_reorder_empty_0),
+      .fifo_empty_1 (fifo_reorder_empty_1),
+      .fifo_empty_2 (fifo_reorder_empty_2),
+      .fifo_empty_3 (fifo_reorder_empty_3)
 
     );
 
@@ -429,49 +439,49 @@ module wrapper_macpcs_rx(
         .fifo_empty         (empty_fifo)
    );
 
-    (* dont_touch = "true" *) pcs_selector INST_0_pcs_selector (
-         .clk   			(rx_clk_161_13),
-         .rst_n       (async_reset_n),
-         .old_header	  (old_header_0),
-         .old_data	(old_data_0),
-         .header_in	    (pcs_0_header_out[1:0]),
-         .data_in	  (pcs_0_data_out[63:0]),
-         .header_out	  (pcs_0_header_sel[1:0]),
-         .data_out	(pcs_0_data_sel[63:0])
-    );
-
-    (* dont_touch = "true" *) pcs_selector INST_1_pcs_selector (
-        .clk   			(rx_clk_161_13),
-        .rst_n      (async_reset_n),
-        .old_header	  (pcs_0_header_out[1:0]),
-        .old_data	(pcs_0_data_out[63:0]),
-        .header_in	  (pcs_1_header_out[1:0]),
-        .data_in	(pcs_1_data_out[63:0]),
-        .header_out	  (pcs_1_header_sel[1:0]),
-        .data_out	(pcs_1_data_sel[63:0])
-    );
-
-   (* dont_touch = "true" *) pcs_selector INST_2_pcs_selector (
-       .clk   		 (rx_clk_161_13),
-       .rst_n      (async_reset_n),
-       .old_header	 (pcs_1_header_out[1:0]),
-       .old_data (pcs_1_data_out[63:0]),
-       .header_in	   (pcs_2_header_out[1:0]),
-       .data_in	 (pcs_2_data_out[63:0]),
-       .header_out	 (pcs_2_header_sel[1:0]),
-       .data_out (pcs_2_data_sel[63:0])
-    );
-
-    (* dont_touch = "true" *) pcs_selector INST_3_pcs_selector (
-        .clk   		  (rx_clk_161_13),
-        .rst_n      (async_reset_n),
-        .old_header	  (pcs_2_header_out[1:0]),
-        .old_data (pcs_2_data_out[63:0]),
-        .header_in	  (pcs_3_header_out[1:0]),
-        .data_in	(pcs_3_data_out[63:0]),
-        .header_out	  (pcs_3_header_sel[1:0]),
-        .data_out (pcs_3_data_sel[63:0])
-     );
+  //   (* dont_touch = "true" *) pcs_selector INST_0_pcs_selector (
+  //        .clk   			(rx_clk_161_13),
+  //        .rst_n       (async_reset_n),
+  //        .old_header	  (old_header_0),
+  //        .old_data	(old_data_0),
+  //        .header_in	    (pcs_0_header_out[1:0]),
+  //        .data_in	  (pcs_0_data_out[63:0]),
+  //        .header_out	  (pcs_0_header_sel[1:0]),
+  //        .data_out	(pcs_0_data_sel[63:0])
+  //   );
+   //
+  //   (* dont_touch = "true" *) pcs_selector INST_1_pcs_selector (
+  //       .clk   			(rx_clk_161_13),
+  //       .rst_n      (async_reset_n),
+  //       .old_header	  (pcs_0_header_out[1:0]),
+  //       .old_data	(pcs_0_data_out[63:0]),
+  //       .header_in	  (pcs_1_header_out[1:0]),
+  //       .data_in	(pcs_1_data_out[63:0]),
+  //       .header_out	  (pcs_1_header_sel[1:0]),
+  //       .data_out	(pcs_1_data_sel[63:0])
+  //   );
+   //
+  //  (* dont_touch = "true" *) pcs_selector INST_2_pcs_selector (
+  //      .clk   		 (rx_clk_161_13),
+  //      .rst_n      (async_reset_n),
+  //      .old_header	 (pcs_1_header_out[1:0]),
+  //      .old_data (pcs_1_data_out[63:0]),
+  //      .header_in	   (pcs_2_header_out[1:0]),
+  //      .data_in	 (pcs_2_data_out[63:0]),
+  //      .header_out	 (pcs_2_header_sel[1:0]),
+  //      .data_out (pcs_2_data_sel[63:0])
+  //   );
+   //
+  //   (* dont_touch = "true" *) pcs_selector INST_3_pcs_selector (
+  //       .clk   		  (rx_clk_161_13),
+  //       .rst_n      (async_reset_n),
+  //       .old_header	  (pcs_2_header_out[1:0]),
+  //       .old_data (pcs_2_data_out[63:0]),
+  //       .header_in	  (pcs_3_header_out[1:0]),
+  //       .data_in	(pcs_3_data_out[63:0]),
+  //       .header_out	  (pcs_3_header_sel[1:0]),
+  //       .data_out (pcs_3_data_sel[63:0])
+  //    );
 
     PCS_core_rx INST_0_PCS_core
     (

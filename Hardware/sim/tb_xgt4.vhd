@@ -333,12 +333,12 @@ begin
         --payload_cycles      => (others=>'0'),
         -- payload_cycles      => x"00000006", -- 64 bytes
         --payload_cycles      => x"0000000E", -- 128 bytes
-        --payload_cycles      => x"0000001E", -- 256 bytes
-        --payload_cycles      => x"0000003E", -- 512 bytes
-        --payload_cycles      => x"0000005E", -- 768 bytes
+        -- payload_cycles      => x"0000001E", -- 256 bytes
+        -- payload_cycles      => x"0000003E", -- 512 bytes
+        payload_cycles      => x"0000005E", -- 768 bytes
         --payload_cycles      => x"0000007E", -- 1024 bytes
         --payload_cycles      => x"0000009E", -- 1280 bytes
-        payload_cycles      => x"000000BC", -- 1518 bytes
+        -- payload_cycles      => x"000000BC", -- 1518 bytes
 
         payload_last_size   => (others=>'0'),
         -- payload_last_size   => "0001000",

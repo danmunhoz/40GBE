@@ -96,7 +96,13 @@ entity lane_reorder is
     pcs_0_header_out  : out std_logic_vector(1 downto 0);
     pcs_1_header_out  : out std_logic_vector(1 downto 0);
     pcs_2_header_out  : out std_logic_vector(1 downto 0);
-    pcs_3_header_out  : out std_logic_vector(1 downto 0)
+    pcs_3_header_out  : out std_logic_vector(1 downto 0);
+
+    fifo_empty_0  : out std_logic;
+    fifo_empty_1  : out std_logic;
+    fifo_empty_2  : out std_logic;
+    fifo_empty_3  : out std_logic
+
   );
 end entity;
 
@@ -310,8 +316,13 @@ begin
   --==============================================================================
 
   -- Só habilita leitura após todas lanes estiverem syncadas
+  -- read_from_fifos_int <= '0' when (barreira_skew.logical_lane_0 = "100" and barreira_skew.logical_lane_1 = "100" and
+  --                                  barreira_skew.logical_lane_2 = "100" and barreira_skew.logical_lane_3 = "100") or
+  --                                 (empty_0 = '1' or empty_1 = '1' or empty_2 = '1' or empty_3 = '1')
+  --                                 else '1';
   read_from_fifos_int <= '0' when (barreira_skew.logical_lane_0 = "100" and barreira_skew.logical_lane_1 = "100" and
-                                   barreira_skew.logical_lane_2 = "100" and barreira_skew.logical_lane_3 = "100") else '1';
+                                   barreira_skew.logical_lane_2 = "100" and barreira_skew.logical_lane_3 = "100")
+                                  else '1';
 
   -- descarta todos blocos até a chegada do primeiro block sync
   enable_lane_0 <= '0' when barreira_skew.logical_lane_0 = "100" else '1';
@@ -434,7 +445,8 @@ begin
 				ren					=>	barreira_xbar.read_from_fifos,
 				-- data_out    =>	fifo_out_0,
         data_out    =>	out_data.block_0,
-				empty       =>	empty_0,
+				-- empty       =>	empty_0,
+        empty       =>	fifo_empty_0,
 				almost_e    =>	almost_e_0
   );
 
@@ -456,7 +468,8 @@ begin
  			ren					=>	barreira_xbar.read_from_fifos,
  		  -- data_out    =>	fifo_out_1,
       data_out    =>	out_data.block_1,
- 			empty       =>	empty_1,
+ 		-- 	empty       =>	empty_1,
+      empty       =>	fifo_empty_1,
  			almost_e    =>	almost_e_1
   );
 
@@ -478,7 +491,8 @@ begin
 				ren					=>	barreira_xbar.read_from_fifos,
 				-- data_out    =>	fifo_out_2,
         data_out    =>	out_data.block_2,
-				empty       =>	empty_2,
+				-- empty       =>	empty_2,
+        empty       =>	fifo_empty_2,
 				almost_e    =>	almost_e_2
   );
 
@@ -500,7 +514,8 @@ begin
 				ren					=>	barreira_xbar.read_from_fifos,
 				-- data_out    =>	fifo_out_3,
         data_out    =>	out_data.block_3,
-				empty       =>	empty_3,
+				-- empty       =>	empty_3,
+        empty       =>	fifo_empty_3,
 				almost_e    =>	almost_e_3
   );
 
