@@ -19,9 +19,12 @@ report_drc -file $outputDir/post_imp_drc.rpt
 
 #write_verilog -force $outputDir/cpu_impl_netlist.v -mode timesim -sdf_anno true
 #-include_xilinx_libs
-write_sdf -force $outputDir/cpu_impl_netlist.sdf -mode sta
-#write_verilog -force $outputDir/cpu_impl_netlist.v -mode sta
-write_verilog -force $outputDir/cpu_impl_netlist.v -mode funcsim
+
+
+write_sdf -force $outputDir/cpu_impl_netlist.sdf -mode timesim
+
+write_verilog -force $outputDir/cpu_impl_netlist.v -mode design
+
 
 #
 # STEP#6: generate a bitstream

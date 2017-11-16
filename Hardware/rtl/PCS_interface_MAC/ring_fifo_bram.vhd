@@ -95,7 +95,7 @@ architecture behav of ring_fifo_bram is
   signal full_h_1  : std_logic;
 
   attribute dont_touch : string;
-  attribute dont_touch of BRAM_inst_l_0,BRAM_inst_l_1,BRAM_inst_h_0,BRAM_inst_h_1,regs : label is "true";
+  attribute dont_touch of FIFO_inst_l_0,FIFO_inst_l_1,FIFO_inst_h_0,FIFO_inst_h_1,regs : label is "true";
 
 begin
   rst <= not rst_n;
