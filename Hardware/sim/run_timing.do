@@ -51,9 +51,15 @@ sccom -link -B/usr/bin/
 
 #vsim -voptargs=+acc=lprn+notimingchecks -L unisims_ver -L unimacro_ver -L simprims_ver \
 
+# sdftyp
+#vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
+#-L secureip -L xilinxcorelib work.glbl \
+#-sdftyp ../implementation/output_dir/cpu_impl_netlist.sdf -sdfnowarn -sdfnoerror \
+
+#sdfmax
 vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 -L secureip -L xilinxcorelib work.glbl \
--sdftyp ../implementation/output_dir/cpu_impl_netlist.sdf -sdfnowarn -sdfnoerror \
+-sdfmax ../implementation/output_dir/cpu_impl_netlist.sdf -sdfnowarn -sdfnoerror \
 work.Top -t 1ps
 do wave_t.do
 run 1000 ns

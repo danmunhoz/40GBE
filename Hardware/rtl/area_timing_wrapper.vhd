@@ -972,10 +972,10 @@ architecture top of area_timing_wrapper is
     inst_wrapper_macpcs: wrapper_macpcs_rx port map(
       -- Clocks
       clk_156             => clk_156_int,
-      -- tx_clk_161_13       => gt0_txusrclk2_i,
-      -- rx_clk_161_13       => gt0_txusrclk2_i,
-      tx_clk_161_13       => clk_161_int,
-      rx_clk_161_13       => clk_161_int,
+      tx_clk_161_13       => gt0_txusrclk2_i,
+      rx_clk_161_13       => gt0_txusrclk2_i,
+      -- tx_clk_161_13       => clk_161_int,
+      -- rx_clk_161_13       => clk_161_int,
       clk_xgmii_rx        => clk_156_int,
       clk_xgmii_tx        => clk_156_int,
       -- clk_312             => clk_250,             -- 250 POR ENQUANTO!!!!!
