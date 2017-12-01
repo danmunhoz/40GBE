@@ -136,19 +136,43 @@ add wave -noupdate -group Shift_reg -radix hexadecimal /Top/rx_xgt4/inst_wrapper
 add wave -noupdate -group Shifter -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shifter/in_1
 add wave -noupdate -group Shifter -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shifter/in_0
 add wave -noupdate -group Shifter -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/shifter/ctrl_reg_shift
-add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/rst_n
-add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/clk_w
-add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/wen
-add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/data_in
-add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/is_sop_in
-add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/eop_addr_in
-add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/clk_r
-add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/ren
-add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/data_out
-add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/is_sop_out
-add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/eop_addr_out
-add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/empty
-add wave -noupdate -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/full
+add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/rst_n
+add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/clk_w
+add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/wen
+add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/data_in
+add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/is_sop_in
+add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/eop_addr_in
+add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/clk_r
+add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/ren
+add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/data_out
+add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/is_sop_out
+add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/eop_addr_out
+add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/empty
+add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/full
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/ALMOST_FULL_OFFSET
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/ALMOST_EMPTY_OFFSET
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/DATA_WIDTH
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/DEVICE
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/FIFO_SIZE
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/FIRST_WORD_FALL_THROUGH
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/INIT
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/SRVAL
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/SIM_MODE
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/ALMOSTEMPTY
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/ALMOSTFULL
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/DO
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/EMPTY
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/FULL
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/RDCOUNT
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/RDERR
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/WRCOUNT
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/WRERR
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/DI
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/RDCLK
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/RDEN
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/RST
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/WRCLK
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/FIFO_inst_l_0/WREN
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {62543 ps} 0} {{Cursor 2} {29948019 ps} 0}
 quietly wave cursor active 2
@@ -166,4 +190,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {29561955 ps} {29627826 ps}
+WaveRestoreZoom {0 ps} {65871 ps}

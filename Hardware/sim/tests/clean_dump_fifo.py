@@ -1,8 +1,5 @@
-"""
-Created on Mon Oct 16 16:12:43 2017
+#!/usr/bin/python3
 
-@author: rafasperb
-"""
 import os
 
 n=1
@@ -30,6 +27,7 @@ while(n<=8):
                     new_file.write(line[(len(line)-1)-(aux*8):])
                     escrever = 0
                 else:
+                    escrever = 0
                     new_file.write(line[8:])
 
     new_file.close()
