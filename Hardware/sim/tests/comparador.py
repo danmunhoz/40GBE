@@ -1,10 +1,8 @@
-"""
-Created on Mon Oct 16 16:12:43 2017
+#!/usr/bin/python3
 
-@author: rafasperb
-"""
 import os
 n=1
+x=0
 ##############################################################
 ############# EXCLUI OS ARQUIVOS DE SINALIZACAO
 ##############################################################
@@ -42,7 +40,8 @@ while(n<=8):
     str_tx = str_tx.replace('\n', '')
     str_fifo = str_fifo.replace('\n', '')
 
-    if str_tx == str_fifo:
+
+    if str_tx[0:] == str_fifo[0:x]:
         new_file = open(string+'/PASSOU.txt', 'w')
     else:
         new_file = open(string+'/NAO PASSOU.txt', 'w')

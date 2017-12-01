@@ -333,6 +333,9 @@ begin
         -- payload_type        => (others=>'0'),
         payload_type        => "000",
         --payload_cycles      => (others=>'0'),
+<<<<<<< HEAD
+        payload_cycles      => x"000000BC",
+=======
         -- payload_cycles      => x"00000006", -- 64 bytes
         --payload_cycles      => x"0000000E", -- 128 bytes
         -- payload_cycles      => x"0000001E", -- 256 bytes
@@ -341,6 +344,7 @@ begin
         --payload_cycles      => x"0000007E", -- 1024 bytes
         --payload_cycles      => x"0000009E", -- 1280 bytes
         -- payload_cycles      => x"000000BC", -- 1518 bytes
+>>>>>>> a0e65b240504387a98278bfa8c3ad62f59c6c000
 
         payload_last_size   => (others=>'0'),
         -- payload_last_size   => "0001000",
@@ -352,8 +356,8 @@ begin
 
       -- wait for 144 ns;
       --
-      for i in 0 to 4 loop
-        wait for 56 ns;
+      for i in 0 to 2 loop
+        wait for 5 ns;
         pkt_tx_start <= '1';
         wait until pkt_tx_eop = '1';
         pkt_tx_start <= '0';

@@ -1,8 +1,5 @@
-"""
-Created on Mon Oct 16 16:12:43 2017
+#!/usr/bin/python3
 
-@author: rafasperb
-"""
 import os
 
 control = []
