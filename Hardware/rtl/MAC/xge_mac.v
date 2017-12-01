@@ -44,8 +44,7 @@ module xge_mac(/*AUTOARG*/
   pkt_rx_val, pkt_rx_sop, pkt_rx_mod, pkt_rx_err, pkt_rx_eop,
   pkt_rx_data, pkt_rx_avail,
   // Inputs
-  xgmii_rxd_0, xgmii_rxc_0, xgmii_rxd_1, xgmii_rxc_1, xgmii_rxd_2, xgmii_rxc_2,
-  xgmii_rxd_3, xgmii_rxc_3, wb_we_i, wb_stb_i, wb_rst_i, wb_dat_i,
+  xgmii_rxd, xgmii_rxc, wb_we_i, wb_stb_i, wb_rst_i, wb_dat_i,
   wb_cyc_i, wb_clk_i, wb_adr_i, reset_xgmii_tx_n, reset_xgmii_rx_n,
   reset_156m25_n, pkt_tx_val, pkt_tx_sop, pkt_tx_mod, pkt_tx_eop,
   pkt_tx_data, pkt_rx_ren, clk_xgmii_tx, clk_xgmii_rx, clk_156m25
@@ -65,14 +64,8 @@ input                   pkt_tx_val;             // To tx_eq0 of tx_enqueue.v
 input                   reset_156m25_n;         // To rx_dq0 of rx_dequeue.v, ...
 input                   reset_xgmii_rx_n;       // To rx_eq0 of rx_enqueue.v, ...
 input                   reset_xgmii_tx_n;       // To tx_dq0 of tx_dequeue.v, ...
-input [7:0]             xgmii_rxc_0;              // To rx_eq0 of rx_enqueue.v
-input [63:0]            xgmii_rxd_0;              // To rx_eq0 of rx_enqueue.v
-input [7:0]             xgmii_rxc_1;              // To rx_eq0 of rx_enqueue.v
-input [63:0]            xgmii_rxd_1;              // To rx_eq0 of rx_enqueue.v
-input [7:0]             xgmii_rxc_2;              // To rx_eq0 of rx_enqueue.v
-input [63:0]            xgmii_rxd_2;              // To rx_eq0 of rx_enqueue.v
-input [7:0]             xgmii_rxc_3;              // To rx_eq0 of rx_enqueue.v
-input [63:0]            xgmii_rxd_3;              // To rx_eq0 of rx_enqueue.v
+input [7:0]             xgmii_rxc;              // To rx_eq0 of rx_enqueue.v
+input [63:0]            xgmii_rxd;              // To rx_eq0 of rx_enqueue.v
 
 
 input [7:0]             wb_adr_i;               // To wishbone_if0 of wishbone_if.v
@@ -201,96 +194,8 @@ rx_enqueue rx_eq0(/*AUTOINST*/
                   // Inputs
                   .clk_xgmii_rx         (clk_xgmii_rx),
                   .reset_xgmii_rx_n     (reset_xgmii_rx_n),
-                  .xgmii_rxd            (xgmii_rxd_0[63:0]),
-                  .xgmii_rxc            (xgmii_rxc_0[7:0]),
-                  .rxdfifo_wfull        (rxdfifo_wfull),
-                  .rxhfifo_rdata        (rxhfifo_rdata[63:0]),
-                  .rxhfifo_rstatus      (rxhfifo_rstatus[7:0]),
-                  .rxhfifo_rempty       (rxhfifo_rempty),
-                  .rxhfifo_ralmost_empty(rxhfifo_ralmost_empty));
-
-rx_enqueue rx_eq1(/*AUTOINST*/
-                  // Outputs
-                  .rxdfifo_wdata        (),
-                  .rxdfifo_wstatus      (),
-                  .rxdfifo_wen          (),
-                  .rxhfifo_ren          (),
-                  .rxhfifo_wdata        (),
-                  .rxhfifo_wstatus      (),
-                  .rxhfifo_wen          (),
-                  .local_fault_msg_det  (),
-                  .remote_fault_msg_det (),
-                  .status_crc_error_tog (),
-                  .status_fragment_error_tog(),
-                  .status_lenght_error_tog(),
-                  .status_rxdfifo_ovflow_tog(),
-                  .status_pause_frame_rx_tog(),
-                  .rxsfifo_wen          (),
-                  .rxsfifo_wdata        (),
-                  // Inputs
-                  .clk_xgmii_rx         (clk_xgmii_rx),
-                  .reset_xgmii_rx_n     (reset_xgmii_rx_n),
-                  .xgmii_rxd            (xgmii_rxd_1[63:0]),
-                  .xgmii_rxc            (xgmii_rxc_1[7:0]),
-                  .rxdfifo_wfull        (rxdfifo_wfull),
-                  .rxhfifo_rdata        (rxhfifo_rdata[63:0]),
-                  .rxhfifo_rstatus      (rxhfifo_rstatus[7:0]),
-                  .rxhfifo_rempty       (rxhfifo_rempty),
-                  .rxhfifo_ralmost_empty(rxhfifo_ralmost_empty));
-
-rx_enqueue rx_eq2(/*AUTOINST*/
-                  // Outputs
-                  .rxdfifo_wdata        (),
-                  .rxdfifo_wstatus      (),
-                  .rxdfifo_wen          (),
-                  .rxhfifo_ren          (),
-                  .rxhfifo_wdata        (),
-                  .rxhfifo_wstatus      (),
-                  .rxhfifo_wen          (),
-                  .local_fault_msg_det  (),
-                  .remote_fault_msg_det (),
-                  .status_crc_error_tog (),
-                  .status_fragment_error_tog(),
-                  .status_lenght_error_tog(),
-                  .status_rxdfifo_ovflow_tog(),
-                  .status_pause_frame_rx_tog(),
-                  .rxsfifo_wen          (),
-                  .rxsfifo_wdata        (),
-                  // Inputs
-                  .clk_xgmii_rx         (clk_xgmii_rx),
-                  .reset_xgmii_rx_n     (reset_xgmii_rx_n),
-                  .xgmii_rxd            (xgmii_rxd_2[63:0]),
-                  .xgmii_rxc            (xgmii_rxc_2[7:0]),
-                  .rxdfifo_wfull        (rxdfifo_wfull),
-                  .rxhfifo_rdata        (rxhfifo_rdata[63:0]),
-                  .rxhfifo_rstatus      (rxhfifo_rstatus[7:0]),
-                  .rxhfifo_rempty       (rxhfifo_rempty),
-                  .rxhfifo_ralmost_empty(rxhfifo_ralmost_empty));
-
-
-rx_enqueue rx_eq3(/*AUTOINST*/
-                  // Outputs
-                  .rxdfifo_wdata        (),
-                  .rxdfifo_wstatus      (),
-                  .rxdfifo_wen          (),
-                  .rxhfifo_ren          (),
-                  .rxhfifo_wdata        (),
-                  .rxhfifo_wstatus      (),
-                  .rxhfifo_wen          (),
-                  .local_fault_msg_det  (),
-                  .remote_fault_msg_det (),
-                  .status_crc_error_tog (),
-                  .status_fragment_error_tog(),
-                  .status_lenght_error_tog(),
-                  .status_rxdfifo_ovflow_tog(),
-                  .status_pause_frame_rx_tog(),
-                  .rxsfifo_wen          (),
-                  .rxsfifo_wdata        (),
-                  // Inputs
-                  .clk_xgmii_rx         (clk_xgmii_rx),
-                  .reset_xgmii_rx_n     (reset_xgmii_rx_n),
-                  .xgmii_rxd            (xgmii_rxd_3[63:0]),
-                  .xgmii_rxc            (xgmii_rxc_3[7:0]),
+                  .xgmii_rxd            (xgmii_rxd[63:0]),
+                  .xgmii_rxc            (xgmii_rxc[7:0]),
                   .rxdfifo_wfull        (rxdfifo_wfull),
                   .rxhfifo_rdata        (rxhfifo_rdata[63:0]),
                   .rxhfifo_rstatus      (rxhfifo_rstatus[7:0]),

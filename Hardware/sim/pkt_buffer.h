@@ -13,8 +13,9 @@
 #include <fstream>
 #include <limits>
 
-//#define PKTS_BTW_SYNC 16383
-#define PKTS_BTW_SYNC 32
+//#define PKTS_BTW_SYNC 16383/lane = 65532
+#define PKTS_BTW_SYNC 60
+// #define PKTS_BTW_SYNC 65532
 
 /* SYNC_LANEx_LOW BIP SYNC_LANEx_HIGH BIP */
 #define SYNC_LANE0_LOW  "100100000111011001000111"    // 0x907647
@@ -195,7 +196,7 @@ SC_MODULE(pkt_buffer) {
         lane0_bip = "00000000";
         // cout << "LANE0_BIP " << hdr_temp << "-" << blk_temp << endl;
         // cout << "LANE0_BIP " << lane0_bip << endl;
-        bip_calculator (&lane0_bip, blk_temp, hdr_temp, 0);
+        bip_calculator (&lane0_bip, blk_temp, hdr_temp);
         // cout << "LANE0_BIP_ret: " << lane0_bip << endl << endl;
 
         lane1 << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << endl;
@@ -228,6 +229,7 @@ SC_MODULE(pkt_buffer) {
 
   SC_CTOR(pkt_buffer) {
     block_counter = 0;
+    // block_counter = 65500; //Start transmisison writting alignment blocks
 
     lane0.open("lane0.txt");
     if (lane0.is_open()){

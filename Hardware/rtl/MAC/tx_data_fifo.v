@@ -93,4 +93,3 @@ fifo0(
 );
 
 endmodule
-

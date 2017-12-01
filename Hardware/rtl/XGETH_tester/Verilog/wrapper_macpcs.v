@@ -261,14 +261,8 @@ module wrapper_macpcs(
 
         .xgmii_txc          (xgmii_txc),
         .xgmii_txd          (xgmii_txd),
-        .xgmii_rxc_0          (xgmii_txc),
-        .xgmii_rxd_0          (xgmii_txd),
-        .xgmii_rxc_1          (xgmii_txc),
-        .xgmii_rxd_1          (xgmii_txd),
-        .xgmii_rxc_2          (xgmii_txc),
-        .xgmii_rxd_2          (xgmii_txd),
-        .xgmii_rxc_3          (xgmii_txc),
-        .xgmii_rxd_3          (xgmii_txd)
+        .xgmii_rxc          (xgmii_rxc),
+        .xgmii_rxd          (xgmii_rxd)
 
         //.xgmii_rxc          (xgmii_rxc),
         //.xgmii_rxd          (xgmii_rxd)

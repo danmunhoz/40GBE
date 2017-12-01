@@ -177,6 +177,8 @@ begin
     rx_data_valid_in <= '0','1' after 65 ns;
     rx_header_valid_in <= '0','1' after 65 ns;
 
+    pkt_rx_ren <= '0','1' after 100 ns;
+
     -- Loopback no PCS para observar Encode.v funcionando em cond. normais
     header_out <= rx_header_in;
     data_out <= rx_data_in;
