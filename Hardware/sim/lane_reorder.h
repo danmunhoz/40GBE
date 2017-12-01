@@ -24,6 +24,10 @@ public:
     sc_out<sc_lv<2> > pcs_1_header_out;
     sc_out<sc_lv<2> > pcs_2_header_out;
     sc_out<sc_lv<2> > pcs_3_header_out;
+    sc_out<sc_logic> fifo_empty_0;
+    sc_out<sc_logic> fifo_empty_1;
+    sc_out<sc_logic> fifo_empty_2;
+    sc_out<sc_logic> fifo_empty_3;
 
 
     lane_reorder(sc_module_name nm, const char* hdl_name)
@@ -45,7 +49,11 @@ public:
        pcs_0_header_out("pcs_0_header_out"),
        pcs_1_header_out("pcs_1_header_out"),
        pcs_2_header_out("pcs_2_header_out"),
-       pcs_3_header_out("pcs_3_header_out")
+       pcs_3_header_out("pcs_3_header_out"),
+       fifo_empty_0("fifo_empty_0"),
+       fifo_empty_1("fifo_empty_1"),
+       fifo_empty_2("fifo_empty_2"),
+       fifo_empty_3("fifo_empty_3")
     {
         elaborate_foreign_module(hdl_name);
     }

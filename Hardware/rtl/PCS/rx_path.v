@@ -163,7 +163,6 @@ module rx_path (/*AUTOARG*/
    //      .RXGEARBOXSLIP_OUT    (rxgearboxslip_out),
    //      .RXHEADER_IN          ({1'b0,rx_header_in}),
    //      .RXHEADERVALID_IN     (rx_header_valid_in),
-
    //      // System Interface
    //      .USER_CLK             (rx_clk161),
    //      .SYSTEM_RESET         (!arstb)
