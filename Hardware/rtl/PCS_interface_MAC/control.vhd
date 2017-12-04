@@ -385,7 +385,7 @@ eop_location_out <= eop_location_calc_reg_reg_reg;
         wen_fifo_reg <= '1';
 
       -- EOP: stop writing
-    elsif eop_location_reg_reg /= "00100000" and sop_location = "1000" then
+    elsif eop_location_reg_reg /= "00100000" and sop_location = "1000" and sop_location_reg = "1000" then
           wen_fifo_reg <= '0';
       end if;
 

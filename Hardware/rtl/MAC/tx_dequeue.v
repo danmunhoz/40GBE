@@ -1055,13 +1055,13 @@ always @(/*AS*/crc32_tx or ctrl_tx_enable_ctx or curr_state_enc or eop
               else begin
                   // next_state_enc = SM_IFG;
                   // TALVEZ PULAR DIRETO PARA IDLE QUANDO PRECISAR ECONOMIZA UM CICLO DE IFG
-                  if (delete_next_ifg) begin
-                    next_state_enc <= SM_IDLE;
-                    ifg_deleted <= 1'b1;
-                  end
-                  else begin
+                  // if (delete_next_ifg) begin
+                  //   next_state_enc <= SM_IDLE;
+                  //   ifg_deleted <= 1'b1;
+                  // end
+                  // else begin
                     next_state_enc = SM_IFG;
-                  end
+                  // end
               end
 
           end
@@ -1072,13 +1072,13 @@ always @(/*AS*/crc32_tx or ctrl_tx_enable_ctx or curr_state_enc or eop
               next_xgxs_txd = {{7{`IDLE}}, `TERMINATE};
               next_xgxs_txc = 8'b11111111;
 
-              if (delete_next_ifg) begin
-                next_state_enc <= SM_IDLE;
-                ifg_deleted <= 1'b1;
-              end
-              else begin
+              // if (delete_next_ifg) begin
+              //   next_state_enc <= SM_IDLE;
+              //   ifg_deleted <= 1'b1;
+              // end
+              // else begin
                 next_state_enc = SM_IFG;
-              end
+              // end
 
           end
 
