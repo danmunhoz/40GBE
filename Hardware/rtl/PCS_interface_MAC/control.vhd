@@ -342,14 +342,16 @@ begin
   elsif clk'event and clk='1' then
       eop_location_calc_reg <= eop_location_calc;
       eop_location_calc_reg_reg <= eop_location_calc_reg;
+      -- teste para ajustar eop
       if ctrl_delay_reg_reg_reg /= "00" then
         eop_location_calc_reg_reg_reg <= eop_location_calc_reg_reg;
-      else eop_location_calc_reg_reg_reg <= eop_location_calc_reg;
+      else
+        eop_location_calc_reg_reg_reg <= eop_location_calc_reg;
     end if;
   end if;
 end process;
 
-eop_location_out <= eop_location_calc_reg_reg_reg;
+eop_location_out <= eop_location_calc_reg_reg_reg when (sop_eop_same_cycle = '0' or sop_eop_same_cycle_reg_reg = '0') else eop_location_calc_reg;
 
   -- Process to control fifo write enable
   wen_fifo_proc: process (clk, rst_n)
