@@ -242,7 +242,8 @@ begin
         -- EOP at word 2
         when x"08" | x"09" | x"0A" | x"0B" => shift_calc <= (others=>'0');
         -- EOP at word 3
-        when x"0C" | x"0D" | x"0E" | x"0F" => shift_calc <= "001";
+        -- when x"0C" | x"0D" | x"0E" | x"0F" => shift_calc <= "001";  -- TESTE DESLOCADOR PARA TESTE COM CYLES = 3E. KOROL
+        when x"0C" | x"0D" | x"0E" | x"0F" => shift_calc <= "000";
         -- EOP at word 4
         when x"10" | x"11" | x"12" | x"13" => shift_calc <= (sop_location(2 downto 0) + 1) - 4;
         -- EOP at word 5

@@ -184,7 +184,7 @@ add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_cor
 add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/is_sop_out
 add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/eop_addr_out
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 4} {790352 ps} 0}
+WaveRestoreCursors {{Cursor 4} {464000 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 778
 configure wave -valuecolwidth 181
@@ -200,9 +200,9 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {770792 ps} {837046 ps}
-bookmark add wave bookmark128 {{770754 ps} {811500 ps}} 13
-bookmark add wave bookmark129 {{780000 ps} {800000 ps}} 8
-bookmark add wave bookmark130 {{0 ps} {42010 ps}} 0
-bookmark add wave bookmark131 {{201305 ps} {266263 ps}} 7
-bookmark add wave bookmark132 {{728057 ps} {794311 ps}} 6
+WaveRestoreZoom {437273 ps} {503527 ps}
+bookmark add wave bookmark172 {{770754 ps} {811500 ps}} 13
+bookmark add wave bookmark173 {{780000 ps} {800000 ps}} 8
+bookmark add wave bookmark174 {{0 ps} {42010 ps}} 0
+bookmark add wave bookmark175 {{201305 ps} {266263 ps}} 7
+bookmark add wave bookmark176 {{728057 ps} {794311 ps}} 6
