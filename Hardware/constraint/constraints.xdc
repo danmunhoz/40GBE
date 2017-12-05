@@ -633,6 +633,11 @@ set_clock_groups -name pcieclkmux -physically_exclusive -group clk_125mhz_mux_x0
 set_false_path -to [get_pins inst_pcie/pcie3_7x_0_support_i/pipe_clock_i/pclk_i1_bufgctrl.pclk_i1/S0]
 set_false_path -to [get_pins inst_pcie/pcie3_7x_0_support_i/pipe_clock_i/pclk_i1_bufgctrl.pclk_i1/S1]
 
+# tanauan -> testando caminho falso
+set_false_path -from [get_pins inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/FIFO_DUALCLOCK_MACRO_inst/genblk5_0.fifo_36_bl_1.fifo_36_bl_1/RDCLK ] -to [get_pins inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/almostempty_ff1_reg/D]
+set_false_path -from [get_pins inst_wrapper_macpcs/INST_1_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/FIFO_DUALCLOCK_MACRO_inst/genblk5_0.fifo_36_bl_1.fifo_36_bl_1/RDCLK ] -to [get_pins inst_wrapper_macpcs/INST_1_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/almostempty_ff1_reg/D]
+set_false_path -from [get_pins inst_wrapper_macpcs/INST_2_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/FIFO_DUALCLOCK_MACRO_inst/genblk5_0.fifo_36_bl_1.fifo_36_bl_1/RDCLK ] -to [get_pins inst_wrapper_macpcs/INST_2_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/almostempty_ff1_reg/D]
+set_false_path -from [get_pins inst_wrapper_macpcs/INST_3_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/FIFO_DUALCLOCK_MACRO_inst/genblk5_0.fifo_36_bl_1.fifo_36_bl_1/RDCLK ] -to [get_pins inst_wrapper_macpcs/INST_3_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/almostempty_ff1_reg/D]
 ###############################################################################
 # Physical Constraints
 ###############################################################################
