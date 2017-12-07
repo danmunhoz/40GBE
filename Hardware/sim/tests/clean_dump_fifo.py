@@ -1,10 +1,14 @@
 #!/usr/bin/python3
 
+##############################################################
+## ESTE SCRIPT LIMPA O ARQUIVO DE SAIDA DEIXANDO APENAS DADOS
+##############################################################
+
 import os
 
 n=1
 
-while(n<=8):
+while(n<=16):
     string = "sc"
     string += str(n)
     new_file = open(string+'/cleaned_dump_fifo2.txt', 'w')
@@ -27,7 +31,7 @@ while(n<=8):
                     new_file.write(line[(len(line)-1)-(aux*8):])
                     escrever = 0
                 else:
-                    escrever = 0
+                    escrever = 1
                     new_file.write(line[8:])
 
     new_file.close()

@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+##############################################################
+## ESTE SCRIPT ALTERA OS VALORES DE PAYLOAD DO TB
+##############################################################
+
 import os
 import sys
 
@@ -32,9 +36,34 @@ def alterar_linha(path,index_linha,nova_linha):
             else:
                 f.write(i)
 
+if (x == '9'):
+    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    string = '        wait for 5 ns;\n'
+    nova_linha = '        wait for 15 ns;'
+
+    encontrar_string(path, string)
+    alterar_linha(path,n,nova_linha)
+
+if (x == '99'):
+    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    string = '        wait for 15 ns;\n'
+    nova_linha = '        wait for 5 ns;'
+
+    encontrar_string(path, string)
+    alterar_linha(path,n,nova_linha)
+
+
 if (x == '1'):
     path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
     string = '        payload_cycles      => x"00000006",\n'
+    nova_linha = '        payload_cycles      => x"00000006",'
+
+    encontrar_string(path, string)
+    alterar_linha(path,n,nova_linha)
+
+if (x == '11'):
+    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    string = '        payload_cycles      => x"000000BC",\n'
     nova_linha = '        payload_cycles      => x"00000006",'
 
     encontrar_string(path, string)

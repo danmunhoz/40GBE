@@ -1,12 +1,18 @@
 #!/usr/bin/python3
 
+##############################################################
+## ESTE SCRIPT COMPARA BIT A BIT O ARQUIVO DE ENTRADA COM O
+## ARQUIVO DE SAIDA
+##############################################################
+
 import os
 n=1
 x=0
+
 ##############################################################
 ############# EXCLUI OS ARQUIVOS DE SINALIZACAO
 ##############################################################
-while(n<=8):
+while(n<=16):
     string = "sc"
     string += str(n)
     try:
@@ -27,7 +33,7 @@ while(n<=8):
 ############# UM ARQUIVO TXT
 ##############################################################
 n=1
-while(n<=8):
+while(n<=16):
     string = "sc"
     string += str(n)
 
@@ -44,7 +50,7 @@ while(n<=8):
     if str_tx[0:] == str_fifo[0:x]:
         new_file = open(string+'/PASSOU.txt', 'w')
     else:
-        new_file = open(string+'/NAO PASSOU.txt', 'w')
+        new_file = open(string+'/NAO_PASSOU.txt', 'w')
 
     # print('Tamanho Entrada: ',len(str_tx))
     # print('Tamanho Saida FIFO: ',len(str_fifo))

@@ -346,7 +346,7 @@ begin
       -- wait for 144 ns;
       --
       for i in 0 to 4 loop
-        wait for 15 ns;
+        wait for 5 ns;
         pkt_tx_start <= '1';
         wait until pkt_tx_eop = '1';
         pkt_tx_start <= '0';

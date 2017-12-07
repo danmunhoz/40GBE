@@ -1,30 +1,58 @@
 #!/bin/sh
+#!/usr/bin/python3
 
 #############################################
-## LIMPA OS ARQUIVOS DE DUMP DOS CENÁRIO
+## LIMPA OS ARQUIVOS DE RESULTADOS DOS CENARIO
 #############################################
 
 cd sc1
-rm *.txt
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
 cd ..
 cd sc2
-rm *.txt
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
 cd ..
 cd sc3
-rm *.txt
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
 cd ..
 cd sc4
-rm *.txt
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
 cd ..
 cd sc5
-rm *.txt
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
 cd ..
 cd sc6
-rm *.txt
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
 cd ..
 cd sc7
-rm *.txt
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
 cd ..
 cd sc8
-rm *.txt
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
 cd ..
+cd sc9
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
+cd ..
+cd sc10
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
+cd ..
+cd sc11
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
+cd ..
+cd sc12
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
+cd ..
+cd sc13
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
+cd ..
+cd sc14
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
+cd ..
+cd sc15
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
+cd ..
+cd sc16
+rm cleaned_dump_fifo.txt cleaned_dump_tx.txt dump_output.txt NAO_PASSOU.txt PASSOU.txt
+cd ..
+cd ..
+rm dump_mii_tx.txt
+cd tests
