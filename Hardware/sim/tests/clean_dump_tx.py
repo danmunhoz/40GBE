@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+##############################################################
+## ESTE SCRIPT LIMPA O ARQUIVO DE ENTRADA DEIXANDO APENAS DADOS
+##############################################################
+
 import os
 
 control = []
@@ -9,7 +13,7 @@ sop_addr = 0
 achou_eop = 0
 n=1
 
-while(n<=8):
+while(n<=16):
     string = "sc"
     string += str(n)
 
