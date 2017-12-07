@@ -36,13 +36,47 @@ architecture behav_crc_rx of crc_rx is
   byte_cnt  : std_logic_vector(2 downto 0);
 
   crc_temp  : std_logic_vector(31 downto 0); --DEPOIS PENSA EM ALUMA COISA MELHOR
-  data      : std_logic_vector(127 downto 0); --saida da fiifo???
+  -- data      : std_logic_vector(127 downto 0); --saida da fiifo??? nao usado
+
+  input_reg : std_logic_vector(127 downto 0);
+  eop_reg   : std_logic_vector(4 downto 0);
+  sop_reg   : std_logic;
+  input_reg_reg : std_logic_vector(127 downto 0);
+  eop_reg_reg   : std_logic_vector(4 downto 0);
+
   begin
+    -- input regs process
+    data_regs: process(clk_312,rst_n)
+    begin
+      if rst_n = '0' then
+        input_reg <= (others=>'0');
+        input_reg_reg <= (others=>'0');
+        eop_reg <= (others=>'0');
+        eop_reg_reg <= (others=>'0');
+        sop_reg <= '0';
+      elsif clk_312'event and clk_312 = '1' then
+        input_reg <= mac_data;
+        eop_reg <= mac_eop;
+        sop_reg <= mac_sop;
+        input_reg_reg <= input_reg;
+        eop_reg_reg <= eop_reg_reg;
+      end if;
+    end process;
 
     -- process to control crc modules and fifos
-    control: process(clk_312, rst_n)
+    control: process(input_reg, input_reg_reg, eop_reg, eop_reg_reg, sop_reg)
     begin
+      if sop_reg = '1' then -- Frame starting now
+        valid_frame <= '1';
+      end if;
 
+      if eop_reg /= x"00" then -- End of frame
+        valid_frame <= '0';
+        use_d128 <= '0';
+        -- Now, find out where it is
+      else
+        use_d128 <= '1'
+      end if;
     end process;
 
     -- process to run crc calculations

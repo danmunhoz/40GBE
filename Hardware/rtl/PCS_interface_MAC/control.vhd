@@ -39,6 +39,8 @@ architecture behav_control of control is
   signal shift_out_int              : std_logic_vector(2 downto 0);
   signal shift_out_reg              : std_logic_vector(2 downto 0);
   signal shift_out_reg_reg          : std_logic_vector(2 downto 0);
+  signal shift_eop                  : std_logic_vector(2 downto 0);
+  signal shift_eop_reg              : std_logic_vector(2 downto 0);
   signal ctrl_delay_int             : std_logic_vector( 1 downto 0);
   signal ctrl_delay_reg             : std_logic_vector( 1 downto 0);
   signal ctrl_delay_reg_reg         : std_logic_vector( 1 downto 0);
@@ -352,7 +354,12 @@ begin
   end if;
 end process;
 
-eop_location_out <= eop_location_calc_reg_reg_reg when (sop_eop_same_cycle = '0' or sop_eop_same_cycle_reg_reg = '0') else eop_location_calc_reg;
+-- Some cases eop needs to be outputed one cycle ahead
+-- Ending with shift of 100/110 and next shift is different
+eop_location_out <= eop_location_calc_reg when (shift_eop = "100" or shift_eop_reg = "100") and shift_out_reg /= "100" else
+                    eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_reg /= "110" else
+                    eop_location_calc_reg_reg;
+-- eop_location_out <= eop_location_calc_reg_reg;
 
   -- Process to control fifo write enable
   wen_fifo_proc: process (clk, rst_n)
@@ -417,6 +424,7 @@ eop_location_out <= eop_location_calc_reg_reg_reg when (sop_eop_same_cycle = '0'
     if (rst_n = '0') then
       shift_out_reg <= (others=>'0');
       shift_out_reg_reg <= (others=>'0');
+      shift_eop_reg <= (others=>'0');
       is_sop_reg <= '0';
       is_sop_reg_reg <= '0';
       sop_location_reg <= (others=>'0');
@@ -424,6 +432,7 @@ eop_location_out <= eop_location_calc_reg_reg_reg when (sop_eop_same_cycle = '0'
       shift_out_reg <= shift_out_int;
       sop_location_reg <= sop_location;
       missed_sop_reg <= missed_sop;
+      shift_eop_reg <= shift_eop;
 
       if (sop_location(2 downto 0) >= "100" and eop_location /= "00100000") or sop_location = "0110" or sop_location = "0111" then
         is_sop_reg <= '0';
@@ -453,7 +462,8 @@ eop_location_out <= eop_location_calc_reg_reg_reg when (sop_eop_same_cycle = '0'
 
 
   wen_fifo <= wen_fifo_reg_reg;
-  shift_out <= shift_out_reg_reg;
+  shift_eop <= shift_out_reg_reg;
+  shift_out <= shift_eop;
   is_sop <= is_sop_reg_reg;
 
 end architecture;

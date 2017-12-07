@@ -143,7 +143,9 @@ add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/ins
 add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/xgmii_rxd_3
 add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/ctrl_delay
 add wave -noupdate -expand -group Controller -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/shift_out
-add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/shift_out_int
+add wave -noupdate -expand -group Controller -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/shift_out_int
+add wave -noupdate -expand -group Controller -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/shift_out_reg
+add wave -noupdate -expand -group Controller -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/shift_out_reg_reg
 add wave -noupdate -expand -group Controller -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/sop_location
 add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/eop_location
 add wave -noupdate -expand -group Controller -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/controller/eop_location_calc
@@ -184,7 +186,7 @@ add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_cor
 add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/is_sop_out
 add wave -noupdate -expand -group fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/eop_addr_out
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 4} {464000 ps} 0}
+WaveRestoreCursors {{Cursor 4} {521600 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 778
 configure wave -valuecolwidth 181
@@ -200,9 +202,9 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {437273 ps} {503527 ps}
-bookmark add wave bookmark172 {{770754 ps} {811500 ps}} 13
-bookmark add wave bookmark173 {{780000 ps} {800000 ps}} 8
-bookmark add wave bookmark174 {{0 ps} {42010 ps}} 0
-bookmark add wave bookmark175 {{201305 ps} {266263 ps}} 7
-bookmark add wave bookmark176 {{728057 ps} {794311 ps}} 6
+WaveRestoreZoom {488499 ps} {554753 ps}
+bookmark add wave bookmark112 {{770754 ps} {811500 ps}} 13
+bookmark add wave bookmark113 {{780000 ps} {800000 ps}} 8
+bookmark add wave bookmark114 {{0 ps} {42010 ps}} 0
+bookmark add wave bookmark115 {{201305 ps} {266263 ps}} 7
+bookmark add wave bookmark116 {{728057 ps} {794311 ps}} 6
