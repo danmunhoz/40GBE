@@ -91,6 +91,9 @@ vcom -novopt ../rtl/PCS/shuffle.vhd
 vcom -novopt ../rtl/PCS/bip_calculator.vhd
 vcom -novopt ../rtl/PCS/reorder_fifo.vhd
 vcom -novopt ../rtl/PCS/lane_reordering.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D8.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D64.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D128.vhd
 
 
 scgenmod tb_xgt4 > tb_xgt4.h
