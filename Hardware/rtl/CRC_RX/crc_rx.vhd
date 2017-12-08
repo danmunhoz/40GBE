@@ -70,10 +70,15 @@ architecture behav_crc_rx of crc_rx is
         valid_frame <= '1';
       end if;
 
-      if eop_reg /= x"00" then -- End of frame
+      if eop_reg(4) = '1' then -- End of a frame
         valid_frame <= '0';
         use_d128 <= '0';
         -- Now, find out where it is
+        case eop_reg(3 downto 0) is
+          when x"0" | x"1" | x"2" | x"3" | x"4" | x"5" | x"6" | x"7" =>
+          when x"8" | x"9" | x"A" | x"B" | x"C" | x"D" | x"E" | x"F" =>
+          when others => null;
+        end case;
       else
         use_d128 <= '1'
       end if;
