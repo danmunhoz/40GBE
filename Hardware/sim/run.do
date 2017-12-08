@@ -5,14 +5,14 @@ if [file exists work] {
 vlib work
 vmap work work
 
-vmap unisim /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/vhdl/mti_se/10.3a/lin64/unisim
 vmap unisims_ver /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/verilog/mti_se/10.3a/lin64/unisims_ver
-vmap unimacro /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/vhdl/mti_se/10.3a/lin64/unimacro
 vmap unimacro_ver /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/verilog/mti_se/10.3a/lin64/unimacro_ver
-vmap simprim /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/vhdl/mti_se/10.3a/lin64/simprim
 vmap simprims_ver /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/verilog/mti_se/10.3a/lin64/simprims_ver
 vmap xilinxcorelib /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/vhdl/mti_se/10.3a/lin64/xilinxcorelib
 vmap xilinxcorelib_ver /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/verilog/mti_se/10.3a/lin64/xilinxcorelib_ver
+vmap unimacro /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/vhdl/mti_se/10.3a/lin64/unimacro
+vmap simprim /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/vhdl/mti_se/10.3a/lin64/simprim
+vmap unisim /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/vhdl/mti_se/10.3a/lin64/unisim
 #vmap secureip /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/verilog/mti_se/10.3a/lin64/secureip
 
 vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/glbl.v
@@ -122,7 +122,9 @@ sccom fiber.cpp
 sccom -novopt -g sc_tb.cpp
 sccom -link -B/usr/bin/
 
-vsim -novopt work.glbl work.Top -t 1ps
+vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
+-L secureip -L xilinxcorelib work.glbl \
+work.Top -t 1ps
 
 do wave.do
 # do wave_interface_fifo.do
