@@ -18,13 +18,6 @@ vmap unisim /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/vhdl/mti_se/10.3a/lin
 vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/glbl.v
 vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/uni9000/*.v
 
-#Compiling macros
-#vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/*.v
-#vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/simprims/*.v
-#vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unimacro/*.v
-#vcom -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/vhdl/src/unimacro/*.vhd
-#vcom -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/vhdl/src/unisims/*.vhd
-#vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE/verilog/src/unisims/*.v
 
 #vlog -novopt PCS/*.v
 vlog -novopt ../rtl/PCS/descramble.v
@@ -107,6 +100,7 @@ vcom -novopt ../rtl/PCS/lane_reordering.vhd
 vcom -novopt ../rtl/CRC_RX/CRC32_D8.vhd
 vcom -novopt ../rtl/CRC_RX/CRC32_D64.vhd
 vcom -novopt ../rtl/CRC_RX/CRC32_D128.vhd
+vcom -novopt ../rtl/CRC_RX/crc_rx.vhd
 
 
 scgenmod tb_xgt4 > tb_xgt4.h

@@ -248,6 +248,11 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) output empty_fifo;
     (* syn_keep = "true"*) output full_fifo;
 
+    (* syn_keep = "true"*) wire [4:0] app_eop;
+    (* syn_keep = "true"*) wire app_sop;
+    (* syn_keep = "true"*) wire [127:0] app_data;
+    (* syn_keep = "true"*) wire crc_ok;
+
     wire            tx_clk_161_13;
     wire            rx_clk_161_13;
     wire            clk_156;
@@ -419,6 +424,19 @@ module wrapper_macpcs_rx(
 
     // MAC POR ENQUANTO "QUEBRADO" DENTRO DO WRAPPER: CORE_INTERFACE, CRC CHECKER, FAULTS, ETC...
     // TODO: CRIAR UM MODULO PARA ORGANIZAR TUDO
+
+    (* dont_touch = "true" *) crc_rx INST_crc_rx
+    (
+      .clk_312  (clk_312),
+      .rst_n    (reset_rx_n),
+      .mac_data (mac_data),
+      .mac_sop  (mac_sop),
+      .mac_eop  (mac_eop),
+      .app_data (app_data),
+      .app_sop  (app_sop),
+      .app_eop  (app_eop),
+      .crc_ok   (crc_ok)
+    );
 
     (* dont_touch = "true" *) core_interface INST_core_interface
     (
