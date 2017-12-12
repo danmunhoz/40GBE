@@ -195,6 +195,16 @@ add wave -noupdate -expand -group CRC_RX -group output /Top/rx_xgt4/inst_wrapper
 add wave -noupdate -expand -group CRC_RX -group output /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/app_sop
 add wave -noupdate -expand -group CRC_RX -group output /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/app_eop
 add wave -noupdate -expand -group CRC_RX -group output /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/crc_ok
+add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/ren
+add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/wen
+add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/fifo_data_out
+add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/fifo_eop_out
+add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/fifo_sop_out
+add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/input_reg
+add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/input_reg_reg
+add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/eop_reg
+add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/eop_reg_reg
+add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/sop_reg
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/s_d8
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/use_d128
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/use_d64
@@ -204,18 +214,8 @@ add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_c
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/valid_frame
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/byte_cnt
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/d8_done
-add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/input_reg
-add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/eop_reg
-add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/sop_reg
-add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/input_reg_reg
-add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/eop_reg_reg
-add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/fifo_data_out
-add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/fifo_eop_out
-add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/fifo_sop_out
-add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/ren
-add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/wen
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 4} {401600 ps} 0}
+WaveRestoreCursors {{Cursor 4} {446400 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 778
 configure wave -valuecolwidth 181
@@ -231,9 +231,9 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {400176 ps} {466430 ps}
-bookmark add wave bookmark256 {{770754 ps} {811500 ps}} 13
-bookmark add wave bookmark257 {{780000 ps} {800000 ps}} 8
-bookmark add wave bookmark258 {{0 ps} {42010 ps}} 0
-bookmark add wave bookmark259 {{201305 ps} {266263 ps}} 7
-bookmark add wave bookmark260 {{728057 ps} {794311 ps}} 6
+WaveRestoreZoom {423071 ps} {489325 ps}
+bookmark add wave bookmark280 {{770754 ps} {811500 ps}} 13
+bookmark add wave bookmark281 {{780000 ps} {800000 ps}} 8
+bookmark add wave bookmark282 {{0 ps} {42010 ps}} 0
+bookmark add wave bookmark283 {{201305 ps} {266263 ps}} 7
+bookmark add wave bookmark284 {{728057 ps} {794311 ps}} 6

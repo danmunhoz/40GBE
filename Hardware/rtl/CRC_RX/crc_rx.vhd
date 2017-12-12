@@ -159,9 +159,9 @@ architecture behav_crc_rx of crc_rx is
       elsif clk_312'event and clk_312 = '1' then
         input_reg <= fifo_data_out;
         eop_reg <= fifo_eop_out;
+        eop_reg_reg <= eop_reg;
         sop_reg <= fifo_sop_out;
         input_reg_reg <= input_reg;
-        eop_reg_reg <= eop_reg_reg;
       end if;
     end process;
 
@@ -172,7 +172,7 @@ architecture behav_crc_rx of crc_rx is
         valid_frame <= '1';
       end if;
 
-      if eop_reg(4) = '1' then -- End of a frame
+      if eop_reg(4) = '1' and valid_frame = '1' then -- End of a frame
         valid_frame <= '0';
         use_d128 <= '0';
         -- Now, find out where it is
@@ -196,8 +196,12 @@ architecture behav_crc_rx of crc_rx is
             use_d8 <= '1';
           when others => null;
         end case;
-      else
+      elsif valid_frame = '1' then
         use_d128 <= '1';
+        use_d64  <= '0';
+        use_d8   <= '0';
+      else
+        use_d128 <= '0';
         use_d64  <= '0';
         use_d8   <= '0';
       end if;
@@ -220,7 +224,7 @@ architecture behav_crc_rx of crc_rx is
           d64_reg <= (others=>'0');
         else
           wen <= '1';
-          if use_d128 = '1' then                      -- free to use all input
+          if use_d128 = '1' then      -- free to use all input
             crc_reg <= nextCRC32_D128(input_reg, crc_reg);
             ren <= '1';
           elsif use_d64 = '1' and use_d8 = '1' and d8_done = '0' then
