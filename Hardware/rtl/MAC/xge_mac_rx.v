@@ -124,6 +124,10 @@ wire                    status_fragment_error;        // From sync_clk_wb0 of sy
 wire                    status_lenght_error;          // From sync_clk_wb0 of sync_clk_wb.v
 wire                    status_local_fault;           // From sync_clk_wb0 of sync_clk_wb.v
 wire                    status_local_fault_crx;       // From fault_sm0 of fault_sm.v
+// tanauan testando fault.vhd
+wire      status_local_fault_crx2;
+wire      status_remote_fault_crx2;
+//
 wire                    status_local_fault_ctx;       // From sync_clk_xgmii_tx0 of sync_clk_xgmii_tx.v
 wire                    status_pause_frame_rx;        // From sync_clk_wb0 of sync_clk_wb.v
 wire                    status_remote_fault;          // From sync_clk_wb0 of sync_clk_wb.v
@@ -719,6 +723,15 @@ fault_sm fault_sm0(/*AUTOINST*/
                    .reset_xgmii_rx_n    (reset_xgmii_rx_n),
                    .local_fault_msg_det (local_fault_msg_det_0[1:0]),
                    .remote_fault_msg_det(remote_fault_msg_det_0[1:0]));
+
+fault_sm_rx INST_fault(  // Outputs
+                   .status_local_fault_crx (status_local_fault_crx2),
+                   .status_remote_fault_crx (status_remote_fault_crx2),
+                   // Inputs
+                   .clk_xgmii_rx         (clk_xgmii_rx),
+                   .reset_xgmii_rx_n     (reset_xgmii_rx_n),
+                   .local_fault_msg_det  (local_fault_msg_det_0[1:0]),
+                   .remote_fault_msg_det (remote_fault_msg_det_0[1:0]) );
 
 sync_clk_wb sync_clk_wb0(/*AUTOINST*/
                          // Outputs

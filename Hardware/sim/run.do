@@ -47,6 +47,7 @@ vcom -novopt ../rtl/PCS/register.vhd
 
 #vlog -novopt MAC/*.v
 vlog -novopt ../rtl/MAC/fault_sm.v
+vcom -novopt ../rtl/MAC/fault_sm_rx.vhd
 vlog -novopt ../rtl/MAC/rx_dequeue.v
 vlog -novopt ../rtl/MAC/tx_stats_fifo.v
 vlog -novopt ../rtl/MAC/tx_dequeue.v
