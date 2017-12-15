@@ -250,7 +250,7 @@ SC_MODULE(pkt_buffer) {
          }
         }
       } else {
-        cout << "PCS TX REPETIU BLOCO!!!!!!  -> " << block_in_lv << " = " << block_in_old << endl;
+        cout << "PCS TX REPETIU BLOCO!!!!!!  -> " << block_in_lv << " != " << block_in_old << endl;
       }
     }
 
