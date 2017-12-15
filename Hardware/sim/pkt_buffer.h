@@ -34,6 +34,7 @@ SC_MODULE(pkt_buffer) {
 
   sc_in<sc_lv<64> > block_in;
   sc_in<sc_lv<2> >  header_in;
+
   sc_in<sc_logic>   data_valid_in;
 
   sc_out<sc_lv<64 > > block_out_0;
@@ -56,6 +57,15 @@ SC_MODULE(pkt_buffer) {
   ofstream lane3;
 
   ofstream dbg_bip;
+
+  sc_lv<64> block_in_old;
+  sc_lv<2>  header_in_old;
+
+  sc_lv<64> block_in_old_o;
+  sc_lv<2>  header_in_old_o;
+
+  sc_lv<64 > block_in_lv;
+  sc_lv<2 > header_in_lv;
 
   void bip_calculator (sc_lv<8 > *lane_bip, const sc_lv<64 > block_in_lv, const sc_lv<2 > header_in_lv, int debug = 0) {
 
@@ -97,15 +107,24 @@ SC_MODULE(pkt_buffer) {
       cout << endl;
   }
 
+  void reg() {
+    block_in_old_o = block_in_old;
+    header_in_old_o = header_in_old;
+  }
+
   void rx() {
     std::stringstream buffer;
+    std::stringstream buffer_old;
     int lane = 0;
 
-    sc_lv<64 > block_in_lv;
-    sc_lv<2 > header_in_lv;
+    // sc_lv<64 > block_in_lv;
+    // sc_lv<2 > header_in_lv;
 
     block_in_lv = block_in;
     header_in_lv = header_in;
+
+    block_in_old = block_in;
+    header_in_old = header_in;
 
     sc_lv<64 > blk_temp;
     sc_lv<2 >  hdr_temp;
@@ -125,105 +144,113 @@ SC_MODULE(pkt_buffer) {
         lane3_bip = "00000000";
     }
 
-    if ( data_valid_in == SC_LOGIC_1 ) {
+    if ( block_in_old_o != block_in_lv) {
 
-      buffer << header_in << "-" << block_in;
+      cout << "PCS TX BLOCO OK!!!!!!  -> " << block_in_lv << " = " << block_in_old << endl;
 
-      lane = block_counter % 4;
+      if ( data_valid_in == SC_LOGIC_1 ) {
 
-      // dbg_bip << "Pkt_buffer - rx: bc = " << block_counter << " lane = " << lane << " buffer = " << buffer.str() << endl;
+        buffer << header_in << "-" << block_in;
 
-      switch (lane) {
 
-        case 0:
-          lane0 << buffer.str() << endl;
-          // cout << buffer.str() << endl;
-          block_counter++;
-          bip_calculator (&lane0_bip, block_in, header_in);
-          break;
-        case 1:
-          lane1 << buffer.str() << endl;
-          // cout << buffer.str() << endl;
-          block_counter++;
-          bip_calculator (&lane1_bip, block_in, header_in);
-          break;
-        case 2:
-          lane2 << buffer.str() << endl;
-          // cout << buffer.str() << endl;
-          block_counter++;
-          bip_calculator (&lane2_bip, block_in, header_in);
-          break;
-        case 3:
-          lane3 << buffer.str() << endl;
-          // cout << buffer.str() << endl;
-          block_counter++;
-          bip_calculator (&lane3_bip, block_in, header_in);
-          break;
-        default:
-          cout << "Wrong mode operation!" << endl;
+        lane = block_counter % 4;
 
-        buffer.str("");
+        // dbg_bip << "Pkt_buffer - rx: bc = " << block_counter << " lane = " << lane << " buffer = " << buffer.str() << endl;
 
-      }
+        switch (lane) {
 
-      if( block_counter == PKTS_BTW_SYNC) {
-        /*
-        **  BIT INTERLEAVED PARITY
-        **  Each bit in the BIP field is an even parity calculation over all of
-        **  the previous specified bits of a given PCS Lane, from and including
-        **  the previous alignment marker, but not including the current alignment
-        **  marker.
-        */
-        /*
-        **  BIP BIT NUMBER  |   Assigned 66-bit word bits
-        **        0         |     2,10,18,26,34,42,50,58
-        **        1         |     3,11,19,27,35,43,51,59
-        **        2         |     4,12,20,28,36,44,52,60
-        **        3         |   0,5,13,21,29,37,45,53,61
-        **        4         |   1,6,14,22,30,38,46,54,62
-        **        5         |     7,15,23,31,39,47,55,63
-        **        6         |     8,16,24,32,40,48,56,64
-        **        7         |     9,17,25,33,41,49,57,65
-        */
-        /*
-        **  10-LOW PART OF AN ALIGNMENT BLOCK, BIP, HIGH PART OF AN ALIGNMENT BLOCK, NOT(BIP)
-        */
+          case 0:
+            lane0 << buffer.str() << endl;
+            // cout << buffer.str() << endl;
+            block_counter++;
+            bip_calculator (&lane0_bip, block_in, header_in);
+            break;
+          case 1:
+            lane1 << buffer.str() << endl;
+            // cout << buffer.str() << endl;
+            block_counter++;
+            bip_calculator (&lane1_bip, block_in, header_in);
+            break;
+          case 2:
+            lane2 << buffer.str() << endl;
+            // cout << buffer.str() << endl;
+            block_counter++;
+            bip_calculator (&lane2_bip, block_in, header_in);
+            break;
+          case 3:
+            lane3 << buffer.str() << endl;
+            // cout << buffer.str() << endl;
+            block_counter++;
+            bip_calculator (&lane3_bip, block_in, header_in);
+            break;
+          default:
+            cout << "Wrong mode operation!" << endl;
 
-        lane0 << "10-" << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << endl;
-        str_temp << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip;
-        blk_temp = str_temp.str().c_str();
-        hdr_temp = "10";
-        lane0_bip = "00000000";
-        // cout << "LANE0_BIP " << hdr_temp << "-" << blk_temp << endl;
-        // cout << "LANE0_BIP " << lane0_bip << endl;
-        bip_calculator (&lane0_bip, blk_temp, hdr_temp);
-        // cout << "LANE0_BIP_ret: " << lane0_bip << endl << endl;
+          buffer.str("");
 
-        lane1 << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << endl;
-        str_temp << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane0_bip;
-        blk_temp = str_temp.str().c_str();
-        hdr_temp = "10";
-        lane1_bip = "00000000";
-        bip_calculator (&lane1_bip, blk_temp, hdr_temp);
+        }
 
-        lane2 << "10-" << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << endl;
-        str_temp << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane0_bip;
-        blk_temp = str_temp.str().c_str();
-        hdr_temp = "10";
-        lane2_bip = "00000000";
-        bip_calculator (&lane2_bip, block_in_lv, hdr_temp);
+        if( block_counter == PKTS_BTW_SYNC) {
+          /*
+          **  BIT INTERLEAVED PARITY
+          **  Each bit in the BIP field is an even parity calculation over all of
+          **  the previous specified bits of a given PCS Lane, from and including
+          **  the previous alignment marker, but not including the current alignment
+          **  marker.
+          */
+          /*
+          **  BIP BIT NUMBER  |   Assigned 66-bit word bits
+          **        0         |     2,10,18,26,34,42,50,58
+          **        1         |     3,11,19,27,35,43,51,59
+          **        2         |     4,12,20,28,36,44,52,60
+          **        3         |   0,5,13,21,29,37,45,53,61
+          **        4         |   1,6,14,22,30,38,46,54,62
+          **        5         |     7,15,23,31,39,47,55,63
+          **        6         |     8,16,24,32,40,48,56,64
+          **        7         |     9,17,25,33,41,49,57,65
+          */
+          /*
+          **  10-LOW PART OF AN ALIGNMENT BLOCK, BIP, HIGH PART OF AN ALIGNMENT BLOCK, NOT(BIP)
+          */
 
-        lane3 << "10-" << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip << endl;
-        str_temp << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane0_bip;
-        blk_temp = str_temp.str().c_str();
-        hdr_temp = "10";
-        lane3_bip = "00000000";
-        bip_calculator (&lane3_bip, blk_temp, hdr_temp);
+          lane0 << "10-" << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << endl;
+          str_temp << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip;
+          blk_temp = str_temp.str().c_str();
+          hdr_temp = "10";
+          lane0_bip = "00000000";
+          // cout << "LANE0_BIP " << hdr_temp << "-" << blk_temp << endl;
+          // cout << "LANE0_BIP " << lane0_bip << endl;
+          bip_calculator (&lane0_bip, blk_temp, hdr_temp);
+          // cout << "LANE0_BIP_ret: " << lane0_bip << endl << endl;
 
-        block_counter = (block_counter % 4);
-        // block_counter = 1;
-        // dbg_bip << "Pkt_buffer - bip: " << block_counter << endl;
-       }
+          lane1 << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << endl;
+          str_temp << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane0_bip;
+          blk_temp = str_temp.str().c_str();
+          hdr_temp = "10";
+          lane1_bip = "00000000";
+          bip_calculator (&lane1_bip, blk_temp, hdr_temp);
+
+          lane2 << "10-" << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << endl;
+          str_temp << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane0_bip;
+          blk_temp = str_temp.str().c_str();
+          hdr_temp = "10";
+          lane2_bip = "00000000";
+          bip_calculator (&lane2_bip, block_in_lv, hdr_temp);
+
+          lane3 << "10-" << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip << endl;
+          str_temp << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane0_bip;
+          blk_temp = str_temp.str().c_str();
+          hdr_temp = "10";
+          lane3_bip = "00000000";
+          bip_calculator (&lane3_bip, blk_temp, hdr_temp);
+
+          block_counter = (block_counter % 4);
+          // block_counter = 1;
+          // dbg_bip << "Pkt_buffer - bip: " << block_counter << endl;
+         }
+        }
+      } else {
+        cout << "PCS TX REPETIU BLOCO!!!!!!  -> " << block_in_lv << " = " << block_in_old << endl;
       }
     }
 
@@ -262,6 +289,10 @@ SC_MODULE(pkt_buffer) {
     }
 
     SC_METHOD(rx);
+    sensitive<<clock_in161.pos();
+    dont_initialize();
+
+    SC_METHOD(reg);
     sensitive<<clock_in161.pos();
     dont_initialize();
 
