@@ -1,6 +1,5 @@
 library ieee;
   use ieee.std_logic_1164.all;
-
 package lane_defs is
   subtype LANE0  is natural range 7 downto 0;
   subtype LANE1  is natural range 15 downto 8;
@@ -22,6 +21,23 @@ end lane_defs;
 
 library ieee;
   use ieee.std_logic_1164.all;
+package rev_func is
+  function reverse (data_in: std_logic_vector) return std_logic_vector;
+end rev_func;
+package body rev_func is
+  function reverse (data_in:  std_logic_vector) return std_logic_vector is
+    variable data_out : std_logic_vector(data_in'range);
+    alias temp: std_logic_vector(data_in'reverse_range) is data_in;
+  begin
+    for i in temp'range loop
+      data_out(i) := temp(i);
+    end loop;
+    return data_out;
+  end reverse;
+end rev_func;
+
+library ieee;
+  use ieee.std_logic_1164.all;
   use ieee.std_logic_unsigned.all;
   use ieee.numeric_std.all;
 library UNISIM;
@@ -32,6 +48,7 @@ use work.PCK_CRC32_D8.all;
 use work.PCK_CRC32_D64.all;
 use work.PCK_CRC32_D128.all;
 use work.lane_defs.all;
+use work.rev_func.all;
 
 entity crc_rx is
   port(
@@ -68,8 +85,10 @@ architecture behav_crc_rx of crc_rx is
 
   -- signal crc_final  : std_logic_vector(31 downto 0);
   signal crc_value  : std_logic_vector(31 downto 0);
+  signal crc_final  : std_logic_vector(31 downto 0);
   signal d8_done    : std_logic;
   signal d8_bytes   : std_logic_vector(2 downto 0);
+  signal delay_cnt  : std_logic_vector(2 downto 0);
 
   signal input_reg : std_logic_vector(127 downto 0);
   signal input_reg_reg : std_logic_vector(127 downto 0);
@@ -104,7 +123,6 @@ architecture behav_crc_rx of crc_rx is
   signal clk_312_n : std_logic;
   signal fifo_delay : std_logic_vector(2 downto 0);
 
-
   begin
     rst <= not rst_n;
     clk_312_n <= not clk_312;
@@ -115,6 +133,8 @@ architecture behav_crc_rx of crc_rx is
 
     ren <= ren_int;
     wen <= wen_int;
+
+    crc_final <= not(reverse(crc_reg));
 
     -- Hold fifo. Needed to wait for at most 8 cycles
     FIFO_hold_l : FIFO_SYNC_MACRO
@@ -192,7 +212,7 @@ architecture behav_crc_rx of crc_rx is
         -- Saves the 64 bits necesseries for d8 crc
         -- if ps_crc = D64 then
           if eop_reg(4) = '1' then
-            if d64_low = '1' then
+            if d64_low = '0' then
               d64_reg <= input_reg (63 downto 0);
             else
               d64_reg <= input_reg (127 downto 64);
@@ -220,6 +240,7 @@ architecture behav_crc_rx of crc_rx is
         use_d8 <= '0';
         d8_bytes <= "000";
         valid_frame <= '0';
+        d64_low <= '1';
         crc_value <= (others => '0');
       elsif clk_312'event and clk_312 = '1' then
 
@@ -360,7 +381,7 @@ architecture behav_crc_rx of crc_rx is
       end if;
     end process;
 
-    next_state_decoder: process(rst_n, ps_crc, use_d128, use_d64, use_d8, sop_reg, eop_reg)
+    next_state_decoder: process(rst_n, ps_crc, use_d128, use_d64, use_d8, sop_reg, eop_reg, fifo_delay)
     begin
       if rst_n = '0' then
         ren_int <= '0';
@@ -371,11 +392,16 @@ architecture behav_crc_rx of crc_rx is
 
         case ps_crc is
           when IDLE =>
-            -- if use_d128 = '1' then
-            if sop_reg = '1' then
-              ns_crc <= D128;
+            if fifo_delay = "111" then
+              ren_int <= '1';
+              if sop_reg = '1' then
+                ns_crc <= D128;
+              else
+                ns_crc <= IDLE;
+              end if;
             else
               ns_crc <= IDLE;
+              ren_int <= '0';
             end if;
 
           when D128 =>
@@ -385,6 +411,7 @@ architecture behav_crc_rx of crc_rx is
               ns_crc <= D64;
             elsif eop_reg(3 downto 0) = x"4" then
               ns_crc <= CHECK;
+              -- ren_int <= '0';
             elsif eop_reg(3 downto 0) = x"C" then
               ns_crc <= D64;
             else
@@ -394,6 +421,7 @@ architecture behav_crc_rx of crc_rx is
           when D64 =>
             if d8_bytes = "000" then
               ns_crc <= CHECK;
+              ren_int <= '0';
             else
               ns_crc <= D8_0;
               ren_int <= '0';
@@ -452,16 +480,16 @@ architecture behav_crc_rx of crc_rx is
             ren_int <= '0';
 
           when D8_7 =>
-            if d8_done = '1' then
-              ns_crc <= CHECK;
-            else
-              ns_crc <= CHECK;
-            end if;
+            ns_crc <= CHECK;
             ren_int <= '0';
-
           when CHECK =>
             -- Por enquanto...
-            ns_crc <= IDLE;
+            ren_int <= '0';
+            -- if sop_reg = '1' then
+            --   ns_crc <= D128;
+            -- else
+              ns_crc <= IDLE;
+            -- end if;
 
           when others => ns_crc <= IDLE;
         end case;
@@ -471,72 +499,80 @@ architecture behav_crc_rx of crc_rx is
     output_decoder: process(ps_crc, clk_312, rst_n)
     begin
       if rst_n = '0' then
-        crc_reg <= (others=>'0');
+        crc_reg <= (others=>'1');
         d8_done <= '0';
+        fifo_delay <= (others=>'0');
       elsif clk_312'event and clk_312 = '1' then
         case ps_crc is
           when IDLE =>
-            crc_reg <= (others=>'0');
+            if fifo_delay < "111" then
+              fifo_delay <= fifo_delay + 1;
+            end if;
             d8_done <= '0';
+            if sop_reg = '1' and fifo_delay = "111" then
+              crc_reg <= nextCRC32_D128(reverse(input_reg), crc_reg);
+            end if;
           when D128 =>
-            crc_reg <= nextCRC32_D128(input_reg, crc_reg);
+            crc_reg <= nextCRC32_D128(reverse(input_reg), crc_reg);
             d8_done <= '0';
           when D64 =>
-            crc_reg <= nextCRC32_D64(input_reg(63 downto 0), crc_reg);
+            crc_reg <= nextCRC32_D64(reverse(d64_reg), crc_reg);
             d8_done <= '0';
           when D8_0 =>
-            crc_reg <= nextCRC32_D8(d64_reg(LANE0), crc_reg);
+            crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE0)), crc_reg);
             d8_done <= '0';
           when D8_1 =>
             if d8_bytes > "000" then
-              crc_reg <= nextCRC32_D8(d64_reg(LANE1), crc_reg);
+              crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE1)), crc_reg);
               d8_done <= '0';
             else
               d8_done <= '1';
             end if;
           when D8_2 =>
             if d8_bytes > "001" then
-              crc_reg <= nextCRC32_D8(d64_reg(LANE2), crc_reg);
+              crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE2)), crc_reg);
               d8_done <= '0';
             else
               d8_done <= '1';
             end if;
           when D8_3 =>
             if d8_bytes > "010" then
-              crc_reg <= nextCRC32_D8(d64_reg(LANE3), crc_reg);
+              crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE3)), crc_reg);
               d8_done <= '0';
             else
               d8_done <= '1';
             end if;
           when D8_4 =>
             if d8_bytes > "011" then
-              crc_reg <= nextCRC32_D8(d64_reg(LANE4), crc_reg);
+              crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE4)), crc_reg);
               d8_done <= '0';
             else
               d8_done <= '1';
             end if;
           when D8_5 =>
             if d8_bytes > "100" then
-              crc_reg <= nextCRC32_D8(d64_reg(LANE5), crc_reg);
+              crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE5)), crc_reg);
               d8_done <= '0';
             else
               d8_done <= '1';
             end if;
           when D8_6 =>
             if d8_bytes > "101" then
-              crc_reg <= nextCRC32_D8(d64_reg(LANE6), crc_reg);
+              crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE6)), crc_reg);
               d8_done <= '0';
             else
               d8_done <= '1';
             end if;
           when D8_7 =>
             if d8_bytes > "110" then
-              crc_reg <= nextCRC32_D8(d64_reg(LANE7), crc_reg);
+              crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE7)), crc_reg);
               d8_done <= '0';
             else
               d8_done <= '1';
             end if;
           when CHECK =>
+            crc_reg <= (others=>'1');
+            fifo_delay <= (others=>'0');
             if crc_reg = crc_value then
               crc_ok <= '1';
             else
@@ -546,43 +582,4 @@ architecture behav_crc_rx of crc_rx is
         end case;
       end if;
     end process;
-
-    --
-    -- -- process to perform crc byte by byte using nextCRC32_D8
-    -- -- It will use crc_reg, so input fifo must be not enabled
-    -- calc_d8: process(clk_312, rst_n)
-    -- begin
-    --   if rst_n = '0' then
-    --     s_d8 <= INIT;
-    --
-    --   elsif clk_312'event and clk_312 = '1' then
-    --         case s_d8 is
-    --           when INIT =>
-    --             byte_cnt <= (others=>'0');
-    --             crc_final <= (others=>'0');
-    --             d8_done  <= '0';
-    --             if use_d8 = '1' then
-    --               s_d8 <= CALC;
-    --             end if;
-    --           when CALC =>
-    --             if byte_cnt < (eop_last(3 downto 0) - 4) then -- CRC value is not used in the crc calculation
-    --               case byte_cnt is
-    --                 when "000" => crc_final <= nextCRC32_D8(d64_reg(LANE0), crc_reg);
-    --                 when "001" => crc_final <= nextCRC32_D8(d64_reg(LANE1), crc_final);
-    --                 when "010" => crc_final <= nextCRC32_D8(d64_reg(LANE2), crc_final);
-    --                 when "011" => crc_final <= nextCRC32_D8(d64_reg(LANE3), crc_final);
-    --                 when "100" => crc_final <= nextCRC32_D8(d64_reg(LANE4), crc_final);
-    --                 when "101" => crc_final <= nextCRC32_D8(d64_reg(LANE5), crc_final);
-    --                 when "110" => crc_final <= nextCRC32_D8(d64_reg(LANE6), crc_final);
-    --                 when "111" => crc_final <= nextCRC32_D8(d64_reg(LANE7), crc_final);
-    --                 when others => null;
-    --               end case;
-    --               byte_cnt <= byte_cnt + 1;
-    --             else
-    --               s_d8 <= INIT;
-    --             end if;
-    --           when others => null;
-    --       end case;
-    --   end if;
-    -- end process;
 end behav_crc_rx;

@@ -14,8 +14,8 @@
 #include <limits>
 
 //#define PKTS_BTW_SYNC 16383/lane = 65532
-#define PKTS_BTW_SYNC 60
-// #define PKTS_BTW_SYNC 65532
+// #define PKTS_BTW_SYNC 60
+#define PKTS_BTW_SYNC 65532
 
 /* SYNC_LANEx_LOW BIP SYNC_LANEx_HIGH BIP */
 #define SYNC_LANE0_LOW  "100100000111011001000111"    // 0x907647
@@ -146,7 +146,7 @@ SC_MODULE(pkt_buffer) {
 
     if ( block_in_old_o != block_in_lv) {
 
-      cout << "PCS TX BLOCO OK!!!!!!  -> " << block_in_lv << " = " << block_in_old << endl;
+      cout << "PCS TX BLOCO OK!!!!!!  -> " << block_in_lv << " != " << block_in_old << endl;
 
       if ( data_valid_in == SC_LOGIC_1 ) {
 
@@ -250,13 +250,13 @@ SC_MODULE(pkt_buffer) {
          }
         }
       } else {
-        cout << "PCS TX REPETIU BLOCO!!!!!!  -> " << block_in_lv << " != " << block_in_old << endl;
+        cout << "PCS TX REPETIU BLOCO!!!!!!  -> " << block_in_lv << " = " << block_in_old << endl;
       }
     }
 
   SC_CTOR(pkt_buffer) {
-    block_counter = 0;
-    // block_counter = 65500; //Start transmisison writting alignment blocks
+    // block_counter = 0;
+    block_counter = 65500; //Start transmisison writing alignment blocks
 
     lane0.open("lane0.txt");
     if (lane0.is_open()){
