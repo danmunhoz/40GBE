@@ -45,6 +45,7 @@ architecture behav_control of control is
   signal ctrl_delay_reg             : std_logic_vector( 1 downto 0);
   signal ctrl_delay_reg_reg         : std_logic_vector( 1 downto 0);
   signal ctrl_delay_reg_reg_reg     : std_logic_vector( 1 downto 0);
+  signal flag_mux_delay_ctrl        : std_logic:='0';
   signal wen_fifo_reg               : std_logic;
   signal wen_fifo_reg_reg           : std_logic;
   signal missed_sop                 : std_logic;
@@ -205,7 +206,16 @@ begin
       ctrl_delay_reg_reg_reg <= (others=>'0');
     elsif clk'event and clk = '1' then
       ctrl_delay_reg_reg <= ctrl_delay_reg;
-      ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg;
+
+      -- Quando delay passa de 2 para !=2, segurar o valor por mais um ciclo
+      if  ctrl_delay_reg_reg = "00" and ctrl_delay_reg_reg_reg = "10" and flag_mux_delay_ctrl = '0' then
+        ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg_reg;
+        flag_mux_delay_ctrl <= '1';
+      else
+        ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg;
+        flag_mux_delay_ctrl <= '0';
+      end if;
+
       if ctrl_delay_int /= "00" then
         -- ctrl_delay_int updated to a valid value
         ctrl_delay_reg <= ctrl_delay_int;
@@ -356,10 +366,12 @@ end process;
 
 -- Some cases eop needs to be outputed one cycle earlier
 -- Frame ending with shift of 100/110/010 and next shift is different
-eop_location_out <= eop_location_calc_reg when (shift_eop = "100" or shift_eop_reg = "100") and shift_out_reg /= "100" else
+eop_location_out <= eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_int = "010" else  -- correção eop_addr payload_cycles "e1"
+                    eop_location_calc_reg when (shift_eop = "100" or shift_eop_reg = "100") and shift_out_reg /= "100" else
                     eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_reg /= "110" else
                     eop_location_calc_reg when (shift_eop = "010" or shift_eop_reg = "010") and shift_out_reg = "000"  and ctrl_delay_reg = "10" else
                     eop_location_calc_reg_reg;
+
 -- eop_location_out <= eop_location_calc_reg_reg;
 
   -- Process to control fifo write enable
@@ -450,7 +462,7 @@ eop_location_out <= eop_location_calc_reg when (shift_eop = "100" or shift_eop_r
         is_sop_reg_reg <= is_sop_reg;
       end if;
 
-      if sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '0' then
+      if (sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '0') or (shift_out_reg_reg = "010" and shift_out_reg = "000" and sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '1') or (shift_out_reg_reg = "000" and shift_out_reg = "100" and sop_eop_same_cycle_reg = '0' and sop7_eop_same_cycle_reg = '0') then
         shift_out_reg_reg <= shift_out_reg_reg;
         is_sop_reg_reg <= is_sop_reg_reg;
       else
