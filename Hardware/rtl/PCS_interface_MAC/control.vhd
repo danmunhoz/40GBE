@@ -207,14 +207,17 @@ begin
     elsif clk'event and clk = '1' then
       ctrl_delay_reg_reg <= ctrl_delay_reg;
 
+      -- voltando commit referente a manter um ciclo a mais ctrl_mux_delay 
       -- Quando delay passa de 2 para !=2, segurar o valor por mais um ciclo
-      if  ctrl_delay_reg_reg = "00" and ctrl_delay_reg_reg_reg = "10" and flag_mux_delay_ctrl = '0' then
-        ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg_reg;
-        flag_mux_delay_ctrl <= '1';
-      else
-        ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg;
-        flag_mux_delay_ctrl <= '0';
-      end if;
+      -- if  ctrl_delay_reg_reg = "00" and ctrl_delay_reg_reg_reg = "10" and flag_mux_delay_ctrl = '0' then
+      --   ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg_reg;
+      --   flag_mux_delay_ctrl <= '1';
+      -- else
+      --   ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg;
+      --   flag_mux_delay_ctrl <= '0';
+      -- end if;
+
+      ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg;
 
       if ctrl_delay_int /= "00" then
         -- ctrl_delay_int updated to a valid value
