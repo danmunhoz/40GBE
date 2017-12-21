@@ -250,6 +250,7 @@ module wrapper_macpcs_rx(
 
     (* syn_keep = "true"*) wire [4:0] app_eop;
     (* syn_keep = "true"*) wire app_sop;
+    (* syn_keep = "true"*) wire app_val;
     (* syn_keep = "true"*) wire [127:0] app_data;
     (* syn_keep = "true"*) wire crc_ok;
 
@@ -434,6 +435,7 @@ module wrapper_macpcs_rx(
       .mac_eop  (mac_eop),
       .app_data (app_data),
       .app_sop  (app_sop),
+      .app_val  (app_val),
       .app_eop  (app_eop),
       .crc_ok   (crc_ok)
     );
