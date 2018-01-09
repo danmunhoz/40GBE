@@ -423,14 +423,14 @@ begin
   --==============================================================================
   -- descarta bloco de sync
 
-  fifo_wen_0 <= '0' when (barreira_xbar.data_0 = shuffle_out_3(63 downto 0))
-                        else barreira_xbar.wen_0;
-  fifo_wen_1 <= '0' when (barreira_xbar.data_1 = barreira_xbar.data_0)
-                        else barreira_xbar.wen_1;
-  fifo_wen_2 <= '0' when (barreira_xbar.data_2 = barreira_xbar.data_1)
-                        else barreira_xbar.wen_2;
-  fifo_wen_3 <= '0' when (barreira_xbar.data_3 = barreira_xbar.data_2)
-                        else barreira_xbar.wen_3;
+  -- fifo_wen_0 <= '0' when (barreira_xbar.data_0 = shuffle_out_3(63 downto 0))
+  --                       else barreira_xbar.wen_0;
+  -- fifo_wen_1 <= '0' when (barreira_xbar.data_1 = barreira_xbar.data_0)
+  --                       else barreira_xbar.wen_1;
+  -- fifo_wen_2 <= '0' when (barreira_xbar.data_2 = barreira_xbar.data_1)
+  --                       else barreira_xbar.wen_2;
+  -- fifo_wen_3 <= '0' when (barreira_xbar.data_3 = barreira_xbar.data_2)
+  --                       else barreira_xbar.wen_3;
 
   fifo_0 : entity work.reorder_fifo
   port map (
