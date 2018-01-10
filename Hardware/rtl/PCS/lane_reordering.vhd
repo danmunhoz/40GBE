@@ -204,6 +204,7 @@ architecture behav_lane_reorder of lane_reorder is
     signal is_sync_3_int : std_logic;
 
     signal read_from_fifos_int :std_logic;
+    signal read_from_fifos_reg :std_logic;
 
     signal enable_lane_0 : std_logic;
     signal enable_lane_1 : std_logic;
@@ -316,12 +317,8 @@ begin
   --==============================================================================
 
   -- Só habilita leitura após todas lanes estiverem syncadas
-  -- read_from_fifos_int <= '0' when (barreira_skew.logical_lane_0 = "100" and barreira_skew.logical_lane_1 = "100" and
-  --                                  barreira_skew.logical_lane_2 = "100" and barreira_skew.logical_lane_3 = "100") or
-  --                                 (empty_0 = '1' or empty_1 = '1' or empty_2 = '1' or empty_3 = '1')
-  --                                 else '1';
-  read_from_fifos_int <= '0' when (barreira_skew.logical_lane_0 = "100" and barreira_skew.logical_lane_1 = "100" and
-                                   barreira_skew.logical_lane_2 = "100" and barreira_skew.logical_lane_3 = "100")
+  read_from_fifos_int <= '0' when (barreira_skew.logical_lane_0 = "100" or barreira_skew.logical_lane_1 = "100" or
+                                   barreira_skew.logical_lane_2 = "100" or barreira_skew.logical_lane_3 = "100")
                                   else '1';
 
   -- descarta todos blocos até a chegada do primeiro block sync
@@ -393,10 +390,16 @@ begin
       out_3  => shuffle_out_3
   );
 
-  wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' else '1';
-  wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' else '1';
-  wen_2_int <= '0' when barreira_skew.is_sync_2 = '1' else '1';
-  wen_3_int <= '0' when barreira_skew.is_sync_3 = '1' else '1';
+  -- wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' else '1';
+  -- wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' else '1';
+  -- wen_2_int <= '0' when barreira_skew.is_sync_2 = '1' else '1';
+  -- wen_3_int <= '0' when barreira_skew.is_sync_3 = '1' else '1';
+
+  -- Inicia escrita apos respectivo alinhamento e não escreve palavras de alinhamento
+  wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' or barreira_skew.logical_lane_0 = "100" else '1';
+  wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' or barreira_skew.logical_lane_1 = "100" else '1';
+  wen_2_int <= '0' when barreira_skew.is_sync_2 = '1' or barreira_skew.logical_lane_2 = "100" else '1';
+  wen_3_int <= '0' when barreira_skew.is_sync_3 = '1' or barreira_skew.logical_lane_3 = "100" else '1';
 
   reg_xbar_read_lanes: entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>barreira_bip.read_from_fifos, Q=>barreira_xbar.read_from_fifos);
 
@@ -417,6 +420,7 @@ begin
   reg_xbar_header_3:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_3(65 downto 64), Q=>barreira_xbar.header_3);
   reg_xbar_wen_3:        entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>wen_3_int, Q=>barreira_xbar.wen_3);
 
+  reg_read_lanes: entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>barreira_xbar.read_from_fifos, Q=>read_from_fifos_reg);
 
   --==============================================================================
   -- forth_stage - FIFOS
@@ -442,7 +446,8 @@ begin
 				full       	=> 	full_0,
 				almost_f   	=> 	almost_f_0,
 
-				ren					=>	barreira_xbar.read_from_fifos,
+				-- ren					=>	barreira_xbar.read_from_fifos,
+        ren					=>	read_from_fifos_reg,
 				-- data_out    =>	fifo_out_0,
         data_out    =>	out_data.block_0,
 				-- empty       =>	empty_0,
@@ -465,7 +470,8 @@ begin
  			full       	=> 	full_1,
  			almost_f   	=> 	almost_f_1,
 
- 			ren					=>	barreira_xbar.read_from_fifos,
+ 		-- 	ren					=>	barreira_xbar.read_from_fifos,
+    ren					=>	read_from_fifos_reg,
  		  -- data_out    =>	fifo_out_1,
       data_out    =>	out_data.block_1,
  		-- 	empty       =>	empty_1,
@@ -488,7 +494,8 @@ begin
 				full       	=> 	full_2,
 				almost_f   	=> 	almost_f_2,
 
-				ren					=>	barreira_xbar.read_from_fifos,
+				-- ren					=>	barreira_xbar.read_from_fifos,
+        ren					=>	read_from_fifos_reg,
 				-- data_out    =>	fifo_out_2,
         data_out    =>	out_data.block_2,
 				-- empty       =>	empty_2,
@@ -511,7 +518,8 @@ begin
 				full       	=> 	full_3,
 				almost_f   	=> 	almost_f_3,
 
-				ren					=>	barreira_xbar.read_from_fifos,
+				-- ren					=>	barreira_xbar.read_from_fifos,
+        ren					=>	read_from_fifos_reg,
 				-- data_out    =>	fifo_out_3,
         data_out    =>	out_data.block_3,
 				-- empty       =>	empty_3,
