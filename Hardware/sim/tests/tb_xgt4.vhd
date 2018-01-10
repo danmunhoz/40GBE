@@ -348,8 +348,8 @@ begin
       --
 --CHANGE_PKT
       for i in 0 to 25 loop
---CHANGE_IPG        
-        wait for 5 ns;
+--CHANGE_IPG
+        wait for 8 ns;
         pkt_tx_start <= '1';
         wait until pkt_tx_eop = '1';
         pkt_tx_start <= '0';
