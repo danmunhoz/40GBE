@@ -61,6 +61,11 @@ rm dump_mii_tx.txt
 cd tests
 
 python config.py mt0
+python config.py pkt
+python config.py ipg_min
+python config.py order
+python config.py skew
+
 ###############################################
 ## SC1 ########################################
 

@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 ##############################################################
-## ESTE SCRIPT ALTERA OS VALORES DE PAYLOAD DO TB
+## ESTE SCRIPT CONFIGURA O TESTE
 ##############################################################
 
-#### DEFINIR CAMINHO DO PROJETO ##############################
+#### DEFINIR CAMINHO DO PROJETO /40GBE #######################
 string = "/home/rafasperb/Documentos"
 ##############################################################
 
@@ -15,8 +15,17 @@ pkt = 26
 ipg = 32
 ##############################################################
 
-### DEFINIR O SKEW ###########################################
-skew=100
+#### DEFINIR IPG #############################################
+#### DEFINE A ORDEM DAS FIBRAS, 0 = ORDEM SEQUENCIAL, 1 = RANDOM
+order = 0
+##############################################################
+
+#### DEFINIR O SKEW ##########################################
+#### SKEW MINIMO = RESET = 40 ################################
+skew_0=40
+skew_1=40
+skew_2=40
+skew_3=40
 ##############################################################
 
 #### DEFINIR TAMANHOS DE PAYLOAD ENTRE 0x00 e 0xBC ###########
@@ -33,7 +42,6 @@ sc8='0xBC'
 import os
 import sys
 import shutil
-
 x=0
 x = sys.argv[1]
 
@@ -77,83 +85,122 @@ if (x == 'pkt'):
 if (x == 'ipg_min'):
 
     path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
-    string = '--CHANGE_IPG\n'
-    nova_linha = '        wait for 10 ns;'
+    marcador = '--CHANGE_IPG\n'
+    nova_linha = '        wait for 8 ns;'
 
-    encontrar_string(path, string)
+    encontrar_string(path, marcador)
     alterar_linha(path,n,nova_linha)
 
 if (x == 'ipg'):
 
     path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
-    string = '--CHANGE_IPG\n'
+    marcador = '--CHANGE_IPG\n'
     nova_linha = '        wait for '+str(ipg)+' ns;'
 
-    encontrar_string(path, string)
+    encontrar_string(path, marcador)
+    alterar_linha(path,n,nova_linha)
+
+if (x == 'order'):
+
+    path = string+'/40GBE/Hardware/sim/fiber.h'
+    marcador = '//ORDER\n'
+    nova_linha = '#define PICK_RANDOM_ORDER '+str(order)+''
+
+    encontrar_string(path, marcador)
+    alterar_linha(path,n,nova_linha)
+
+if (x == 'skew'):
+
+    path = string+'/40GBE/Hardware/sim/fiber.h'
+    marcador = '//SKEW_0\n'
+    nova_linha = '#define SKEW_0_NS '+str(skew_0)+''
+
+    encontrar_string(path, marcador)
+    alterar_linha(path,n,nova_linha)
+
+    path = string+'/40GBE/Hardware/sim/fiber.h'
+    marcador = '//SKEW_1\n'
+    nova_linha = '#define SKEW_1_NS '+str(skew_1)+''
+
+    encontrar_string(path, marcador)
+    alterar_linha(path,n,nova_linha)
+
+    path = string+'/40GBE/Hardware/sim/fiber.h'
+    marcador = '//SKEW_2\n'
+    nova_linha = '#define SKEW_2_NS '+str(skew_2)+''
+
+    encontrar_string(path, marcador)
+    alterar_linha(path,n,nova_linha)
+
+    path = string+'/40GBE/Hardware/sim/fiber.h'
+    marcador = '//SKEW_3\n'
+    nova_linha = '#define SKEW_3_NS '+str(skew_3)+''
+
+    encontrar_string(path, marcador)
     alterar_linha(path,n,nova_linha)
 
 if (x == 'sc1'):
     path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
-    string = '--CHANGE_PAYLOAD\n'
+    marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc1[2:]+'",'
 
-    encontrar_string(path, string)
+    encontrar_string(path, marcador)
     alterar_linha(path,n,nova_linha)
 
 if (x == 'sc2'):
     path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
-    string = '--CHANGE_PAYLOAD\n'
+    marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc2[2:]+'",'
 
-    encontrar_string(path, string)
+    encontrar_string(path, marcador)
     alterar_linha(path,n,nova_linha)
 
 if x == 'sc3':
     path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
-    string = '--CHANGE_PAYLOAD\n'
+    marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc3[2:]+'",'
 
-    encontrar_string(path, string)
+    encontrar_string(path, marcador)
     alterar_linha(path,n,nova_linha)
 
 if x == 'sc4':
     path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
-    string = '--CHANGE_PAYLOAD\n'
+    marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc4[2:]+'",'
 
-    encontrar_string(path, string)
+    encontrar_string(path, marcador)
     alterar_linha(path,n,nova_linha)
 
 if x == 'sc5':
     path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
-    string = '--CHANGE_PAYLOAD\n'
+    marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc5[2:]+'",'
 
-    encontrar_string(path, string)
+    encontrar_string(path, marcador)
     alterar_linha(path,n,nova_linha)
 
 if x == 'sc6':
     path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
-    string = '--CHANGE_PAYLOAD\n'
+    marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc6[2:]+'",'
 
-    encontrar_string(path, string)
+    encontrar_string(path, marcador)
     alterar_linha(path,n,nova_linha)
 
 if x == 'sc7':
     path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
-    string = '--CHANGE_PAYLOAD\n'
+    marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc7[2:]+'",'
 
-    encontrar_string(path, string)
+    encontrar_string(path, marcador)
     alterar_linha(path,n,nova_linha)
 
 if x == 'sc8':
     path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
-    string = '--CHANGE_PAYLOAD\n'
+    marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc8[2:]+'",'
 
-    encontrar_string(path, string)
+    encontrar_string(path, marcador)
     alterar_linha(path,n,nova_linha)
 
 ##############################################################
