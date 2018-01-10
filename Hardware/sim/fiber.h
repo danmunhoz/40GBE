@@ -50,7 +50,6 @@ SC_MODULE(fiber) {
   sc_signal<sc_logic> skew_ok_1;
   sc_signal<sc_logic> skew_ok_2;
   sc_signal<sc_logic> skew_ok_3;
-  sc_signal<sc_logic> reset_event_sig;
 
   std::pair<std::string, std::string> splitHeaderBlock(std::string val) {
       std::string arg;
@@ -108,17 +107,6 @@ SC_MODULE(fiber) {
       skew_ok_3 = SC_LOGIC_0;
     } else {
       skew_ok_3 = SC_LOGIC_1;
-    }
-  }
-
-  void reset_flag() {
-    static bool f = true;
-
-    if(f) {
-      f = false;
-      reset_event_sig = SC_LOGIC_0;
-    } else {
-      reset_event_sig = SC_LOGIC_1;
     }
   }
 
@@ -281,7 +269,7 @@ SC_MODULE(fiber) {
     sensitive<<clock_in.pos();
 
     SC_METHOD(skew_lane_0);
-    sensitive<<skew_event_0<<reset_in.pos();
+    sensitive<<skew_event_0;
 
     SC_METHOD(skew_lane_1);
     sensitive<<skew_event_1;
@@ -291,9 +279,6 @@ SC_MODULE(fiber) {
 
     SC_METHOD(skew_lane_3);
     sensitive<<skew_event_3;
-
-    SC_METHOD(reset_flag);
-    sensitive<<reset_in.pos();
   }
 
   ~fiber () {

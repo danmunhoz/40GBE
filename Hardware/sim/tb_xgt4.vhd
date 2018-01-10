@@ -333,8 +333,12 @@ begin
         -- payload_type        => (others=>'0'),
         payload_type        => "000",
         --payload_cycles      => (others=>'0'),
+<<<<<<< HEAD
 --CHANGE_PAYLOAD
         payload_cycles      => x"00000000",
+=======
+        payload_cycles      => x"0000000C",
+>>>>>>> 102668497577c9a90274fd10362bbba5180c8254
 
         payload_last_size   => (others=>'0'),
         -- payload_last_size   => "0001000",
@@ -344,12 +348,17 @@ begin
     process
     begin
 
+<<<<<<< HEAD
       -- wait for 144 ns;
       --
 --CHANGE_PKT
       for i in 0 to 26 loop
 --CHANGE_IPG
         wait for 8 ns;
+=======
+      for i in 0 to 25 loop
+        wait for 10 ns;
+>>>>>>> 102668497577c9a90274fd10362bbba5180c8254
         pkt_tx_start <= '1';
         wait until pkt_tx_eop = '1';
         pkt_tx_start <= '0';
