@@ -8,157 +8,208 @@
 ###############################################
 ## LIMPA OS ARQUIVOS DE DUMP DOS CENARIO
 
-./cleaner.sh
-python move_tx.py 0
+cd sc1
+rm -rf *
+cd ..
+cd sc2
+rm -rf *
+cd ..
+cd sc3
+rm -rf *
+cd ..
+cd sc4
+rm -rf *
+cd ..
+cd sc5
+rm -rf *
+cd ..
+cd sc6
+rm -rf *
+cd ..
+cd sc7
+rm -rf *
+cd ..
+cd sc8
+rm -rf *
+cd ..
+cd sc9
+rm -rf *
+cd ..
+cd sc10
+rm -rf *
+cd ..
+cd sc11
+rm -rf *
+cd ..
+cd sc12
+rm -rf *
+cd ..
+cd sc13
+rm -rf *
+cd ..
+cd sc14
+rm -rf *
+cd ..
+cd sc15
+rm -rf *
+cd ..
+cd sc16
+rm -rf *
+cd ..
+cd ..
+rm dump_mii_tx.txt
+cd tests
+
+python config.py mt0
 ###############################################
 ## SC1 ########################################
 
-python change_dump.py 1
+python config.py sc1
 cd ..
 module load modelsim
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 1
+python config.py mts1
 
 ###############################################
 ## SC2 ########################################
 
-python change_dump.py 2
+python config.py sc2
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 2
+python config.py mts2
 
-###############################################
-## SC3 ########################################
+##############################################
+# SC3 ########################################
 
-python change_dump.py 3
+python config.py sc3
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 3
+python config.py mts3
 
 ###############################################
 ## SC4 ########################################
 
-python change_dump.py 4
+python config.py sc4
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 4
+python config.py mts4
 
 ###############################################
 ## SC5 ########################################
 
-python change_dump.py 5
+python config.py sc5
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 5
+python config.py mts5
 
 ###############################################
 ## SC6 ########################################
 
-python change_dump.py 6
+python config.py sc6
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 6
+python config.py mts6
 
 ###############################################
 ## SC7 ########################################
 
-python change_dump.py 7
+python config.py sc7
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 7
+python config.py mts7
 
 ###############################################
 ## SC8 ########################################
 
-python change_dump.py 8
+python config.py sc8
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 8
+python config.py mts8
 
 ###############################################
 ## ALTERA O IPG ###############################
 
-python change_dump.py 9
+python config.py ipg
 
 ###############################################
 ## SC9 ########################################
 
-python change_dump.py 11
+python config.py sc1
 cd ..
 module load modelsim
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 9
+python config.py mts9
 
 ###############################################
 ## SC10 ########################################
 
-python change_dump.py 2
+python config.py sc2
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 10
+python config.py mts10
 
 ###############################################
 ## SC11 ########################################
 
-python change_dump.py 3
+python config.py sc3
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 11
+python config.py mts11
 
 ###############################################
 ## SC12 ########################################
 
-python change_dump.py 4
+python config.py sc4
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 12
+python config.py mts12
 
 ###############################################
 ## SC13 ########################################
 
-python change_dump.py 5
+python config.py sc5
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 13
+python config.py mts13
 
 ###############################################
 ## SC14 ########################################
 
-python change_dump.py 6
+python config.py sc6
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 14
+python config.py mts14
 
 ###############################################
 ## SC15 ########################################
 
-python change_dump.py 7
+python config.py sc7
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 15
+python config.py mts15
 
 ###############################################
 ## SC16 ########################################
 
-python change_dump.py 8
+python config.py sc8
 cd ..
 vsim -do run.do -c
 cd tests
-python move_mii_tx.py 16
+python config.py mts16
 
 ###############################################

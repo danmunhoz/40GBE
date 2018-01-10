@@ -333,7 +333,8 @@ begin
         -- payload_type        => (others=>'0'),
         payload_type        => "000",
         --payload_cycles      => (others=>'0'),
-        payload_cycles      => x"00000006",
+--CHANGE_PAYLOAD
+        payload_cycles      => x"00000000",
 
         payload_last_size   => (others=>'0'),
         -- payload_last_size   => "0001000",
@@ -345,7 +346,9 @@ begin
 
       -- wait for 144 ns;
       --
+--CHANGE_PKT
       for i in 0 to 25 loop
+--CHANGE_IPG        
         wait for 5 ns;
         pkt_tx_start <= '1';
         wait until pkt_tx_eop = '1';

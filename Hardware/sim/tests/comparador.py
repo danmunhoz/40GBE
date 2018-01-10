@@ -37,17 +37,17 @@ while(n<=16):
     string = "sc"
     string += str(n)
 
-    with open(string+'/cleaned_dump_tx.txt') as f1:
+    with open(string+'/cleaned_dump_txhex.txt') as f1:
         str_tx = f1.read()
 
-    with open(string+'/cleaned_dump_fifo.txt') as f2:
+    with open(string+'/cleaned_dump_fifohex.txt') as f2:
         str_fifo = f2.read()
 
-    str_tx = str_tx.replace('\n', '')
-    str_fifo = str_fifo.replace('\n', '')
+    # str_tx = str_tx.replace('\n', '')
+    # str_fifo = str_fifo.replace('\n', '')
 
 
-    if str_tx[0:] == str_fifo[0:x]:
+    if str_tx[0:] == str_fifo[0:]:
         new_file = open(string+'/PASSOU.txt', 'w')
     else:
         new_file = open(string+'/NAO_PASSOU.txt', 'w')
