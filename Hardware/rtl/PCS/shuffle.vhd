@@ -98,38 +98,38 @@ begin
   lane_vec <= lane_0 & lane_1 & lane_2 & lane_3;
 
   -- Atribuicao do vetor de controle
-  ctr_vec(0) <= '1' when lane_vec = "00100111" or lane_vec = "00101101" or
-                         lane_vec = "01110010" or lane_vec = "01111000" or
-                         lane_vec = "10000111" or lane_vec = "10001101" or
-                         lane_vec = "11010010" or lane_vec = "11011000" else '0';
+  ctr_vec(0) <= '1' when lane_vec = "00100111" or lane_vec = "00110110" or
+                         lane_vec = "01100011" or lane_vec = "01110010" or
+                         lane_vec = "10001101" or lane_vec = "10011100" or
+                         lane_vec = "11001001" or lane_vec = "11011000" else '0';
 
-  ctr_vec(1) <= '1' when lane_vec = "01100011" or lane_vec = "01101100" or
-                         lane_vec = "01110010" or lane_vec = "01111000" or
+  ctr_vec(1) <= '1' when lane_vec = "10000111" or lane_vec = "10001101" or
                          lane_vec = "10010011" or lane_vec = "10011100" or
                          lane_vec = "10110001" or lane_vec = "10110100" or
+                         lane_vec = "11000110" or lane_vec = "11001001" or
                          lane_vec = "11010010" or lane_vec = "11011000" or
                          lane_vec = "11100001" or lane_vec = "11100100" else '0';
 
   ctr_vec(2) <= '1' when lane_vec = "00100111" or lane_vec = "00101101" or
                          lane_vec = "00110110" or lane_vec = "00111001" or
-                         lane_vec = "10000111" or lane_vec = "10001101" or
+                         lane_vec = "01100011" or lane_vec = "01101100" or
+                         lane_vec = "01110010" or lane_vec = "01111000" or
                          lane_vec = "10110001" or lane_vec = "10110100" or
-                         lane_vec = "11000110" or lane_vec = "11001001" or
                          lane_vec = "11100001" or lane_vec = "11100100" else '0';
 
   ctr_vec(3) <= '1' when lane_vec = "01001011" or lane_vec = "01001110" or
                          lane_vec = "01100011" or lane_vec = "01101100" or
                          lane_vec = "01110010" or lane_vec = "01111000" or
                          lane_vec = "10000111" or lane_vec = "10001101" or
-                         lane_vec = "11000110" or lane_vec = "11001001" or
-                         lane_vec = "11100001" or lane_vec = "11100100" else '0';
+                         lane_vec = "10110100" or lane_vec = "11000110" or
+                         lane_vec = "11001001" or lane_vec = "11100100" else '0';
 
   ctr_vec(4) <= '1' when lane_vec = "00011110" or lane_vec = "00100111" or
-                         lane_vec = "00110110" or lane_vec = "01001110" or
-                         lane_vec = "01101100" or lane_vec = "01111000" or
-                         lane_vec = "10000111" or lane_vec = "10011100" or
-                         lane_vec = "10110100" or lane_vec = "11000110" or
-                         lane_vec = "11011000" or lane_vec = "11100100" else '0';
+                         lane_vec = "00101101" or lane_vec = "01001110" or
+                         lane_vec = "01100011" or lane_vec = "01101100" or
+                         lane_vec = "11000110" or lane_vec = "11001001" or
+                         lane_vec = "11010010" or lane_vec = "11011000" or
+                         lane_vec = "11100001" or lane_vec = "11100100" else '0';
 
   -- BIT 0 -> Sempre em zero, não vamos instanciar um switch para este...
   switch_1_inst: entity work.switch port map( a_in => in_2, b_in => in_3, a_out => m,     b_out => n,     ctr => ctr_vec(0));

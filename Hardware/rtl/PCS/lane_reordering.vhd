@@ -221,11 +221,6 @@ architecture behav_lane_reorder of lane_reorder is
     signal wen_2_int : std_logic;
     signal wen_3_int : std_logic;
 
-    signal shuffle_in_0 : std_logic_vector(65 downto 0);
-    signal shuffle_in_1 : std_logic_vector(65 downto 0);
-    signal shuffle_in_2 : std_logic_vector(65 downto 0);
-    signal shuffle_in_3 : std_logic_vector(65 downto 0);
-
     signal shuffle_out_0 : std_logic_vector(65 downto 0);
     signal shuffle_out_1 : std_logic_vector(65 downto 0);
     signal shuffle_out_2 : std_logic_vector(65 downto 0);
@@ -293,8 +288,6 @@ begin
 
   logical_lane_3 : entity work.last_lane_reg port map(ck => clock, rst=>reset, sync_ok => is_sync_3_int,
     logical_lane => logical_lane_3_int, logical_lane_reg => barreira_skew.logical_lane_3);
-
-  -- read_from_fifos_int <= '0' when () else '1';
 
   reg_skew_data_0:      entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>lane_0_data_in,   Q=>barreira_skew.data_0);
   reg_skew_header_0:    entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>lane_0_header_in, Q=>barreira_skew.header_0);
@@ -367,34 +360,6 @@ begin
   reg_bip_bip_ok_3:     entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>bip_lane_3_int, Q=>barreira_bip.bip_ok_3);
   reg_bip_logic_lane_3: entity work.regnbit generic map (size=>3)  port map (ck=>clock, rst=>reset, ce=>'1', D=>barreira_skew.logical_lane_3,  Q=>barreira_bip.logical_lane_3);
 
-  --==============================================================================
-  -- third_stage - SHUFFLE NETWORK
-  --==============================================================================
-  shuffle_in_0 <= (barreira_bip.header_0 & barreira_bip.data_0);
-  shuffle_in_1 <= (barreira_bip.header_1 & barreira_bip.data_1);
-  shuffle_in_2 <= (barreira_bip.header_2 & barreira_bip.data_2);
-  shuffle_in_3 <= (barreira_bip.header_3 & barreira_bip.data_3);
-
-  shuffle_lanes: entity work.shuffle port map (
-      in_0   => shuffle_in_0,
-      in_1   => shuffle_in_1,
-      in_2   => shuffle_in_2,
-      in_3   => shuffle_in_3,
-      lane_0 => (barreira_bip.logical_lane_0(1 downto 0)),
-      lane_1 => (barreira_bip.logical_lane_1(1 downto 0)),
-      lane_2 => (barreira_bip.logical_lane_2(1 downto 0)),
-      lane_3 => (barreira_bip.logical_lane_3(1 downto 0)),
-      out_0  => shuffle_out_0,
-      out_1  => shuffle_out_1,
-      out_2  => shuffle_out_2,
-      out_3  => shuffle_out_3
-  );
-
-  -- wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' else '1';
-  -- wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' else '1';
-  -- wen_2_int <= '0' when barreira_skew.is_sync_2 = '1' else '1';
-  -- wen_3_int <= '0' when barreira_skew.is_sync_3 = '1' else '1';
-
   -- Inicia escrita apos respectivo alinhamento e não escreve palavras de alinhamento
   wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' or barreira_skew.logical_lane_0 = "100" else '1';
   wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' or barreira_skew.logical_lane_1 = "100" else '1';
@@ -423,42 +388,24 @@ begin
   reg_read_lanes: entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>barreira_xbar.read_from_fifos, Q=>read_from_fifos_reg);
 
   --==============================================================================
-  -- forth_stage - FIFOS
+  -- third_stage - BUFFERS
   --==============================================================================
-  -- descarta bloco de sync
-
-  -- fifo_wen_0 <= '0' when (barreira_xbar.data_0 = shuffle_out_3(63 downto 0))
-  --                       else barreira_xbar.wen_0;
-  -- fifo_wen_1 <= '0' when (barreira_xbar.data_1 = barreira_xbar.data_0)
-  --                       else barreira_xbar.wen_1;
-  -- fifo_wen_2 <= '0' when (barreira_xbar.data_2 = barreira_xbar.data_1)
-  --                       else barreira_xbar.wen_2;
-  -- fifo_wen_3 <= '0' when (barreira_xbar.data_3 = barreira_xbar.data_2)
-  --                       else barreira_xbar.wen_3;
 
   fifo_0 : entity work.reorder_fifo
   port map (
  				clk       	=> 	clock,
 				rst_n     	=> 	reset_n,
 				wen 				=> 	barreira_xbar.wen_0,
-        -- wen 				=> 	fifo_wen_0,
 				data_in    	=> 	fifo_in_0,
 				full       	=> 	full_0,
 				almost_f   	=> 	almost_f_0,
-
-				-- ren					=>	barreira_xbar.read_from_fifos,
         ren					=>	read_from_fifos_reg,
-				-- data_out    =>	fifo_out_0,
         data_out    =>	out_data.block_0,
-				-- empty       =>	empty_0,
         empty       =>	fifo_empty_0,
 				almost_e    =>	almost_e_0
   );
-
-  fifo_in_0 <= barreira_xbar.header_0 & barreira_xbar.data_0;
-  -- pcs_0_header_out <= fifo_out_0(65 downto 64);
-  -- pcs_0_data_out <= fifo_out_0(63 downto 0);
-
+  fifo_in_0 <= (others => '0') when barreira_skew.logical_lane_0 = "100" else
+               barreira_bip.header_0 & barreira_bip.data_0 ;
 
   fifo_1 : entity work.reorder_fifo
   port map (
@@ -469,19 +416,13 @@ begin
  			data_in    	=> 	fifo_in_1,
  			full       	=> 	full_1,
  			almost_f   	=> 	almost_f_1,
-
- 		-- 	ren					=>	barreira_xbar.read_from_fifos,
-    ren					=>	read_from_fifos_reg,
- 		  -- data_out    =>	fifo_out_1,
+      ren					=>	read_from_fifos_reg,
       data_out    =>	out_data.block_1,
- 		-- 	empty       =>	empty_1,
       empty       =>	fifo_empty_1,
  			almost_e    =>	almost_e_1
   );
-
-  fifo_in_1 <= barreira_xbar.header_1 & barreira_xbar.data_1;
-  -- pcs_1_header_out <= fifo_out_1(65 downto 64);
-  -- pcs_1_data_out <= fifo_out_1(63 downto 0);
+  fifo_in_1 <= (others => '0') when barreira_skew.logical_lane_1 = "100" else
+                barreira_bip.header_1 & barreira_bip.data_1;
 
 
   fifo_2 : entity work.reorder_fifo
@@ -489,23 +430,16 @@ begin
  				clk       	=> 	clock,
 				rst_n      	=> 	reset_n,
 				wen 				=> 	barreira_xbar.wen_2,
-        -- wen 				=> 	fifo_wen_2,
 				data_in    	=> 	fifo_in_2,
 				full       	=> 	full_2,
 				almost_f   	=> 	almost_f_2,
-
-				-- ren					=>	barreira_xbar.read_from_fifos,
         ren					=>	read_from_fifos_reg,
-				-- data_out    =>	fifo_out_2,
         data_out    =>	out_data.block_2,
-				-- empty       =>	empty_2,
         empty       =>	fifo_empty_2,
 				almost_e    =>	almost_e_2
   );
-
-  fifo_in_2 <= barreira_xbar.header_2 & barreira_xbar.data_2;
-  -- pcs_2_header_out <= fifo_out_2(65 downto 64);
-  -- pcs_2_data_out <= fifo_out_2(63 downto 0);
+  fifo_in_2 <= (others => '0') when barreira_skew.logical_lane_2 = "100" else
+               barreira_bip.header_2 & barreira_bip.data_2;
 
 
   fifo_3 : entity work.reorder_fifo
@@ -513,33 +447,45 @@ begin
  				clk       	=> 	clock,
 				rst_n     	=> 	reset_n,
 				wen 				=> 	barreira_xbar.wen_3,
-        -- wen 				=> 	fifo_wen_3,
 				data_in    	=> 	fifo_in_3,
 				full       	=> 	full_3,
 				almost_f   	=> 	almost_f_3,
-
-				-- ren					=>	barreira_xbar.read_from_fifos,
         ren					=>	read_from_fifos_reg,
-				-- data_out    =>	fifo_out_3,
         data_out    =>	out_data.block_3,
-				-- empty       =>	empty_3,
         empty       =>	fifo_empty_3,
 				almost_e    =>	almost_e_3
   );
+  fifo_in_3 <= (others => '0') when barreira_skew.logical_lane_3 = "100" else
+               barreira_bip.header_3 & barreira_bip.data_3;
 
-  fifo_in_3 <= barreira_xbar.header_3 & barreira_xbar.data_3;
-  -- pcs_3_header_out <= fifo_out_3(65 downto 64);
-  -- pcs_3_data_out <= fifo_out_3(63 downto 0);
+ --==============================================================================
+ -- fourth_stage - SHUFFLE NETWORK
+ --==============================================================================
 
-  reg_out_data_0:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_0(63 downto 0),  Q=>pcs_0_data_out);
-  reg_out_header_0:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_0(65 downto 64), Q=>pcs_0_header_out);
+  shuffle_lanes: entity work.shuffle port map (
+      in_0   => out_data.block_0,
+      in_1   => out_data.block_1,
+      in_2   => out_data.block_2,
+      in_3   => out_data.block_3,
+      lane_0 => (barreira_bip.logical_lane_0(1 downto 0)),
+      lane_1 => (barreira_bip.logical_lane_1(1 downto 0)),
+      lane_2 => (barreira_bip.logical_lane_2(1 downto 0)),
+      lane_3 => (barreira_bip.logical_lane_3(1 downto 0)),
+      out_0  => shuffle_out_0,
+      out_1  => shuffle_out_1,
+      out_2  => shuffle_out_2,
+      out_3  => shuffle_out_3
+  );
 
-  reg_out_data_1:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_1(63 downto 0),  Q=>pcs_1_data_out);
-  reg_out_header_1:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_1(65 downto 64), Q=>pcs_1_header_out);
+  reg_out_data_0:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_0(63 downto 0),  Q=>pcs_0_data_out);
+  reg_out_header_0:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_0(65 downto 64), Q=>pcs_0_header_out);
 
-  reg_out_data_2:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_2(63 downto 0),  Q=>pcs_2_data_out);
-  reg_out_header_2:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_2(65 downto 64), Q=>pcs_2_header_out);
+  reg_out_data_1:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_1(63 downto 0),  Q=>pcs_1_data_out);
+  reg_out_header_1:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_1(65 downto 64), Q=>pcs_1_header_out);
 
-  reg_out_data_3:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_3(63 downto 0),  Q=>pcs_3_data_out);
-  reg_out_header_3:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>out_data.block_3(65 downto 64), Q=>pcs_3_header_out);
+  reg_out_data_2:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_2(63 downto 0),  Q=>pcs_2_data_out);
+  reg_out_header_2:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_2(65 downto 64), Q=>pcs_2_header_out);
+
+  reg_out_data_3:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_3(63 downto 0),  Q=>pcs_3_data_out);
+  reg_out_header_3:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_3(65 downto 64), Q=>pcs_3_header_out);
 end behav_lane_reorder;

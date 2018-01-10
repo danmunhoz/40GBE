@@ -8,13 +8,13 @@
 #include <fstream>
 #include <time.h>
 
-#define PICK_RANDOM_ORDER 0
+#define PICK_RANDOM_ORDER 1
 
 // It counts from time ZERO (not from reset)
 #define SKEW_0_NS 40
-#define SKEW_1_NS 45
-#define SKEW_2_NS 87
-#define SKEW_3_NS 100
+#define SKEW_1_NS 210
+#define SKEW_2_NS 80
+#define SKEW_3_NS 65
 
 SC_MODULE(fiber) {
 
