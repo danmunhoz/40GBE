@@ -38,7 +38,6 @@ entity rx_xgt4 is
       rx_lane_3_data_valid_in    : in  std_logic;
       rx_lane_3_data_in          : in  std_logic_vector(63 downto 0);
 
-
       -- XMAC Outputs
       pkt_rx_avail        : out  std_logic;
       pkt_rx_data         : out  std_logic_vector(63 downto 0);
@@ -140,6 +139,11 @@ architecture behav of rx_xgt4 is
     signal fifo_saida_full : std_logic;
 
     signal read_as_mac : std_logic;
+
+    -- signal rx_lane_skew_0 : std_logic;
+    -- signal rx_lane_skew_1 : std_logic;
+    -- signal rx_lane_skew_2 : std_logic;
+    -- signal rx_lane_skew_3 : std_logic;
 
   component wrapper_macpcs_rx port(
           -- Clocks
@@ -273,6 +277,11 @@ begin
 
           valid_in <= '0', '1' after 127 ns;
 
+          -- rx_lane_skew_0 <= '0' , '1' after 10 ns;
+          -- rx_lane_skew_1 <= '0' , '1' after 10 ns;
+          -- rx_lane_skew_2 <= '0' , '1' after 10 ns;
+          -- rx_lane_skew_3 <= '0' , '1' after 10 ns;
+
           -- Por enquanto...
           lane_0_header_valid_in  <= valid_in;
           lane_0_data_valid_in    <= valid_in;
@@ -283,8 +292,19 @@ begin
           lane_3_header_valid_in  <= valid_in;
           lane_3_data_valid_in    <= valid_in;
 
-          -- INST WRAPPER
+          -- lane_0_header_in <= rx_lane_0_header_in when rx_lane_skew_0 = '1' else (others=>'0');
+          -- lane_0_data_in   <= rx_lane_0_data_in when rx_lane_skew_0 = '1' else (others=>'0');
+          --
+          -- lane_1_header_in <= rx_lane_1_header_in when rx_lane_skew_1 = '1' else (others=>'0');
+          -- lane_1_data_in   <= rx_lane_1_data_in when rx_lane_skew_1 = '1' else (others=>'0');
+          --
+          -- lane_2_header_in <= rx_lane_2_header_in when rx_lane_skew_2 = '1' else (others=>'0');
+          -- lane_2_data_in   <= rx_lane_2_data_in when rx_lane_skew_2 = '1' else (others=>'0');
+          --
+          -- lane_3_header_in <= rx_lane_0_header_in when rx_lane_skew_0 = '1' else (others=>'0');
+          -- lane_3_data_in   <= rx_lane_0_data_in when rx_lane_skew_0 = '1' else (others=>'0');
 
+          -- INST WRAPPER
           inst_wrapper_macpcs: wrapper_macpcs_rx port map(
             -- Clocks
             clk_156             => clk_156,

@@ -73,18 +73,38 @@ add wave -noupdate -group {Lane Reorder} /Top/rx_xgt4/inst_wrapper_macpcs/INST_l
 add wave -noupdate -group {Lane Reorder} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_1_header_out
 add wave -noupdate -group {Lane Reorder} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_header_out
 add wave -noupdate -group {Lane Reorder} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_header_out
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_0_header_in
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_0_data_in
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_1_header_in
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_1_data_in
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_2_header_in
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_2_data_in
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_3_header_in
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_3_data_in
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_empty_0
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_empty_1
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_empty_2
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_empty_3
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_data_out
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_1_data_out
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_data_out
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_data_out
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/ren
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_1/ren
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_2/ren
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_3/ren
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/wen
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_1/wen
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_2/wen
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_3/wen
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.logical_lane_0
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.logical_lane_1
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.logical_lane_2
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.logical_lane_3
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_header_out
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_data_out
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_1_header_out
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_1_data_out
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_header_out
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_data_out
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_header_out
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_data_out
 add wave -noupdate -divider PCSs
 add wave -noupdate -expand -group PCS_0 -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/xgmii_rxc
 add wave -noupdate -expand -group PCS_0 -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/xgmii_rxd
@@ -212,10 +232,12 @@ add wave -noupdate -expand -group CRC_RX -group input /Top/rx_xgt4/inst_wrapper_
 add wave -noupdate -expand -group CRC_RX -group input /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/fifo_data_out
 add wave -noupdate -expand -group CRC_RX -group input /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/fifo_sop_out
 add wave -noupdate -expand -group CRC_RX -group input /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/fifo_eop_out
-add wave -noupdate -expand -group CRC_RX -group output /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/app_data
-add wave -noupdate -expand -group CRC_RX -group output /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/app_sop
-add wave -noupdate -expand -group CRC_RX -group output /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/app_eop
-add wave -noupdate -expand -group CRC_RX -group output /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/crc_ok
+add wave -noupdate -expand -group CRC_RX -expand -group output /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/app_data
+add wave -noupdate -expand -group CRC_RX -expand -group output /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/app_val
+add wave -noupdate -expand -group CRC_RX -expand -group output /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/app_sop
+add wave -noupdate -expand -group CRC_RX -expand -group output /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/app_eop
+add wave -noupdate -expand -group CRC_RX -expand -group output /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/crc_ok
+add wave -noupdate -expand -group CRC_RX -divider {New Divider}
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/ren
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/wen
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/input_reg
@@ -225,32 +247,21 @@ add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_c
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/valid_frame
 add wave -noupdate -expand -group CRC_RX -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/crc_value
 add wave -noupdate -expand -group CRC_RX -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/d64_reg
-add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/ns_crc
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/ps_crc
 add wave -noupdate -expand -group CRC_RX -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/d8_bytes
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/use_d128
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/use_d64
 add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/use_d8
-add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/crc_reg
-add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/d8_done
-add wave -noupdate /Top/pkt_buffer/clock_in161
-add wave -noupdate /Top/pkt_buffer/block_in
-add wave -noupdate /Top/pkt_buffer/header_in
-add wave -noupdate /Top/pkt_buffer/data_valid_in
-add wave -noupdate /Top/pkt_buffer/header_in_old
-add wave -noupdate /Top/pkt_buffer/block_in_old
-add wave -noupdate /Top/pkt_buffer/header_in_old_o
-add wave -noupdate /Top/pkt_buffer/block_in_old_o
-add wave -noupdate /Top/pkt_buffer/header_in_lv
-add wave -noupdate /Top/pkt_buffer/block_in_lv
-add wave -noupdate /Top/pkt_buffer/dbg_bip
-add wave -noupdate /Top/pkt_buffer/lane3
-add wave -noupdate /Top/pkt_buffer/lane2
-add wave -noupdate /Top/pkt_buffer/lane1
-add wave -noupdate /Top/pkt_buffer/lane0
-add wave -noupdate /Top/pkt_buffer/block_counter
+add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/crc_ok
+add wave -noupdate -expand -group CRC_RX /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/crc_done
+add wave -noupdate -expand -group CRC_RX -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/crc_final
+add wave -noupdate /Top/fiber/skew_ok_0
+add wave -noupdate /Top/fiber/skew_ok_1
+add wave -noupdate /Top/fiber/skew_ok_2
+add wave -noupdate /Top/fiber/skew_ok_3
+add wave -noupdate /Top/fiber/reset_in
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 4} {507200 ps} 1} {{Cursor 2} {251100 ps} 0}
+WaveRestoreCursors {{Cursor 2} {721600 ps} 1} {{Cursor 3} {96100 ps} 0}
 quietly wave cursor active 2
 configure wave -namecolwidth 602
 configure wave -valuecolwidth 349
@@ -266,9 +277,9 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {29936736 ps} {30003330 ps}
-bookmark add wave bookmark112 {{770754 ps} {811500 ps}} 13
-bookmark add wave bookmark113 {{780000 ps} {800000 ps}} 8
-bookmark add wave bookmark114 {{0 ps} {42010 ps}} 0
-bookmark add wave bookmark115 {{201305 ps} {266263 ps}} 7
-bookmark add wave bookmark116 {{728057 ps} {794311 ps}} 6
+WaveRestoreZoom {62803 ps} {129397 ps}
+bookmark add wave bookmark64 {{770754 ps} {811500 ps}} 13
+bookmark add wave bookmark65 {{780000 ps} {800000 ps}} 8
+bookmark add wave bookmark66 {{0 ps} {42010 ps}} 0
+bookmark add wave bookmark67 {{201305 ps} {266263 ps}} 7
+bookmark add wave bookmark68 {{728057 ps} {794311 ps}} 6
