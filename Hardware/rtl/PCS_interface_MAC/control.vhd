@@ -207,14 +207,14 @@ begin
     elsif clk'event and clk = '1' then
       ctrl_delay_reg_reg <= ctrl_delay_reg;
 
-      -- voltando commit referente a manter um ciclo a mais ctrl_mux_delay 
+      -- voltando commit referente a manter um ciclo a mais ctrl_mux_delay
       -- Quando delay passa de 2 para !=2, segurar o valor por mais um ciclo
       -- if  ctrl_delay_reg_reg = "00" and ctrl_delay_reg_reg_reg = "10" and flag_mux_delay_ctrl = '0' then
-      --   ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg_reg;
-      --   flag_mux_delay_ctrl <= '1';
+        -- ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg_reg;
+        -- flag_mux_delay_ctrl <= '1';
       -- else
-      --   ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg;
-      --   flag_mux_delay_ctrl <= '0';
+        -- ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg;
+        -- flag_mux_delay_ctrl <= '0';
       -- end if;
 
       ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg;
@@ -370,7 +370,7 @@ end process;
 -- Some cases eop needs to be outputed one cycle earlier
 -- Frame ending with shift of 100/110/010 and next shift is different
 eop_location_out <= eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_int = "010" else  -- correção eop_addr payload_cycles "e1"
-                    eop_location_calc_reg when (shift_eop = "100" or shift_eop_reg = "100") and shift_out_reg /= "100" else
+                    -- eop_location_calc_reg when (shift_eop = "100" or shift_eop_reg = "100") and shift_out_reg /= "100" else
                     eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_reg /= "110" else
                     eop_location_calc_reg when (shift_eop = "010" or shift_eop_reg = "010") and shift_out_reg = "000"  and ctrl_delay_reg = "10" else
                     eop_location_calc_reg_reg;

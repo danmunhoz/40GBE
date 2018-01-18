@@ -8,7 +8,7 @@
 #include <fstream>
 #include <time.h>
 //ORDER
-#define PICK_RANDOM_ORDER 1
+#define PICK_RANDOM_ORDER 0
 
 // It counts from time ZERO (not from reset)
 //SKEW_0

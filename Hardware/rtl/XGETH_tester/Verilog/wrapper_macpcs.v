@@ -40,6 +40,7 @@ module wrapper_macpcs(
                         wb_ack_o, wb_dat_o, wb_int_o,
                         // Para uso do Testbench
             						start_fifo,
+            						start_fifo_rd,
                         dump_xgmii_txc,
                         dump_xgmii_txd
                         );
@@ -83,6 +84,7 @@ module wrapper_macpcs(
 
     //For Testbench use
 		input					start_fifo;
+		input					start_fifo_rd;
 
     // PCS Outputs
     output        hi_ber;
@@ -182,6 +184,7 @@ module wrapper_macpcs(
         .reset_rx_n         (reset_rx_n),
 
         .start_fifo         (start_fifo),
+        .start_fifo_rd      (start_fifo_rd),
 
         // PCS Signals
 

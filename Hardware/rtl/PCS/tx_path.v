@@ -68,7 +68,7 @@ module tx_path (/*AUTOARG*/
 		        arstb, seed_A, seed_B, tx_jtm_en,
 		        xgmii_txc, xgmii_txd,
 						// Para uso do Testbench
-						start_fifo
+						start_fifo, start_fifo_rd
 
 		        );
 
@@ -90,6 +90,7 @@ module tx_path (/*AUTOARG*/
 
 		//For Testbench use
 		input					start_fifo;
+		input					start_fifo_rd;
 
 
     // Outputs
@@ -156,7 +157,8 @@ module tx_path (/*AUTOARG*/
           .spill                 (spill),
           .rclk                  (tx_clk161),
           //.readen                (data_pause),
-					.readen                (data_pause & start_fifo),
+					// .readen                (data_pause & start_fifo),
+					.readen                (data_pause & start_fifo_rd),
           .wclk                  (clk156),
           //.writen                (1'b1),
 					.writen                (1'b1 & start_fifo),

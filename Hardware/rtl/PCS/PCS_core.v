@@ -73,7 +73,7 @@ module PCS_core  (  /*AUTOARG*/
                     tx_fifo_spill, rxlf, txlf, errd_blks, xgmii_rxc, xgmii_rxd,
                     tx_data_out, tx_header_out, tx_sequence_out, rxgearboxslip_out,
                     // Para uso do Testbench
-        						start_fifo
+        						start_fifo, start_fifo_rd
                     );
 
     // Clocks and reset
@@ -112,6 +112,7 @@ module PCS_core  (  /*AUTOARG*/
 
     //For Testbench use
 		input					start_fifo;
+		input					start_fifo_rd;
 
     output        hi_ber;
     output        blk_lock;
@@ -171,7 +172,8 @@ tx_path INST_tx_path(   // Inputs
                         .tx_data_out        (tx_data_out[63:0]),
                         .tx_header_out      (tx_header_out[1:0]),
                         .tx_sequence_out    (tx_sequence_out),
-                        .start_fifo         (start_fifo)
+                        .start_fifo         (start_fifo),
+                        .start_fifo_rd      (start_fifo_rd)
                         );
 
 rx_path INST_rx_path(   // Input Ports

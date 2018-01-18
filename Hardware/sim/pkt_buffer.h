@@ -58,6 +58,8 @@ SC_MODULE(pkt_buffer) {
 
   ofstream dbg_bip;
 
+  ofstream lane_dump_conf;
+
   sc_lv<64> block_in_old;
   sc_lv<2>  header_in_old;
 
@@ -144,7 +146,9 @@ SC_MODULE(pkt_buffer) {
         lane3_bip = "00000000";
     }
 
-    if ( block_in_old_o != block_in_lv) {
+     if ( block_in_old_o != block_in_lv) {            // sem repetição do PCS
+      //  if ( 1 ) {                                   // com repetição do PCS
+
 
       cout << "PCS TX BLOCO OK!!!!!!  -> " << block_in_lv << " != " << block_in_old << endl;
 
@@ -161,24 +165,28 @@ SC_MODULE(pkt_buffer) {
 
           case 0:
             lane0 << buffer.str() << endl;
+            lane_dump_conf << buffer.str() << endl;
             // cout << buffer.str() << endl;
             block_counter++;
             bip_calculator (&lane0_bip, block_in, header_in);
             break;
           case 1:
             lane1 << buffer.str() << endl;
+            lane_dump_conf << buffer.str() << endl;
             // cout << buffer.str() << endl;
             block_counter++;
             bip_calculator (&lane1_bip, block_in, header_in);
             break;
           case 2:
             lane2 << buffer.str() << endl;
+            lane_dump_conf << buffer.str() << endl;
             // cout << buffer.str() << endl;
             block_counter++;
             bip_calculator (&lane2_bip, block_in, header_in);
             break;
           case 3:
             lane3 << buffer.str() << endl;
+            lane_dump_conf << buffer.str() << endl;
             // cout << buffer.str() << endl;
             block_counter++;
             bip_calculator (&lane3_bip, block_in, header_in);
@@ -214,6 +222,7 @@ SC_MODULE(pkt_buffer) {
           */
 
           lane0 << "10-" << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << endl;
+          lane_dump_conf << "10-" << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << endl;
           str_temp << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip;
           blk_temp = str_temp.str().c_str();
           hdr_temp = "10";
@@ -224,6 +233,7 @@ SC_MODULE(pkt_buffer) {
           // cout << "LANE0_BIP_ret: " << lane0_bip << endl << endl;
 
           lane1 << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << endl;
+          lane_dump_conf << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << endl;
           str_temp << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane0_bip;
           blk_temp = str_temp.str().c_str();
           hdr_temp = "10";
@@ -231,6 +241,7 @@ SC_MODULE(pkt_buffer) {
           bip_calculator (&lane1_bip, blk_temp, hdr_temp);
 
           lane2 << "10-" << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << endl;
+          lane_dump_conf << "10-" << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << endl;
           str_temp << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane0_bip;
           blk_temp = str_temp.str().c_str();
           hdr_temp = "10";
@@ -238,6 +249,7 @@ SC_MODULE(pkt_buffer) {
           bip_calculator (&lane2_bip, block_in_lv, hdr_temp);
 
           lane3 << "10-" << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip << endl;
+          lane_dump_conf << "10-" << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip << endl;
           str_temp << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane0_bip;
           blk_temp = str_temp.str().c_str();
           hdr_temp = "10";
@@ -288,6 +300,13 @@ SC_MODULE(pkt_buffer) {
       cout << "[pkt_buffer] ERROR opening lane3.txt" << endl;
     }
 
+    lane_dump_conf.open("lane_dump_conf.txt");
+    if (lane_dump_conf.is_open()){
+      cout << "[pkt_buffer] File lane_dump_conf.txt opened." << endl;
+    } else {
+      cout << "[pkt_buffer] ERROR opening lane_dump_conf.txt" << endl;
+    }
+
     SC_METHOD(rx);
     sensitive<<clock_in161.pos();
     dont_initialize();
@@ -304,6 +323,7 @@ SC_MODULE(pkt_buffer) {
     lane1.close();
     lane2.close();
     lane3.close();
+    lane_dump_conf.close();
   }
 
 };
