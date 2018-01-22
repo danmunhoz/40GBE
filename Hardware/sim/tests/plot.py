@@ -102,6 +102,7 @@ for i in diff_val:
     print len(time[0:len(i)])
     print len(i)
     axarr[subplot_i].plot(time[0:len(i)], i)
+    axarr[subplot_i].set_title(wires[subplot_i*2])
     axarr[subplot_i].axis([0,max(time),0,max(i)+3])
     axarr[subplot_i].grid(True)
     subplot_i = subplot_i + 1

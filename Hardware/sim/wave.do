@@ -276,10 +276,28 @@ add wave -noupdate /Top/fiber/skew_ok_1
 add wave -noupdate /Top/fiber/skew_ok_2
 add wave -noupdate /Top/fiber/skew_ok_3
 add wave -noupdate /Top/fiber/reset_in
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/FIFO_SYNC_MACRO_inst/WRCOUNT
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/FIFO_SYNC_MACRO_inst/RDCOUNT
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_1/FIFO_SYNC_MACRO_inst/WRCOUNT
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_1/FIFO_SYNC_MACRO_inst/RDCOUNT
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_2/FIFO_SYNC_MACRO_inst/WRCOUNT
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_2/FIFO_SYNC_MACRO_inst/RDCOUNT
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_3/FIFO_SYNC_MACRO_inst/WRCOUNT
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_3/FIFO_SYNC_MACRO_inst/RDCOUNT
+add wave -noupdate -expand -group LIST -radix unsigned /Top/tb_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/wr_count
+add wave -noupdate -expand -group LIST -radix unsigned /Top/tb_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/rd_count
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/wr_count
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/rd_count
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_1_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/wr_count
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_1_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/rd_count
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_2_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/wr_count
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_2_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/rd_count
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/wr_count
+add wave -noupdate -expand -group LIST -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/rd_count
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 2} {721600 ps} 1} {{Cursor 3} {120899 ps} 1} {{Cursor 3} {89900 ps} 1} {{Cursor 4} {108500 ps} 0}
+WaveRestoreCursors {{Cursor 2} {721600 ps} 1} {{Cursor 3} {120899 ps} 1} {{Cursor 3} {89900 ps} 1} {{Cursor 4} {6000025 ps} 0}
 quietly wave cursor active 4
-configure wave -namecolwidth 602
+configure wave -namecolwidth 617
 configure wave -valuecolwidth 349
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
@@ -293,7 +311,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {87459 ps} {154053 ps}
+WaveRestoreZoom {5968282 ps} {6020756 ps}
 bookmark add wave bookmark224 {{770754 ps} {811500 ps}} 13
 bookmark add wave bookmark225 {{780000 ps} {800000 ps}} 8
 bookmark add wave bookmark226 {{0 ps} {42010 ps}} 0

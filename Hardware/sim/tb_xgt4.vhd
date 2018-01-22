@@ -175,7 +175,7 @@ begin
 
     reset_in_pcs <= '0', '1' after 35 ns;
     start_fifo <= '0', '1' after 65 ns;
-    start_fifo_rd <= '0', '1' after 200 ns;  -- Tanauan, testando repeticao mii
+    start_fifo_rd <= '0', '1' after 150 ns;  -- Tanauan, testando repeticao mii
     seed_val <= '1', '0' after 35 ns;
     rx_data_valid_in <= '0','1' after 65 ns;
     rx_header_valid_in <= '0','1' after 65 ns;
