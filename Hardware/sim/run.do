@@ -123,6 +123,12 @@ work.Top -t 1ps
 
 do wave.do
 # do wave_interface_fifo.do
+
+# vcd file myvcd1.vcd
+# vcd add -r /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/w_ptr
+# vcd add -r /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/fifo_0/r_ptr
+
+
 run 30000 ns
 
 exec cp lane0.txt lane0_rx.txt

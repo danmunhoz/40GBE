@@ -74,7 +74,8 @@ architecture behav of tb_xgt4 is
   --signal pkt_rx_full  : std_logic;
   signal reset_in_pcs : std_logic;
 
-  signal start_fifo : std_logic;
+  signal start_fifo     : std_logic;
+  signal start_fifo_rd  : std_logic;
 
   signal time_stamp_value  : std_logic_vector(47 downto 0);
 
@@ -96,6 +97,7 @@ architecture behav of tb_xgt4 is
         reset_rx_done       : in std_logic;
 
         start_fifo          : in std_logic;
+        start_fifo_rd       : in std_logic;
         dump_xgmii_txc      : out std_logic_vector(7 downto 0);
         dump_xgmii_txd      : out std_logic_vector(63 downto 0);
 
@@ -173,6 +175,7 @@ begin
 
     reset_in_pcs <= '0', '1' after 35 ns;
     start_fifo <= '0', '1' after 65 ns;
+    start_fifo_rd <= '0', '1' after 150 ns;  -- Tanauan, testando repeticao mii
     seed_val <= '1', '0' after 35 ns;
     rx_data_valid_in <= '0','1' after 65 ns;
     rx_header_valid_in <= '0','1' after 65 ns;
@@ -218,6 +221,7 @@ begin
         --reset_rx_done       => reset_in,
 
         start_fifo => start_fifo,
+        start_fifo_rd => start_fifo_rd,
         dump_xgmii_txc => dump_xgmii_txc,
         dump_xgmii_txd => dump_xgmii_txd,
 
@@ -334,8 +338,7 @@ begin
         payload_type        => "000",
         --payload_cycles      => (others=>'0'),
 --CHANGE_PAYLOAD
-        payload_cycles      => x"00000000",
-
+        payload_cycles      => x"0000003e",
         payload_last_size   => (others=>'0'),
         -- payload_last_size   => "0001000",
         pkt_lost_counter    => open
@@ -344,10 +347,8 @@ begin
     process
     begin
 
-      -- wait for 144 ns;
-      --
 --CHANGE_PKT
-      for i in 0 to 25 loop
+      for i in 0 to 26 loop
 --CHANGE_IPG
         wait for 8 ns;
         pkt_tx_start <= '1';
