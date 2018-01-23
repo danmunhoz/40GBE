@@ -107,6 +107,6 @@ for i in diff_val:
     axarr[subplot_i].grid(True)
     subplot_i = subplot_i + 1
 
-axarr[0].set_title('COMPORTAMENTO FIFOS (WRITE - READ)')
+# axarr[0].set_title('COMPORTAMENTO FIFOS (WRITE - READ)')
 plt.xlabel('time [ps]')
 plt.show()
