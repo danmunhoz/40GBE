@@ -15,10 +15,10 @@
 // Date Modified             User Name            Full Name
 //        Descrition of Changes
 //-----------------------------------------------------------------
-// Mon Jun 14 10:19:32 2004    
-//        Reduced FIFO size to 70bits wide.  Changed so only 
-//        consecutive Seq ordered sets are removed.  
-// Tue Jun 29 13:53:09 2004  
+// Mon Jun 14 10:19:32 2004
+//        Reduced FIFO size to 70bits wide.  Changed so only
+//        consecutive Seq ordered sets are removed.
+// Tue Jun 29 13:53:09 2004
 //        changed so idle after term is written into fifo
 //
 //-----------------------------------------------------------------
@@ -30,7 +30,7 @@
 
 module opt_fifo_new (   /*AUTOARG*/
                         // Outputs
-                        readdata, spill, 
+                        readdata, spill,
                         // Inputs
                         rclk, readen, wclk, writen, writedata, rst
                         );
@@ -78,18 +78,18 @@ module opt_fifo_new (   /*AUTOARG*/
     reg           registered_read_enable;
     reg [1:0]     spill_rr;
     reg [1:0]     spill_ww;
-    reg [23:0]    seq_data_r;  
+    reg [23:0]    seq_data_r;
     reg [65:0]    writedata_d;
     reg [65:0]    readdata;
     reg [69:0]    wfifo_data;
     reg [69:0]    registered_write_data;
-    
-    
+
+
     reg           almostempty_ff1;
     reg           almostempty_ff2;
     reg [1:0]     rst_ext;
-    
-    
+
+
 
 parameter FIFO_FULL         = 0; // setting this to 1 results in FIFO staying mostly full otherwise it is mostly empty.
 
@@ -105,7 +105,7 @@ always@(posedge wclk) begin
     writedata_d   <= writedata;
     seq2          <= control_block & !(|writedata[41:38]) & (((writedata[9:2] == 8'h2d) & !(|writedata[37:10])) | (writedata[9:2] == 8'h55));
     seq1          <= control_block & (((writedata[9:2] == 8'h4b) & !(|writedata[65:38]) & !(|writedata[37:34])) | ((writedata[9:2] == 8'h55) & !(|writedata[41:38])));
-    
+
     wr_ctrl_idle  <= (wr_ctrl) & !(|writedata[65:10]);
     wr_idle_seq   <= control_block & (writedata[9:2] == 8'h2d) & !(|writedata[37:10]) & !(|writedata[41:38]);
     wr_seq_idle   <= control_block & (writedata[9:2] == 8'h4b) & !(|writedata[65:38]) & !(|writedata[37:34]);
@@ -120,14 +120,14 @@ always@(posedge wclk) begin
 
 
     // We are only allowed to remove consecutive ordered sets.
-    if (wr_idle_seq | wr_seq | wr_seq_idle) 
+    if (wr_idle_seq | wr_seq | wr_seq_idle)
         seq_data_r <=  seq_data;
     else
         seq_data_r <=  24'hFFFFFF;
-    
+
     //    seq_repeat <= (seq_data == seq_data_r);
     write_enable <= writen;
-end  
+end
 
 assign seq_repeat = (seq_data == seq_data_r);
 
@@ -141,7 +141,9 @@ always@(posedge wclk or posedge rst)
     else if (write_enable) begin
         wr_term_d <=  wr_term_dd;
         // need to make sure idle following terminate is written into fifo
-        if (((wr_ctrl_idle & !wr_term_d) | seq_repeat) & (!almostempty_ff2)) begin
+        // if (((wr_ctrl_idle & !wr_term_d) | seq_repeat) & (!almostempty_ff2)) begin
+        if (((!wr_term_d) | seq_repeat) & (!almostempty_ff2)) begin
+        // Não otimizar a escrita de idle na fifo para não dessincronizar as FIFOs. 
             // dont write idles unless FIFO is almost empty
             wfifo_en    <=  1'b0;
 //            wfifo_data  <=  70'h0;
@@ -173,11 +175,11 @@ FIFO_DUALCLOCK_MACRO # (
                         .DEVICE                     ("7SERIES"), // Target device: "VIRTEX5", "VIRTEX6"
                         .FIFO_SIZE                  ("36Kb"), // Target BRAM: "18Kb" or "36Kb"
                         .FIRST_WORD_FALL_THROUGH    ("TRUE") // Sets the FIFO FWFT to "TRUE" or "FALSE"
-                        ) FIFO_DUALCLOCK_MACRO_inst 
-                        (                   
+                        ) FIFO_DUALCLOCK_MACRO_inst
+                        (
                         .RDERR          (), // 1-bit read error output
                         .WRERR          (), // 1-bit write error
-                    
+
                         .ALMOSTEMPTY    (almostempty), // 1-bit almost empty output flag
                         .ALMOSTFULL     (almostfull), // 1-bit almost full output flag
                         .DO             (rfifo_data), // 70-bit data output
@@ -203,7 +205,7 @@ begin
         registered_write_enable = 1'b0;
         registered_write_data   = 70'h0;
     end
-    else begin  
+    else begin
         registered_write_enable <= wfifo_en & write_enable;
         registered_write_data   <= wfifo_data;
     end
@@ -212,7 +214,7 @@ end
 // read FIFO and insert idles
 // We are only allowed to insert idles.
 
-always@(posedge rclk or posedge rst) 
+always@(posedge rclk or posedge rst)
     if (rst) begin
         rd_en       <=  1'b0;
         readdata    <=  {64'h000000000000001e,2'b01};
