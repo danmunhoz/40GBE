@@ -8,55 +8,7 @@
 ###############################################
 ## LIMPA OS ARQUIVOS DE DUMP DOS CENARIO
 
-cd sc1
-rm -rf *
-cd ..
-cd sc2
-rm -rf *
-cd ..
-cd sc3
-rm -rf *
-cd ..
-cd sc4
-rm -rf *
-cd ..
-cd sc5
-rm -rf *
-cd ..
-cd sc6
-rm -rf *
-cd ..
-cd sc7
-rm -rf *
-cd ..
-cd sc8
-rm -rf *
-cd ..
-cd sc9
-rm -rf *
-cd ..
-cd sc10
-rm -rf *
-cd ..
-cd sc11
-rm -rf *
-cd ..
-cd sc12
-rm -rf *
-cd ..
-cd sc13
-rm -rf *
-cd ..
-cd sc14
-rm -rf *
-cd ..
-cd sc15
-rm -rf *
-cd ..
-cd sc16
-rm -rf *
-cd ..
-cd ..
+rm -rf sc*/*
 rm dump_mii_tx.txt
 cd tests
 
