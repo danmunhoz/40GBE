@@ -370,8 +370,10 @@ end process;
 -- Some cases eop needs to be outputed one cycle earlier
 -- Frame ending with shift of 100/110/010 and next shift is different
 eop_location_out <= eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_int = "010" else  -- correção eop_addr payload_cycles "e1"
-                    eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_reg /= "110" else
-                    eop_location_calc_reg when (shift_eop = "010" or shift_eop_reg = "010") and shift_out_reg = "000"  and ctrl_delay_reg = "10" else
+                    -- eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_reg /= "110" else
+                    eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") else
+                    -- eop_location_calc_reg when (shift_eop = "010" or shift_eop_reg = "010") and shift_out_reg = "000"  and ctrl_delay_reg = "10" else
+                    eop_location_calc_reg when (shift_eop = "010" or shift_eop_reg = "010") else
                     eop_location_calc_reg when (shift_eop_reg = "100") else
                       -- eop_location_calc_reg when (shift_eop = "100" or shift_eop_reg = "100") and shift_out_reg /= "100" else
                     eop_location_calc_reg_reg;
