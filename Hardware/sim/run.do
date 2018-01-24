@@ -125,7 +125,7 @@ work.Top -t 1ps
 do wave_pcs_TX.do
 
 
-run 60000 ns
+run 30000 ns
 
 exec cp lane0.txt lane0_rx.txt
 exec cp lane1.txt lane1_rx.txt

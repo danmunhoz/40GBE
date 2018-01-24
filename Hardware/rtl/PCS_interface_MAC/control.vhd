@@ -370,9 +370,10 @@ end process;
 -- Some cases eop needs to be outputed one cycle earlier
 -- Frame ending with shift of 100/110/010 and next shift is different
 eop_location_out <= eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_int = "010" else  -- correção eop_addr payload_cycles "e1"
-                    -- eop_location_calc_reg when (shift_eop = "100" or shift_eop_reg = "100") and shift_out_reg /= "100" else
                     eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_reg /= "110" else
                     eop_location_calc_reg when (shift_eop = "010" or shift_eop_reg = "010") and shift_out_reg = "000"  and ctrl_delay_reg = "10" else
+                    eop_location_calc_reg when (shift_eop_reg = "100") else
+                      -- eop_location_calc_reg when (shift_eop = "100" or shift_eop_reg = "100") and shift_out_reg /= "100" else
                     eop_location_calc_reg_reg;
 
 -- eop_location_out <= eop_location_calc_reg_reg;
@@ -465,7 +466,9 @@ eop_location_out <= eop_location_calc_reg when (shift_eop = "110" or shift_eop_r
         is_sop_reg_reg <= is_sop_reg;
       end if;
 
-      if (sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '0') or (shift_out_reg_reg = "010" and shift_out_reg = "000" and sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '1') or (shift_out_reg_reg = "000" and shift_out_reg = "100" and sop_eop_same_cycle_reg = '0' and sop7_eop_same_cycle_reg = '0') then
+      if  (sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '0') or
+          (shift_out_reg_reg = "010" and shift_out_reg = "000" and sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '1') then --or
+          -- (shift_out_reg_reg = "000" and shift_out_reg = "100" and sop_eop_same_cycle_reg = '0' and sop7_eop_same_cycle_reg = '0') then
         shift_out_reg_reg <= shift_out_reg_reg;
         is_sop_reg_reg <= is_sop_reg_reg;
       else
