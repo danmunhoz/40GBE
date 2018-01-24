@@ -143,14 +143,14 @@ always@(posedge wclk or posedge rst)
         // need to make sure idle following terminate is written into fifo
         // if (((wr_ctrl_idle & !wr_term_d) | seq_repeat) & (!almostempty_ff2)) begin
         if (((!wr_term_d) | seq_repeat) & (!almostempty_ff2)) begin
-        // Não otimizar a escrita de idle na fifo para não dessincronizar as FIFOs. 
+        // Não otimizar a escrita de idle na fifo para não dessincronizar as FIFOs.
             // dont write idles unless FIFO is almost empty
             wfifo_en    <=  1'b0;
-//            wfifo_data  <=  70'h0;
+            wfifo_data  <=  70'h0;
         end
         else begin
             wfifo_en    <=  1'b1;
-//            wfifo_data  <=  {(wr_seq_start | wr_idle_start | wr_ctrl_idle),wr_start,wr_term,(wr_ctrl_idle | wr_idle_seq | wr_seq_idle | wr_seq),writedata_d};
+            wfifo_data  <=  {(wr_seq_start | wr_idle_start | wr_ctrl_idle),wr_start,wr_term,(wr_ctrl_idle | wr_idle_seq | wr_seq_idle | wr_seq),writedata_d};
         end
         wfifo_data  <=  {(wr_seq_start | wr_idle_start | wr_ctrl_idle),wr_start,wr_term,(wr_ctrl_idle | wr_idle_seq | wr_seq_idle | wr_seq),writedata_d};
     end
@@ -206,7 +206,8 @@ begin
         registered_write_data   = 70'h0;
     end
     else begin
-        registered_write_enable <= wfifo_en & write_enable;
+        // registered_write_enable <= wfifo_en & write_enable;
+        registered_write_enable <= write_enable;
         registered_write_data   <= wfifo_data;
     end
 end
