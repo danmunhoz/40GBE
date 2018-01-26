@@ -92,7 +92,7 @@ vcom -novopt ../rtl/XGETH_tester/VHD/lfsr.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/txsequence_counter.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator.vhd
 
-vcom -novopt tb_xgt4.vhd
+vcom -novopt tx_xgt4.vhd
 vcom -novopt rx_xgt4.vhd
 vcom -novopt ../rtl/PCS/shuffle.vhd
 vcom -novopt ../rtl/PCS/bip_calculator.vhd
@@ -104,7 +104,7 @@ vcom -novopt ../rtl/CRC_RX/CRC32_D128.vhd
 vcom -novopt ../rtl/CRC_RX/crc_rx.vhd
 
 
-scgenmod tb_xgt4 > tb_xgt4.h
+scgenmod tx_xgt4 > tx_xgt4.h
 scgenmod rx_xgt4 > rx_xgt4.h
 scgenmod lane_reorder > lane_reorder.h
 scgenmod shuffle > shuffle.h

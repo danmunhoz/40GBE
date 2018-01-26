@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 //MODULES VHDL
-#include "tb_xgt4.h"
+#include "tx_xgt4.h"
 #include "rx_xgt4.h"
 #include "scoreboard.h"
 #include "pkt_buffer.h"
@@ -106,7 +106,7 @@ SC_MODULE(Top) {
   sc_signal<sc_lv<5> > mac_eop;
 
 
-  tb_xgt4      * tb_xgt4_inst;
+  tx_xgt4      * tx_xgt4_inst;
   rx_xgt4      * rx_xgt4_inst;
   scoreboard   * scoreboard_inst;
   pkt_buffer   * pkt_buffer_inst;
@@ -132,7 +132,7 @@ SC_MODULE(Top) {
                data_valid_xgt4("data_valid_xgt4"), header_valid_xgt4("header_valid_xgt4"), block_from_mac_rx("block_from_mac_rx") {
 
     // Creating instances
-    tb_xgt4_inst = new tb_xgt4("tb_xgt4","tb_xgt4");
+    tx_xgt4_inst = new tx_xgt4("tx_xgt4","tx_xgt4");
     rx_xgt4_inst = new rx_xgt4("rx_xgt4","rx_xgt4");
     scoreboard_inst = new scoreboard("scoreboard");
     pkt_buffer_inst = new pkt_buffer("pkt_buffer");
@@ -149,16 +149,16 @@ SC_MODULE(Top) {
     // lane_reorder_inst = new lane_reorder("lane_reorder", "lane_reorder");
 
     // Connections
-    tb_xgt4_inst->clock_in156(iclock156);
-    tb_xgt4_inst->clock_in161(iclock161);
-    tb_xgt4_inst->reset_in(reset);
-    tb_xgt4_inst->reset_in_mii_tx(reset_mii_tx);
-    tb_xgt4_inst->reset_in_mii_rx(reset_mii_rx);
-    tb_xgt4_inst->data_out(block_from_xgt4);
-    tb_xgt4_inst->header_out(header_from_xgt4);
-    tb_xgt4_inst->dump_xgmii_txc(dump_xgmii_txc);
-    tb_xgt4_inst->dump_xgmii_txd(dump_xgmii_txd);
-    // tb_xgt4_inst->pkt_tx_start(pkt_tx_start);
+    tx_xgt4_inst->clock_in156(iclock156);
+    tx_xgt4_inst->clock_in161(iclock161);
+    tx_xgt4_inst->reset_in(reset);
+    tx_xgt4_inst->reset_in_mii_tx(reset_mii_tx);
+    tx_xgt4_inst->reset_in_mii_rx(reset_mii_rx);
+    tx_xgt4_inst->data_out(block_from_xgt4);
+    tx_xgt4_inst->header_out(header_from_xgt4);
+    tx_xgt4_inst->dump_xgmii_txc(dump_xgmii_txc);
+    tx_xgt4_inst->dump_xgmii_txd(dump_xgmii_txd);
+    // tx_xgt4_inst->pkt_tx_start(pkt_tx_start);
 
 
     rx_xgt4_inst->clock_in156(iclock156);
@@ -294,7 +294,7 @@ SC_MODULE(Top) {
 
   }
   ~Top () {
-    // delete tb_xgt4_inst;
+    // delete tx_xgt4_inst;
     // delete rx_xgt4_inst;
     // delete scoreboard_inst;
     // delete pkt_buffer_inst;
