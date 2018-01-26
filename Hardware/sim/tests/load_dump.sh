@@ -10,7 +10,23 @@
 
 rm -rf sc*/*
 rm dump_mii_tx.txt
-cd tests
+
+mkdir sc1
+mkdir sc2
+mkdir sc3
+mkdir sc4
+mkdir sc5
+mkdir sc6
+mkdir sc7
+mkdir sc8
+mkdir sc9
+mkdir sc10
+mkdir sc11
+mkdir sc12
+mkdir sc13
+mkdir sc14
+mkdir sc15
+mkdir sc16
 
 python config.py mt0
 python config.py pkt
