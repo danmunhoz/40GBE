@@ -523,33 +523,33 @@ parameter [0:0]
              SM_PAD_EQ    = 1'd0,
              SM_PAD_PAD   = 1'd1;
 
-reg [13:0]    block_counter; // Counts from 0 to 16383 so we can delete an
-                             // IPG to make room for alignment block
-reg           delete_next_ifg;
-reg           ifg_deleted;
-
-// Process that counts the number of blocks being sent
-always @ ( posedge clk_xgmii_tx or negedge reset_xgmii_tx_n) begin
-  if (reset_xgmii_tx_n == 1'b0) begin
-    block_counter <= 13'h0;
-    delete_next_ifg <= 1'b0;
-  end
-  else begin
-    // Always wWriting stuff
-    block_counter <= block_counter+1;
-
-    // if (block_counter == 13'h3fff) begin //delete_next_ifg
-    if (block_counter == 13'h3c) begin //delete_next_ifg
-      delete_next_ifg <= 1'b1;
-      block_counter <= 13'h0;
-    end
-
-    if (ifg_deleted == 1'b1) begin
-      delete_next_ifg <= 1'b0;
-    end
-
-  end
-end
+// reg [13:0]    block_counter; // Counts from 0 to 16383 so we can delete an
+//                              // IPG to make room for alignment block
+// reg           delete_next_ifg;
+// reg           ifg_deleted;
+//
+// // Process that counts the number of blocks being sent
+// always @ ( posedge clk_xgmii_tx or negedge reset_xgmii_tx_n) begin
+//   if (reset_xgmii_tx_n == 1'b0) begin
+//     block_counter <= 13'h0;
+//     delete_next_ifg <= 1'b0;
+//   end
+//   else begin
+//     // Always wWriting stuff
+//     block_counter <= block_counter+1;
+//
+//     // if (block_counter == 13'h3fff) begin //delete_next_ifg
+//     if (block_counter == 13'h3c) begin //delete_next_ifg
+//       delete_next_ifg <= 1'b1;
+//       block_counter <= 13'h0;
+//     end
+//
+//     if (ifg_deleted == 1'b1) begin
+//       delete_next_ifg <= 1'b0;
+//     end
+//
+//   end
+// end
 
 //---
 // RC layer
@@ -732,7 +732,7 @@ always @(/*AS*/crc32_tx or ctrl_tx_enable_ctx or curr_state_enc or eop
 
               end
 
-              ifg_deleted <= 1'b0;
+              // ifg_deleted <= 1'b0;
 
           end
 
@@ -1053,15 +1053,7 @@ always @(/*AS*/crc32_tx or ctrl_tx_enable_ctx or curr_state_enc or eop
                   next_state_enc = SM_IDLE;
               end
               else begin
-                  // next_state_enc = SM_IFG;
-                  // TALVEZ PULAR DIRETO PARA IDLE QUANDO PRECISAR ECONOMIZA UM CICLO DE IFG
-                  // if (delete_next_ifg) begin
-                  //   next_state_enc <= SM_IDLE;
-                  //   ifg_deleted <= 1'b1;
-                  // end
-                  // else begin
-                    next_state_enc = SM_IFG;
-                  // end
+                  next_state_enc = SM_IFG;
               end
 
           end
