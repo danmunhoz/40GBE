@@ -10,7 +10,7 @@ use UNISIM.VCOMPONENTS.ALL;
 --    use xil_defaultlib.common_pkg.all;
 
 
-entity tb_xgt4 is
+entity tx_xgt4 is
   port (
     clock_in156   : in std_logic;
     clock_in161   : in std_logic;
@@ -26,9 +26,9 @@ entity tb_xgt4 is
     dump_xgmii_txc : out std_logic_vector(7 downto 0);
     dump_xgmii_txd : out std_logic_vector(63 downto 0)
   );
-end tb_xgt4;
+end tx_xgt4;
 
-architecture behav of tb_xgt4 is
+architecture behav of tx_xgt4 is
 	signal	clk_156             : std_logic;
   signal	clk_161             : std_logic;
 	signal	clk_250             : std_logic;
@@ -338,7 +338,7 @@ begin
         payload_type        => "000",
         --payload_cycles      => (others=>'0'),
 --CHANGE_PAYLOAD
-        payload_cycles      => x"0000003e",
+        payload_cycles      => x"0000000E",
         payload_last_size   => (others=>'0'),
         -- payload_last_size   => "0001000",
         pkt_lost_counter    => open
@@ -348,7 +348,7 @@ begin
     begin
 
 --CHANGE_PKT
-      for i in 0 to 26 loop
+      for i in 0 to 10 loop
 --CHANGE_IPG
         wait for 8 ns;
         pkt_tx_start <= '1';

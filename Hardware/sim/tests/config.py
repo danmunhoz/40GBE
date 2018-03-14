@@ -8,7 +8,7 @@ string = "/home/rafasperb/Documentos"
 ##############################################################
 
 #### DEFINIR QUANTIDADE DE PACOTES ###########################
-pkt = 50
+pkt = 5
 ##############################################################
 
 #### DEFINIR IPG #############################################
@@ -75,7 +75,7 @@ def alterar_linha(path,index_linha,nova_linha):
 ##############################################################
 if (x == 'pkt'):
 
-    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    path = string+'/40GBE/Hardware/sim/tx_xgt4.vhd'
     marcador = '--CHANGE_PKT\n'
     nova_linha = '      for i in 0 to '+str(pkt)+' loop'
 
@@ -84,7 +84,7 @@ if (x == 'pkt'):
 
 if (x == 'ipg_min'):
 
-    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    path = string+'/40GBE/Hardware/sim/tx_xgt4.vhd'
     marcador = '--CHANGE_IPG\n'
     nova_linha = '        wait for 8 ns;'
 
@@ -93,7 +93,7 @@ if (x == 'ipg_min'):
 
 if (x == 'ipg'):
 
-    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    path = string+'/40GBE/Hardware/sim/tx_xgt4.vhd'
     marcador = '--CHANGE_IPG\n'
     nova_linha = '        wait for '+str(ipg)+' ns;'
 
@@ -140,7 +140,7 @@ if (x == 'skew'):
     alterar_linha(path,n,nova_linha)
 
 if (x == 'sc1'):
-    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    path = string+'/40GBE/Hardware/sim/tx_xgt4.vhd'
     marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc1[2:]+'",'
 
@@ -148,7 +148,7 @@ if (x == 'sc1'):
     alterar_linha(path,n,nova_linha)
 
 if (x == 'sc2'):
-    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    path = string+'/40GBE/Hardware/sim/tx_xgt4.vhd'
     marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc2[2:]+'",'
 
@@ -156,7 +156,7 @@ if (x == 'sc2'):
     alterar_linha(path,n,nova_linha)
 
 if x == 'sc3':
-    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    path = string+'/40GBE/Hardware/sim/tx_xgt4.vhd'
     marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc3[2:]+'",'
 
@@ -164,7 +164,7 @@ if x == 'sc3':
     alterar_linha(path,n,nova_linha)
 
 if x == 'sc4':
-    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    path = string+'/40GBE/Hardware/sim/tx_xgt4.vhd'
     marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc4[2:]+'",'
 
@@ -172,7 +172,7 @@ if x == 'sc4':
     alterar_linha(path,n,nova_linha)
 
 if x == 'sc5':
-    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    path = string+'/40GBE/Hardware/sim/tx_xgt4.vhd'
     marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc5[2:]+'",'
 
@@ -180,7 +180,7 @@ if x == 'sc5':
     alterar_linha(path,n,nova_linha)
 
 if x == 'sc6':
-    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    path = string+'/40GBE/Hardware/sim/tx_xgt4.vhd'
     marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc6[2:]+'",'
 
@@ -188,7 +188,7 @@ if x == 'sc6':
     alterar_linha(path,n,nova_linha)
 
 if x == 'sc7':
-    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    path = string+'/40GBE/Hardware/sim/tx_xgt4.vhd'
     marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc7[2:]+'",'
 
@@ -196,7 +196,7 @@ if x == 'sc7':
     alterar_linha(path,n,nova_linha)
 
 if x == 'sc8':
-    path = string+'/40GBE/Hardware/sim/tb_xgt4.vhd'
+    path = string+'/40GBE/Hardware/sim/tx_xgt4.vhd'
     marcador = '--CHANGE_PAYLOAD\n'
     nova_linha = '        payload_cycles      => x"000000'+sc8[2:]+'",'
 
@@ -208,7 +208,7 @@ if x == 'sc8':
 ##############################################################
 if (x == 'mt0'):
     #shutil.move(string+"/40GBE/Hardware/sim/dump_mii_tx.txt", string+"/40GBE/Hardware/sim/tests/sc1")
-    shutil.copy2(string+"/40GBE/Hardware/sim/tests/tb_xgt4.vhd", string+"/40GBE/Hardware/sim/")
+    shutil.copy2(string+"/40GBE/Hardware/sim/tests/tx_xgt4.vhd", string+"/40GBE/Hardware/sim/")
 
 if (x == 'mt1'):
     #shutil.move(string+"/40GBE/Hardware/sim/dump_mii_tx.txt", string+"/40GBE/Hardware/sim/tests/sc1")
