@@ -351,7 +351,7 @@ begin
     begin
 
 --CHANGE_PKT
-      for i in 0 to 67 loop
+      for i in 0 to 15 loop
 --CHANGE_IPG
         wait for 8 ns;
         pkt_tx_start <= '1';
