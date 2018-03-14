@@ -340,7 +340,8 @@ begin
 --CHANGE_PAYLOAD
         -- payload_cycles      => x"0000003e",
         -- payload_cycles      => x"00000017",
-        payload_cycles      => x"0000005E",
+        -- payload_cycles      => x"0000005E",
+        payload_cycles      => x"0000000E",
         payload_last_size   => (others=>'0'),
         -- payload_last_size   => "0001000",
         pkt_lost_counter    => open
@@ -350,7 +351,7 @@ begin
     begin
 
 --CHANGE_PKT
-      for i in 0 to 50 loop
+      for i in 0 to 67 loop
 --CHANGE_IPG
         wait for 8 ns;
         pkt_tx_start <= '1';

@@ -111,7 +111,7 @@ scgenmod shuffle > shuffle.h
 
 
 sccom dump_output.cpp
-sccom scoreboard.cpp
+# sccom scoreboard.cpp
 sccom pkt_buffer.cpp
 sccom fiber.cpp
 sccom -novopt -g sc_tb.cpp

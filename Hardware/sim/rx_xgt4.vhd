@@ -272,7 +272,8 @@ begin
 
           start_fifo <= '0', '1' after 65 ns;
 
-          read_fifo <= '0', '1' after 400 ns;
+          -- read_fifo <= '0', '1' after 400 ns; -- original
+          read_fifo <= '0', '1' after 600 ns;
           read_as_mac <= read_fifo when fifo_saida_empty = '0' else '0';
 
           valid_in <= '0', '1' after 127 ns;
