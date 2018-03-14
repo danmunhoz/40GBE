@@ -132,5 +132,5 @@ exec cp lane1.txt lane1_rx.txt
 exec cp lane2.txt lane2_rx.txt
 exec cp lane3.txt lane3_rx.txt
 
-do list.do
-#exit
+#do list.do
+exit
