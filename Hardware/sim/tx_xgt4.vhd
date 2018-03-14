@@ -348,7 +348,11 @@ begin
     begin
 
 --CHANGE_PKT
+<<<<<<< HEAD
       for i in 0 to 5 loop
+=======
+      for i in 0 to 15 loop
+>>>>>>> 0268c4ba6fd2cae4f59cc1ebd0455cc6cc102520
 --CHANGE_IPG
         wait for 32 ns;
         pkt_tx_start <= '1';
