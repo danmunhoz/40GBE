@@ -92,7 +92,6 @@ architecture behav_crc_rx of crc_rx is
   signal delay_cnt  : std_logic_vector(2 downto 0);
 
   signal input_reg : std_logic_vector(127 downto 0);
-  signal input_reg_reg : std_logic_vector(127 downto 0);
   signal eop_last   : std_logic_vector(4 downto 0);
   signal eop_reg   : std_logic_vector(4 downto 0);
   signal sop_reg   : std_logic;
@@ -123,6 +122,9 @@ architecture behav_crc_rx of crc_rx is
   signal rst : std_logic;
   signal clk_312_n : std_logic;
   signal fifo_delay : std_logic_vector(2 downto 0);
+
+  signal frame_len : std_logic_vector(13 downto 0);
+  signal byte_counter : std_logic_vector(13 downto 0);
 
   begin
     rst <= not rst_n;
@@ -198,13 +200,13 @@ architecture behav_crc_rx of crc_rx is
         d64_reg <= (others=>'0');
         -- crc_value <= (others => '0');
         input_reg <= (others=>'0');
-        input_reg_reg <= (others=>'0');
         eop_last <= (others=>'0');
         eop_reg <= (others=>'0');
         sop_reg <= '0';
+        frame_len <= (others=>'0');
+
       elsif clk_312'event and clk_312 = '1' then
         input_reg <= fifo_data_out;
-        input_reg_reg <= input_reg;
         sop_reg <= fifo_sop_out;
         eop_reg <= fifo_eop_out;
 
@@ -227,6 +229,11 @@ architecture behav_crc_rx of crc_rx is
             end if;
           end if;
         -- end if;
+
+        if eop_reg(4) = '1' then
+          frame_len <= byte_counter;
+        end if;
+
       end if;
     end process;
 
@@ -516,6 +523,8 @@ architecture behav_crc_rx of crc_rx is
         crc_reg <= (others=>'1');
         crc_done <= '0';
         fifo_delay <= (others=>'0');
+        byte_counter <= (others=>'0');
+
       elsif clk_312'event and clk_312 = '1' then
         crc_done <= '0';
         case ps_crc is
@@ -526,71 +535,114 @@ architecture behav_crc_rx of crc_rx is
             end if;
             if sop_reg = '1' then
               crc_reg <= nextCRC32_D128(reverse(input_reg), crc_reg);
+              byte_counter <= "00000000010000"; --16
             end if;
 
           when D128 =>
-            if eop_reg(3 downto 0) = x"C" or eop_reg(3 downto 0) = x"D" or
-               eop_reg(3 downto 0) = x"E" or eop_reg(3 downto 0) = x"F" then
+            if eop_reg(4 downto 0) = x"10" or eop_reg(3 downto 0) = x"1" or
+               eop_reg(3 downto 0) = x"2" or eop_reg(3 downto 0) = x"3" or
+               eop_reg(3 downto 0) = x"4" then -- falta
+              crc_done <= '1';
+              -- byte_counter <= byte_counter + 1;
+
+            elsif eop_reg(3 downto 0) = x"5" then -- falta
+              byte_counter <= byte_counter + 1;
+
+            elsif eop_reg(3 downto 0) = x"6" then -- falta
+              byte_counter <= byte_counter + 2;
+
+            elsif eop_reg(3 downto 0) = x"7" then -- falta
+              byte_counter <= byte_counter + 3;
+
+            elsif eop_reg(3 downto 0) = x"C" then
               crc_reg <= nextCRC32_D64(reverse(input_reg(63 downto 0)), crc_reg);
               crc_done <= '1';
-            elsif eop_reg(4) = '0' then
+              byte_counter <= byte_counter + 8;
+
+            elsif eop_reg(3 downto 0) = x"D" then -- falta byte 8
+              crc_reg <= nextCRC32_D64(reverse(input_reg(63 downto 0)), crc_reg);
+              crc_done <= '1';
+              byte_counter <= byte_counter + 9;
+
+            elsif eop_reg(3 downto 0) = x"E" then -- falta byte 8 e 9
+              crc_reg <= nextCRC32_D64(reverse(input_reg(63 downto 0)), crc_reg);
+              crc_done <= '1';
+              byte_counter <= byte_counter + 10;
+
+            elsif eop_reg(3 downto 0) = x"F" then -- falta byte 8,9 e A
+              crc_reg <= nextCRC32_D64(reverse(input_reg(63 downto 0)), crc_reg);
+              crc_done <= '1';
+              byte_counter <= byte_counter + 11;
+
+            elsif eop_reg(4) = '0' then -- No EOP, keep going
               crc_reg <= nextCRC32_D128(reverse(input_reg), crc_reg);
-            else
+              byte_counter <= byte_counter + 16;
+
+            else -- eRROR
               crc_done <= '1';
             end if;
 
           when D64 =>
             crc_reg <= nextCRC32_D64(reverse(d64_reg), crc_reg);
+            byte_counter <= byte_counter + 8;
             crc_done <= '1';
 
           when D8_0 =>
             crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE0)), crc_reg);
+            byte_counter <= byte_counter + 1;
 
           when D8_1 =>
-            if d8_bytes > "000" then
+            if d8_bytes > "001" then
               crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE1)), crc_reg);
+              byte_counter <= byte_counter + 1;
             else
               crc_done <= '1';
             end if;
 
           when D8_2 =>
-            if d8_bytes > "001" then
+            if d8_bytes > "010" then
               crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE2)), crc_reg);
+              byte_counter <= byte_counter + 1;
             else
               crc_done <= '1';
             end if;
 
           when D8_3 =>
-            if d8_bytes > "010" then
+            if d8_bytes > "011" then
               crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE3)), crc_reg);
+              byte_counter <= byte_counter + 1;
             else
               crc_done <= '1';
             end if;
 
           when D8_4 =>
-            if d8_bytes > "011" then
+            if d8_bytes > "100" then
               crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE4)), crc_reg);
+              byte_counter <= byte_counter + 1;
             else
               crc_done <= '1';
             end if;
 
           when D8_5 =>
-            if d8_bytes > "100" then
+            if d8_bytes > "101" then
               crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE5)), crc_reg);
+              byte_counter <= byte_counter + 1;
             else
               crc_done <= '1';
             end if;
 
           when D8_6 =>
-            if d8_bytes > "101" then
+            if d8_bytes > "110" then
               crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE6)), crc_reg);
+              byte_counter <= byte_counter + 1;
             else
               crc_done <= '1';
             end if;
 
           when D8_7 =>
-            if d8_bytes > "110" then
+            if d8_bytes >= "111" then
               crc_reg <= nextCRC32_D8(reverse(d64_reg(LANE7)), crc_reg);
+              byte_counter <= byte_counter + 1;
             else
               crc_done <= '1';
             end if;
