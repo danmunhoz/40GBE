@@ -82,9 +82,7 @@ architecture behav_crc_rx of crc_rx is
                                                      -- has time to perform calculations
   signal d64_low   : std_logic;                      -- Indicates wheather d8 will use low or high part
   signal valid_frame : std_logic;           -- 1 from SOP to EOP. Enables crc processes
-  -- signal byte_cnt  : std_logic_vector(2 downto 0);
 
-  -- signal crc_final  : std_logic_vector(31 downto 0);
   signal crc_value  : std_logic_vector(31 downto 0);
   signal crc_final  : std_logic_vector(31 downto 0);
   signal crc_done    : std_logic;
@@ -125,6 +123,7 @@ architecture behav_crc_rx of crc_rx is
 
   signal frame_len : std_logic_vector(13 downto 0);
   signal byte_counter : std_logic_vector(13 downto 0);
+  signal frame_size_fail : std_logic;
 
   begin
     rst <= not rst_n;
@@ -411,17 +410,11 @@ architecture behav_crc_rx of crc_rx is
 
         case ps_crc is
           when IDLE =>
-            -- if fifo_delay = "111" then
-            --   ren_int <= '1';
               if sop_reg = '1' then
                 ns_crc <= D128;
               else
                 ns_crc <= IDLE;
               end if;
-            -- else
-            --   ns_crc <= IDLE;
-            --   ren_int <= '0';
-            -- end if;
 
           when D128 =>
             if use_d64 = '0' and use_d8 = '1' then
@@ -524,6 +517,7 @@ architecture behav_crc_rx of crc_rx is
         crc_done <= '0';
         fifo_delay <= (others=>'0');
         byte_counter <= (others=>'0');
+        frame_size_fail <= '0';
 
       elsif clk_312'event and clk_312 = '1' then
         crc_done <= '0';
@@ -535,7 +529,7 @@ architecture behav_crc_rx of crc_rx is
             end if;
             if sop_reg = '1' then
               crc_reg <= nextCRC32_D128(reverse(input_reg), crc_reg);
-              byte_counter <= "00000000010000"; --16
+              byte_counter <= "00000000010100"; --16 + 4 (crc no final)
             end if;
 
           when D128 =>
@@ -648,9 +642,15 @@ architecture behav_crc_rx of crc_rx is
             end if;
 
           when CHECK =>
-            -- crc_done <= '1';
             crc_reg <= (others=>'1');
             fifo_delay <= (others=>'0');
+
+            if byte_counter > 1518 then
+              frame_size_fail <= '1';
+            else
+              frame_size_fail <= '0';
+            end if;
+
           when others => crc_reg <= (others=>'0');
         end case;
       end if;
