@@ -147,7 +147,8 @@ module tx_path (/*AUTOARG*/
          .bypass_scram          (bypass_scram),
          .TXD_Scr               (TXD_Scr[65:0]),
          .clk                   (tx_clk161),
-         .scram_en              (data_pause),
+        //  .scram_en              (data_pause),
+         .scram_en              (data_pause & (~spill)),
          .rst                   (!arstb)
          );
 
@@ -157,8 +158,8 @@ module tx_path (/*AUTOARG*/
           .spill                 (spill),
           .rclk                  (tx_clk161),
           //.readen                (data_pause),
-					// .readen                (data_pause & start_fifo),
-					.readen                (data_pause & start_fifo_rd),
+					// .readen                (data_pause & start_fifo_rd),
+					.readen                (data_pause & start_fifo_rd &(~spill)),
           .wclk                  (clk156),
           //.writen                (1'b1),
 					.writen                (1'b1 & start_fifo),
