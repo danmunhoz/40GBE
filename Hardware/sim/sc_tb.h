@@ -83,12 +83,16 @@ SC_MODULE(Top) {
   //Sinais fiber
   sc_signal<sc_lv<64 > > block_out_0;
   sc_signal<sc_lv<2 > >  header_out_0;
+  sc_signal<sc_logic>    valid_out_0;
   sc_signal<sc_lv<64 > > block_out_1;
   sc_signal<sc_lv<2 > >  header_out_1;
+  sc_signal<sc_logic>    valid_out_1;
   sc_signal<sc_lv<64 > > block_out_2;
   sc_signal<sc_lv<2 > >  header_out_2;
+  sc_signal<sc_logic>    valid_out_2;
   sc_signal<sc_lv<64 > > block_out_3;
   sc_signal<sc_lv<2 > >  header_out_3;
+  sc_signal<sc_logic>    valid_out_3;
 
   sc_signal<sc_lv<64 > > pcs_0_block_out;
   sc_signal<sc_lv<64 > > pcs_1_block_out;
@@ -252,12 +256,16 @@ SC_MODULE(Top) {
     fiber_inst->reset_in(reset);
     fiber_inst->block_out_0(block_out_0);
     fiber_inst->header_out_0(header_out_0);
+    fiber_inst->valid_out_0(valid_out_0);
     fiber_inst->block_out_1(block_out_1);
     fiber_inst->header_out_1(header_out_1);
+    fiber_inst->valid_out_1(valid_out_1);
     fiber_inst->block_out_2(block_out_2);
     fiber_inst->header_out_2(header_out_2);
+    fiber_inst->valid_out_2(valid_out_2);
     fiber_inst->block_out_3(block_out_3);
     fiber_inst->header_out_3(header_out_3);
+    fiber_inst->valid_out_3(valid_out_3);
 
     //INSTACIANDO NO TOP POR AGORA PARA TESTER... DEPOIS VAI PRA DENTRO DO WRAPPER...
     // lane_reorder_inst->lane_0_block_in(block_out_0);

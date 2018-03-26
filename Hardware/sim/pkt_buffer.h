@@ -34,7 +34,6 @@ SC_MODULE(pkt_buffer) {
 
   sc_in<sc_lv<64> > block_in;
   sc_in<sc_lv<2> >  header_in;
-
   sc_in<sc_logic>   data_valid_in;
 
   sc_out<sc_lv<64 > > block_out_0;
@@ -65,7 +64,8 @@ SC_MODULE(pkt_buffer) {
   sc_lv<2>  header_in_old_o;
 
   sc_lv<64 > block_in_lv;
-  sc_lv<2 > header_in_lv;
+  sc_lv<2 >  header_in_lv;
+  sc_logic   d_valid_in_wire;
 
   void bip_calculator (sc_lv<8 > *lane_bip, const sc_lv<64 > block_in_lv, const sc_lv<2 > header_in_lv, int debug = 0) {
 
@@ -117,11 +117,9 @@ SC_MODULE(pkt_buffer) {
     std::stringstream buffer_old;
     int lane = 0;
 
-    // sc_lv<64 > block_in_lv;
-    // sc_lv<2 > header_in_lv;
-
     block_in_lv = block_in;
     header_in_lv = header_in;
+    d_valid_in_wire = data_valid_in;
 
     block_in_old = block_in;
     header_in_old = header_in;
@@ -144,20 +142,17 @@ SC_MODULE(pkt_buffer) {
         lane3_bip = "00000000";
     }
 
-     if ( block_in_old_o != block_in_lv) {            // sem repetição do PCS
-      //  if ( 1 ) {                                   // com repetição do PCS
+     if ( block_in_old_o != block_in_lv) {
+       // Sem repeticao. Funcionamento normal...
 
-
-      cout << "PCS TX BLOCO OK!!!!!!  -> " << block_in_lv << " != " << block_in_old << endl;
+      // cout << "PCS TX BLOCO OK!!!!!!  -> " << block_in_lv << " != " << block_in_old << endl;
 
       if ( data_valid_in == SC_LOGIC_1 ) {
 
-        buffer << header_in << "-" << block_in;
-
-
+        // Formato da linha:
+        // HEADER-DATA_BITS=VALID_BIT
+        buffer << header_in << "-" << block_in << "=" << d_valid_in_wire;
         lane = block_counter % 4;
-
-        // dbg_bip << "Pkt_buffer - rx: bc = " << block_counter << " lane = " << lane << " buffer = " << buffer.str() << endl;
 
         switch (lane) {
 
@@ -215,31 +210,28 @@ SC_MODULE(pkt_buffer) {
           **  10-LOW PART OF AN ALIGNMENT BLOCK, BIP, HIGH PART OF AN ALIGNMENT BLOCK, NOT(BIP)
           */
 
-          lane0 << "10-" << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << endl;
+          lane0 << "10-" << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << "=1" <<endl;
           str_temp << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip;
           blk_temp = str_temp.str().c_str();
           hdr_temp = "10";
           lane0_bip = "00000000";
-          // cout << "LANE0_BIP " << hdr_temp << "-" << blk_temp << endl;
-          // cout << "LANE0_BIP " << lane0_bip << endl;
           bip_calculator (&lane0_bip, blk_temp, hdr_temp);
-          // cout << "LANE0_BIP_ret: " << lane0_bip << endl << endl;
 
-          lane1 << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << endl;
+          lane1 << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << "=1" << endl;
           str_temp << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane0_bip;
           blk_temp = str_temp.str().c_str();
           hdr_temp = "10";
           lane1_bip = "00000000";
           bip_calculator (&lane1_bip, blk_temp, hdr_temp);
 
-          lane2 << "10-" << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << endl;
+          lane2 << "10-" << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << "=1" << endl;
           str_temp << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane0_bip;
           blk_temp = str_temp.str().c_str();
           hdr_temp = "10";
           lane2_bip = "00000000";
           bip_calculator (&lane2_bip, block_in_lv, hdr_temp);
 
-          lane3 << "10-" << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip << endl;
+          lane3 << "10-" << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip  << "=1" << endl;
           str_temp << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane0_bip;
           blk_temp = str_temp.str().c_str();
           hdr_temp = "10";
@@ -252,7 +244,11 @@ SC_MODULE(pkt_buffer) {
          }
         }
       } else {
-        cout << "PCS TX REPETIU BLOCO!!!!!!  -> " << block_in_lv << " = " << block_in_old << endl;
+        // Ocorreu uma repetição!
+        // Poderia escrever o proprio bloco no ultimo arquivo escrito... Mas como sabemos que
+        // é um valor repetido, basta copiar a ultima linha de todos arquivos - data_valid em zero
+
+        // cout << "PCS TX REPETIU BLOCO!!!!!!  -> " << block_in_lv << " = " << block_in_old << endl;
       }
     }
 

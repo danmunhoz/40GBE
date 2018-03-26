@@ -3,6 +3,7 @@
 
 #include "systemc.h"
 #include <sstream>
+#include <iostream>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -20,6 +21,12 @@
 //SKEW_3
 #define SKEW_3_NS 65
 
+struct line_data {
+  std::string hdr;
+  std::string data;
+  std::string valid;
+};
+
 SC_MODULE(fiber) {
 
   sc_in<sc_logic>   clock_in;
@@ -29,12 +36,19 @@ SC_MODULE(fiber) {
 
   sc_out<sc_lv<64 > > block_out_0;
   sc_out<sc_lv<2 > >  header_out_0;
+  sc_out<sc_logic>    valid_out_0;
+
   sc_out<sc_lv<64 > > block_out_1;
   sc_out<sc_lv<2 > >  header_out_1;
+  sc_out<sc_logic>    valid_out_1;
+
   sc_out<sc_lv<64 > > block_out_2;
   sc_out<sc_lv<2 > >  header_out_2;
+  sc_out<sc_logic>    valid_out_2;
+
   sc_out<sc_lv<64 > > block_out_3;
   sc_out<sc_lv<2 > >  header_out_3;
+  sc_out<sc_logic>    valid_out_3;
 
   ifstream lanes[4];
   ifstream lanes_shuffled[4];
@@ -58,6 +72,24 @@ SC_MODULE(fiber) {
           val = val.substr(0, pos);
       }
       return std::make_pair(val, arg);
+  }
+
+  // std::tuple<std::string, std::string, std::string> splitHeaderBlockValid(std::string val) {
+  line_data splitHeaderBlockValid(std::string val) {
+      line_data ret;
+      std::string::size_type pos1 = val.find('-');
+      std::string::size_type pos2 = val.find('=');
+      cout << "VAL: " << val << endl;
+
+      if(val.npos != pos1 && val.npos != pos2) {
+          ret.valid = val.substr(pos2+1, 1);
+          ret.data = val.substr(pos1+1, pos2-3);
+          ret.hdr = val.substr(0, pos1);
+      }
+      cout << "HDR: " << ret.hdr << endl;
+      cout << "VLD: " << ret.valid << endl;
+      cout << "DAT: " << ret.data << endl << endl;
+      return ret;
   }
 
   void skew_lane_0() {
@@ -111,10 +143,14 @@ SC_MODULE(fiber) {
 
   void buffer_lanes() {
 
-    std::pair<std::string, std::string> pr0;
-    std::pair<std::string, std::string> pr1;
-    std::pair<std::string, std::string> pr2;
-    std::pair<std::string, std::string> pr3;
+    // std::pair<std::string, std::string> pr0;
+    // std::pair<std::string, std::string> pr1;
+    // std::pair<std::string, std::string> pr2;
+    // std::pair<std::string, std::string> pr3;
+    line_data pr0;
+    line_data pr1;
+    line_data pr2;
+    line_data pr3;
 
     std::string line0;
     std::string line1;
@@ -123,90 +159,122 @@ SC_MODULE(fiber) {
 
     sc_lv<2 >  header_out_0_int;
     sc_lv<64 > block_out_0_int;
+    // sc_logic valid_out_0_int;
+    sc_lv<1 > valid_out_0_int;
+
     sc_lv<2 >  header_out_1_int;
     sc_lv<64 > block_out_1_int;
+    sc_lv<1 > valid_out_1_int;
+
     sc_lv<2 >  header_out_2_int;
     sc_lv<64 > block_out_2_int;
+    sc_lv<1 > valid_out_2_int;
+
     sc_lv<2 >  header_out_3_int;
     sc_lv<64 > block_out_3_int;
+    sc_lv<1 > valid_out_3_int;
 
     if (reset_in == SC_LOGIC_1) {       // RESET ativo baixo
         if( lanes_shuffled[0].is_open() && skew_ok_0 == SC_LOGIC_1) {
           if( lanes_shuffled[0] >> line0 ) {
-            std::pair<std::string, std::string> pr0 = splitHeaderBlock(line0);
+            // std::pair<std::string, std::string> pr0 = splitHeaderBlock(line0);
+            line_data pr0 = splitHeaderBlockValid(line0);
             //cout << "LINE1: " << "Header: " << pr0.first << " Block: " << pr0.second << endl;
 
-            header_out_0_int = pr0.first.c_str();
-            block_out_0_int  = pr0.second.c_str();
+            // header_out_0_int = pr0.first.c_str();
+            // block_out_0_int  = pr0.second.c_str();
+            header_out_0_int = pr0.hdr.c_str();
+            block_out_0_int  = pr0.data.c_str();
+            valid_out_0_int  = pr0.valid.c_str();
 
             header_out_0 = header_out_0_int;
             block_out_0 = block_out_0_int;
+            valid_out_0 = valid_out_0_int.get_bit(0);
 
             // cout << "[fiber 0] Header = " << header_out_0 << " Block = " << block_out_0 << endl;
           }
         } else {
-          cout << "[fiber 0]FALHOU lanes 0" << endl;
+          cout << "[fiber 0] FALHOU lanes 0" << endl;
         }
 
         if( lanes_shuffled[1].is_open() && skew_ok_1 == SC_LOGIC_1) {
           if( lanes_shuffled[1] >> line1 ) {
-            std::pair<std::string, std::string> pr1 = splitHeaderBlock(line1);
+            // std::pair<std::string, std::string> pr1 = splitHeaderBlock(line1);
+            line_data pr1 = splitHeaderBlockValid(line1);
             //cout << "LINE1: " << "Header: " << pr1.first << " Block: " << pr1.second << endl;
 
-            header_out_1_int = pr1.first.c_str();
-            block_out_1_int  = pr1.second.c_str();
+            // header_out_1_int = pr1.first.c_str();
+            // block_out_1_int  = pr1.second.c_str();
+            header_out_1_int = pr1.hdr.c_str();
+            block_out_1_int  = pr1.data.c_str();
+            valid_out_1_int  = pr1.valid.c_str();
 
             header_out_1 = header_out_1_int;
             block_out_1 = block_out_1_int;
+            valid_out_1 = valid_out_1_int.get_bit(0);
 
             // cout << "[fiber 1] Header = " << header_out_1 << " Block = " << block_out_1 << endl;
           }
         } else {
-          cout << "[fiber 1]FALHOU lanes 1" << endl;
+          cout << "[fiber 1] FALHOU lanes 1" << endl;
         }
 
         if( lanes_shuffled[2].is_open() && skew_ok_2 == SC_LOGIC_1) {
           if( lanes_shuffled[2] >> line2 ) {
-            std::pair<std::string, std::string> pr2 = splitHeaderBlock(line2);
+            // std::pair<std::string, std::string> pr2 = splitHeaderBlock(line2);
+            line_data pr2 = splitHeaderBlockValid(line2);
             //cout << "LINE2: " << "Header: " << pr2.first << " Block: " << pr2.second << endl;
 
-            header_out_2_int = pr2.first.c_str();
-            block_out_2_int  = pr2.second.c_str();
+            // header_out_2_int = pr2.first.c_str();
+            // block_out_2_int  = pr2.second.c_str();
+            header_out_2_int = pr2.hdr.c_str();
+            block_out_2_int  = pr2.data.c_str();
+            valid_out_2_int  = pr2.valid.c_str();
 
             header_out_2 = header_out_2_int;
             block_out_2 = block_out_2_int;
+            valid_out_2 = valid_out_2_int.get_bit(0);
 
             // cout << "[fiber 2] Header = " << header_out_2 << " Block = " << block_out_2 << endl;
           }
         } else {
-          cout << "[fiber 2]FALHOU lanes 2" << endl;
+          cout << "[fiber 2] FALHOU lanes 2" << endl;
         }
 
         if( lanes_shuffled[3].is_open() && skew_ok_3 == SC_LOGIC_1) {
           if( lanes_shuffled[3] >> line3 ) {
-            std::pair<std::string, std::string> pr3 = splitHeaderBlock(line3);
+            // std::pair<std::string, std::string> pr3 = splitHeaderBlock(line3);
+            line_data pr3 = splitHeaderBlockValid(line3);
             //cout << "LINE3: " << "Header: " << pr3.first << " Block: " << pr3.second << endl;
 
-            header_out_3_int = pr3.first.c_str();
-            block_out_3_int  = pr3.second.c_str();
+            // header_out_3_int = pr3.first.c_str();
+            // block_out_3_int  = pr3.second.c_str();
+            header_out_3_int = pr3.hdr.c_str();
+            block_out_3_int  = pr3.data.c_str();
+            valid_out_3_int  = pr3.valid.c_str();
 
             header_out_3 = header_out_3_int;
             block_out_3 = block_out_3_int;
+            valid_out_3 = valid_out_3_int.get_bit(0);
 
             // cout << "[fiber 3] Header = " << header_out_3 << " Block = " << block_out_3 << endl;
           }
         } else {
-          cout << "[fiber 3]FALHOU lanes 3" << endl;
+          cout << "[fiber 3] FALHOU lanes 3" << endl;
         }
     } else {
       header_out_0 = "00";
       block_out_0  = "0000000000000000000000000000000000000000000000000000000000000000";
+      valid_out_0  = SC_LOGIC_0;
       header_out_1 = "00";
       block_out_1  = "0000000000000000000000000000000000000000000000000000000000000000";
+      valid_out_1  = SC_LOGIC_0;
       header_out_2 = "00";
       block_out_2  = "0000000000000000000000000000000000000000000000000000000000000000";
+      valid_out_2  = SC_LOGIC_0;
       header_out_3 = "00";
       block_out_3  = "0000000000000000000000000000000000000000000000000000000000000000";
+      valid_out_3  = SC_LOGIC_0;
     }
   }
 
