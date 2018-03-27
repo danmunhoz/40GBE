@@ -151,6 +151,8 @@ SC_MODULE(pkt_buffer) {
     block_in_old = block_in;
     header_in_old = header_in;
 
+    c_counter++;
+    
    if ( block_in_old_o != block_in_lv) {
     // Sem repeticao. Funcionamento normal...
     // cout << "PCS TX BLOCO OK!!!!!!  -> " << block_in_lv << " != " << block_in_old << endl;
@@ -159,8 +161,7 @@ SC_MODULE(pkt_buffer) {
     // HEADER-DATA_BITS=VALID_BIT
     buffer << header_in << "-" << block_in << "=" << d_valid_in_wire;
     lane = block_counter % 4;
-    c_counter++;
-    cout << "Cycle counter: " << c_counter << endl;
+    // cout << "Cycle counter: " << c_counter << endl;
 
     switch (lane) {
       case 0:
