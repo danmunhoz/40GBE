@@ -181,24 +181,24 @@ SC_MODULE(Top) {
     rx_xgt4_inst->dump_xgmii_rxc_3(dump_xgmii_rxc_3);
     rx_xgt4_inst->dump_xgmii_rxd_3(dump_xgmii_rxd_3);
 
-    rx_xgt4_inst->rx_lane_0_header_valid_in(rx_header_valid_in);
+    rx_xgt4_inst->rx_lane_0_header_valid_in(valid_out_0);
     rx_xgt4_inst->rx_lane_0_header_in(header_out_0);
-    rx_xgt4_inst->rx_lane_0_data_valid_in(rx_data_valid_in);
+    rx_xgt4_inst->rx_lane_0_data_valid_in(valid_out_0);
     rx_xgt4_inst->rx_lane_0_data_in(block_out_0);
 
-    rx_xgt4_inst->rx_lane_1_header_valid_in(rx_header_valid_in);
+    rx_xgt4_inst->rx_lane_1_header_valid_in(valid_out_1);
     rx_xgt4_inst->rx_lane_1_header_in(header_out_1);
-    rx_xgt4_inst->rx_lane_1_data_valid_in(rx_data_valid_in);
+    rx_xgt4_inst->rx_lane_1_data_valid_in(valid_out_1);
     rx_xgt4_inst->rx_lane_1_data_in(block_out_1);
 
-    rx_xgt4_inst->rx_lane_2_header_valid_in(rx_header_valid_in);
+    rx_xgt4_inst->rx_lane_2_header_valid_in(valid_out_2);
     rx_xgt4_inst->rx_lane_2_header_in(header_out_2);
-    rx_xgt4_inst->rx_lane_2_data_valid_in(rx_data_valid_in);
+    rx_xgt4_inst->rx_lane_2_data_valid_in(valid_out_2);
     rx_xgt4_inst->rx_lane_2_data_in(block_out_2);
 
-    rx_xgt4_inst->rx_lane_3_header_valid_in(rx_header_valid_in);
+    rx_xgt4_inst->rx_lane_3_header_valid_in(valid_out_3);
     rx_xgt4_inst->rx_lane_3_header_in(header_out_3);
-    rx_xgt4_inst->rx_lane_3_data_valid_in(rx_data_valid_in);
+    rx_xgt4_inst->rx_lane_3_data_valid_in(valid_out_3);
     rx_xgt4_inst->rx_lane_3_data_in(block_out_3);
 
 
@@ -223,9 +223,10 @@ SC_MODULE(Top) {
     scoreboard_inst->clock_in156(iclock156);
 
     pkt_buffer_inst->clock_in161(iclock161);
+    pkt_buffer_inst->reset_n(reset);
     pkt_buffer_inst->header_in(header_from_xgt4);
     pkt_buffer_inst->block_in(block_from_xgt4);
-    pkt_buffer_inst->data_valid_in(rx_data_valid_in);
+    pkt_buffer_inst->data_valid_in(rx_data_valid_in); //Passar para o data_valid do TX
 
     dump_mii_tx_inst->clock_in(iclock156);
     dump_mii_tx_inst->reset_n(reset);

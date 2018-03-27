@@ -11,133 +11,147 @@ add wave -noupdate -group Resets /Top/tx_xgt4/reset_in_pcs
 add wave -noupdate -group Resets /Top/tx_xgt4/reset_in
 add wave -noupdate -group Resets /Top/tx_xgt4/reset_in_mii_tx
 add wave -noupdate -group Resets /Top/tx_xgt4/reset_in_mii_rx
-add wave -noupdate -height 30 -expand -group TX -color Gold -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/xgmii_txc
-add wave -noupdate -height 30 -expand -group TX -color Gold -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/xgmii_txd
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/clock
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/ip_destination
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/ip_source
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/lfsr_polynomial
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/lfsr_seed
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/mac_destination
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/mac_source
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/packet_length
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/payload_cycles
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/payload_last_size
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/payload_type
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_tx_full
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/reset
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/start
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/time_stamp_flag
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/timestamp_base
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/valid_seed
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN -divider outputs
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_lost_counter
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_tx_data
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_tx_eop
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_tx_mod
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_tx_sop
-add wave -noupdate -height 30 -expand -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_tx_val
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/clk_156m25
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/clk_xgmii_rx
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/clk_xgmii_tx
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_ren
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_tx_data
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_tx_eop
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_tx_mod
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_tx_sop
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_tx_val
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/reset_156m25_n
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/reset_xgmii_rx_n
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/reset_xgmii_tx_n
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_adr_i
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_clk_i
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_cyc_i
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_dat_i
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_rst_i
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_stb_i
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_we_i
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/xgmii_rxc
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/xgmii_rxd
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC -divider outputs
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_avail
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_data
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_eop
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_err
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_mod
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_sop
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_val
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_tx_full
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_ack_o
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_dat_o
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_int_o
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/xgmii_txc
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/xgmii_txd
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/clk_156m25
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/clk_xgmii_tx
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/reset_156m25_n
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/reset_xgmii_tx_n
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_ren
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_wdata
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_wen
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_wstatus
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo -divider out
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_ralmost_empty
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_rdata
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_rempty
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_rstatus
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_walmost_full
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_wfull
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/clk_xgmii_tx
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/reset_xgmii_tx_n
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_ren
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_wdata
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_wen
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_wstatus
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_hold_fifo -divider out
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_ralmost_empty
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_rdata
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_rempty
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_rstatus
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_walmost_full
-add wave -noupdate -height 30 -expand -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_wfull
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Encode -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/bypass_66encoder
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Encode -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/clk156
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Encode -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/rstb
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Encode -color Gold -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/txcontrol
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Encode -color Gold -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/txdata
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Encode -color Pink -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/TXD_encoded
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Encode -color Pink -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/txlf
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/FIFO_FULL
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/rclk
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/wclk
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/rst
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/start_fifo_rd
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/readen
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -color Pink -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/readdata
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/start_fifo
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/writen
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/writedata
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/spill
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/almostempty
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/almostfull
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/empty
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/full
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/tx_jtm_en
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/jtm_dps_0
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/jtm_dps_1
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/bypass_scram
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/clk
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/rst
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/seed_A
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/seed_B
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/TXD_encoded
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/scram_en
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group Scramble -color Pink -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/TXD_Scr
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group tx_sequence_counter -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_txsequence_counter/clk_161_in
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group tx_sequence_counter -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_txsequence_counter/reset_n_in
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group tx_sequence_counter -color Pink -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_txsequence_counter/tx_sequence_out
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group tx_sequence_counter -color Pink -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_txsequence_counter/DATA_PAUSE
-add wave -noupdate -height 30 -expand -group TX -group PCS -expand -group tx_sequence_counter -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_txsequence_counter/txseq_counter_r
+add wave -noupdate -height 30 -group TX -color Gold -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/xgmii_txc
+add wave -noupdate -height 30 -group TX -color Gold -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/xgmii_txd
+add wave -noupdate -height 30 -group TX /Top/tx_xgt4/data_out
+add wave -noupdate -height 30 -group TX /Top/tx_xgt4/header_out
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/clock
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/ip_destination
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/ip_source
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/lfsr_polynomial
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/lfsr_seed
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/mac_destination
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/mac_source
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/packet_length
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/payload_cycles
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/payload_last_size
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/payload_type
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_tx_full
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/reset
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/start
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/time_stamp_flag
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/timestamp_base
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/valid_seed
+add wave -noupdate -height 30 -group TX -group ECHO_GEN -divider outputs
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_lost_counter
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_tx_data
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_tx_eop
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_tx_mod
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_tx_sop
+add wave -noupdate -height 30 -group TX -group ECHO_GEN /Top/tx_xgt4/echo_gen_inst/pkt_tx_val
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/clk_156m25
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/clk_xgmii_rx
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/clk_xgmii_tx
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_ren
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_tx_data
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_tx_eop
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_tx_mod
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_tx_sop
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_tx_val
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/reset_156m25_n
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/reset_xgmii_rx_n
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/reset_xgmii_tx_n
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_adr_i
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_clk_i
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_cyc_i
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_dat_i
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_rst_i
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_stb_i
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_we_i
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/xgmii_rxc
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/xgmii_rxd
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC -divider outputs
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_avail
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_data
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_eop
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_err
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_mod
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_sop
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_rx_val
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/pkt_tx_full
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_ack_o
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_dat_o
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/wb_int_o
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/xgmii_txc
+add wave -noupdate -height 30 -group TX -group MAC -expand -group XGE_MAC /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/xgmii_txd
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/clk_156m25
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/clk_xgmii_tx
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/reset_156m25_n
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/reset_xgmii_tx_n
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_ren
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_wdata
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_wen
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_wstatus
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo -divider out
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_ralmost_empty
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_rdata
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_rempty
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_rstatus
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_walmost_full
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_data_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_data_fifo0/txdfifo_wfull
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/clk_xgmii_tx
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/reset_xgmii_tx_n
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_ren
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_wdata
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_wen
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_wstatus
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_hold_fifo -divider out
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_ralmost_empty
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_rdata
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_rempty
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_rstatus
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_walmost_full
+add wave -noupdate -height 30 -group TX -group MAC -expand -group tx_hold_fifo /Top/tx_xgt4/inst_wrapper_macpcs/INST_xge_mac/tx_hold_fifo0/txhfifo_wfull
+add wave -noupdate -height 30 -group TX -group PCS -group Encode -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/bypass_66encoder
+add wave -noupdate -height 30 -group TX -group PCS -group Encode -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/clk156
+add wave -noupdate -height 30 -group TX -group PCS -group Encode -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/rstb
+add wave -noupdate -height 30 -group TX -group PCS -group Encode -color Gold -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/txcontrol
+add wave -noupdate -height 30 -group TX -group PCS -group Encode -color Gold -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/txdata
+add wave -noupdate -height 30 -group TX -group PCS -group Encode -color Pink -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/TXD_encoded
+add wave -noupdate -height 30 -group TX -group PCS -group Encode -color Pink -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_ENCODE/txlf
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/FIFO_FULL
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/rclk
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/wclk
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/rst
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/start_fifo_rd
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/readen
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -color Pink -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/readdata
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/start_fifo
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/writen
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/writedata
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/spill
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/almostempty
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/almostfull
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/empty
+add wave -noupdate -height 30 -group TX -group PCS -group FIFO -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/full
+add wave -noupdate -height 30 -group TX -group PCS -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/tx_jtm_en
+add wave -noupdate -height 30 -group TX -group PCS -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/jtm_dps_0
+add wave -noupdate -height 30 -group TX -group PCS -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/jtm_dps_1
+add wave -noupdate -height 30 -group TX -group PCS -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/bypass_scram
+add wave -noupdate -height 30 -group TX -group PCS -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/clk
+add wave -noupdate -height 30 -group TX -group PCS -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/rst
+add wave -noupdate -height 30 -group TX -group PCS -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/seed_A
+add wave -noupdate -height 30 -group TX -group PCS -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/seed_B
+add wave -noupdate -height 30 -group TX -group PCS -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/TXD_encoded
+add wave -noupdate -height 30 -group TX -group PCS -group Scramble -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/scram_en
+add wave -noupdate -height 30 -group TX -group PCS -group Scramble -color Pink -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_TX_PATH_SCRAMBLE/TXD_Scr
+add wave -noupdate -height 30 -group TX -group PCS -expand -group tx_sequence_counter -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_txsequence_counter/clk_161_in
+add wave -noupdate -height 30 -group TX -group PCS -expand -group tx_sequence_counter -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_txsequence_counter/reset_n_in
+add wave -noupdate -height 30 -group TX -group PCS -expand -group tx_sequence_counter -color Pink -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_txsequence_counter/tx_sequence_out
+add wave -noupdate -height 30 -group TX -group PCS -expand -group tx_sequence_counter -color Pink -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_txsequence_counter/DATA_PAUSE
+add wave -noupdate -height 30 -group TX -group PCS -expand -group tx_sequence_counter -radix hexadecimal /Top/tx_xgt4/inst_wrapper_macpcs/INST_PCS_core/INST_tx_path/INST_txsequence_counter/txseq_counter_r
+add wave -noupdate -group fiber -expand -group lane_0 -radix hexadecimal /Top/fiber/block_out_0
+add wave -noupdate -group fiber -expand -group lane_0 /Top/fiber/header_out_0
+add wave -noupdate -group fiber -expand -group lane_0 /Top/fiber/valid_out_0
+add wave -noupdate -group fiber -expand -group lane_1 -radix hexadecimal /Top/fiber/block_out_1
+add wave -noupdate -group fiber -expand -group lane_1 /Top/fiber/header_out_1
+add wave -noupdate -group fiber -expand -group lane_1 /Top/fiber/valid_out_1
+add wave -noupdate -group fiber -expand -group lane_2 -radix hexadecimal /Top/fiber/block_out_2
+add wave -noupdate -group fiber -expand -group lane_2 /Top/fiber/header_out_2
+add wave -noupdate -group fiber -expand -group lane_2 /Top/fiber/valid_out_2
+add wave -noupdate -group fiber -expand -group lane_3 -radix hexadecimal /Top/fiber/block_out_3
+add wave -noupdate -group fiber -expand -group lane_3 /Top/fiber/header_out_3
+add wave -noupdate -group fiber -expand -group lane_3 /Top/fiber/valid_out_3
 add wave -noupdate -height 30 -expand -group RX -expand -group RX_MII -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/xgmii_rxc
 add wave -noupdate -height 30 -expand -group RX -expand -group RX_MII -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/xgmii_rxd
 add wave -noupdate -height 30 -expand -group RX -expand -group RX_MII -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_1_PCS_core/xgmii_rxc
@@ -1103,12 +1117,12 @@ add wave -noupdate -group {SINAIS PARA LISTA} /Top/rx_xgt4/inst_wrapper_macpcs/I
 add wave -noupdate -group {SINAIS PARA LISTA} /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/w_ptr
 add wave -noupdate -group {SINAIS PARA LISTA} /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/r_ptr_h
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{falta blobo 07 no PCS0} {2038400 ps} 1} {{pkt 42 codificado em erro} {10550400 ps} 1} {{entrada em data_in (pkt_id=43)} {3024000 ps} 1} {{Cursor 4} {3140800 ps} 0}
+WaveRestoreCursors {{falta blobo 07 no PCS0} {2038400 ps} 1} {{pkt 42 codificado em erro} {10550400 ps} 1} {{entrada em data_in (pkt_id=43)} {3024000 ps} 1} {{Cursor 4} {7232300 ps} 0}
 quietly wave cursor active 4
 configure wave -namecolwidth 653
 configure wave -valuecolwidth 159
 configure wave -justifyvalue left
-configure wave -signalnamewidth 0
+configure wave -signalnamewidth 1
 configure wave -snapdistance 10
 configure wave -datasetprefix 0
 configure wave -rowmargin 4
@@ -1119,10 +1133,10 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {3121485 ps} {3156043 ps}
-bookmark add wave bookmark105 {{770754 ps} {811500 ps}} 13
-bookmark add wave bookmark106 {{780000 ps} {800000 ps}} 8
-bookmark add wave bookmark107 {{0 ps} {42010 ps}} 0
-bookmark add wave bookmark108 {{201305 ps} {266263 ps}} 7
-bookmark add wave bookmark109 {{728057 ps} {794311 ps}} 6
-bookmark add wave bookmark110 {{1931987 ps} {1965959 ps}} 9
+WaveRestoreZoom {7215021 ps} {7249579 ps}
+bookmark add wave bookmark5 {{770754 ps} {811500 ps}} 13
+bookmark add wave bookmark6 {{780000 ps} {800000 ps}} 8
+bookmark add wave bookmark7 {{0 ps} {42010 ps}} 0
+bookmark add wave bookmark8 {{201305 ps} {266263 ps}} 7
+bookmark add wave bookmark9 {{728057 ps} {794311 ps}} 6
+bookmark add wave bookmark10 {{1931987 ps} {1965959 ps}} 9

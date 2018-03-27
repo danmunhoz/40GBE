@@ -20,8 +20,10 @@ entity tx_xgt4 is
     reset_in_mii_rx : in std_logic;
 
     --pkt_tx_start  : in std_logic;
-    data_out   : out std_logic_vector(63 downto 0);
-    header_out : out std_logic_vector(1 downto 0);
+    data_out         : out std_logic_vector(63 downto 0);
+    header_out       : out std_logic_vector(1 downto 0);
+    data_valid_out   : out std_logic;
+    header_valid_out : out std_logic;
 
     dump_xgmii_txc : out std_logic_vector(7 downto 0);
     dump_xgmii_txd : out std_logic_vector(63 downto 0)

@@ -79,16 +79,16 @@ SC_MODULE(fiber) {
       line_data ret;
       std::string::size_type pos1 = val.find('-');
       std::string::size_type pos2 = val.find('=');
-      cout << "VAL: " << val << endl;
+      // cout << "VAL: " << val << endl;
 
       if(val.npos != pos1 && val.npos != pos2) {
           ret.valid = val.substr(pos2+1, 1);
           ret.data = val.substr(pos1+1, pos2-3);
           ret.hdr = val.substr(0, pos1);
       }
-      cout << "HDR: " << ret.hdr << endl;
-      cout << "VLD: " << ret.valid << endl;
-      cout << "DAT: " << ret.data << endl << endl;
+      // cout << "HDR: " << ret.hdr << endl;
+      // cout << "VLD: " << ret.valid << endl;
+      // cout << "DAT: " << ret.data << endl << endl;
       return ret;
   }
 
@@ -175,6 +175,7 @@ SC_MODULE(fiber) {
     sc_lv<1 > valid_out_3_int;
 
     if (reset_in == SC_LOGIC_1) {       // RESET ativo baixo
+
         if( lanes_shuffled[0].is_open() && skew_ok_0 == SC_LOGIC_1) {
           if( lanes_shuffled[0] >> line0 ) {
             // std::pair<std::string, std::string> pr0 = splitHeaderBlock(line0);
@@ -191,6 +192,10 @@ SC_MODULE(fiber) {
             block_out_0 = block_out_0_int;
             valid_out_0 = valid_out_0_int.get_bit(0);
 
+            // cout << "HDR: " << header_out_0 << endl;
+            // cout << "BLK: " << block_out_0 << endl;
+            // cout << "VAL: " << valid_out_0 << endl << endl;
+
             // cout << "[fiber 0] Header = " << header_out_0 << " Block = " << block_out_0 << endl;
           }
         } else {
@@ -199,12 +204,8 @@ SC_MODULE(fiber) {
 
         if( lanes_shuffled[1].is_open() && skew_ok_1 == SC_LOGIC_1) {
           if( lanes_shuffled[1] >> line1 ) {
-            // std::pair<std::string, std::string> pr1 = splitHeaderBlock(line1);
             line_data pr1 = splitHeaderBlockValid(line1);
-            //cout << "LINE1: " << "Header: " << pr1.first << " Block: " << pr1.second << endl;
 
-            // header_out_1_int = pr1.first.c_str();
-            // block_out_1_int  = pr1.second.c_str();
             header_out_1_int = pr1.hdr.c_str();
             block_out_1_int  = pr1.data.c_str();
             valid_out_1_int  = pr1.valid.c_str();
@@ -221,12 +222,8 @@ SC_MODULE(fiber) {
 
         if( lanes_shuffled[2].is_open() && skew_ok_2 == SC_LOGIC_1) {
           if( lanes_shuffled[2] >> line2 ) {
-            // std::pair<std::string, std::string> pr2 = splitHeaderBlock(line2);
             line_data pr2 = splitHeaderBlockValid(line2);
-            //cout << "LINE2: " << "Header: " << pr2.first << " Block: " << pr2.second << endl;
 
-            // header_out_2_int = pr2.first.c_str();
-            // block_out_2_int  = pr2.second.c_str();
             header_out_2_int = pr2.hdr.c_str();
             block_out_2_int  = pr2.data.c_str();
             valid_out_2_int  = pr2.valid.c_str();
@@ -243,12 +240,8 @@ SC_MODULE(fiber) {
 
         if( lanes_shuffled[3].is_open() && skew_ok_3 == SC_LOGIC_1) {
           if( lanes_shuffled[3] >> line3 ) {
-            // std::pair<std::string, std::string> pr3 = splitHeaderBlock(line3);
             line_data pr3 = splitHeaderBlockValid(line3);
-            //cout << "LINE3: " << "Header: " << pr3.first << " Block: " << pr3.second << endl;
 
-            // header_out_3_int = pr3.first.c_str();
-            // block_out_3_int  = pr3.second.c_str();
             header_out_3_int = pr3.hdr.c_str();
             block_out_3_int  = pr3.data.c_str();
             valid_out_3_int  = pr3.valid.c_str();
