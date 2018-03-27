@@ -129,7 +129,7 @@ SC_MODULE(Top) {
   void valid_rx_generator();
 
  SC_CTOR(Top): clk_156("clk_156", 6.4, SC_NS, 0.5, 0.0, SC_NS, false),
-               clk_161("clk_161", 6.2, SC_NS, 0.5, 0.0, SC_NS, false),
+               clk_161("clk_161", 6.206169, SC_NS, 0.5, 0.0, SC_NS, false),
                clk_312("clk_312", 3.2, SC_NS, 0.5, 0.0, SC_NS, false),
                iclock156("iclock156"), iclock161("iclock161"), iclock312("iclock312"), block_from_xgt4("block_from_xgt4"), header_from_xgt4("header_from_xgt4"),
                //block_to_xgt4("block_to_xgt4"), data_valid_xgt4("data_valid_xgt4"), header_to_xgt4("header_to_xgt4"),

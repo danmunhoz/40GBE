@@ -270,7 +270,7 @@ begin
 
           reset_in_pcs <= '0', '1' after 40 ns;
 
-          start_fifo <= '0', '1' after 65 ns;
+          start_fifo <= '0', '1' after 100 ns;
 
           -- read_fifo <= '0', '1' after 400 ns; -- original
           read_fifo <= '0', '1' after 600 ns;
@@ -278,32 +278,14 @@ begin
 
           valid_in <= '0', '1' after 127 ns;
 
-          -- rx_lane_skew_0 <= '0' , '1' after 10 ns;
-          -- rx_lane_skew_1 <= '0' , '1' after 10 ns;
-          -- rx_lane_skew_2 <= '0' , '1' after 10 ns;
-          -- rx_lane_skew_3 <= '0' , '1' after 10 ns;
-
-          -- Por enquanto...
-          lane_0_header_valid_in  <= valid_in;
-          lane_0_data_valid_in    <= valid_in;
-          lane_1_header_valid_in  <= valid_in;
-          lane_1_data_valid_in    <= valid_in;
-          lane_2_header_valid_in  <= valid_in;
-          lane_2_data_valid_in    <= valid_in;
-          lane_3_header_valid_in  <= valid_in;
-          lane_3_data_valid_in    <= valid_in;
-
-          -- lane_0_header_in <= rx_lane_0_header_in when rx_lane_skew_0 = '1' else (others=>'0');
-          -- lane_0_data_in   <= rx_lane_0_data_in when rx_lane_skew_0 = '1' else (others=>'0');
-          --
-          -- lane_1_header_in <= rx_lane_1_header_in when rx_lane_skew_1 = '1' else (others=>'0');
-          -- lane_1_data_in   <= rx_lane_1_data_in when rx_lane_skew_1 = '1' else (others=>'0');
-          --
-          -- lane_2_header_in <= rx_lane_2_header_in when rx_lane_skew_2 = '1' else (others=>'0');
-          -- lane_2_data_in   <= rx_lane_2_data_in when rx_lane_skew_2 = '1' else (others=>'0');
-          --
-          -- lane_3_header_in <= rx_lane_0_header_in when rx_lane_skew_0 = '1' else (others=>'0');
-          -- lane_3_data_in   <= rx_lane_0_data_in when rx_lane_skew_0 = '1' else (others=>'0');
+          lane_0_header_valid_in  <= rx_lane_0_header_valid_in;
+          lane_0_data_valid_in    <= rx_lane_0_data_valid_in;
+          lane_1_header_valid_in  <= rx_lane_1_header_valid_in;
+          lane_1_data_valid_in    <= rx_lane_1_data_valid_in;
+          lane_2_header_valid_in  <= rx_lane_2_header_valid_in;
+          lane_2_data_valid_in    <= rx_lane_2_data_valid_in;
+          lane_3_header_valid_in  <= rx_lane_3_header_valid_in;
+          lane_3_data_valid_in    <= rx_lane_3_data_valid_in;
 
           -- INST WRAPPER
           inst_wrapper_macpcs: wrapper_macpcs_rx port map(
