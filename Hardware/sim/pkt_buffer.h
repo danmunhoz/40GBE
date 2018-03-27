@@ -132,14 +132,8 @@ SC_MODULE(pkt_buffer) {
     static sc_lv<2 >  last_hdr_2;
     static sc_lv<64 > last_blk_3;
     static sc_lv<2 >  last_hdr_3;
-    // std::stringstream last_blk_0;
-    // std::stringstream last_hdr_0;
-    // std::stringstream last_blk_1;
-    // std::stringstream last_hdr_1;
-    // std::stringstream last_blk_2;
-    // std::stringstream last_hdr_2;
-    // std::stringstream last_blk_3;
-    // std::stringstream last_hdr_3;
+
+    static int c_counter = 0;
 
     static int first = 0;
     if (first == 0) {
@@ -158,17 +152,17 @@ SC_MODULE(pkt_buffer) {
     header_in_old = header_in;
 
    if ( block_in_old_o != block_in_lv) {
-     // Sem repeticao. Funcionamento normal...
-
+    // Sem repeticao. Funcionamento normal...
     // cout << "PCS TX BLOCO OK!!!!!!  -> " << block_in_lv << " != " << block_in_old << endl;
 
     // Formato da linha:
     // HEADER-DATA_BITS=VALID_BIT
     buffer << header_in << "-" << block_in << "=" << d_valid_in_wire;
     lane = block_counter % 4;
+    c_counter++;
+    cout << "Cycle counter: " << c_counter << endl;
 
     switch (lane) {
-
       case 0:
         lane0 << buffer.str() << endl;
         last_blk_0 = block_in;
@@ -201,70 +195,69 @@ SC_MODULE(pkt_buffer) {
         cout << "Wrong mode operation!" << endl;
 
       buffer.str("");
-
     }
 
     if( block_counter == PKTS_BTW_SYNC) {
-      /*
-      **  BIT INTERLEAVED PARITY
-      **  Each bit in the BIP field is an even parity calculation over all of
-      **  the previous specified bits of a given PCS Lane, from and including
-      **  the previous alignment marker, but not including the current alignment
-      **  marker.
-      */
-      /*
-      **  BIP BIT NUMBER  |   Assigned 66-bit word bits
-      **        0         |     2,10,18,26,34,42,50,58
-      **        1         |     3,11,19,27,35,43,51,59
-      **        2         |     4,12,20,28,36,44,52,60
-      **        3         |   0,5,13,21,29,37,45,53,61
-      **        4         |   1,6,14,22,30,38,46,54,62
-      **        5         |     7,15,23,31,39,47,55,63
-      **        6         |     8,16,24,32,40,48,56,64
-      **        7         |     9,17,25,33,41,49,57,65
-      */
-      /*
-      **  10-LOW PART OF AN ALIGNMENT BLOCK, BIP, HIGH PART OF AN ALIGNMENT BLOCK, NOT(BIP)
-      */
+        /*
+        **  BIT INTERLEAVED PARITY
+        **  Each bit in the BIP field is an even parity calculation over all of
+        **  the previous specified bits of a given PCS Lane, from and including
+        **  the previous alignment marker, but not including the current alignment
+        **  marker.
+        */
+        /*
+        **  BIP BIT NUMBER  |   Assigned 66-bit word bits
+        **        0         |     2,10,18,26,34,42,50,58
+        **        1         |     3,11,19,27,35,43,51,59
+        **        2         |     4,12,20,28,36,44,52,60
+        **        3         |   0,5,13,21,29,37,45,53,61
+        **        4         |   1,6,14,22,30,38,46,54,62
+        **        5         |     7,15,23,31,39,47,55,63
+        **        6         |     8,16,24,32,40,48,56,64
+        **        7         |     9,17,25,33,41,49,57,65
+        */
+        /*
+        **  10-LOW PART OF AN ALIGNMENT BLOCK, BIP, HIGH PART OF AN ALIGNMENT BLOCK, NOT(BIP)
+        */
 
-      lane0 << "10-" << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << "=1" << endl;
-      str_temp << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip;
-      blk_temp = str_temp.str().c_str();
-      hdr_temp = "10";
-      lane0_bip = "00000000";
-      bip_calculator (&lane0_bip, blk_temp, hdr_temp);
+        lane0 << "10-" << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << "=1" << endl;
+        str_temp << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip;
+        blk_temp = str_temp.str().c_str();
+        hdr_temp = "10";
+        lane0_bip = "00000000";
+        bip_calculator (&lane0_bip, blk_temp, hdr_temp);
 
-      lane1 << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << "=1" << endl;
-      str_temp << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane0_bip;
-      blk_temp = str_temp.str().c_str();
-      hdr_temp = "10";
-      lane1_bip = "00000000";
-      bip_calculator (&lane1_bip, blk_temp, hdr_temp);
+        lane1 << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << "=1" << endl;
+        str_temp << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane0_bip;
+        blk_temp = str_temp.str().c_str();
+        hdr_temp = "10";
+        lane1_bip = "00000000";
+        bip_calculator (&lane1_bip, blk_temp, hdr_temp);
 
-      lane2 << "10-" << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << "=1" << endl;
-      str_temp << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane0_bip;
-      blk_temp = str_temp.str().c_str();
-      hdr_temp = "10";
-      lane2_bip = "00000000";
-      bip_calculator (&lane2_bip, block_in_lv, hdr_temp);
+        lane2 << "10-" << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << "=1" << endl;
+        str_temp << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane0_bip;
+        blk_temp = str_temp.str().c_str();
+        hdr_temp = "10";
+        lane2_bip = "00000000";
+        bip_calculator (&lane2_bip, block_in_lv, hdr_temp);
 
-      lane3 << "10-" << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip  << "=1" << endl;
-      str_temp << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane0_bip;
-      blk_temp = str_temp.str().c_str();
-      hdr_temp = "10";
-      lane3_bip = "00000000";
-      bip_calculator (&lane3_bip, blk_temp, hdr_temp);
+        lane3 << "10-" << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip  << "=1" << endl;
+        str_temp << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane0_bip;
+        blk_temp = str_temp.str().c_str();
+        hdr_temp = "10";
+        lane3_bip = "00000000";
+        bip_calculator (&lane3_bip, blk_temp, hdr_temp);
 
-      block_counter = (block_counter % 4);
+        block_counter = (block_counter % 4);
       }
-    } else {
       // Ocorreu uma repetição!
-      lane0 << last_hdr_0 << '-' << last_blk_0 << "=0" << endl;
-      lane1 << last_hdr_1 << '-' << last_blk_1 << "=" << '0' << endl;
-      lane2 << last_hdr_2 << '-' << last_blk_2 << "=" << '0' << endl;
-      lane3 << last_hdr_3 << '-' << last_blk_3 << "=" << '0' << endl;
-
-      // cout << "PCS TX REPETIU BLOCO!!!!!!  -> " << block_in_lv << " = " << block_in_old << endl;
+      if (c_counter == 127) {
+        c_counter = 0;
+        lane0 << last_hdr_0 << '-' << last_blk_0 << "=0" << endl;
+        lane1 << last_hdr_1 << '-' << last_blk_1 << "=0" << endl;
+        lane2 << last_hdr_2 << '-' << last_blk_2 << "=0" << endl;
+        lane3 << last_hdr_3 << '-' << last_blk_3 << "=0" << endl;
+      }
     }
   }
 
