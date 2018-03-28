@@ -115,6 +115,7 @@ SC_MODULE(pkt_buffer) {
   void rx() {
     int lane = 0;
     std::stringstream buffer;
+    std::stringstream buffer_rep;
     std::stringstream str_temp;
     sc_lv<64 > blk_temp;
     sc_lv<2 >  hdr_temp;
@@ -133,7 +134,10 @@ SC_MODULE(pkt_buffer) {
     static sc_lv<64 > last_blk_3;
     static sc_lv<2 >  last_hdr_3;
 
-    static int c_counter = 0;
+    static int c_counter_0 = 0;
+    static int c_counter_1 = 0;
+    static int c_counter_2 = 0;
+    static int c_counter_3 = 0;
 
     static int first = 0;
     if (first == 0) {
@@ -151,23 +155,29 @@ SC_MODULE(pkt_buffer) {
     block_in_old = block_in;
     header_in_old = header_in;
 
-   if ( block_in_old_o != block_in_lv) {
+   if ( block_in_old_o != block_in_lv && data_valid_in == SC_LOGIC_1) {
     // Sem repeticao. Funcionamento normal...
     // cout << "PCS TX BLOCO OK!!!!!!  -> " << block_in_lv << " != " << block_in_old << endl;
 
     // Formato da linha:
     // HEADER-DATA_BITS=VALID_BIT
     buffer << header_in << "-" << block_in << "=" << d_valid_in_wire;
+    buffer_rep << header_in << "-" << block_in << "=" << '0';
     lane = block_counter % 4;
     // cout << "Cycle counter: " << c_counter << endl;
 
-    c_counter++;
+    // c_counter++;
     switch (lane) {
       case 0:
         lane0 << buffer.str() << endl;
         last_blk_0 = block_in;
         last_hdr_0 = header_in;
         block_counter++;
+        c_counter_0++;
+        if(c_counter_0 == 31) {
+          lane0 << buffer_rep.str() << endl;
+          c_counter_0 = 0;
+        }
         bip_calculator (&lane0_bip, block_in, header_in);
         break;
       case 1:
@@ -175,6 +185,11 @@ SC_MODULE(pkt_buffer) {
         last_blk_1 = block_in;
         last_hdr_1 = header_in;
         block_counter++;
+        c_counter_1++;
+        if (c_counter_1 == 31) {
+          lane1 << buffer_rep.str() << endl;
+          c_counter_1 = 0;
+        }
         bip_calculator (&lane1_bip, block_in, header_in);
         break;
       case 2:
@@ -182,6 +197,11 @@ SC_MODULE(pkt_buffer) {
         last_blk_2 = block_in;
         last_hdr_2 = header_in;
         block_counter++;
+        c_counter_2++;
+        if (c_counter_2 == 31) {
+          lane2 << buffer_rep.str() << endl;
+          c_counter_2 = 0;
+        }
         bip_calculator (&lane2_bip, block_in, header_in);
         break;
       case 3:
@@ -189,6 +209,11 @@ SC_MODULE(pkt_buffer) {
         last_blk_3 = block_in;
         last_hdr_3 = header_in;
         block_counter++;
+        c_counter_3++;
+        if (c_counter_3 == 31) {
+          lane3 << buffer_rep.str() << endl;
+          c_counter_3 = 0;
+        }
         bip_calculator (&lane3_bip, block_in, header_in);
         break;
       default:
@@ -251,14 +276,14 @@ SC_MODULE(pkt_buffer) {
         block_counter = (block_counter % 4);
       }
 
-      if (c_counter == 127) {
-        // Forçar uma repetição!
-        c_counter = 0;
-        lane0 << last_hdr_0 << '-' << last_blk_0 << "=0" << endl;
-        lane1 << last_hdr_1 << '-' << last_blk_1 << "=0" << endl;
-        lane2 << last_hdr_2 << '-' << last_blk_2 << "=0" << endl;
-        lane3 << last_hdr_3 << '-' << last_blk_3 << "=0" << endl;
-      }
+      // if (c_counter == 127) {
+      //   // Forçar uma repetição!
+      //   c_counter = 0;
+      //   lane0 << last_hdr_0 << '-' << last_blk_0 << "=0" << endl;
+      //   lane1 << last_hdr_1 << '-' << last_blk_1 << "=0" << endl;
+      //   lane2 << last_hdr_2 << '-' << last_blk_2 << "=0" << endl;
+      //   lane3 << last_hdr_3 << '-' << last_blk_3 << "=0" << endl;
+      // }
     }
   }
 
