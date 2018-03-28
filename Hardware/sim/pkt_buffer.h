@@ -151,8 +151,6 @@ SC_MODULE(pkt_buffer) {
     block_in_old = block_in;
     header_in_old = header_in;
 
-    c_counter++;
-    
    if ( block_in_old_o != block_in_lv) {
     // Sem repeticao. Funcionamento normal...
     // cout << "PCS TX BLOCO OK!!!!!!  -> " << block_in_lv << " != " << block_in_old << endl;
@@ -163,6 +161,7 @@ SC_MODULE(pkt_buffer) {
     lane = block_counter % 4;
     // cout << "Cycle counter: " << c_counter << endl;
 
+    c_counter++;
     switch (lane) {
       case 0:
         lane0 << buffer.str() << endl;
@@ -251,8 +250,9 @@ SC_MODULE(pkt_buffer) {
 
         block_counter = (block_counter % 4);
       }
-      // Ocorreu uma repetição!
+
       if (c_counter == 127) {
+        // Forçar uma repetição!
         c_counter = 0;
         lane0 << last_hdr_0 << '-' << last_blk_0 << "=0" << endl;
         lane1 << last_hdr_1 << '-' << last_blk_1 << "=0" << endl;
