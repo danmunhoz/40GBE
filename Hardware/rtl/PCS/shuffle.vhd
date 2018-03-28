@@ -20,7 +20,7 @@ use IEEE.std_logic_1164.all;
 
 entity switch is
   generic(
-  size : integer := 66 );
+  size : integer := 67 );
   port(
          a_in  : in  std_logic_vector (size-1 downto 0);
          b_in  : in  std_logic_vector (size-1 downto 0);
@@ -65,7 +65,7 @@ use IEEE.std_logic_1164.all;
 
 entity shuffle is
   generic(
-    size : integer := 66 );
+    size : integer := 67 );
   port(
         -- WHEN USING SYSTEMC TESTBENCH, GO WITH FIXED SIZE INTERFACE :(
         --  in_0   : in  std_logic_vector (size-1 downto 0);
@@ -76,14 +76,14 @@ entity shuffle is
         --  out_1  : out std_logic_vector (size-1 downto 0);
         --  out_2  : out std_logic_vector (size-1 downto 0);
         --  out_3  : out std_logic_vector (size-1 downto 0);
-         in_0   : in  std_logic_vector (65 downto 0);
-         in_1   : in  std_logic_vector (65 downto 0);
-         in_2   : in  std_logic_vector (65 downto 0);
-         in_3   : in  std_logic_vector (65 downto 0);
-         out_0  : out std_logic_vector (65 downto 0);
-         out_1  : out std_logic_vector (65 downto 0);
-         out_2  : out std_logic_vector (65 downto 0);
-         out_3  : out std_logic_vector (65 downto 0);
+         in_0   : in  std_logic_vector (66 downto 0);
+         in_1   : in  std_logic_vector (66 downto 0);
+         in_2   : in  std_logic_vector (66 downto 0);
+         in_3   : in  std_logic_vector (66 downto 0);
+         out_0  : out std_logic_vector (66 downto 0);
+         out_1  : out std_logic_vector (66 downto 0);
+         out_2  : out std_logic_vector (66 downto 0);
+         out_3  : out std_logic_vector (66 downto 0);
          lane_0 : in  std_logic_vector (1 downto 0);
          lane_1 : in  std_logic_vector (1 downto 0);
          lane_2 : in  std_logic_vector (1 downto 0);

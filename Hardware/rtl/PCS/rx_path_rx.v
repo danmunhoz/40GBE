@@ -65,14 +65,13 @@ module rx_path_rx (/*AUTOARG*/
                 clk156, lpbk, arstb, rx_jtm_en, rx_clk161,
                 rx_header_in, rx_data_in, rx_header_valid_in, rx_data_valid_in,
                 rx_old_header_in, rx_old_data_in, terminate_in, start_in,
-
-		        // Outputs
-		        ber_cnt, blk_lock, jtest_errc_out, errd_blks, hi_ber, rxlf,
-		        spill, xgmii_rxc, xgmii_rxd, linkstatus, rxgearboxslip_out,
-            terminate_out, start_out,
-            // Para uso do Testbench
-						start_fifo
-		        );
+    		        // Outputs
+    		        ber_cnt, blk_lock, jtest_errc_out, errd_blks, hi_ber, rxlf,
+    		        spill, xgmii_rxc, xgmii_rxd, linkstatus, rxgearboxslip_out,
+                terminate_out, start_out,
+                // Para uso do Testbench
+    						start_fifo
+    		        );
 
     input           bypass_66decoder;
     input           bypass_descram;
@@ -221,8 +220,6 @@ module rx_path_rx (/*AUTOARG*/
          .readen            (start_fifo),
          .wclk              (rx_clk161),
          .writen            (rx_data_valid_in),
-        //  .writen            (rx_data_valid_in & !is_reg_current_equal),
-         //  .writedata         (descram_data[65:0]),
          .writedata         (descram_data[65:0]),
          .rst               (!arstb)
          );

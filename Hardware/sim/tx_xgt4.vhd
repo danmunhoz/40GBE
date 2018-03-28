@@ -350,7 +350,7 @@ begin
     begin
 
 --CHANGE_PKT
-      for i in 0 to 100 loop
+      for i in 0 to 2000 loop
 --CHANGE_IPG
         wait for 8 ns;
         pkt_tx_start <= '1';

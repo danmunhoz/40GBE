@@ -6,14 +6,14 @@
 class shuffle : public sc_foreign_module
 {
 public:
-    sc_in<sc_lv<66> > in_0;
-    sc_in<sc_lv<66> > in_1;
-    sc_in<sc_lv<66> > in_2;
-    sc_in<sc_lv<66> > in_3;
-    sc_out<sc_lv<66> > out_0;
-    sc_out<sc_lv<66> > out_1;
-    sc_out<sc_lv<66> > out_2;
-    sc_out<sc_lv<66> > out_3;
+    sc_in<sc_lv<67> > in_0;
+    sc_in<sc_lv<67> > in_1;
+    sc_in<sc_lv<67> > in_2;
+    sc_in<sc_lv<67> > in_3;
+    sc_out<sc_lv<67> > out_0;
+    sc_out<sc_lv<67> > out_1;
+    sc_out<sc_lv<67> > out_2;
+    sc_out<sc_lv<67> > out_3;
     sc_in<sc_lv<2> > lane_0;
     sc_in<sc_lv<2> > lane_1;
     sc_in<sc_lv<2> > lane_2;

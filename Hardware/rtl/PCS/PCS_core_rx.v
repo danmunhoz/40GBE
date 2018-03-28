@@ -108,6 +108,7 @@ module PCS_core_rx  (  /*AUTOARG*/
 
     input [1:0]   rx_old_header_in;
     input [63:0]  rx_old_data_in;
+
     // Do we need extra valid_ins??
     input          terminate_in;
     wire           terminate_in;
