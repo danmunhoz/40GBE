@@ -174,7 +174,7 @@ SC_MODULE(pkt_buffer) {
         last_hdr_0 = header_in;
         block_counter++;
         c_counter_0++;
-        if(c_counter_0 == 31) {
+        if(c_counter_0 == 32) {
           lane0 << buffer_rep.str() << endl;
           c_counter_0 = 0;
         }
@@ -186,7 +186,7 @@ SC_MODULE(pkt_buffer) {
         last_hdr_1 = header_in;
         block_counter++;
         c_counter_1++;
-        if (c_counter_1 == 31) {
+        if (c_counter_1 == 32) {
           lane1 << buffer_rep.str() << endl;
           c_counter_1 = 0;
         }
@@ -198,7 +198,7 @@ SC_MODULE(pkt_buffer) {
         last_hdr_2 = header_in;
         block_counter++;
         c_counter_2++;
-        if (c_counter_2 == 31) {
+        if (c_counter_2 == 32) {
           lane2 << buffer_rep.str() << endl;
           c_counter_2 = 0;
         }
@@ -210,7 +210,7 @@ SC_MODULE(pkt_buffer) {
         last_hdr_3 = header_in;
         block_counter++;
         c_counter_3++;
-        if (c_counter_3 == 31) {
+        if (c_counter_3 == 32) {
           lane3 << buffer_rep.str() << endl;
           c_counter_3 = 0;
         }
