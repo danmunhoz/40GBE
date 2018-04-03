@@ -295,10 +295,10 @@ module wrapper_macpcs_rx(
     wire            fifo_reorder_empty_2;
     wire            fifo_reorder_empty_3;
 
-    wire            lane_0_valid_out;
-    wire            lane_1_valid_out;
-    wire            lane_2_valid_out;
-    wire            lane_3_valid_out;
+    wire            pcs_0_valid_out;
+    wire            pcs_1_valid_out;
+    wire            pcs_2_valid_out;
+    wire            pcs_3_valid_out;
 
     assign empty_fifo = fifo_interface_empty;
     assign full_fifo = fifo_interface_full;
@@ -370,7 +370,8 @@ module wrapper_macpcs_rx(
         old_header_0 <= 2'b01;
         old_data_0   <= 64'h0;
       end
-      else begin
+      else if (pcs_3_valid_out) begin
+        // Nao atualiza registrador com valores invalidos
         old_header_0 <= pcs_3_header_out[1:0];
         old_data_0   <= pcs_3_data_out[63:0];
       end
@@ -413,19 +414,19 @@ module wrapper_macpcs_rx(
       .lane_3_header_in  (rx_lane_3_header_in[1:0]),
       .lane_3_valid_in   (rx_lane_3_data_valid_in),
 
-      .pcs_0_valid_out  (lane_0_valid_out),
+      .pcs_0_valid_out  (pcs_0_valid_out),
       .pcs_0_header_out (pcs_0_header_out[1:0]),
       .pcs_0_data_out   (pcs_0_data_out[63:0]),
 
-      .pcs_1_valid_out  (lane_1_valid_out),
+      .pcs_1_valid_out  (pcs_1_valid_out),
       .pcs_1_header_out (pcs_1_header_out[1:0]),
       .pcs_1_data_out   (pcs_1_data_out[63:0]),
 
-      .pcs_2_valid_out  (lane_2_valid_out),
+      .pcs_2_valid_out  (pcs_2_valid_out),
       .pcs_2_header_out (pcs_2_header_out[1:0]),
       .pcs_2_data_out   (pcs_2_data_out[63:0]),
 
-      .pcs_3_valid_out  (lane_3_valid_out),
+      .pcs_3_valid_out  (pcs_3_valid_out),
       .pcs_3_header_out (pcs_3_header_out[1:0]),
       .pcs_3_data_out   (pcs_3_data_out[63:0]),
 
@@ -501,10 +502,8 @@ module wrapper_macpcs_rx(
         .jtm_dps_1          (jtm_dps_1),
         .seed_A             (seed_A),
         .seed_B             (seed_B),
-        .rx_header_valid_in (lane_0_valid_out),
-        .rx_data_valid_in   (lane_0_valid_out),
-        // .rx_header_in       (pcs_0_header_out[1:0]),
-        // .rx_data_in         (pcs_0_data_out[63:0]),
+        .rx_header_valid_in (pcs_0_valid_out),
+        .rx_data_valid_in   (pcs_0_valid_out),
         .rx_header_in       (pcs_0_header_out[1:0]),
         .rx_data_in         (pcs_0_data_out[63:0]),
         .hi_ber             (hi_ber_0),
@@ -528,8 +527,6 @@ module wrapper_macpcs_rx(
 
         .rx_old_header_in   (old_header_0),
         .rx_old_data_in     (old_data_0),
-        // .rx_old_header_in   (pcs_3_header_out[1:0]),
-        // .rx_old_data_in     (pcs_3_data_out[63:0]),
 
         .terminate_in       (terminate_in_0),
         .terminate_out      (terminate_out_0),
@@ -563,10 +560,8 @@ module wrapper_macpcs_rx(
         .jtm_dps_1          (jtm_dps_1),
         .seed_A             (seed_A),
         .seed_B             (seed_B),
-        .rx_header_valid_in (lane_1_valid_out),
-        .rx_data_valid_in   (lane_1_valid_out),
-        // .rx_header_in       (pcs_1_header_out[1:0]),
-        // .rx_data_in         (pcs_1_data_out[63:0]),
+        .rx_header_valid_in (pcs_1_valid_out),
+        .rx_data_valid_in   (pcs_1_valid_out),
         .rx_header_in       (pcs_1_header_out[1:0]),
         .rx_data_in         (pcs_1_data_out[63:0]),
         .hi_ber             (hi_ber_1),
@@ -623,10 +618,8 @@ module wrapper_macpcs_rx(
         .jtm_dps_1          (jtm_dps_1),
         .seed_A             (seed_A),
         .seed_B             (seed_B),
-        .rx_header_valid_in (lane_2_valid_out),
-        .rx_data_valid_in   (lane_2_valid_out),
-        // .rx_header_in       (pcs_2_header_out[1:0]),
-        // .rx_data_in         (pcs_2_data_out[63:0]),
+        .rx_header_valid_in (pcs_2_valid_out),
+        .rx_data_valid_in   (pcs_2_valid_out),
         .rx_header_in       (pcs_2_header_out[1:0]),
         .rx_data_in         (pcs_2_data_out[63:0]),
         .hi_ber             (hi_ber_2),
@@ -683,10 +676,8 @@ module wrapper_macpcs_rx(
         .jtm_dps_1          (jtm_dps_1),
         .seed_A             (seed_A),
         .seed_B             (seed_B),
-        .rx_header_valid_in (lane_3_valid_out),
-        .rx_data_valid_in   (lane_3_valid_out),
-        // .rx_header_in       (pcs_3_header_out[1:0]),
-        // .rx_data_in         (pcs_3_data_out[63:0]),
+        .rx_header_valid_in (pcs_3_valid_out),
+        .rx_data_valid_in   (pcs_3_valid_out),
         .rx_header_in       (pcs_3_header_out[1:0]),
         .rx_data_in         (pcs_3_data_out[63:0]),
         .hi_ber             (hi_ber_3),

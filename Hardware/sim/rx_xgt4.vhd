@@ -270,7 +270,7 @@ begin
 
           reset_in_pcs <= '0', '1' after 40 ns;
 
-          start_fifo <= '0', '1' after 100 ns;
+          start_fifo <= '0', '1' after 600 ns;
 
           -- read_fifo <= '0', '1' after 400 ns; -- original
           read_fifo <= '0', '1' after 600 ns;
