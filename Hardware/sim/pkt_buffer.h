@@ -13,8 +13,7 @@
 #include <fstream>
 #include <limits>
 
-//#define PKTS_BTW_SYNC 16383/lane = 65532
-// #define PKTS_BTW_SYNC 60
+// #define PKTS_BTW_SYNC 16383/lane = 65532
 #define PKTS_BTW_SYNC 65532
 
 /* SYNC_LANEx_LOW BIP SYNC_LANEx_HIGH BIP */
@@ -222,7 +221,8 @@ SC_MODULE(pkt_buffer) {
       buffer.str("");
     }
 
-    if( block_counter == PKTS_BTW_SYNC) {
+    if( block_counter == PKTS_BTW_SYNC && first == 1) {
+      first++;
         /*
         **  BIT INTERLEAVED PARITY
         **  Each bit in the BIP field is an even parity calculation over all of
