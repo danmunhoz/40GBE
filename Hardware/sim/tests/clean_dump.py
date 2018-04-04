@@ -115,7 +115,8 @@ if (x == 'tx'):
 
 if (x == 'hex'):
     n = y
-
+    cont=0
+    cont2=0
     string = "sc"
     string += str(n)
 
@@ -123,6 +124,8 @@ if (x == 'hex'):
 
     with open(string+'/cleaned_dump_tx.txt') as f1:
         for line in f1:
+            cont=cont+1
+            # print(cont)
             if (line != '\n'):
                 new_file.write(hex(int(line,2))+"\n")
 
@@ -134,5 +137,8 @@ if (x == 'hex'):
 
     with open(string+'/cleaned_dump_fifo.txt') as f1:
         for line in f1:
+            # if (cont2 < cont):
+            #     cont2=cont2+1
+            #     print(cont2)
             if (line != '\n'):
                 new_file2.write(hex(int(line,2))+"\n")
