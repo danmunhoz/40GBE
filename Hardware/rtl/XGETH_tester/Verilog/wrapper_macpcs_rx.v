@@ -57,7 +57,9 @@ module wrapper_macpcs_rx(
                         mac_data,
                         read_fifo,
                         empty_fifo,
-                        full_fifo
+                        full_fifo,
+                        fifo_almost_f,
+                        fifo_almost_e
                         );
     // Clocks
     input           clk_156;
@@ -247,6 +249,8 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) output [127:0] mac_data;
     (* syn_keep = "true"*) output empty_fifo;
     (* syn_keep = "true"*) output full_fifo;
+    (* syn_keep = "true"*) output fifo_almost_f;
+    (* syn_keep = "true"*) output fifo_almost_e;
 
     (* syn_keep = "true"*) wire [4:0] app_eop;
     (* syn_keep = "true"*) wire app_sop;
@@ -473,7 +477,9 @@ module wrapper_macpcs_rx(
         .mac_sop            (mac_sop),
         .mac_eop            (mac_eop),
         .fifo_full          (full_fifo),
-        .fifo_empty         (empty_fifo)
+        .fifo_empty         (empty_fifo),
+        .fifo_almost_f      (fifo_almost_f),
+        .fifo_almost_e      (fifo_almost_e)
    );
 
     PCS_core_rx INST_0_PCS_core

@@ -22,7 +22,9 @@ entity core_interface is
       mac_sop         : out std_logic;
       mac_eop         : out std_logic_vector(4 downto 0);
       fifo_full       : out std_logic;
-      fifo_empty       : out std_logic
+      fifo_empty      : out std_logic;
+      fifo_almost_f   : out std_logic;
+      fifo_almost_e   : out std_logic
     );
 end entity;
 
@@ -92,7 +94,9 @@ architecture behav_core_interface of core_interface is
           wen          => fifo_wen,
           ren          => ren,
           empty        => fifo_empty,
-          full         => fifo_full
+          full         => fifo_full,
+          almost_f     => fifo_almost_f,
+          almost_e     => fifo_almost_e
     );
 
 end behav_core_interface;

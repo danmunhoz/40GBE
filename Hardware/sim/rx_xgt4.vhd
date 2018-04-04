@@ -137,8 +137,12 @@ architecture behav of rx_xgt4 is
 
     signal fifo_saida_empty : std_logic;
     signal fifo_saida_full : std_logic;
+    signal fifo_saida_almost_f : std_logic;
+    signal fifo_saida_almost_e : std_logic;
 
-    signal read_as_mac : std_logic;
+    signal read_as_mac  : std_logic;
+    signal pause_read   : std_logic;
+    signal mac_eop_wire : std_logic_vector(4 downto 0);
 
     -- signal rx_lane_skew_0 : std_logic;
     -- signal rx_lane_skew_1 : std_logic;
@@ -163,6 +167,7 @@ architecture behav of rx_xgt4 is
 
           start_fifo          : in std_logic;
           read_fifo           : in std_logic;
+
           dump_xgmii_rxc_0    : out std_logic_vector(7 downto 0);
           dump_xgmii_rxd_0    : out std_logic_vector(63 downto 0);
           dump_xgmii_rxc_1    : out std_logic_vector(7 downto 0);
@@ -236,6 +241,8 @@ architecture behav of rx_xgt4 is
           mac_eop             : out std_logic_vector(4 downto 0);
           empty_fifo          : out std_logic;
           full_fifo           : out std_logic;
+          fifo_almost_f       : out std_logic;
+          fifo_almost_e       : out std_logic;
 
           -- Wishbone (MAC)
           wb_adr_i            : in  std_logic_vector(7 downto 0);
@@ -268,13 +275,33 @@ begin
           clk_161 <= clock_in161;
           clk_312 <= clock_in312;
 
+          mac_eop <= mac_eop_wire;
+
           reset_in_pcs <= '0', '1' after 40 ns;
 
           start_fifo <= '0', '1' after 600 ns;
 
           -- read_fifo <= '0', '1' after 400 ns; -- original
           read_fifo <= '0', '1' after 600 ns;
-          read_as_mac <= read_fifo when fifo_saida_empty = '0' else '0';
+
+          -- read_as_mac <= read_fifo when fifo_saida_empty = '0' else '0';
+          read_as_mac <= '1' when pause_read = '0' else '0';
+
+          fake_consumer: process(reset_in_pcs, clk_312)
+          begin
+            if reset_in_pcs = '0' then
+                pause_read <= '0';
+            elsif clk_312'event and clk_312 = '1' then
+              if fifo_saida_almost_e = '1' then
+                if mac_eop_wire /= "00000" then
+                  pause_read <= '1';
+                end if;
+              else
+                pause_read <= '0';
+              end if;
+
+            end if;
+          end process;
 
           valid_in <= '0', '1' after 127 ns;
 
@@ -340,9 +367,11 @@ begin
             read_fifo                    => read_as_mac,
             empty_fifo                   => fifo_saida_empty,
             full_fifo                    => fifo_saida_full,
+            fifo_almost_f                => fifo_saida_almost_f,
+            fifo_almost_e                => fifo_saida_almost_e,
             mac_sop                      => mac_sop,
             mac_data                     => mac_data,
-            mac_eop                      => mac_eop,
+            mac_eop                      => mac_eop_wire,
 
             -- PCS OUT
             tx_data_out        => tx_data_out,

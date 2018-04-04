@@ -340,7 +340,7 @@ begin
         payload_type        => "000",
         --payload_cycles      => (others=>'0'),
 --CHANGE_PAYLOAD
-        payload_cycles      => x"0000001E",
+        payload_cycles      => x"0000000E",
         payload_last_size   => (others=>'0'),
         -- payload_last_size   => "0001000",
         pkt_lost_counter    => open

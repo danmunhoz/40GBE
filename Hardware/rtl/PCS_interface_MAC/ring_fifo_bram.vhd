@@ -27,7 +27,9 @@ entity ring_fifo_bram is
     wen        : in  std_logic;
 		ren	       : in  std_logic;
 		empty	     : out std_logic;
-		full	     : out std_logic
+		full	     : out std_logic;
+    almost_f   : out std_logic;
+    almost_e   : out std_logic
 	);
 end ring_fifo_bram;
 
@@ -93,8 +95,22 @@ architecture behav of ring_fifo_bram is
   signal empty_h_1 : std_logic;
   signal full_h_1  : std_logic;
 
+  signal a_empty_l_0 : std_logic;
+  signal a_full_l_0  : std_logic;
+  signal a_empty_h_0 : std_logic;
+  signal a_full_h_0  : std_logic;
+  signal a_empty_l_1 : std_logic;
+  signal a_full_l_1  : std_logic;
+  signal a_empty_h_1 : std_logic;
+  signal a_full_h_1  : std_logic;
+
 begin
   rst <= not rst_n;
+
+  almost_e <= '1' when a_empty_h_0 = '1' or a_empty_h_1 = '1' else '0';
+
+  almost_f <= '1' when a_full_h_0 = '1' or a_full_l_0 = '1' or
+                       a_full_l_1 = '1' or a_full_h_1 = '1' else '0';
 
   regs : process (clk_w,rst_n)
   begin
@@ -147,14 +163,14 @@ begin
   FIFO_inst_l_0 : FIFO_DUALCLOCK_MACRO
     generic map (
       DEVICE => "7SERIES",              -- Target Device: "VIRTEX5", "VIRTEX6", "7SERIES"
-      ALMOST_FULL_OFFSET => X"0080",    -- Sets almost full threshold
-      ALMOST_EMPTY_OFFSET => X"0080",   -- Sets the almost empty threshold
+      ALMOST_FULL_OFFSET => X"0005",    -- Sets almost full threshold
+      ALMOST_EMPTY_OFFSET => X"0005",   -- Sets the almost empty threshold
       DATA_WIDTH => 64,                 -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
       FIFO_SIZE => "36Kb",              -- Target BRAM, "18Kb" or "36Kb"
       FIRST_WORD_FALL_THROUGH => FALSE) -- Sets the FIFO FWFT to TRUE or FALSE
     port map (
-      ALMOSTEMPTY => open,              -- 1-bit output almost empty
-      ALMOSTFULL => open,               -- 1-bit output almost full
+      ALMOSTEMPTY => a_empty_l_0,       -- 1-bit output almost empty
+      ALMOSTFULL => a_full_l_0,         -- 1-bit output almost full
       DO => mem_low_out_0,              -- Output data, width defined by DATA_WIDTH parameter
       EMPTY => empty_l_0,               -- 1-bit output empty
       FULL =>  full_l_0,                -- 1-bit output full
@@ -173,14 +189,14 @@ begin
     FIFO_inst_l_1 : FIFO_DUALCLOCK_MACRO
       generic map (
         DEVICE => "7SERIES",
-        ALMOST_FULL_OFFSET => X"0080",
-        ALMOST_EMPTY_OFFSET => X"0080",
+        ALMOST_FULL_OFFSET => X"0005",
+        ALMOST_EMPTY_OFFSET => X"0005",
         DATA_WIDTH => 72,
         FIFO_SIZE => "36Kb",
         FIRST_WORD_FALL_THROUGH => FALSE)
       port map (
-        ALMOSTEMPTY => open,
-        ALMOSTFULL => open,
+        ALMOSTEMPTY => a_empty_l_1,
+        ALMOSTFULL => a_full_l_1,
         DO => mem_low_out_1,
         EMPTY => empty_l_1,
         FULL =>  full_l_1,
@@ -199,14 +215,14 @@ begin
     FIFO_inst_h_0 : FIFO_DUALCLOCK_MACRO
       generic map (
         DEVICE => "7SERIES",
-        ALMOST_FULL_OFFSET => X"0080",
-        ALMOST_EMPTY_OFFSET => X"0080",
+        ALMOST_FULL_OFFSET => X"0005",
+        ALMOST_EMPTY_OFFSET => X"0005",
         DATA_WIDTH => 64,
         FIFO_SIZE => "36Kb",
         FIRST_WORD_FALL_THROUGH => FALSE)
       port map (
-        ALMOSTEMPTY => open,
-        ALMOSTFULL => open,
+        ALMOSTEMPTY => a_empty_h_0,
+        ALMOSTFULL => a_full_h_0,
         DO => mem_high_out_0,
         EMPTY => empty_h_0,
         FULL =>  full_h_0,
@@ -226,14 +242,14 @@ begin
     FIFO_inst_h_1 : FIFO_DUALCLOCK_MACRO
       generic map (
         DEVICE => "7SERIES",
-        ALMOST_FULL_OFFSET => X"0080",
-        ALMOST_EMPTY_OFFSET => X"0080",
+        ALMOST_FULL_OFFSET => X"0005",
+        ALMOST_EMPTY_OFFSET => X"0005",
         DATA_WIDTH => 72,
         FIFO_SIZE => "36Kb",
         FIRST_WORD_FALL_THROUGH => FALSE)
       port map (
-        ALMOSTEMPTY => open,
-        ALMOSTFULL => open,
+        ALMOSTEMPTY => a_empty_h_1,
+        ALMOSTFULL => a_full_h_1,
         DO => mem_high_out_1,
         EMPTY => empty_h_1,
         FULL =>  full_h_1,
@@ -291,7 +307,11 @@ begin
           is_sop_out <= '0';
         end if;
         rr <= not rr;
+      else
+        ren_int_l <= '0';
+        ren_int_h <= '0';
       end if;
+
     end if;
   end process;
 
