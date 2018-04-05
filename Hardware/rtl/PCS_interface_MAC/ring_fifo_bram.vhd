@@ -104,6 +104,20 @@ architecture behav of ring_fifo_bram is
   signal a_empty_h_1 : std_logic;
   signal a_full_h_1  : std_logic;
 
+  -- debug
+  signal high_in_o    :std_logic_vector (63 downto 0);
+  signal high_in_1    :std_logic_vector (63 downto 0);
+  signal low_in_o     :std_logic_vector (63 downto 0);
+  signal low_in_1     :std_logic_vector (63 downto 0);
+
+  signal r_high_in_o    :std_logic_vector (63 downto 0);
+  signal r_high_in_1    :std_logic_vector (63 downto 0);
+  signal r_low_in_o     :std_logic_vector (63 downto 0);
+  signal r_low_in_1     :std_logic_vector (63 downto 0);
+
+  signal DO_L_1         :std_logic_vector (63 downto 0);
+  signal DO_H_1         :std_logic_vector (63 downto 0);
+
 begin
   rst <= not rst_n;
 
@@ -159,6 +173,19 @@ begin
   --                 mem_high_out_1(5 downto 1);
 
   -- is_sop_out <= mem_high_out_1(0) when rr = '0' else '0';
+
+  high_in_o  <=  mem_high_in_0;
+  high_in_1  <=  mem_high_in_1(69 downto 6);
+  low_in_o   <=  mem_low_in_0;
+  low_in_1   <=  mem_low_in_1(69 downto 6);
+
+  r_high_in_o <=  mem_high_in_0_reg;
+  r_high_in_1 <=  mem_high_in_1_reg(69 downto 6);
+  r_low_in_o  <=  mem_low_in_0_reg;
+  r_low_in_1  <=  mem_low_in_1_reg(69 downto 6);
+
+  DO_L_1 <=   mem_low_out_1(69 downto 6);
+  DO_H_1 <=   mem_high_out_1(69 downto 6);
 
   FIFO_inst_l_0 : FIFO_DUALCLOCK_MACRO
     generic map (
@@ -293,15 +320,19 @@ begin
       if ren = '1' then              -- Does not check if empty, will underwrite
         if rr = '0' then
           r_ptr_l <= r_ptr_l + 1;
-          ren_int_l <= '1';
-          ren_int_h <= '0';
+          -- ren_int_l <= '1';
+          ren_int_l <= '0';
+          -- ren_int_h <= '0';
+          ren_int_h <= '1';
           data_out <= mem_low_out_1(69 downto 6) & mem_low_out_0;
           eop_addr_out <= mem_low_out_1(5 downto 1);
           is_sop_out <= mem_low_out_1(0);
         else
           r_ptr_h <= r_ptr_h + 1;
-          ren_int_h <= '1';
-          ren_int_l <= '0';
+          -- ren_int_h <= '1';
+          -- ren_int_l <= '0';
+          ren_int_h <= '0';
+          ren_int_l <= '1';
           data_out <= mem_high_out_1(69 downto 6) & mem_high_out_0;
           eop_addr_out <= mem_high_out_1(5 downto 1);
           is_sop_out <= '0';
