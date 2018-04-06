@@ -190,8 +190,8 @@ begin
   FIFO_inst_l_0 : FIFO_DUALCLOCK_MACRO
     generic map (
       DEVICE => "7SERIES",              -- Target Device: "VIRTEX5", "VIRTEX6", "7SERIES"
-      ALMOST_FULL_OFFSET => X"0005",    -- Sets almost full threshold
-      ALMOST_EMPTY_OFFSET => X"0005",   -- Sets the almost empty threshold
+      ALMOST_FULL_OFFSET => X"0064",    -- Sets almost full threshold
+      ALMOST_EMPTY_OFFSET => X"0064",   -- Sets the almost empty threshold
       DATA_WIDTH => 64,                 -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
       FIFO_SIZE => "36Kb",              -- Target BRAM, "18Kb" or "36Kb"
       FIRST_WORD_FALL_THROUGH => FALSE) -- Sets the FIFO FWFT to TRUE or FALSE
@@ -216,8 +216,8 @@ begin
     FIFO_inst_l_1 : FIFO_DUALCLOCK_MACRO
       generic map (
         DEVICE => "7SERIES",
-        ALMOST_FULL_OFFSET => X"0005",
-        ALMOST_EMPTY_OFFSET => X"0005",
+        ALMOST_FULL_OFFSET => X"0064",
+        ALMOST_EMPTY_OFFSET => X"0064",
         DATA_WIDTH => 72,
         FIFO_SIZE => "36Kb",
         FIRST_WORD_FALL_THROUGH => FALSE)
@@ -242,8 +242,8 @@ begin
     FIFO_inst_h_0 : FIFO_DUALCLOCK_MACRO
       generic map (
         DEVICE => "7SERIES",
-        ALMOST_FULL_OFFSET => X"0005",
-        ALMOST_EMPTY_OFFSET => X"0005",
+        ALMOST_FULL_OFFSET => X"0064",
+        ALMOST_EMPTY_OFFSET => X"0064",
         DATA_WIDTH => 64,
         FIFO_SIZE => "36Kb",
         FIRST_WORD_FALL_THROUGH => FALSE)
@@ -269,8 +269,8 @@ begin
     FIFO_inst_h_1 : FIFO_DUALCLOCK_MACRO
       generic map (
         DEVICE => "7SERIES",
-        ALMOST_FULL_OFFSET => X"0005",
-        ALMOST_EMPTY_OFFSET => X"0005",
+        ALMOST_FULL_OFFSET => X"0064",
+        ALMOST_EMPTY_OFFSET => X"0064",
         DATA_WIDTH => 72,
         FIFO_SIZE => "36Kb",
         FIRST_WORD_FALL_THROUGH => FALSE)
