@@ -1137,8 +1137,14 @@ add wave -noupdate -group {SINAIS PARA LISTA} /Top/rx_xgt4/inst_wrapper_macpcs/I
 add wave -noupdate -group {SINAIS PARA LISTA} /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/rd_count
 add wave -noupdate -group {SINAIS PARA LISTA} /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/w_ptr
 add wave -noupdate -group {SINAIS PARA LISTA} /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/r_ptr_h
+add wave -noupdate /Top/dump_output/clock_in
+add wave -noupdate /Top/dump_output/reset_n
+add wave -noupdate /Top/dump_output/mac_data
+add wave -noupdate /Top/dump_output/mac_sop
+add wave -noupdate /Top/dump_output/mac_eop
+add wave -noupdate /Top/dump_output/mac_val
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{falta blobo 07 no PCS0} {2038400 ps} 1} {{pkt 42 codificado em erro} {10550400 ps} 1} {{entrada em data_in (pkt_id=43)} {3024000 ps} 1} {{Cursor 4} {952621 ps} 0}
+WaveRestoreCursors {{falta blobo 07 no PCS0} {2038400 ps} 1} {{pkt 42 codificado em erro} {10550400 ps} 1} {{entrada em data_in (pkt_id=43)} {3024000 ps} 1} {{Cursor 4} {29960406 ps} 0}
 quietly wave cursor active 4
 configure wave -namecolwidth 653
 configure wave -valuecolwidth 159
@@ -1155,9 +1161,9 @@ configure wave -timeline 0
 configure wave -timelineunits ns
 update
 WaveRestoreZoom {29956745 ps} {30002277 ps}
-bookmark add wave bookmark5 {{770754 ps} {811500 ps}} 13
-bookmark add wave bookmark6 {{780000 ps} {800000 ps}} 8
-bookmark add wave bookmark7 {{0 ps} {42010 ps}} 0
-bookmark add wave bookmark8 {{201305 ps} {266263 ps}} 7
-bookmark add wave bookmark9 {{728057 ps} {794311 ps}} 6
-bookmark add wave bookmark10 {{1931987 ps} {1965959 ps}} 9
+bookmark add wave bookmark40 {{201305 ps} {266263 ps}} 7
+bookmark add wave bookmark41 {{728057 ps} {794311 ps}} 6
+bookmark add wave bookmark42 {{1931987 ps} {1965959 ps}} 9
+bookmark add wave bookmark43 {{770754 ps} {811500 ps}} 13
+bookmark add wave bookmark44 {{780000 ps} {800000 ps}} 8
+bookmark add wave bookmark45 {{0 ps} {42010 ps}} 0

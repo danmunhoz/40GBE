@@ -19,6 +19,7 @@ public:
   sc_in<sc_logic>   reset_n;
   sc_in<sc_lv<128> > mac_data;
   sc_in<sc_logic > mac_sop;
+  sc_in<sc_logic > mac_val;
   sc_in<sc_lv<5> > mac_eop;
 
   ofstream dump_file;
@@ -47,7 +48,9 @@ public:
 inline void dump_output::dump() {
   if(reset_n == SC_LOGIC_1) {
     if(dump_file.is_open()) {
-      dump_file << mac_sop << "-" << mac_eop << "-" << mac_data << endl;
+      if(mac_val == SC_LOGIC_1) {
+        dump_file << mac_sop << "-" << mac_eop << "-" << mac_data << endl;
+      }
     }
   }
 }

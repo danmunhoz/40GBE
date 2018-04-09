@@ -107,8 +107,8 @@ SC_MODULE(Top) {
   // sinais de saida da FIFO
   sc_signal<sc_lv<128> > mac_data;
   sc_signal<sc_logic> mac_sop;
+  sc_signal<sc_logic> mac_val;
   sc_signal<sc_lv<5> > mac_eop;
-
 
   tx_xgt4      * tx_xgt4_inst;
   rx_xgt4      * rx_xgt4_inst;
@@ -212,6 +212,7 @@ SC_MODULE(Top) {
     rx_xgt4_inst->mac_data(mac_data);
     rx_xgt4_inst->mac_sop(mac_sop);
     rx_xgt4_inst->mac_eop(mac_eop);
+    rx_xgt4_inst->mac_val(mac_val);
 
     // output dumped to file for comparison
     dump_output_inst->clock_in(iclock312);
@@ -219,6 +220,7 @@ SC_MODULE(Top) {
     dump_output_inst->mac_data(mac_data);
     dump_output_inst->mac_sop(mac_sop);
     dump_output_inst->mac_eop(mac_eop);
+    dump_output_inst->mac_val(mac_val);
 
     scoreboard_inst->clock_in156(iclock156);
 
