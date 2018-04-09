@@ -34,8 +34,8 @@ python config.py skew
 cd ..
 module load modelsim
 cd tests
-# ###############################################
-# ## SC1 ########################################
+###############################################
+## SC1 ########################################
 # ./cleaner.sh 1
 #
 # python config.py sc1
@@ -54,6 +54,9 @@ cd tests
 # python clean_dump.py fifo 1
 # python clean_dump.py hex 1
 # python comparador.py 1
+# cd sc1
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
 # ###############################################
 # ## SC2 ########################################
 # ./cleaner.sh 2
@@ -74,8 +77,11 @@ cd tests
 # python clean_dump.py fifo 2
 # python clean_dump.py hex 2
 # python comparador.py 2
-# # # # #############################################
-# # # # SC3 ########################################
+# cd sc2
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
+# # # #############################################
+# # # SC3 ########################################
 ./cleaner.sh 3
 
 python config.py sc3
@@ -94,6 +100,9 @@ python clean_dump.py tx 3
 python clean_dump.py fifo 3
 python clean_dump.py hex 3
 python comparador.py 3
+cd sc3
+diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+cd ..
 # # ##############################################
 # # # SC4 ########################################
 # ./cleaner.sh 4
@@ -114,6 +123,9 @@ python comparador.py 3
 # python clean_dump.py fifo 4
 # python clean_dump.py hex 4
 # python comparador.py 4
+# cd sc4
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
 # # # ###############################################
 # # # ## SC5 ########################################
 # ./cleaner.sh 5
@@ -134,6 +146,9 @@ python comparador.py 3
 # python clean_dump.py fifo 5
 # python clean_dump.py hex 5
 # python comparador.py 5
+# cd sc5
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
 # # # ###############################################
 # # # ## SC6 ########################################
 # ./cleaner.sh 6
@@ -154,6 +169,9 @@ python comparador.py 3
 # python clean_dump.py fifo 6
 # python clean_dump.py hex 6
 # python comparador.py 6
+# cd sc6
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
 # # # ###############################################
 # # # ## SC7 ########################################
 # ./cleaner.sh 7
@@ -174,6 +192,9 @@ python comparador.py 3
 # python clean_dump.py fifo 7
 # python clean_dump.py hex 7
 # python comparador.py 7
+# cd sc7
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
 # # # ###############################################
 # # # ## SC8 ########################################
 # ./cleaner.sh 8
@@ -194,6 +215,9 @@ python comparador.py 3
 # python clean_dump.py fifo 8
 # python clean_dump.py hex 8
 # python comparador.py 8
+# cd sc8
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
 # # ###############################################
 # # ## ALTERA O IPG ###############################
 # #
@@ -219,6 +243,9 @@ python comparador.py 3
 # python clean_dump.py fifo 9
 # python clean_dump.py hex 9
 # python comparador.py 9
+# cd sc9
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
 # # ###############################################
 # # ## SC10 #######################################
 # ./cleaner.sh 10
@@ -239,26 +266,32 @@ python comparador.py 3
 # python clean_dump.py fifo 10
 # python clean_dump.py hex 10
 # python comparador.py 10
+# cd sc10
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
 # # ###############################################
 # # ## SC11 #######################################
-./cleaner.sh 11
-
-python config.py sc11
-cd ..
-vsim -do run.do -c
-cd tests
-python config.py mts11
-
-python config.py mt11
-python config.py sc3
-cd ..
-vsim -do run.do -c
-cd tests
-python config.py mo11
-python clean_dump.py tx 11
-python clean_dump.py fifo 11
-python clean_dump.py hex 11
-python comparador.py 11
+# ./cleaner.sh 11
+#
+# python config.py sc11
+# cd ..
+# vsim -do run.do -c
+# cd tests
+# python config.py mts11
+#
+# python config.py mt11
+# python config.py sc3
+# cd ..
+# vsim -do run.do -c
+# cd tests
+# python config.py mo11
+# python clean_dump.py tx 11
+# python clean_dump.py fifo 11
+# python clean_dump.py hex 11
+# python comparador.py 11
+# cd sc11
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
 # # ###############################################
 # # ## SC12 #######################################
 # ./cleaner.sh 12
@@ -279,6 +312,9 @@ python comparador.py 11
 # python clean_dump.py fifo 12
 # python clean_dump.py hex 12
 # python comparador.py 12
+# cd sc12
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
 # # ###############################################
 # # ## SC13 #######################################
 # ./cleaner.sh 13
@@ -299,6 +335,9 @@ python comparador.py 11
 # python clean_dump.py fifo 13
 # python clean_dump.py hex 13
 # python comparador.py 13
+# cd sc13
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
 # # ###############################################
 # # ## SC14 #######################################
 # ./cleaner.sh 14
@@ -319,6 +358,9 @@ python comparador.py 11
 # python clean_dump.py fifo 14
 # python clean_dump.py hex 14
 # python comparador.py 14
+# cd sc14
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
 # # ###############################################
 # # ## SC15 #######################################
 # ./cleaner.sh 15
@@ -339,6 +381,9 @@ python comparador.py 11
 # python clean_dump.py fifo 15
 # python clean_dump.py hex 15
 # python comparador.py 15
+# cd sc15
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
 # # ###############################################
 # # ## SC16 #######################################
 # ./cleaner.sh 16
@@ -359,3 +404,6 @@ python comparador.py 11
 # python clean_dump.py fifo 16
 # python clean_dump.py hex 16
 # python comparador.py 16
+# cd sc16
+# diff -y cleaned_dump_txhex.txt cleaned_dump_fifohex.txt > diff.txt
+# cd ..
