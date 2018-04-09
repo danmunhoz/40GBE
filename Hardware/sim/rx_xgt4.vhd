@@ -59,6 +59,7 @@ entity rx_xgt4 is
 
       mac_data : out std_logic_vector(127 downto 0);
       mac_sop  : out std_logic;
+      mac_val  : out std_logic;
       mac_eop  : out std_logic_vector(4 downto 0)
 
       );
@@ -239,6 +240,7 @@ architecture behav of rx_xgt4 is
           mac_sop             : out std_logic;
           mac_data            : out std_logic_vector(127 downto 0);
           mac_eop             : out std_logic_vector(4 downto 0);
+          mac_val             : out std_logic;
           empty_fifo          : out std_logic;
           full_fifo           : out std_logic;
           fifo_almost_f       : out std_logic;
@@ -371,6 +373,7 @@ begin
             fifo_almost_e                => fifo_saida_almost_e,
             mac_sop                      => mac_sop,
             mac_data                     => mac_data,
+            mac_val                      => mac_val,
             mac_eop                      => mac_eop_wire,
 
             -- PCS OUT

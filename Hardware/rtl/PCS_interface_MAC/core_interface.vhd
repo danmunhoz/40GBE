@@ -21,6 +21,7 @@ entity core_interface is
       mac_data        : out std_logic_vector(127 downto 0);
       mac_sop         : out std_logic;
       mac_eop         : out std_logic_vector(4 downto 0);
+      mac_val         : out std_logic;
       fifo_full       : out std_logic;
       fifo_empty      : out std_logic;
       fifo_almost_f   : out std_logic;
@@ -89,6 +90,7 @@ architecture behav_core_interface of core_interface is
           is_sop_in    => is_sop_control,
           eop_addr_in  => eop_addr,
           data_out     => mac_data,
+          data_val     => mac_val,
           is_sop_out   => mac_sop,
           eop_addr_out => mac_eop,
           wen          => fifo_wen,

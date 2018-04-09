@@ -55,6 +55,7 @@ module wrapper_macpcs_rx(
                         mac_eop,
                         mac_sop,
                         mac_data,
+                        mac_val,
                         read_fifo,
                         empty_fifo,
                         full_fifo,
@@ -246,6 +247,7 @@ module wrapper_macpcs_rx(
 
     (* syn_keep = "true"*) output [4:0] mac_eop;
     (* syn_keep = "true"*) output mac_sop;
+    (* syn_keep = "true"*) output mac_val;
     (* syn_keep = "true"*) output [127:0] mac_data;
     (* syn_keep = "true"*) output empty_fifo;
     (* syn_keep = "true"*) output full_fifo;
@@ -476,6 +478,7 @@ module wrapper_macpcs_rx(
         .mac_data           (mac_data),
         .mac_sop            (mac_sop),
         .mac_eop            (mac_eop),
+        .mac_val            (mac_val),
         .fifo_full          (full_fifo),
         .fifo_empty         (empty_fifo),
         .fifo_almost_f      (fifo_almost_f),

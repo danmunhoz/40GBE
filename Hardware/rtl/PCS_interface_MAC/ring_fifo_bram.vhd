@@ -20,6 +20,7 @@ entity ring_fifo_bram is
 		rst_n	     : in  std_logic;
     data_in	   : in  std_logic_vector (WIDTH-1 downto 0);
     data_out   : out std_logic_vector (WIDTH/2-1 downto 0);
+    data_val   : out std_logic;
     is_sop_in  : in  std_logic;
     eop_addr_in: in  std_logic_vector(5 downto 0);
     is_sop_out : out  std_logic;
@@ -63,11 +64,11 @@ architecture behav of ring_fifo_bram is
   signal r_ptr_l : std_logic_vector(N-1 downto 0);
   signal r_ptr_h : std_logic_vector(N-1 downto 0);
   signal rr      : std_logic;         -- Round Robbin between fifos when reading
+  signal data_val_w : std_logic;
 
   signal ren_int_l : std_logic;            -- Controls the reading from low fifo
   signal ren_int_h : std_logic;           -- Controls the reading from high fifo
 
-  -- signal last_op : std_logic; -- 1 - last operation = write / 0 - last operation = read
   signal last_w  : std_logic; -- A write happened last cycle
   signal last_r  : std_logic; -- A read happened last cycle
 
@@ -144,9 +145,11 @@ begin
   end process;
 
   wen_bram <= wen or wen_reg;
+  data_val <= data_val_w;
 
   empty <= empty_l_0 or empty_h_0 or empty_l_1 or empty_h_1;
   full <= full_h_1 or full_l_1 or full_h_0 or full_l_0;
+
 
   -- Keeping EOP/SOP stuff with the *_1 BRAMs
   -- bram <= data_in & EOP_FLAG & EOP_ADDR & SOP_FLAG
@@ -167,12 +170,6 @@ begin
   mem_high_in_1 <= "00" & data_in(255 downto 192) & '1' & eop_addr_in(3 downto 0) & '0' when eop_addr_in(5 downto 4) = "01" else
   --               Valid high EOP and no SOP/no SOP
                    "00" & data_in(255 downto 192) & "000000";
-
-
-  -- eop_addr_out <= mem_low_out_1(4 downto 0) when rr = '0' else
-  --                 mem_high_out_1(5 downto 1);
-
-  -- is_sop_out <= mem_high_out_1(0) when rr = '0' else '0';
 
   high_in_o  <=  mem_high_in_0;
   high_in_1  <=  mem_high_in_1(69 downto 6);
@@ -316,21 +313,19 @@ begin
       r_ptr_l  <= (others=>'0');
       r_ptr_h  <= (others=>'0');
       rr <= '0';
+      data_val_w <= '0';
     elsif clk_r'event and clk_r = '1' then
       if ren = '1' then              -- Does not check if empty, will underwrite
+        data_val_w <= '1';
         if rr = '0' then
           r_ptr_l <= r_ptr_l + 1;
-          -- ren_int_l <= '1';
           ren_int_l <= '0';
-          -- ren_int_h <= '0';
           ren_int_h <= '1';
           data_out <= mem_low_out_1(69 downto 6) & mem_low_out_0;
           eop_addr_out <= mem_low_out_1(5 downto 1);
           is_sop_out <= mem_low_out_1(0);
         else
           r_ptr_h <= r_ptr_h + 1;
-          -- ren_int_h <= '1';
-          -- ren_int_l <= '0';
           ren_int_h <= '0';
           ren_int_l <= '1';
           data_out <= mem_high_out_1(69 downto 6) & mem_high_out_0;
@@ -339,6 +334,7 @@ begin
         end if;
         rr <= not rr;
       else
+        data_val_w <= '0';
         ren_int_l <= '0';
         ren_int_h <= '0';
       end if;
