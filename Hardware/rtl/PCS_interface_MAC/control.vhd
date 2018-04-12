@@ -305,7 +305,9 @@ begin
         when "000" => if ctrl_delay_reg_reg_reg = "01" then
                         eop_location_calc(4 downto 0) <= eop_location(4 downto 0) + 4;
                       elsif ctrl_delay_reg_reg_reg = "10" then
-                      eop_location_calc(4 downto 0) <= eop_location(4 downto 0) + 8;
+                        eop_location_calc(4 downto 0) <= eop_location(4 downto 0) + 8;
+                      elsif ctrl_delay_reg_reg_reg = "11" then
+                        eop_location_calc(4 downto 0) <= eop_location(4 downto 0) + 16;
                     else eop_location_calc(4 downto 0) <= eop_location(4 downto 0);
                       end if;
         when "001" =>if (eop_location(4 downto 0) < "0100") then
