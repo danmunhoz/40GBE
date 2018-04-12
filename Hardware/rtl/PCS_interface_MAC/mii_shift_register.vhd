@@ -26,7 +26,7 @@ architecture behav_mii_shift_register of mii_shift_register is
     signal reg_current_D   : std_logic_vector(255 downto 0);
     signal reg_current_Q   : std_logic_vector(255 downto 0);
     signal reg_previous_Q  : std_logic_vector(255 downto 0);
-    signal reg_delay_Q     : std_logic_vector( 63 downto 0);
+    signal reg_delay_Q     : std_logic_vector(127 downto 0);
 
   begin
 
@@ -50,19 +50,20 @@ architecture behav_mii_shift_register of mii_shift_register is
                 Q   =>  reg_previous_Q
               );
 
-    reg_delay    : entity work.regnbit generic map (size=>64)
+    reg_delay    : entity work.regnbit generic map (size=>128)
       port map(
                 ck  =>  clk,
                 rst =>  rst_n,
                 ce  =>  rst_n,
-                D   =>  reg_previous_Q(255 downto 192),
+                D   =>  reg_previous_Q(255 downto 128),
                 Q   =>  reg_delay_Q
               );
 
     mux_out_0:  out_0 <= reg_current_Q;
 
-    mux_out_1:  out_1 <= reg_previous_Q(223 downto 0) & reg_delay_Q(63 downto 32)  when ctrl="01" else
-                         reg_previous_Q(191 downto 0) & reg_delay_Q                 when ctrl="10" else
+    mux_out_1:  out_1 <= reg_previous_Q(223 downto 0) & reg_delay_Q(96 downto 64)  when ctrl="01" else
+                         reg_previous_Q(191 downto 0) & reg_delay_Q(127 downto 64)  when ctrl="10" else
+                         reg_previous_Q(127 downto 0) & reg_delay_Q                when ctrl="11" else
                          reg_previous_Q;
 
 end behav_mii_shift_register;

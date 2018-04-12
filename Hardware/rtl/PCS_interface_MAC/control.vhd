@@ -59,6 +59,7 @@ architecture behav_control of control is
   signal is_sop_int                 : std_logic;
   signal is_sop_reg                 : std_logic;
   signal is_sop_reg_reg             : std_logic;
+  signal is_sop_reg_reg_reg         : std_logic;
   signal eop_location_calc          : std_logic_vector(5 downto 0);
   signal eop_location_calc_reg      : std_logic_vector(5 downto 0);
   signal eop_location_calc_reg_reg  : std_logic_vector(5 downto 0);
@@ -195,7 +196,8 @@ begin
   end process;
 
   ctrl_delay_int <= "01" when (sop_location = "0101" and eop_location /= "00100000") else
-                    "10" when (sop_location = "0100" and eop_location /= "00100000") else
+                    "10" when (sop_location = "0100" and eop_location /=  "00100000") else
+                    "11" when (sop_location = "0010" and eop_location_reg = "00011100") else
                     "00";
 
   mux_delay_ctrl: process(clk, rst_n)
@@ -204,26 +206,21 @@ begin
       ctrl_delay_reg <= (others=>'0');
       ctrl_delay_reg_reg <= (others=>'0');
       ctrl_delay_reg_reg_reg <= (others=>'0');
+      flag_mux_delay_ctrl <= '0';
     elsif clk'event and clk = '1' then
       ctrl_delay_reg_reg <= ctrl_delay_reg;
 
-      -- voltando commit referente a manter um ciclo a mais ctrl_mux_delay
-      -- Quando delay passa de 2 para !=2, segurar o valor por mais um ciclo
-      -- if  ctrl_delay_reg_reg = "00" and ctrl_delay_reg_reg_reg = "10" and flag_mux_delay_ctrl = '0' then
-        -- ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg_reg;
-        -- flag_mux_delay_ctrl <= '1';
-      -- else
-        -- ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg;
-        -- flag_mux_delay_ctrl <= '0';
-      -- end if;
+      if  ctrl_delay_reg_reg = "00" and ctrl_delay_reg_reg_reg = "10" and flag_mux_delay_ctrl = '0' then
+        ctrl_delay_reg_reg_reg <= ctrl_delay_reg;
+        flag_mux_delay_ctrl <= '1';
+      else
+        ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg;
+        flag_mux_delay_ctrl <= '0';
+      end if;
 
-      ctrl_delay_reg_reg_reg <= ctrl_delay_reg_reg;
-
-      if ctrl_delay_int /= "00" then
+      if  sop_location /= "1000" then
         -- ctrl_delay_int updated to a valid value
         ctrl_delay_reg <= ctrl_delay_int;
-      elsif eop_location /= "00100000" then
-        ctrl_delay_reg <= (others=>'0');
       end if;
     end if;
   end process;
@@ -237,7 +234,7 @@ begin
       case sop_location is
         when "0000" => shift_calc <= "010";
         when "0001" => shift_calc <= "011";
-        when "0010" => shift_calc <= "100";
+        when "0010" => if eop_location_reg = "00011100" then shift_calc <= "000"; else shift_calc <= "100"; end if;
         when "0011" => shift_calc <= "101";
         when "0100" => shift_calc <= "110";
         when "0101" => shift_calc <= "111";
@@ -290,9 +287,6 @@ begin
 
   -- Inform fifo if is SOP
   is_sop_int <= '0' when sop_location = "1000" else '1';
-  -- is_sop_int <= '0' when sop_location = "1000" and sop_eop_same_cycle = '0' else
-  --               '1';
-  -- Inform fifo where  EOP is
 
   -- Inform process that a SOP and EOP happened on the same cycle
   sop_eop_same_cycle <= '1' when sop_location /= "1000" and eop_location /= "00100000" else
@@ -369,14 +363,11 @@ end process;
 
 -- Some cases eop needs to be outputed one cycle earlier
 -- Frame ending with shift of 100/110/010 and next shift is different
-eop_location_out <= eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_int = "010" else  -- correção eop_addr payload_cycles "e1"
-                    -- eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_reg /= "110" else
+eop_location_out <= eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_int = "010" else
                     eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") else
-                    -- eop_location_calc_reg when (shift_eop = "010" or shift_eop_reg = "010") and shift_out_reg = "000"  and ctrl_delay_reg = "10" else
                     eop_location_calc_reg when (shift_eop = "010" or shift_eop_reg = "010") and ctrl_delay_reg = "10" else
-                    eop_location_calc_reg when (shift_eop_reg = "100") else
-                      -- eop_location_calc_reg when (shift_eop = "100" or shift_eop_reg = "100") and shift_out_reg /= "100" else
-                    eop_location_calc_reg_reg;
+                    eop_location_calc_reg_reg when ctrl_delay_reg /= "11" else
+                    eop_location_calc_reg_reg_reg;
 
 -- eop_location_out <= eop_location_calc_reg_reg;
 
@@ -447,16 +438,21 @@ eop_location_out <= eop_location_calc_reg when (shift_eop = "110" or shift_eop_r
       is_sop_reg <= '0';
       is_sop_reg_reg <= '0';
       sop_location_reg <= (others=>'0');
+      is_sop_reg_reg_reg <= '0';
+
     elsif clk'event and clk = '1' then
       shift_out_reg <= shift_out_int;
       sop_location_reg <= sop_location;
       missed_sop_reg <= missed_sop;
       shift_eop_reg <= shift_eop;
+      is_sop_reg_reg_reg <= is_sop_reg_reg;
+
 
       if (sop_location(2 downto 0) >= "100" and eop_location /= "00100000") or sop_location = "0110" or sop_location = "0111" then
         is_sop_reg <= '0';
       else
         is_sop_reg <= is_sop_int;
+
         if (sop_location_reg(2 downto 0) >= "100" and eop_location_reg /= "00100000") or sop_location_reg = "0110" or sop_location_reg = "0111" then
           is_sop_reg <= '1';
         end if;
@@ -469,22 +465,32 @@ eop_location_out <= eop_location_calc_reg when (shift_eop = "110" or shift_eop_r
       end if;
 
       if  (sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '0') or
-          (shift_out_reg_reg = "010" and shift_out_reg = "000" and sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '1') then --or
-          -- (shift_out_reg_reg = "000" and shift_out_reg = "100" and sop_eop_same_cycle_reg = '0' and sop7_eop_same_cycle_reg = '0') then
-        shift_out_reg_reg <= shift_out_reg_reg;
+          (shift_out_reg_reg = "010" and shift_out_reg = "000" and sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '1') then
+          -- (shift_out_reg = "000" and shift_eop_reg = "010" and ctrl_delay_reg = "11") then
+          -- (ctrl_delay_reg = "11") then
+          -- (shift_out_reg_reg = "000" and ctrl_delay_reg = "11") then
         is_sop_reg_reg <= is_sop_reg_reg;
       else
-        shift_out_reg_reg <= shift_out_reg;
         is_sop_reg_reg <= is_sop_reg;
+      end if;
+
+
+
+      if  (sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '0' and shift_eop = "000") or
+          (shift_out_reg_reg = "010" and shift_out_reg = "000" and sop_eop_same_cycle_reg = '1' and sop7_eop_same_cycle_reg = '1') then --or
+          -- (sop_eop_same_cycle_reg = '0' and sop7_eop_same_cycle_reg = '0' and ctrl_delay_reg_reg_reg = "10") then
+        shift_out_reg_reg <= shift_out_reg_reg;
+      else
+        shift_out_reg_reg <= shift_out_reg;
       end if;
 
     end if;
   end process;
 
-
   wen_fifo <= wen_fifo_reg_reg;
   shift_eop <= shift_out_reg_reg;
   shift_out <= shift_eop;
-  is_sop <= is_sop_reg_reg;
+  is_sop <= is_sop_reg_reg_reg when (ctrl_delay_reg_reg = "11") else  is_sop_reg_reg;
+
 
 end architecture;
