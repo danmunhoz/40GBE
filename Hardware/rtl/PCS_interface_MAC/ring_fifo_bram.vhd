@@ -321,18 +321,13 @@ begin
           r_ptr_l <= r_ptr_l + 1;
           ren_int_l <= '0';
           ren_int_h <= '1';
-          data_out <= mem_low_out_1(69 downto 6) & mem_low_out_0;
-          eop_addr_out <= mem_low_out_1(5 downto 1);
-          is_sop_out <= mem_low_out_1(0);
         else
           r_ptr_h <= r_ptr_h + 1;
           ren_int_h <= '0';
           ren_int_l <= '1';
-          data_out <= mem_high_out_1(69 downto 6) & mem_high_out_0;
-          eop_addr_out <= mem_high_out_1(5 downto 1);
-          is_sop_out <= '0';
         end if;
         rr <= not rr;
+
       else
         data_val_w <= '0';
         ren_int_l <= '0';
@@ -341,5 +336,16 @@ begin
 
     end if;
   end process;
+
+  data_out <= mem_low_out_1(69 downto 6) & mem_low_out_0   when (rr = '0' and data_val_w = '1') else
+              mem_high_out_1(69 downto 6) & mem_high_out_0 when (rr = '1' and data_val_w = '1') else
+              (others=>'0');
+
+  eop_addr_out <= mem_low_out_1(5 downto 1) when (rr = '0' and data_val_w = '1') else
+                  mem_high_out_1(5 downto 1) when (rr = '1' and data_val_w = '1') else
+                  (others=>'0');
+
+  is_sop_out <= mem_low_out_1(0) when (rr = '0' and data_val_w = '1') else
+                '0';
 
 end behav;
