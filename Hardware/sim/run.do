@@ -51,6 +51,7 @@ vcom -novopt ../rtl/MAC/fault_sm_rx.vhd
 vlog -novopt ../rtl/MAC/rx_dequeue.v
 vlog -novopt ../rtl/MAC/tx_stats_fifo.v
 vlog -novopt ../rtl/MAC/tx_dequeue.v
+#vlog -novopt ../rtl/MAC/tx_enqueue_tx.v
 vlog -novopt ../rtl/MAC/sync_clk_wb.v
 vlog -novopt ../rtl/MAC/stats_sm.v
 vlog -novopt ../rtl/MAC/defines.v
@@ -83,7 +84,7 @@ vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo_bram.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/core_interface.vhd
 
-vcom -novopt ../rtl/PCS/pcs_selector.vhd
+# vcom -novopt ../rtl/PCS/pcs_selector.vhd
 
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs_rx.v
@@ -111,9 +112,9 @@ scgenmod shuffle > shuffle.h
 
 
 sccom dump_output.cpp
-# sccom scoreboard.cpp
 sccom pkt_buffer.cpp
 sccom fiber.cpp
+sccom app_tx.cpp
 sccom -novopt -g sc_tb.cpp
 sccom -link -B/usr/bin/
 

@@ -74,21 +74,16 @@ SC_MODULE(fiber) {
       return std::make_pair(val, arg);
   }
 
-  // std::tuple<std::string, std::string, std::string> splitHeaderBlockValid(std::string val) {
   line_data splitHeaderBlockValid(std::string val) {
       line_data ret;
       std::string::size_type pos1 = val.find('-');
       std::string::size_type pos2 = val.find('=');
-      // cout << "VAL: " << val << endl;
 
       if(val.npos != pos1 && val.npos != pos2) {
           ret.valid = val.substr(pos2+1, 1);
           ret.data = val.substr(pos1+1, pos2-3);
           ret.hdr = val.substr(0, pos1);
       }
-      // cout << "HDR: " << ret.hdr << endl;
-      // cout << "VLD: " << ret.valid << endl;
-      // cout << "DAT: " << ret.data << endl << endl;
       return ret;
   }
 
@@ -142,11 +137,6 @@ SC_MODULE(fiber) {
   }
 
   void buffer_lanes() {
-
-    // std::pair<std::string, std::string> pr0;
-    // std::pair<std::string, std::string> pr1;
-    // std::pair<std::string, std::string> pr2;
-    // std::pair<std::string, std::string> pr3;
     line_data pr0;
     line_data pr1;
     line_data pr2;
@@ -159,7 +149,6 @@ SC_MODULE(fiber) {
 
     sc_lv<2 >  header_out_0_int;
     sc_lv<64 > block_out_0_int;
-    // sc_logic valid_out_0_int;
     sc_lv<1 > valid_out_0_int;
 
     sc_lv<2 >  header_out_1_int;
@@ -199,7 +188,7 @@ SC_MODULE(fiber) {
             // cout << "[fiber 0] Header = " << header_out_0 << " Block = " << block_out_0 << endl;
           }
         } else {
-          cout << "[fiber 0] FALHOU lanes 0" << endl;
+          cout << "[fiber 0] Esperando SKEW OK" << endl;
         }
 
         if( lanes_shuffled[1].is_open() && skew_ok_1 == SC_LOGIC_1) {
@@ -217,7 +206,7 @@ SC_MODULE(fiber) {
             // cout << "[fiber 1] Header = " << header_out_1 << " Block = " << block_out_1 << endl;
           }
         } else {
-          cout << "[fiber 1] FALHOU lanes 1" << endl;
+          cout << "[fiber 1] Esperando SKEW OK" << endl;
         }
 
         if( lanes_shuffled[2].is_open() && skew_ok_2 == SC_LOGIC_1) {
@@ -235,7 +224,7 @@ SC_MODULE(fiber) {
             // cout << "[fiber 2] Header = " << header_out_2 << " Block = " << block_out_2 << endl;
           }
         } else {
-          cout << "[fiber 2] FALHOU lanes 2" << endl;
+          cout << "[fiber 2] Esperando SKEW OK" << endl;
         }
 
         if( lanes_shuffled[3].is_open() && skew_ok_3 == SC_LOGIC_1) {
@@ -253,7 +242,7 @@ SC_MODULE(fiber) {
             // cout << "[fiber 3] Header = " << header_out_3 << " Block = " << block_out_3 << endl;
           }
         } else {
-          cout << "[fiber 3] FALHOU lanes 3" << endl;
+          cout << "[fiber 3] Esperando SKEW OK" << endl;
         }
     } else {
       header_out_0 = "00";
