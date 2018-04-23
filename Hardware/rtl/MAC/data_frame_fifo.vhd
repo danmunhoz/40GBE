@@ -13,7 +13,7 @@ entity data_frame_fifo is
   port (
     --INPUTS
     clk       : in std_logic;
-    rst       : in std_logic;
+    rst_n       : in std_logic;
     data_in   : in std_logic_vector(255 downto 0);
     eop_in    : in std_logic_vector(  5 downto 0);
     sop_in    : in std_logic;
@@ -31,6 +31,7 @@ entity data_frame_fifo is
 end entity;
 
 architecture behav_data_frame_fifo of data_frame_fifo is
+    signal rst            : std_logic;
     signal l0_data_in     : std_logic_vector(63 downto 0);
     signal l1_data_in     : std_logic_vector(63 downto 0);
     signal h0_data_in     : std_logic_vector(63 downto 0);
@@ -74,11 +75,12 @@ architecture behav_data_frame_fifo of data_frame_fifo is
 
   begin
     -- signals in
-    l1_data_in  <=  data_in( 63 downto 0  );
-    l1_data_in  <=  data_in(127 downto 64 );
+    l0_data_in  <=  data_in( 63 downto 0);
+    l1_data_in  <=  data_in(127 downto 64);
     h0_data_in  <=  data_in(191 downto 128);
     h1_data_in  <=  val_in & sop_in & eop_in & data_in(255 downto 192);
 
+    rst <= not rst_n;
     FIFO_L0 : FIFO_SYNC_MACRO
     generic map (
       DEVICE => "7SERIES",
