@@ -55,9 +55,6 @@ SC_MODULE(app_tx) {
 
           data = (data_int,data_int,data_int,data_int); // Enquanto nao passarmos um pacote de verdade...
 
-          cout << "[app_tx] ctrl_int : " << ctrl_int << endl;
-          cout << "[app_tx] data     : " << data << endl;
-
           if (ctrl_int == "00000001") { //Assuming packets are starting at byte 0...
             sop = SC_LOGIC_1;
             eop = SC_LOGIC_0;
@@ -68,14 +65,12 @@ SC_MODULE(app_tx) {
             eop = SC_LOGIC_0;
             val = SC_LOGIC_0;
             mod = "01111";
-          } else {
+          } else if (ctrl_int == "00000000") {
             sop = SC_LOGIC_0;
             eop = SC_LOGIC_0;
-            val = SC_LOGIC_0;
+            val = SC_LOGIC_1;
             mod = "00000";
           }
-        } else {
-          cout << "[app_tx] no lines left on input file." << endl;
         }
       } else {
         cout << "[app_tx] input file not open." << endl;

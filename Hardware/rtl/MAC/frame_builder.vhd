@@ -67,6 +67,10 @@ architecture behav_frame_builder of frame_builder is
     signal ipg_deficit : std_logic_vector(2 downto 0); -- HOW BIG CAN IT BE?
 
   begin
+
+    ren_out <= ren when rst = '1' else '0';
+    wen_out <= wen when rst = '1' else '0';
+
     input_regs: process(clk, rst)
     begin
       if rst = '0' then
