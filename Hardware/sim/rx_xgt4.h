@@ -28,6 +28,11 @@ public:
     sc_in<sc_lv<2> > rx_lane_3_header_in;
     sc_in<sc_logic> rx_lane_3_data_valid_in;
     sc_in<sc_lv<64> > rx_lane_3_data_in;
+    sc_in<sc_lv<256> > pkt_tx_data;
+    sc_in<sc_logic> pkt_tx_eop;
+    sc_in<sc_lv<5> > pkt_tx_mod;
+    sc_in<sc_logic> pkt_tx_sop;
+    sc_in<sc_logic> pkt_tx_val;
     sc_out<sc_logic> pkt_rx_avail;
     sc_out<sc_lv<64> > pkt_rx_data;
     sc_out<sc_logic> pkt_rx_eop;
@@ -73,6 +78,11 @@ public:
        rx_lane_3_header_in("rx_lane_3_header_in"),
        rx_lane_3_data_valid_in("rx_lane_3_data_valid_in"),
        rx_lane_3_data_in("rx_lane_3_data_in"),
+       pkt_tx_data("pkt_tx_data"),
+       pkt_tx_eop("pkt_tx_eop"),
+       pkt_tx_mod("pkt_tx_mod"),
+       pkt_tx_sop("pkt_tx_sop"),
+       pkt_tx_val("pkt_tx_val"),
        pkt_rx_avail("pkt_rx_avail"),
        pkt_rx_data("pkt_rx_data"),
        pkt_rx_eop("pkt_rx_eop"),

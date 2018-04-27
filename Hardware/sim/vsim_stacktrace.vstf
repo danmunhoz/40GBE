@@ -1,0 +1,21 @@
+# Current time Fri Apr 27 15:13:29 2018
+# ModelSim Stack Trace
+# Program = vsim
+# Id = "10.3c"
+# Version = "2014.07"
+# Date = "Jul 18 2014"
+# Platform = linux_x86_64
+# --> START OF USERCODE
+# 0    0x00007ffff7148264: 'fclose + 0x4' in '/lib/x86_64-linux-gnu/libc.so.6'
+# 1    0x00007ffff28b395a: 'scoreboard::~scoreboard() + 0x48' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 2    0x00007ffff28b3a6a: 'scoreboard::~scoreboard() + 0x18' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 3    0x00007ffff28c0772: 'Top::~Top() + 0xd4' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 4    0x00007ffff28c128c: 'Top::~Top() + 0x18' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# 5    0x00007ffff28e1183: 'sc_core::scmti_delete_module(void*) + 0x13' in '/home/korol/Desktop/40GBE_repo/40GBE/Hardware/sim/work/_sc/linux_x86_64_gcc-4.5.0/systemc.so'
+# <-- END OF USERCODE
+# 6    0x000000000080b521: '<unknown (@0x80b521)>'
+# 7    0x000000000053c010: '<unknown (@0x53c010)>'
+# 8    0x00000000007ac58e: '<unknown (@0x7ac58e)>'
+# End of Stack Trace
+
+

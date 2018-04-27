@@ -84,6 +84,10 @@ vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo_bram.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/core_interface.vhd
 
+vcom -novopt ../rtl/MAC/data_frame_fifo.vhd
+vcom -novopt ../rtl/MAC/frame_builder.vhd
+vcom -novopt ../rtl/MAC/mac_tx_path.vhd
+
 # vcom -novopt ../rtl/PCS/pcs_selector.vhd
 
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v
@@ -132,6 +136,8 @@ exec cp lane0.txt lane0_rx.txt
 exec cp lane1.txt lane1_rx.txt
 exec cp lane2.txt lane2_rx.txt
 exec cp lane3.txt lane3_rx.txt
+
+exec cp dump_mii_tx.txt dump_app.txt
 
 #do list.do
 exit

@@ -13,6 +13,7 @@
 #include "dump_mii.h"
 #include "dump_output.h"
 #include "fiber.h"
+#include "app_tx.h"
 // #include "lane_reorder.h"
 
 SC_MODULE(Top) {
@@ -32,8 +33,6 @@ SC_MODULE(Top) {
   sc_signal<sc_logic> reset_mii_tx;
   sc_signal<sc_logic> reset_mii_rx;
 
-  //sc_signal<sc_logic> pkt_tx_start;
-
   // TX
   sc_signal<sc_lv<8> >  dump_xgmii_txc;
   sc_signal<sc_lv<64> > dump_xgmii_txd;
@@ -50,21 +49,7 @@ SC_MODULE(Top) {
   sc_signal<sc_lv<64> > block_from_xgt4;
   sc_signal<sc_lv<2> >  header_from_xgt4;
 
-  // sc_signal<sc_lv<64> > lane0_block_from_xgt4;
-  // sc_signal<sc_lv<2> >  lane0_header_from_xgt4;
-  //
-  // sc_signal<sc_lv<64> > lane1_block_from_xgt4;
-  // sc_signal<sc_lv<2> >  lane1_header_from_xgt4;
-  //
-  // sc_signal<sc_lv<64> > lane2_block_from_xgt4;
-  // sc_signal<sc_lv<2> >  lane2_header_from_xgt4;
-  //
-  // sc_signal<sc_lv<64> > lane3_block_from_xgt4;
-  // sc_signal<sc_lv<2> >  lane3_header_from_xgt4;
-
   // RX
-  //sc_signal< sc_lv<64> >    block_to_xgt4;
-  //sc_signal< sc_lv<2>  >    header_to_xgt4;
 
   sc_signal< sc_logic  >    data_valid_xgt4;
   sc_signal< sc_logic  >    header_valid_xgt4;
@@ -106,9 +91,15 @@ SC_MODULE(Top) {
 
   // sinais de saida da FIFO
   sc_signal<sc_lv<128> > mac_data;
-  sc_signal<sc_logic> mac_sop;
-  sc_signal<sc_logic> mac_val;
-  sc_signal<sc_lv<5> > mac_eop;
+  sc_signal<sc_logic>    mac_sop;
+  sc_signal<sc_logic>    mac_val;
+  sc_signal<sc_lv<5> >   mac_eop;
+
+  sc_signal<sc_lv<256> > app_tx_data;
+  sc_signal<sc_lv<5> >   app_tx_mod;
+  sc_signal<sc_logic>    app_tx_sop;
+  sc_signal<sc_logic>    app_tx_eop;
+  sc_signal<sc_logic>    app_tx_val;
 
   tx_xgt4      * tx_xgt4_inst;
   rx_xgt4      * rx_xgt4_inst;
@@ -121,6 +112,7 @@ SC_MODULE(Top) {
   dump_mii     * dump_mii_rx_inst_3;
   fiber        * fiber_inst;
   dump_output  * dump_output_inst;
+  app_tx       * app_tx_inst;
   // lane_reorder * lane_reorder_inst;
 
   void clock_assign();
@@ -150,7 +142,7 @@ SC_MODULE(Top) {
     dump_output_inst = new dump_output("dump_output", "dump_output.txt");
 
     fiber_inst  = new fiber("fiber");
-    // lane_reorder_inst = new lane_reorder("lane_reorder", "lane_reorder");
+    app_tx_inst = new app_tx("app_tx");
 
     // Connections
     tx_xgt4_inst->clock_in156(iclock156);
@@ -214,6 +206,12 @@ SC_MODULE(Top) {
     rx_xgt4_inst->mac_eop(mac_eop);
     rx_xgt4_inst->mac_val(mac_val);
 
+    rx_xgt4_inst->pkt_tx_data(app_tx_data);
+    rx_xgt4_inst->pkt_tx_eop(app_tx_eop);
+    rx_xgt4_inst->pkt_tx_mod(app_tx_mod);
+    rx_xgt4_inst->pkt_tx_sop(app_tx_sop);
+    rx_xgt4_inst->pkt_tx_val(app_tx_val);
+
     // output dumped to file for comparison
     dump_output_inst->clock_in(iclock312);
     dump_output_inst->reset_n(reset);
@@ -270,23 +268,13 @@ SC_MODULE(Top) {
     fiber_inst->header_out_3(header_out_3);
     fiber_inst->valid_out_3(valid_out_3);
 
-    //INSTACIANDO NO TOP POR AGORA PARA TESTER... DEPOIS VAI PRA DENTRO DO WRAPPER...
-    // lane_reorder_inst->lane_0_block_in(block_out_0);
-    // lane_reorder_inst->lane_1_block_in(block_out_1);
-    // lane_reorder_inst->lane_2_block_in(block_out_2);
-    // lane_reorder_inst->lane_3_block_in(block_out_3);
-    // lane_reorder_inst->lane_0_header_in(header_out_0);
-    // lane_reorder_inst->lane_1_header_in(header_out_1);
-    // lane_reorder_inst->lane_2_header_in(header_out_2);
-    // lane_reorder_inst->lane_3_header_in(header_out_3);
-    // lane_reorder_inst->pcs_0_block_out(pcs_0_block_out);
-    // lane_reorder_inst->pcs_1_block_out(pcs_1_block_out);
-    // lane_reorder_inst->pcs_2_block_out(pcs_2_block_out);
-    // lane_reorder_inst->pcs_3_block_out(pcs_3_block_out);
-    // lane_reorder_inst->pcs_0_header_out(pcs_0_header_out);
-    // lane_reorder_inst->pcs_1_header_out(pcs_1_header_out);
-    // lane_reorder_inst->pcs_2_header_out(pcs_2_header_out);
-    // lane_reorder_inst->pcs_3_header_out(pcs_3_header_out);
+    app_tx_inst->clock_in(iclock156);
+    app_tx_inst->reset_in(reset);
+    app_tx_inst->data(app_tx_data);
+    app_tx_inst->mod(app_tx_mod);
+    app_tx_inst->sop(app_tx_sop);
+    app_tx_inst->eop(app_tx_eop);
+    app_tx_inst->val(app_tx_val);
 
     SC_METHOD(clock_assign);
     sensitive << clk_156.signal();
@@ -309,11 +297,12 @@ SC_MODULE(Top) {
     // delete rx_xgt4_inst;
     // delete scoreboard_inst;
     // delete pkt_buffer_inst;
-    // delete dump_mii_rx_inst;
     // delete fiber_inst;
+    // delete app_tx_inst;
   }
 
 };
+
 inline void Top::clock_assign()
 {
   sc_logic clock_tmp156(clk_156.signal().read());

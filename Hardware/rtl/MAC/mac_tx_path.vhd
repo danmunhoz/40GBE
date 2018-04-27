@@ -35,6 +35,8 @@ architecture behav_mac_tx_path of mac_tx_path is
     signal ren_fifo_0    : std_logic;
     signal empty_fifo_0  : std_logic;
     signal full_fifo_0   : std_logic;
+    signal almost_e_fifo_0 : std_logic;
+    signal almost_f_fifo_0 : std_logic;
 
     signal w_frame_fifo_1 : std_logic_vector(255 downto 0);
     signal w_eop_fifo_1  : std_logic_vector(5 downto 0);
@@ -56,13 +58,13 @@ architecture behav_mac_tx_path of mac_tx_path is
 
     payload_in: entity work.data_frame_fifo port map(
       clk      => clk_156,
-      rst      => rst_n,
+      rst_n    => rst_n,
 
       data_in  => data_in,
       eop_in   => w_eop_fifo_0,
       sop_in   => sop_in,
       val_in   => val_in,
-      wen      => wen_fifo_0,
+      wen      => val_in,
       full     => full_fifo_0,
 
       data_out => r_data_fifo_0,
@@ -71,6 +73,8 @@ architecture behav_mac_tx_path of mac_tx_path is
       val_out  => r_val_fifo_0,
       ren      => ren_fifo_0,
       empty    => empty_fifo_0
+      -- almost_e => almost_e_fifo_0,
+      -- almost_f => almost_f_fifo_0,
     );
 
     frame: entity work.frame_builder port map(
@@ -78,21 +82,23 @@ architecture behav_mac_tx_path of mac_tx_path is
       rst      => rst_n,
 
       data_in  => r_data_fifo_0,
-      sop_in   => r_eop_fifo_0,
-      eop_in   => r_sop_fifo_0,
+      sop_in   => r_sop_fifo_0,
+      eop_in   => r_eop_fifo_0,
       val_in   => r_val_fifo_0,
-      ren      => ren_fifo_0,
+      almost_e => almost_e_fifo_0,
+      almost_f => almost_f_fifo_0,
 
+      ren_out => ren_fifo_0,
+      wen_out => wen_fifo_1,
       frame_out => w_frame_fifo_1,
-      eop_out  => w_eop_fifo_1,
-      sop_out  => w_sop_fifo_1,
-      val_out  => w_val_fifo_1,
-      wen      => wen_fifo_1
+      eop_out   => w_eop_fifo_1,
+      sop_out   => w_sop_fifo_1,
+      val_out   => w_val_fifo_1
     );
 
     frame_out: entity work.data_frame_fifo port map(
       clk      => clk_156,
-      rst      => rst_n,
+      rst_n    => rst_n,
       -- provalvelmente vai entrar clock e rst do MII
 
       data_in  => w_frame_fifo_1,
@@ -110,24 +116,24 @@ architecture behav_mac_tx_path of mac_tx_path is
       empty    => empty_fifo_1
     );
 
-    mii: entity work.mii_if port map(
-      clk      => clk_156,
-      rst      => rst_n,
-
-      data_in  => r_frame_fifo_1,
-      eop_in   => r_eop_fifo_1,
-      sop_in   => r_sop_fifo_1,
-      val_in   => r_val_fifo_1,
-      ren      => ren_fifo_1,
-
-      mii_data_0 => mii_data_0,
-      mii_ctrl_0 => mii_ctrl_0,
-      mii_data_1 => mii_data_1,
-      mii_ctrl_1 => mii_ctrl_1,
-      mii_data_2 => mii_data_2,
-      mii_ctrl_2 => mii_ctrl_2,
-      mii_data_3 => mii_data_3,
-      mii_ctrl_3 => mii_ctrl_3
-    );
+    -- mii: entity work.mii_if port map(
+    --   clk      => clk_156,
+    --   rst      => rst_n,
+    --
+    --   data_in  => r_frame_fifo_1,
+    --   eop_in   => r_eop_fifo_1,
+    --   sop_in   => r_sop_fifo_1,
+    --   val_in   => r_val_fifo_1,
+    --   ren      => ren_fifo_1,
+    --
+    --   mii_data_0 => mii_data_0,
+    --   mii_ctrl_0 => mii_ctrl_0,
+    --   mii_data_1 => mii_data_1,
+    --   mii_ctrl_1 => mii_ctrl_1,
+    --   mii_data_2 => mii_data_2,
+    --   mii_ctrl_2 => mii_ctrl_2,
+    --   mii_data_3 => mii_data_3,
+    --   mii_ctrl_3 => mii_ctrl_3
+    -- );
 
 end behav_mac_tx_path;

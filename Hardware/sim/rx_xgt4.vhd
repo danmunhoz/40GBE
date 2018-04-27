@@ -37,6 +37,12 @@ entity rx_xgt4 is
       rx_lane_3_header_in        : in  std_logic_vector(1 downto 0);
       rx_lane_3_data_valid_in    : in  std_logic;
       rx_lane_3_data_in          : in  std_logic_vector(63 downto 0);
+      --entrada MAC
+      pkt_tx_data                : in  std_logic_vector(255 downto 0);
+      pkt_tx_eop                 : in  std_logic;
+      pkt_tx_mod                 : in  std_logic_vector(4 downto 0);
+      pkt_tx_sop                 : in  std_logic;
+      pkt_tx_val                 : in  std_logic;
 
       -- XMAC Outputs
       pkt_rx_avail        : out  std_logic;
@@ -89,14 +95,6 @@ architecture behav of rx_xgt4 is
   	signal	rxgearboxslip_out   : std_logic;
   	signal	tx_sequence_out     : std_logic_vector(6 downto 0);
 
-    --  MAC input
-    signal  pkt_rx_ren          :  std_logic;
-    signal  pkt_tx_data         :  std_logic_vector(63 downto 0);
-    signal  pkt_tx_eop          :  std_logic;
-    signal  pkt_tx_mod          :  std_logic_vector(2 downto 0);
-    signal  pkt_tx_sop          :  std_logic;
-    signal  pkt_tx_val          :  std_logic;
-
     signal pkt_tx_full :std_logic;
 
     signal reset_in_pcs : std_logic;
@@ -144,140 +142,23 @@ architecture behav of rx_xgt4 is
     signal read_as_mac  : std_logic;
     signal pause_read   : std_logic;
     signal mac_eop_wire : std_logic_vector(4 downto 0);
+    signal mac_data_wire: std_logic_vector(127 downto 0);
+    signal mac_sop_wire: std_logic;
+    signal mac_val_wire: std_logic;
 
     -- signal rx_lane_skew_0 : std_logic;
     -- signal rx_lane_skew_1 : std_logic;
     -- signal rx_lane_skew_2 : std_logic;
     -- signal rx_lane_skew_3 : std_logic;
-
-  component wrapper_macpcs_rx port(
-          -- Clocks
-          clk_156             : in  std_logic;
-          tx_clk_161_13       : in  std_logic;
-          rx_clk_161_13       : in  std_logic;
-          clk_xgmii_rx        : in  std_logic;
-          clk_xgmii_tx        : in  std_logic;
-          clk_312             : in  std_logic;
-
-          -- Resets
-          async_reset_n       : in  std_logic;
-          reset_tx_n          : in std_logic;
-          reset_rx_n          : in std_logic;
-          reset_tx_done       : in std_logic;
-          reset_rx_done       : in std_logic;
-
-          start_fifo          : in std_logic;
-          read_fifo           : in std_logic;
-
-          dump_xgmii_rxc_0    : out std_logic_vector(7 downto 0);
-          dump_xgmii_rxd_0    : out std_logic_vector(63 downto 0);
-          dump_xgmii_rxc_1    : out std_logic_vector(7 downto 0);
-          dump_xgmii_rxd_1    : out std_logic_vector(63 downto 0);
-          dump_xgmii_rxc_2    : out std_logic_vector(7 downto 0);
-          dump_xgmii_rxd_2    : out std_logic_vector(63 downto 0);
-          dump_xgmii_rxc_3    : out std_logic_vector(7 downto 0);
-          dump_xgmii_rxd_3    : out std_logic_vector(63 downto 0);
-
-          -- PCS Inputs
-          rx_jtm_en           : in  std_logic;
-          bypass_descram      : in  std_logic;
-          bypass_scram        : in  std_logic;
-          bypass_66decoder    : in  std_logic;
-          bypass_66encoder    : in  std_logic;
-          clear_errblk        : in  std_logic;
-          clear_ber_cnt       : in  std_logic;
-          tx_jtm_en           : in  std_logic;
-          jtm_dps_0           : in  std_logic;
-          jtm_dps_1           : in  std_logic;
-          seed_A              : in  std_logic_vector(57 downto 0);
-          seed_B              : in  std_logic_vector(57 downto 0);
-
-          rx_lane_0_header_valid_in    : in  std_logic;
-          rx_lane_0_header_in          : in  std_logic_vector(1 downto 0);
-          rx_lane_0_data_valid_in      : in  std_logic;
-          rx_lane_0_data_in            : in  std_logic_vector(63 downto 0);
-
-          rx_lane_1_header_valid_in    : in  std_logic;
-          rx_lane_1_header_in          : in  std_logic_vector(1 downto 0);
-          rx_lane_1_data_valid_in      : in  std_logic;
-          rx_lane_1_data_in            : in  std_logic_vector(63 downto 0);
-
-          rx_lane_2_header_valid_in    : in  std_logic;
-          rx_lane_2_header_in          : in  std_logic_vector(1 downto 0);
-          rx_lane_2_data_valid_in      : in  std_logic;
-          rx_lane_2_data_in            : in  std_logic_vector(63 downto 0);
-
-          rx_lane_3_header_valid_in    : in  std_logic;
-          rx_lane_3_header_in          : in  std_logic_vector(1 downto 0);
-          rx_lane_3_data_valid_in      : in  std_logic;
-          rx_lane_3_data_in            : in  std_logic_vector(63 downto 0);
-
-          -- PCS Outputs
-          hi_ber              : out  std_logic;
-          blk_lock            : out  std_logic;
-          linkstatus          : out  std_logic;
-          rx_fifo_spill       : out  std_logic;
-          tx_fifo_spill       : out  std_logic;
-          rxlf                : out  std_logic;
-          txlf                : out  std_logic;
-          ber_cnt             : out  std_logic_vector(5 downto 0);
-          errd_blks           : out  std_logic_vector(7 downto 0);
-          jtest_errc          : out  std_logic_vector(15 downto 0);
-          --
-          tx_data_out         : out  std_logic_vector(63 downto 0);
-          tx_header_out       : out  std_logic_vector(1 downto 0);
-          rxgearboxslip_out   : out  std_logic;
-          tx_sequence_out     : out  std_logic_vector(6 downto 0);
-
-          -- MAC Inputs
-          pkt_rx_ren          : in  std_logic;
-          pkt_tx_data         : in  std_logic_vector(63 downto 0);
-          pkt_tx_eop          : in  std_logic;
-          pkt_tx_mod          : in  std_logic_vector(2 downto 0);
-          pkt_tx_sop          : in  std_logic;
-          pkt_tx_val          : in  std_logic;
-
-          mac_sop             : out std_logic;
-          mac_data            : out std_logic_vector(127 downto 0);
-          mac_eop             : out std_logic_vector(4 downto 0);
-          mac_val             : out std_logic;
-          empty_fifo          : out std_logic;
-          full_fifo           : out std_logic;
-          fifo_almost_f       : out std_logic;
-          fifo_almost_e       : out std_logic;
-
-          -- Wishbone (MAC)
-          wb_adr_i            : in  std_logic_vector(7 downto 0);
-          wb_clk_i            : in  std_logic;
-          wb_cyc_i            : in  std_logic;
-          wb_dat_i            : in  std_logic_vector(31 downto 0);
-          wb_stb_i            : in  std_logic;
-          wb_we_i             : in  std_logic;
-
-          -- XMAC Outputs
-          pkt_rx_avail        : out  std_logic;
-          pkt_rx_data         : out  std_logic_vector(63 downto 0);
-          pkt_rx_eop          : out  std_logic;
-          pkt_rx_err          : out  std_logic;
-          pkt_rx_mod          : out  std_logic_vector(2 downto 0);
-          pkt_rx_sop          : out  std_logic;
-          pkt_rx_val          : out  std_logic;
-          pkt_tx_full         : out  std_logic;
-
-          -- Wishbone (MAC)
-          wb_ack_o            : out  std_logic;
-          wb_dat_o            : out  std_logic_vector(31 downto 0);
-          wb_int_o            : out  std_logic
-          );
-      end component;
-
-
 begin
           clk_156 <= clock_in156;
           clk_161 <= clock_in161;
           clk_312 <= clock_in312;
 
           mac_eop <= mac_eop_wire;
+          mac_data <= mac_data_wire;
+          mac_sop <= mac_sop_wire;
+          mac_val <= mac_val_wire;
 
           reset_in_pcs <= '0', '1' after 40 ns;
 
@@ -317,7 +198,7 @@ begin
           lane_3_data_valid_in    <= rx_lane_3_data_valid_in;
 
           -- INST WRAPPER
-          inst_wrapper_macpcs: wrapper_macpcs_rx port map(
+          inst_wrapper_macpcs: entity work.wrapper_macpcs_rx port map(
             -- Clocks
             clk_156             => clk_156,
             tx_clk_161_13       => clk_161,
@@ -371,9 +252,9 @@ begin
             full_fifo                    => fifo_saida_full,
             fifo_almost_f                => fifo_saida_almost_f,
             fifo_almost_e                => fifo_saida_almost_e,
-            mac_sop                      => mac_sop,
-            mac_data                     => mac_data,
-            mac_val                      => mac_val,
+            mac_sop                      => mac_sop_wire,
+            mac_data                     => mac_data_wire,
+            mac_val                      => mac_val_wire,
             mac_eop                      => mac_eop_wire,
 
             -- PCS OUT
@@ -393,7 +274,7 @@ begin
             pkt_tx_full     => pkt_tx_full,
 
            -- MAC Outputs
-            pkt_rx_ren      => pkt_rx_ren,
+            pkt_rx_ren      => '0',
             pkt_tx_data     => pkt_tx_data,
             pkt_tx_eop      => pkt_tx_eop,
             pkt_tx_mod      => pkt_tx_mod,

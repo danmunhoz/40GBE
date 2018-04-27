@@ -193,18 +193,24 @@ module wrapper_macpcs_rx(
     wire [6:0]  tx_sequence_out_3;
 
     // MAC Inputs
-    (* KEEP = "true" *)
-    input           pkt_rx_ren;
-    (* KEEP = "true" *)
-    input [63:0]    pkt_tx_data;
-    (* KEEP = "true" *)
-    input           pkt_tx_eop;
-    (* KEEP = "true" *)
-    input [2:0]     pkt_tx_mod;
-    (* KEEP = "true" *)
-    input           pkt_tx_sop;
-    (* KEEP = "true" *)
-    input           pkt_tx_val;
+    // (* KEEP = "true" *)
+    // input           pkt_rx_ren;
+    // (* KEEP = "true" *)
+    // input [63:0]    pkt_tx_data;
+    // (* KEEP = "true" *)
+    // input           pkt_tx_eop;
+    // (* KEEP = "true" *)
+    // input [2:0]     pkt_tx_mod;
+    // (* KEEP = "true" *)
+    // input           pkt_tx_sop;
+    // (* KEEP = "true" *)
+    // input           pkt_tx_val;
+    (* KEEP = "true" *) input pkt_rx_ren;
+    (* KEEP = "true" *) input [255:0] pkt_tx_data;
+    (* KEEP = "true" *) input pkt_tx_eop;
+    (* KEEP = "true" *) input [4:0] pkt_tx_mod;
+    (* KEEP = "true" *) input pkt_tx_sop;
+    (* KEEP = "true" *) input pkt_tx_val;
 
     // Wishbone Inputs (MAC)
     input [7:0]     wb_adr_i;
@@ -485,6 +491,28 @@ module wrapper_macpcs_rx(
         .fifo_almost_e      (fifo_almost_e)
    );
 
+   (* dont_touch = "true" *) mac_tx_path INST_mac_tx_path
+   (
+     .clk_156    (clk_156),
+     .rst_n      (async_reset_n),
+     .data_in    (pkt_tx_data),
+     .sop_in     (pkt_tx_sop),
+     .eop_in     (pkt_tx_eop),
+     .mod_in     (pkt_tx_mod),
+     .val_in     (pkt_tx_val),
+
+     .mii_data_0 (),
+     .mii_ctrl_0 (),
+     .mii_data_1 (),
+     .mii_ctrl_1 (),
+     .mii_data_2 (),
+     .mii_ctrl_2 (),
+     .mii_data_3 (),
+     .mii_ctrl_3 ()
+   );
+
+
+
     PCS_core_rx INST_0_PCS_core
     (
         // CLOCKS
@@ -737,9 +765,9 @@ module wrapper_macpcs_rx(
         .pkt_rx_sop         (pkt_rx_sop),
         .pkt_rx_val         (pkt_rx_val),
 
-        .pkt_tx_data        (pkt_tx_data),
+        .pkt_tx_data        (pkt_tx_data[63:0]),
         .pkt_tx_eop         (pkt_tx_eop),
-        .pkt_tx_mod         (pkt_tx_mod),
+        .pkt_tx_mod         (pkt_tx_mod[2:0]),
         .pkt_tx_sop         (pkt_tx_sop),
         .pkt_tx_full        (pkt_tx_full),
         .pkt_tx_val         (pkt_tx_val),
