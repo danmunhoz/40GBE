@@ -103,9 +103,7 @@ architecture behav_data_frame_fifo of data_frame_fifo is
           rst_safe <= (others=>'0');
           enable_fifo <= '1';
         end if;
-
       end if;
-
     end process;
 
 
