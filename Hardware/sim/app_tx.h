@@ -24,6 +24,8 @@ SC_MODULE(app_tx) {
   sc_out<sc_logic>  eop;
   sc_out<sc_logic>  val;
 
+  int counter;
+
   ifstream in_file;
   sc_event reset_event;
 
@@ -41,47 +43,55 @@ SC_MODULE(app_tx) {
     line pr0;
     std::string line0;
 
-    sc_lv<8 >  ctrl_int;
-    sc_lv<64 > data_int;
-
     if (reset_in == SC_LOGIC_1) {       // RESET ativo baixo
 
-      if( in_file.is_open() ) {
-        if( in_file >> line0 ) {
-          line pr0 = splitHeaderBlock(line0);
+        counter = counter + 1;
 
-          ctrl_int = pr0.ctrl.c_str();
-          data_int  = pr0.data.c_str();
+        if (counter == 2) {
+          // SOP
+          sop = SC_LOGIC_1;
+          eop = SC_LOGIC_0;
+          val = SC_LOGIC_1;
+          mod = "00000";
+          data = ((sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter); // Enquanto nao passarmos um pacote de verdade...
 
-          data = (data_int,data_int,data_int,data_int); // Enquanto nao passarmos um pacote de verdade...
+        } else if (counter > 2 && counter < 64) {
+          // PAYLOAD
+          sop = SC_LOGIC_0;
+          eop = SC_LOGIC_0;
+          val = SC_LOGIC_1;
+          mod = "00000";
+          data = ((sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter);
 
-          if (ctrl_int == "00000001") { //Assuming packets are starting at byte 0...
-            sop = SC_LOGIC_1;
-            eop = SC_LOGIC_0;
-            val = SC_LOGIC_0;
-            mod = "00000";
-          } else if (ctrl_int == "11110000"){ // TODO: calcular todos eops....!
-            sop = SC_LOGIC_0;
-            eop = SC_LOGIC_0;
-            val = SC_LOGIC_0;
-            mod = "01111";
-          } else if (ctrl_int == "00000000") {
-            sop = SC_LOGIC_0;
-            eop = SC_LOGIC_0;
-            val = SC_LOGIC_1;
-            mod = "00000";
-          }
+        } else if (counter == 64) {
+          // EOP
+          sop = SC_LOGIC_0;
+          eop = SC_LOGIC_1;
+          val = SC_LOGIC_1;
+          mod = "00001";
+          data = ((sc_lv<64 >)0,(sc_lv<64 >)0,(sc_lv<64 >)0,(sc_lv<64 >)43981);
+
+        } else if (counter > 64 && counter < 72) {
+          // IDLE
+          sop = SC_LOGIC_0;
+          eop = SC_LOGIC_0;
+          val = SC_LOGIC_0;
+          mod = "00000";
+          data = (sc_lv<256 >)0;
+
+        } else if (counter == 72) {
+          // reset counter
+          data = (sc_lv<256 >)0;
+          counter = 0;
         }
-      } else {
-        cout << "[app_tx] input file not open." << endl;
-      }
 
     } else {
       mod = "00000";
       sop = SC_LOGIC_0;
       eop = SC_LOGIC_0;
       val = SC_LOGIC_0;
-      data  = "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+      data = (sc_lv<256 >)0;
+      counter  = 0;
     }
   }
 

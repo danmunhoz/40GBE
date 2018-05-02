@@ -119,10 +119,11 @@ architecture behav_frame_builder of frame_builder is
       end if;
     end process;
 
-    frame_output_decoder: process(ps_frame, eop_reg_in, sop_reg_in, val_reg_in, data_0, data_1, data_2, data_3, almost_e)
+    frame_output_decoder: process(ps_frame, eop_reg_in, sop_reg_in, val_reg_in, data_0, data_1, data_2, data_3, almost_e, wait_cnt)
     begin
       enable_regs <= '1';
-      frame_out <= (others=>'0');
+      -- frame_out <= (others=>'0');
+      frame_reg <= (others=>'0');
       eop_out <= (others=>'0');
       sop_out <= '0';
       val_out <= '0';
@@ -141,7 +142,7 @@ architecture behav_frame_builder of frame_builder is
           wait_cnt <= "000";
 
         when S_WAIT_CRC =>
-          if (wait_cnt <= "111") then
+          if (wait_cnt < "111") then
             wait_cnt <= wait_cnt + 1;
           end if;
 
@@ -188,7 +189,7 @@ architecture behav_frame_builder of frame_builder is
 
     end process;
 
-    frame_ns_decoder: process(ps_frame, eop_reg_in, sop_reg_in, data_0, data_1, data_2, data_3)
+    frame_ns_decoder: process(ps_frame, eop_reg_in, sop_reg_in, data_0, data_1, data_2, data_3, wait_cnt)
     begin
       case ps_frame is
         when S_IDLE =>
@@ -197,17 +198,17 @@ architecture behav_frame_builder of frame_builder is
           end if;
 
         when S_WAIT_CRC =>
-          if (wait_cnt = "111") then
-            ns_frame <= S_PREAM;
-          else
+          if (wait_cnt < "111") then
             ns_frame <= S_WAIT_CRC;
+          else
+            ns_frame <= S_PREAM;
           end if;
 
         when S_PREAM =>
           ns_frame <= S_READ_FIFO;
 
         when S_READ_FIFO =>
-          if (eop_reg_in = "10000") then
+          if (eop_reg_in = "100000") then
             ns_frame <= S_READ_FIFO;
           else
             ns_frame <= S_EOP;
