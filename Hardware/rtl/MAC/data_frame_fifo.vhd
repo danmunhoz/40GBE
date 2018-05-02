@@ -32,6 +32,10 @@ end entity;
 
 architecture behav_data_frame_fifo of data_frame_fifo is
     signal rst            : std_logic;
+    signal clk_n          : std_logic;
+    signal ren_int        : std_logic;
+    signal wen_int        : std_logic;
+
     signal l0_data_in     : std_logic_vector(63 downto 0);
     signal l1_data_in     : std_logic_vector(63 downto 0);
     signal h0_data_in     : std_logic_vector(63 downto 0);
@@ -72,6 +76,8 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     signal h0_wrcnt : std_logic_vector(8 downto 0);
     signal h1_wrcnt : std_logic_vector(8 downto 0);
 
+    signal rst_safe : std_logic_vector(2 downto 0);
+    signal enable_fifo : std_logic;
 
   begin
     -- signals in
@@ -80,7 +86,31 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     h0_data_in  <=  data_in(191 downto 128);
     h1_data_in  <=  val_in & sop_in & eop_in & data_in(255 downto 192);
 
+    ren_int <= ren when enable_fifo = '1' else '0';
+    wen_int <= wen when enable_fifo = '1' else '0';
+
+    reset_drc : process(clk, rst_n)
+    begin
+      if (rst_n = '0') then
+        rst_safe <= (others =>'0');
+        enable_fifo <= '0';
+      elsif clk = '1' and clk'event then
+        if (rst_safe < "101") then
+          rst_safe <= rst_safe + 1;
+          enable_fifo <= '0';
+        else
+          rst_safe <= (others=>'0');
+          enable_fifo <= '1';
+        end if;
+
+      end if;
+
+    end process;
+
+
     rst <= not rst_n;
+    clk_n <= not clk;
+
     FIFO_L0 : FIFO_SYNC_MACRO
     generic map (
       DEVICE => "7SERIES",
@@ -98,11 +128,11 @@ architecture behav_data_frame_fifo of data_frame_fifo is
       RDERR => open,
       WRCOUNT => l0_wrcnt,
       WRERR => open,
-      CLK => clk,
+      CLK => clk_n,
       DI => l0_data_in,
-      RDEN => ren,
+      RDEN => ren_int,
       RST => rst,
-      WREN => wen
+      WREN => wen_int
     );
 
     FIFO_L1 : FIFO_SYNC_MACRO
@@ -122,11 +152,11 @@ architecture behav_data_frame_fifo of data_frame_fifo is
       RDERR => open,
       WRCOUNT => l1_wrcnt,
       WRERR => open,
-      CLK => clk,
+      CLK => clk_n,
       DI => l1_data_in,
-      RDEN => ren,
+      RDEN => ren_int,
       RST => rst,
-      WREN => wen
+      WREN => wen_int
     );
 
     FIFO_H0 : FIFO_SYNC_MACRO
@@ -146,11 +176,11 @@ architecture behav_data_frame_fifo of data_frame_fifo is
       RDERR => open,
       WRCOUNT => h0_wrcnt,
       WRERR => open,
-      CLK => clk,
+      CLK => clk_n,
       DI => h0_data_in,
-      RDEN => ren,
+      RDEN => ren_int,
       RST => rst,
-      WREN => wen
+      WREN => wen_int
     );
 
     FIFO_H1 : FIFO_SYNC_MACRO
@@ -170,11 +200,11 @@ architecture behav_data_frame_fifo of data_frame_fifo is
       RDERR => open,
       WRCOUNT => h1_wrcnt,
       WRERR => open,
-      CLK => clk,
+      CLK => clk_n,
       DI => h1_data_in,
-      RDEN => ren,
+      RDEN => ren_int,
       RST => rst,
-      WREN => wen
+      WREN => wen_int
     );
 
     -- signals out
