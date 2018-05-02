@@ -86,7 +86,8 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     h0_data_in  <=  data_in(191 downto 128);
     h1_data_in  <=  val_in & sop_in & eop_in & data_in(255 downto 192);
 
-    ren_int <= ren when enable_fifo = '1' else '0';
+    -- ren_int <= ren when enable_fifo = '1' else '0';
+    ren_int <= '0', '1' after 200 ns;
     wen_int <= wen when enable_fifo = '1' else '0';
 
     reset_drc : process(clk, rst_n)
@@ -95,7 +96,7 @@ architecture behav_data_frame_fifo of data_frame_fifo is
         rst_safe <= (others =>'0');
         enable_fifo <= '0';
       elsif clk = '1' and clk'event then
-        if (rst_safe < "101") then
+        if (rst_safe < "101" and enable_fifo = '0') then
           rst_safe <= rst_safe + 1;
           enable_fifo <= '0';
         else
