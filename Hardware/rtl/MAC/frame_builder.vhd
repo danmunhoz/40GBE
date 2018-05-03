@@ -42,6 +42,7 @@ architecture behav_frame_builder of frame_builder is
 
     type crc_fsm_states is (S_IDLE, S_D128, S_D64, S_D8_0, S_D8_1, S_D8_2, S_D8_3, S_D8_4, S_D8_5, S_D8_6, S_D8_7, S_DONE);
     signal ps_crc : crc_fsm_states;
+    signal ns_crc : crc_fsm_states;
 
     type frame_fsm_states is (S_IDLE, S_WAIT_CRC, S_PREAM, S_READ_FIFO, S_EOP, S_IPG, S_ERROR);
     signal ps_frame : frame_fsm_states;
@@ -53,10 +54,14 @@ architecture behav_frame_builder of frame_builder is
     signal data_3 : std_logic_vector(63 downto 0);
     signal data_3_o : std_logic_vector(63 downto 0);
 
-    signal eop_reg_in : std_logic_vector( 5 downto 0);
+    signal eop_reg_in : std_logic_vector(5 downto 0);
     signal sop_reg_in : std_logic;
     signal val_reg_in : std_logic;
-    signal frame_reg  : std_logic_vector(255 downto 0);
+
+    signal sop_int    : std_logic;
+    signal val_int    : std_logic;
+    signal eop_int    : std_logic_vector( 5 downto 0);
+    signal frame_int  : std_logic_vector(255 downto 0);
 
     signal ren  : std_logic;
     signal wen  : std_logic;
@@ -70,6 +75,10 @@ architecture behav_frame_builder of frame_builder is
 
     ren_out <= ren when rst = '1' else '0';
     wen_out <= wen when rst = '1' else '0';
+    frame_out <= frame_int;
+    eop_out <= eop_int;
+    sop_out <= sop_int;
+    val_out <= val_int;
 
     input_regs: process(clk, rst)
     begin
@@ -82,8 +91,6 @@ architecture behav_frame_builder of frame_builder is
         eop_reg_in <=  (others=>'0');
         sop_reg_in <= '0';
         val_reg_in <= '0';
-        -- ren <= '0';
-        -- wen <= '0';
       elsif clk'event and clk = '1' then
         if (enable_regs = '1') then
           data_0 <= data_in(63 downto 0);
@@ -94,8 +101,6 @@ architecture behav_frame_builder of frame_builder is
           eop_reg_in <= eop_in;
           sop_reg_in <= sop_in;
           val_reg_in <= val_in;
-          -- ren <= ren_in
-          -- wen <= wen_in
         end if;
       end if;
     end process;
@@ -103,6 +108,22 @@ architecture behav_frame_builder of frame_builder is
     -- CRC FINITE STATE MACHINE
     -- Will start calculating as soon as a new payload arrives. At the end of
     -- the reception of data, will output de frame crc value.
+    sunc_proc_crc: process(clk, rst)
+    begin
+      if rst = '0' then
+        ps_crc <= S_IDLE;
+      elsif clk'event and clk = '1' then
+        ps_crc <= ns_crc;
+      end if;
+    end process;
+
+    crc_output_decoder: process(ps_crc)
+    begin
+    end process;
+
+    crc_ns_decoder: process(ps_crc)
+    begin
+    end process;
 
 
     -- FRAME FINITE STATE MACHINE
@@ -122,11 +143,10 @@ architecture behav_frame_builder of frame_builder is
     frame_output_decoder: process(ps_frame, eop_reg_in, sop_reg_in, val_reg_in, data_0, data_1, data_2, data_3, almost_e, wait_cnt)
     begin
       enable_regs <= '1';
-      -- frame_out <= (others=>'0');
-      frame_reg <= (others=>'0');
-      eop_out <= (others=>'0');
-      sop_out <= '0';
-      val_out <= '0';
+      frame_int <= (others=>'0');
+      eop_int <= "100000";
+      sop_int <= '0';
+      val_int <= '0';
       ren <= '0';
       wen <= '0';
 
@@ -138,7 +158,6 @@ architecture behav_frame_builder of frame_builder is
             enable_regs <= '0'; -- So that CRC has time to calculate it
             ren <= '0';
           end if;
-
           wait_cnt <= "000";
 
         when S_WAIT_CRC =>
@@ -147,45 +166,52 @@ architecture behav_frame_builder of frame_builder is
           end if;
 
         when S_PREAM =>
-          frame_reg <= data_2 & data_1 & data_0 & PREAMBLE;
-          eop_out <= "100000";
-          sop_out <= '1';
-          val_out <= '1';
+          frame_int <= data_2 & data_1 & data_0 & PREAMBLE;
+          eop_int <= "100000";
+          sop_int <= '1';
+          val_int <= '1';
 
           ren <= '1';
           wen <= '1';
 
         when S_READ_FIFO =>
-          frame_reg <= data_2 & data_1 & data_0 & data_3_o;
-          eop_out <= "100000";
-          sop_out <= '0';
-          val_out <= '1';
+          frame_int <= data_2 & data_1 & data_0 & data_3_o;
+          eop_int <= "100000";
+          sop_int <= '0';
+          val_int <= '1';
 
           ren <= '1';
           wen <= '1';
 
         when S_EOP =>
-          frame_reg <= data_2 & data_1 & data_0 & PREAMBLE;
-          eop_out <= eop_reg_in;
-          sop_out <= '0';
-          val_out <= '1';
+          frame_int <= data_2 & data_1 & data_0 & PREAMBLE;
+          eop_int <= eop_reg_in + 8;
+          sop_int <= '0';
+          val_int <= '1';
 
         when S_IPG =>
-          frame_reg <= LANE_ERROR & LANE_ERROR & LANE_ERROR & LANE_ERROR; -- Nao lembro do codigo de IDLE
+          frame_int <= LANE_ERROR & LANE_ERROR & LANE_ERROR & LANE_ERROR; -- Nao lembro do codigo de IDLE
+          eop_int <= "100000";
+          sop_int <= '0';
+          val_int <= '0';
 
         when S_ERROR =>
-          frame_reg <= LANE_ERROR & LANE_ERROR & LANE_ERROR & LANE_ERROR;
+          frame_int <= LANE_ERROR & LANE_ERROR & LANE_ERROR & LANE_ERROR;
+          eop_int <= "100000";
+          sop_int <= '0';
+          val_int <= '0';
 
         when others => null;
       end case;
 
       -- Safety measures...
-      if (almost_e = '1') then
-        ren <= '0';
-      end if;
-      if (almost_f = '1') then
-        wen <= '0';
-      end if;
+      -- if (almost_e = '1') then
+      --   ren <= '0';
+      -- end if;
+      --
+      -- if (almost_f = '1') then
+      --   wen <= '0';
+      -- end if;
 
     end process;
 
@@ -193,8 +219,11 @@ architecture behav_frame_builder of frame_builder is
     begin
       case ps_frame is
         when S_IDLE =>
-          if (sop_reg_in = '1') then
-            ns_frame <= S_WAIT_CRC;
+          if (almost_e = '1') then
+          -- If input is almost empty, stay in the idle state
+            if (sop_reg_in = '1') then
+              ns_frame <= S_WAIT_CRC;
+            end if;
           end if;
 
         when S_WAIT_CRC =>
@@ -218,11 +247,11 @@ architecture behav_frame_builder of frame_builder is
           ns_frame <= S_IPG;
 
         when S_IPG =>
-          if (ipg_deficit = "000") then
+          -- if (ipg_deficit = "000") then
             ns_frame <= S_IDLE;
-          else
-            ns_frame <= S_IPG;
-          end if;
+          -- else
+            -- ns_frame <= S_IPG;
+          -- end if;
 
         when S_ERROR =>
         when others => null;

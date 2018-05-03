@@ -25,6 +25,8 @@ entity data_frame_fifo is
     eop_out    : out std_logic_vector(  5 downto 0);
     sop_out    : out std_logic;
     val_out    : out std_logic;
+    almost_e   : out std_logic;
+    almost_f   : out std_logic;
     full       : out std_logic;
     empty      : out std_logic
   );
@@ -35,6 +37,15 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     signal clk_n          : std_logic;
     signal ren_int        : std_logic;
     signal wen_int        : std_logic;
+
+    signal data_reg       : std_logic_vector(255 downto 0);
+    signal eop_reg        : std_logic_vector(  5 downto 0);
+    signal sop_reg        : std_logic;
+    signal val_reg        : std_logic;
+    signal almost_e_reg   : std_logic;
+    signal almost_f_reg   : std_logic;
+    signal full_reg       : std_logic;
+    signal empty_reg      : std_logic;
 
     signal l0_data_in     : std_logic_vector(63 downto 0);
     signal l1_data_in     : std_logic_vector(63 downto 0);
@@ -80,14 +91,37 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     signal enable_fifo : std_logic;
 
   begin
-    -- signals in
-    l0_data_in  <=  data_in( 63 downto 0);
-    l1_data_in  <=  data_in(127 downto 64);
-    h0_data_in  <=  data_in(191 downto 128);
-    h1_data_in  <=  val_in & sop_in & eop_in & data_in(255 downto 192);
+    data_out  <= data_reg;
+    eop_out   <= eop_reg;
+    sop_out   <= sop_reg;
+    val_out   <= val_reg;
+    full      <= full_reg;
+    empty     <= empty_reg;
+    almost_e  <= almost_e_reg;
+    almost_f  <= almost_f_reg;
 
-    ren_int <= ren when enable_fifo = '1' else '0';
-    wen_int <= wen when enable_fifo = '1' else '0';
+    regs_out : process(clk, rst_n)
+    begin
+      if (rst_n = '0') then
+        data_reg <= (others=>'0');
+        eop_reg <=  (others=>'0');
+        sop_reg <= '0';
+        val_reg <= '0';
+        almost_e_reg <= '0';
+        almost_f_reg <= '0';
+        full_reg <= '0';
+        empty_reg <= '0';
+      elsif clk = '1' and clk'event then
+        data_reg <= h1_data_out(63 downto 0) & h0_data_out & l1_data_out & l0_data_out;
+        eop_reg <= h1_data_out(69 downto 64);
+        sop_reg <= h1_data_out(70);
+        val_reg <= h1_data_out(71);
+        full_reg <= h1_full or h0_full or l1_full or l0_full;
+        empty_reg <=  h1_empty or h0_empty or l1_empty or l0_empty;
+        almost_e_reg <= l0_almost_empty or l1_almost_empty or h0_almost_empty or h1_almost_empty;
+        almost_f_reg <= l0_almost_full or l1_almost_full or h0_almost_full or h1_almost_full;
+      end if;
+    end process;
 
     reset_drc : process(clk, rst_n)
     begin
@@ -105,6 +139,15 @@ architecture behav_data_frame_fifo of data_frame_fifo is
       end if;
     end process;
 
+    -- signals in
+    l0_data_in  <=  data_in( 63 downto 0);
+    l1_data_in  <=  data_in(127 downto 64);
+    h0_data_in  <=  data_in(191 downto 128);
+    h1_data_in  <=  val_in & sop_in & eop_in & data_in(255 downto 192);
+
+    ren_int <= ren when enable_fifo = '1' else '0';
+    wen_int <= wen when enable_fifo = '1' else '0';
+
 
     rst <= not rst_n;
     clk_n <= not clk;
@@ -112,8 +155,8 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     FIFO_L0 : FIFO_SYNC_MACRO
     generic map (
       DEVICE => "7SERIES",
-      ALMOST_FULL_OFFSET => X"0080",
-      ALMOST_EMPTY_OFFSET => X"0080",
+      ALMOST_FULL_OFFSET => X"0010",
+      ALMOST_EMPTY_OFFSET => X"0010",
       DATA_WIDTH => 64,
       FIFO_SIZE => "36Kb")
     port map (
@@ -136,8 +179,8 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     FIFO_L1 : FIFO_SYNC_MACRO
     generic map (
       DEVICE => "7SERIES",
-      ALMOST_FULL_OFFSET => X"0080",
-      ALMOST_EMPTY_OFFSET => X"0080",
+      ALMOST_FULL_OFFSET => X"0010",
+      ALMOST_EMPTY_OFFSET => X"0010",
       DATA_WIDTH => 64,
       FIFO_SIZE => "36Kb")
     port map (
@@ -160,8 +203,8 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     FIFO_H0 : FIFO_SYNC_MACRO
     generic map (
       DEVICE => "7SERIES",
-      ALMOST_FULL_OFFSET => X"0080",
-      ALMOST_EMPTY_OFFSET => X"0080",
+      ALMOST_FULL_OFFSET => X"0010",
+      ALMOST_EMPTY_OFFSET => X"0010",
       DATA_WIDTH => 64,
       FIFO_SIZE => "36Kb")
     port map (
@@ -184,8 +227,8 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     FIFO_H1 : FIFO_SYNC_MACRO
     generic map (
       DEVICE => "7SERIES",
-      ALMOST_FULL_OFFSET => X"0080",
-      ALMOST_EMPTY_OFFSET => X"0080",
+      ALMOST_FULL_OFFSET => X"0010",
+      ALMOST_EMPTY_OFFSET => X"0010",
       DATA_WIDTH => 72,
       FIFO_SIZE => "36Kb")
     port map (
@@ -206,13 +249,16 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     );
 
     -- signals out
-    data_out  <=  h1_data_out(63 downto 0) & h0_data_out &
-                  l1_data_out & l0_data_out;
-    eop_out   <=  h1_data_out(69 downto 64);
-    sop_out   <=  h1_data_out(70);
-    val_out   <=  h1_data_out(71);
-
-    full      <=  h1_full or h0_full or l1_full or l0_full;
-    empty     <=  h1_empty or h0_empty or l1_empty or l0_empty;
+    -- data_out  <=  h1_data_out(63 downto 0) & h0_data_out &
+    --               l1_data_out & l0_data_out;
+    -- eop_out   <=  h1_data_out(69 downto 64);
+    -- sop_out   <=  h1_data_out(70);
+    -- val_out   <=  h1_data_out(71);
+    --
+    -- full      <=  h1_full or h0_full or l1_full or l0_full;
+    -- empty     <=  h1_empty or h0_empty or l1_empty or l0_empty;
+    --
+    -- almost_e  <= l0_almost_empty or l1_almost_empty or h0_almost_empty or h1_almost_empty;
+    -- almost_f  <= l0_almost_full or l1_almost_full or h0_almost_full or h1_almost_full;
 
 end behav_data_frame_fifo;

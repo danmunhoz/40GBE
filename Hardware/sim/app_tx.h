@@ -13,6 +13,9 @@ struct line {
   std::string ctrl;
 };
 
+#define MAX_PL_CYCLES 16
+#define MAX_IPG_CYCLES MAX_PL_CYCLES + 5
+
 SC_MODULE(app_tx) {
 
   sc_in<sc_logic>   clock_in;
@@ -55,7 +58,7 @@ SC_MODULE(app_tx) {
           mod = "00000";
           data = ((sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter); // Enquanto nao passarmos um pacote de verdade...
 
-        } else if (counter > 2 && counter < 64) {
+        } else if (counter > 2 && counter < MAX_PL_CYCLES) {
           // PAYLOAD
           sop = SC_LOGIC_0;
           eop = SC_LOGIC_0;
@@ -63,7 +66,7 @@ SC_MODULE(app_tx) {
           mod = "00000";
           data = ((sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter);
 
-        } else if (counter == 64) {
+        } else if (counter == MAX_PL_CYCLES) {
           // EOP
           sop = SC_LOGIC_0;
           eop = SC_LOGIC_1;
@@ -71,7 +74,7 @@ SC_MODULE(app_tx) {
           mod = "00001";
           data = ((sc_lv<64 >)0,(sc_lv<64 >)0,(sc_lv<64 >)0,(sc_lv<64 >)43981);
 
-        } else if (counter > 64 && counter < 72) {
+        } else if (counter > MAX_PL_CYCLES && counter < MAX_IPG_CYCLES) {
           // IDLE
           sop = SC_LOGIC_0;
           eop = SC_LOGIC_0;
@@ -79,7 +82,7 @@ SC_MODULE(app_tx) {
           mod = "00000";
           data = (sc_lv<256 >)0;
 
-        } else if (counter == 72) {
+        } else if (counter == MAX_IPG_CYCLES) {
           // reset counter
           data = (sc_lv<256 >)0;
           counter = 0;

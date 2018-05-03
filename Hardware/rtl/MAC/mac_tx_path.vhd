@@ -72,9 +72,9 @@ architecture behav_mac_tx_path of mac_tx_path is
       sop_out  => r_sop_fifo_0,
       val_out  => r_val_fifo_0,
       ren      => ren_fifo_0,
-      empty    => empty_fifo_0
-      -- almost_e => almost_e_fifo_0,
-      -- almost_f => almost_f_fifo_0,
+      empty    => empty_fifo_0,
+      almost_e => almost_e_fifo_0,
+      almost_f => almost_f_fifo_0
     );
 
     frame: entity work.frame_builder port map(
