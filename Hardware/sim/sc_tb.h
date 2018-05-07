@@ -97,7 +97,7 @@ SC_MODULE(Top) {
 
   sc_signal<sc_lv<256> > app_tx_data;
   sc_signal<sc_lv<5> >   app_tx_mod;
-  sc_signal<sc_logic>    app_tx_sop;
+  sc_signal<sc_lv<2> >   app_tx_sop;
   sc_signal<sc_logic>    app_tx_eop;
   sc_signal<sc_logic>    app_tx_val;
 

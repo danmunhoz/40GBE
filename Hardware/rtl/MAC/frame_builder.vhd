@@ -23,8 +23,8 @@ entity frame_builder is
   clk       : in std_logic;
   rst       : in std_logic;
   data_in   : in std_logic_vector(255 downto 0);
-  eop_in    : in std_logic_vector(  5 downto 0);
-  sop_in    : in std_logic;
+  eop_in    : in std_logic_vector(5 downto 0);
+  sop_in    : in std_logic_vector(1 downto 0);
   val_in    : in std_logic;
   almost_f  : in std_logic;
   almost_e  : in std_logic;
@@ -32,8 +32,8 @@ entity frame_builder is
   ren_out   : out std_logic;
   wen_out   : out std_logic;
   frame_out : out std_logic_vector(255 downto 0);
-  eop_out   : out std_logic_vector(  5 downto 0);
-  sop_out   : out std_logic;
+  eop_out   : out std_logic_vector(5 downto 0);
+  sop_out   : out std_logic_vector(1 downto 0);
   val_out   : out std_logic
   );
 end entity;
@@ -44,7 +44,6 @@ architecture behav_frame_builder of frame_builder is
     signal ps_crc : crc_fsm_states;
     signal ns_crc : crc_fsm_states;
 
-    -- type frame_fsm_states is (S_IDLE, S_WAIT_CRC, S_PREAM, S_READ_FIFO, S_EOP, S_IPG, S_ERROR);
     type frame_fsm_states is (S_IDLE, S_WAIT_CRC, S_PREAM, S_READ_FIFO, S_EOP, S_ERROR);
     signal ps_frame : frame_fsm_states;
     signal ns_frame : frame_fsm_states;
@@ -56,12 +55,12 @@ architecture behav_frame_builder of frame_builder is
     signal data_3_o : std_logic_vector(63 downto 0);
 
     signal eop_reg_in : std_logic_vector(5 downto 0);
-    signal sop_reg_in : std_logic;
+    signal sop_reg_in : std_logic_vector(1 downto 0);
     signal val_reg_in : std_logic;
 
-    signal sop_int    : std_logic;
+    signal sop_int    : std_logic_vector(1 downto 0);
     signal val_int    : std_logic;
-    signal eop_int    : std_logic_vector( 5 downto 0);
+    signal eop_int    : std_logic_vector(5 downto 0);
     signal frame_int  : std_logic_vector(255 downto 0);
 
     signal ren  : std_logic;
@@ -90,7 +89,7 @@ architecture behav_frame_builder of frame_builder is
         data_3 <= (others=>'0');
         data_3_o <= (others=>'0');
         eop_reg_in <=  (others=>'0');
-        sop_reg_in <= '0';
+        sop_reg_in <= (others=>'0');
         val_reg_in <= '0';
       elsif clk'event and clk = '1' then
         if (enable_regs = '1') then
@@ -147,7 +146,7 @@ architecture behav_frame_builder of frame_builder is
       enable_regs <= '1';
       frame_int <= (others=>'0');
       eop_int <= "100000";
-      sop_int <= '0';
+      sop_int <= "00";
       val_int <= '0';
       ren <= '0';
       wen <= '0';
@@ -157,7 +156,7 @@ architecture behav_frame_builder of frame_builder is
           ren <= '1';
           wait_cnt <= "000";
 
-          if (sop_reg_in = '1') then
+          if (sop_reg_in = "10") then
             enable_regs <= '0'; -- So that CRC has time to calculate it
             ren <= '0';
           end if;
@@ -172,7 +171,7 @@ architecture behav_frame_builder of frame_builder is
         when S_PREAM =>
           frame_int <= data_2 & data_1 & data_0 & PREAMBLE;
           eop_int <= "100000";
-          sop_int <= '1';
+          sop_int <= "10";
           val_int <= '1';
           ren <= '1';
           wen <= '1';
@@ -180,7 +179,7 @@ architecture behav_frame_builder of frame_builder is
         when S_READ_FIFO =>
           frame_int <= data_2 & data_1 & data_0 & data_3_o;
           eop_int <= "100000";
-          sop_int <= '0';
+          sop_int <= "00";
           val_int <= '1';
           ren <= '1';
           wen <= '1';
@@ -188,13 +187,13 @@ architecture behav_frame_builder of frame_builder is
         when S_EOP =>
           frame_int <= data_2 & data_1 & data_0 & data_3_o;
           eop_int <= eop_reg_in + 8;
-          sop_int <= '0';
+          sop_int <= "00";
           val_int <= '1';
 
         when S_ERROR =>
           frame_int <= LANE_ERROR & LANE_ERROR & LANE_ERROR & LANE_ERROR;
           eop_int <= "100000";
-          sop_int <= '0';
+          sop_int <= "00";
           val_int <= '0';
 
         when others => null;
@@ -207,7 +206,7 @@ architecture behav_frame_builder of frame_builder is
         when S_IDLE =>
           if (almost_e = '1') then
           -- If input is almost empty, stay in the idle state
-            if (sop_reg_in = '1') then
+            if (sop_reg_in = "10") then
               ns_frame <= S_WAIT_CRC;
             end if;
           end if;
@@ -230,7 +229,7 @@ architecture behav_frame_builder of frame_builder is
             ns_frame <= S_EOP;
           end if;
 
-          if (sop_reg_in = '1') then
+          if (sop_reg_in /= "00") then
             ns_frame <= S_ERROR;
           end if;
 

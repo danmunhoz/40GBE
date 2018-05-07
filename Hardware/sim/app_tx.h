@@ -22,10 +22,10 @@ SC_MODULE(app_tx) {
   sc_in<sc_logic>   reset_in;
 
   sc_out<sc_lv<256 > > data;
-  sc_out<sc_lv<5 > > mod;
-  sc_out<sc_logic>  sop;
-  sc_out<sc_logic>  eop;
-  sc_out<sc_logic>  val;
+  sc_out<sc_lv<5 > >   mod;
+  sc_out<sc_lv<2> >    sop;
+  sc_out<sc_logic>     eop;
+  sc_out<sc_logic>     val;
 
   int counter;
 
@@ -52,7 +52,7 @@ SC_MODULE(app_tx) {
 
         if (counter == 2) {
           // SOP
-          sop = SC_LOGIC_1;
+          sop = "10";
           eop = SC_LOGIC_0;
           val = SC_LOGIC_1;
           mod = "00000";
@@ -60,7 +60,7 @@ SC_MODULE(app_tx) {
 
         } else if (counter > 2 && counter < MAX_PL_CYCLES) {
           // PAYLOAD
-          sop = SC_LOGIC_0;
+          sop = "00";
           eop = SC_LOGIC_0;
           val = SC_LOGIC_1;
           mod = "00000";
@@ -68,7 +68,7 @@ SC_MODULE(app_tx) {
 
         } else if (counter == MAX_PL_CYCLES) {
           // EOP
-          sop = SC_LOGIC_0;
+          sop = "00";
           eop = SC_LOGIC_1;
           val = SC_LOGIC_1;
           mod = "00001";
@@ -76,7 +76,7 @@ SC_MODULE(app_tx) {
 
         } else if (counter > MAX_PL_CYCLES && counter < MAX_IPG_CYCLES) {
           // IDLE
-          sop = SC_LOGIC_0;
+          sop = "00";
           eop = SC_LOGIC_0;
           val = SC_LOGIC_0;
           mod = "00000";
@@ -90,7 +90,7 @@ SC_MODULE(app_tx) {
 
     } else {
       mod = "00000";
-      sop = SC_LOGIC_0;
+      sop = "00";
       eop = SC_LOGIC_0;
       val = SC_LOGIC_0;
       data = (sc_lv<256 >)0;

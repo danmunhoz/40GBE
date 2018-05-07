@@ -41,7 +41,7 @@ entity rx_xgt4 is
       pkt_tx_data                : in  std_logic_vector(255 downto 0);
       pkt_tx_eop                 : in  std_logic;
       pkt_tx_mod                 : in  std_logic_vector(4 downto 0);
-      pkt_tx_sop                 : in  std_logic;
+      pkt_tx_sop                 : in  std_logic_vector(1 downto 0);
       pkt_tx_val                 : in  std_logic;
 
       -- XMAC Outputs

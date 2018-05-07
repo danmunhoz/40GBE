@@ -7,7 +7,7 @@ entity mac_tx_path is
       clk_156  : in std_logic;
       rst_n    : in std_logic;
       data_in  : in std_logic_vector(255 downto 0);
-      sop_in   : in std_logic;
+      sop_in   : in std_logic_vector(1 downto 0);
       eop_in   : in std_logic;
       mod_in   : in std_logic_vector(4 downto 0);
       val_in   : in std_logic;
@@ -29,7 +29,7 @@ architecture behav_mac_tx_path of mac_tx_path is
 
     signal r_data_fifo_0 : std_logic_vector(255 downto 0);
     signal r_eop_fifo_0  : std_logic_vector(5 downto 0);
-    signal r_sop_fifo_0  : std_logic;
+    signal r_sop_fifo_0  : std_logic_vector(1 downto 0);
     signal r_val_fifo_0  : std_logic;
     signal wen_fifo_0    : std_logic;
     signal ren_fifo_0    : std_logic;
@@ -40,7 +40,7 @@ architecture behav_mac_tx_path of mac_tx_path is
 
     signal w_frame_fifo_1 : std_logic_vector(255 downto 0);
     signal w_eop_fifo_1  : std_logic_vector(5 downto 0);
-    signal w_sop_fifo_1  : std_logic;
+    signal w_sop_fifo_1  : std_logic_vector(1 downto 0);
     signal w_val_fifo_1  : std_logic;
     signal wen_fifo_1    : std_logic;
     signal ren_fifo_1    : std_logic;
@@ -48,10 +48,22 @@ architecture behav_mac_tx_path of mac_tx_path is
     signal full_fifo_1   : std_logic;
     signal r_frame_fifo_1 : std_logic_vector(255 downto 0);
     signal r_eop_fifo_1  : std_logic_vector(5 downto 0);
-    signal r_sop_fifo_1  : std_logic;
+    signal r_sop_fifo_1  : std_logic_vector(1 downto 0);
     signal r_val_fifo_1  : std_logic;
 
   begin
+    -- ENCODINGS
+    --  SOP:
+    --    00 - Invalid value
+    --    01 - Invalid value
+    --    10 - Packet starting at byte 0
+    --    11 - Packet starting at byte 16
+    --
+    --  EOP:
+    --    100000 - No eop at this cycle
+    --    0xxxxx - Packet ending at byte xxxxx
+    --
+
 
     w_eop_fifo_0 <= "100000" when eop_in = '0' else
                     '1' & mod_in;

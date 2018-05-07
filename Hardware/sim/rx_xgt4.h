@@ -31,7 +31,7 @@ public:
     sc_in<sc_lv<256> > pkt_tx_data;
     sc_in<sc_logic> pkt_tx_eop;
     sc_in<sc_lv<5> > pkt_tx_mod;
-    sc_in<sc_logic> pkt_tx_sop;
+    sc_in<sc_lv<2> > pkt_tx_sop;
     sc_in<sc_logic> pkt_tx_val;
     sc_out<sc_logic> pkt_rx_avail;
     sc_out<sc_lv<64> > pkt_rx_data;

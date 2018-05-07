@@ -209,7 +209,7 @@ module wrapper_macpcs_rx(
     (* KEEP = "true" *) input [255:0] pkt_tx_data;
     (* KEEP = "true" *) input pkt_tx_eop;
     (* KEEP = "true" *) input [4:0] pkt_tx_mod;
-    (* KEEP = "true" *) input pkt_tx_sop;
+    (* KEEP = "true" *) input [1:0] pkt_tx_sop;
     (* KEEP = "true" *) input pkt_tx_val;
 
     // Wishbone Inputs (MAC)
@@ -768,7 +768,7 @@ module wrapper_macpcs_rx(
         .pkt_tx_data        (pkt_tx_data[63:0]),
         .pkt_tx_eop         (pkt_tx_eop),
         .pkt_tx_mod         (pkt_tx_mod[2:0]),
-        .pkt_tx_sop         (pkt_tx_sop),
+        .pkt_tx_sop         (pkt_tx_sop[1]),
         .pkt_tx_full        (pkt_tx_full),
         .pkt_tx_val         (pkt_tx_val),
 
