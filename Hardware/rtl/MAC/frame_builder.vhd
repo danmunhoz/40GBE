@@ -44,7 +44,8 @@ architecture behav_frame_builder of frame_builder is
     signal ps_crc : crc_fsm_states;
     signal ns_crc : crc_fsm_states;
 
-    type frame_fsm_states is (S_IDLE, S_WAIT_CRC, S_PREAM, S_READ_FIFO, S_EOP, S_IPG, S_ERROR);
+    -- type frame_fsm_states is (S_IDLE, S_WAIT_CRC, S_PREAM, S_READ_FIFO, S_EOP, S_IPG, S_ERROR);
+    type frame_fsm_states is (S_IDLE, S_WAIT_CRC, S_PREAM, S_READ_FIFO, S_EOP, S_ERROR);
     signal ps_frame : frame_fsm_states;
     signal ns_frame : frame_fsm_states;
 
@@ -130,7 +131,8 @@ architecture behav_frame_builder of frame_builder is
     -- At the beginning of a new payload, wait for some time so the crc is ready
     -- by the end of the transmission. Then, outputs the preamble and SFD followed
     -- by the data coming from data_in. Finally, finishes the frame writing the
-    -- crc value.
+    -- crc value. Note that IPG control is done by the mii_if module
+
     sync_proc_frame: process(clk, rst)
     begin
       if rst = '0' then
@@ -153,14 +155,16 @@ architecture behav_frame_builder of frame_builder is
       case ps_frame is
         when S_IDLE =>
           ren <= '1';
+          wait_cnt <= "000";
 
           if (sop_reg_in = '1') then
             enable_regs <= '0'; -- So that CRC has time to calculate it
             ren <= '0';
           end if;
-          wait_cnt <= "000";
 
         when S_WAIT_CRC =>
+          enable_regs <= '0';
+
           if (wait_cnt < "111") then
             wait_cnt <= wait_cnt + 1;
           end if;
@@ -170,7 +174,6 @@ architecture behav_frame_builder of frame_builder is
           eop_int <= "100000";
           sop_int <= '1';
           val_int <= '1';
-
           ren <= '1';
           wen <= '1';
 
@@ -179,21 +182,14 @@ architecture behav_frame_builder of frame_builder is
           eop_int <= "100000";
           sop_int <= '0';
           val_int <= '1';
-
           ren <= '1';
           wen <= '1';
 
         when S_EOP =>
-          frame_int <= data_2 & data_1 & data_0 & PREAMBLE;
+          frame_int <= data_2 & data_1 & data_0 & data_3_o;
           eop_int <= eop_reg_in + 8;
           sop_int <= '0';
           val_int <= '1';
-
-        when S_IPG =>
-          frame_int <= LANE_ERROR & LANE_ERROR & LANE_ERROR & LANE_ERROR; -- Nao lembro do codigo de IDLE
-          eop_int <= "100000";
-          sop_int <= '0';
-          val_int <= '0';
 
         when S_ERROR =>
           frame_int <= LANE_ERROR & LANE_ERROR & LANE_ERROR & LANE_ERROR;
@@ -203,19 +199,9 @@ architecture behav_frame_builder of frame_builder is
 
         when others => null;
       end case;
-
-      -- Safety measures...
-      -- if (almost_e = '1') then
-      --   ren <= '0';
-      -- end if;
-      --
-      -- if (almost_f = '1') then
-      --   wen <= '0';
-      -- end if;
-
     end process;
 
-    frame_ns_decoder: process(ps_frame, eop_reg_in, sop_reg_in, data_0, data_1, data_2, data_3, wait_cnt)
+    frame_ns_decoder: process(ps_frame, eop_in, sop_reg_in, data_0, data_1, data_2, data_3, wait_cnt)
     begin
       case ps_frame is
         when S_IDLE =>
@@ -237,24 +223,25 @@ architecture behav_frame_builder of frame_builder is
           ns_frame <= S_READ_FIFO;
 
         when S_READ_FIFO =>
-          if (eop_reg_in = "100000") then
+          -- if (eop_reg_in = "100000") then
+          if (eop_in = "100000") then
             ns_frame <= S_READ_FIFO;
           else
             ns_frame <= S_EOP;
           end if;
 
-        when S_EOP =>
-          ns_frame <= S_IPG;
+          if (sop_reg_in = '1') then
+            ns_frame <= S_ERROR;
+          end if;
 
-        when S_IPG =>
-          -- if (ipg_deficit = "000") then
-            ns_frame <= S_IDLE;
-          -- else
-            -- ns_frame <= S_IPG;
-          -- end if;
+        when S_EOP =>
+          ns_frame <= S_IDLE;
 
         when S_ERROR =>
+          ns_frame <= S_IDLE;
+
         when others => null;
+
       end case;
     end process;
 
