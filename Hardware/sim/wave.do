@@ -1230,6 +1230,7 @@ add wave -noupdate -expand -group frame_builder -expand -group regs -radix hexad
 add wave -noupdate -expand -group frame_builder -expand -group regs -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/data_3_o
 add wave -noupdate -expand -group frame_builder -expand -group regs -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/eop_reg_in
 add wave -noupdate -expand -group frame_builder -expand -group regs -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/sop_reg_in
+add wave -noupdate -expand -group frame_builder -expand -group regs /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/frame_shift
 add wave -noupdate -expand -group frame_builder -expand -group regs /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/val_reg_in
 add wave -noupdate -group frame_out -group INPUTS_ /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/clk
 add wave -noupdate -group frame_out -group INPUTS_ /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/rst
@@ -1246,7 +1247,7 @@ add wave -noupdate -group frame_out -group OUTPUTS /Top/rx_xgt4/inst_wrapper_mac
 add wave -noupdate -group frame_out -group OUTPUTS /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/full
 add wave -noupdate -group frame_out -group OUTPUTS /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/empty
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 4} {3396800 ps} 1} {{Cursor 5} {3313600 ps} 1} {{Cursor 6} {3316754 ps} 1} {{Cursor 7} {0 ps} 0} {{Cursor 5} {26771364 ps} 0}
+WaveRestoreCursors {{Cursor 4} {3396800 ps} 1} {{Cursor 5} {3313600 ps} 1} {{Cursor 6} {3316754 ps} 1} {{Cursor 7} {0 ps} 0} {{Cursor 5} {29916800 ps} 0}
 quietly wave cursor active 5
 configure wave -namecolwidth 264
 configure wave -valuecolwidth 298
@@ -1262,10 +1263,10 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {29952196 ps} {30002516 ps}
-bookmark add wave bookmark40 {{0 ps} {42010 ps}} 0
-bookmark add wave bookmark41 {{201305 ps} {266263 ps}} 7
-bookmark add wave bookmark42 {{728057 ps} {794311 ps}} 6
-bookmark add wave bookmark43 {{770754 ps} {811500 ps}} 13
-bookmark add wave bookmark44 {{1931987 ps} {1965959 ps}} 9
-bookmark add wave bookmark45 {{780000 ps} {800000 ps}} 8
+WaveRestoreZoom {29891640 ps} {29941960 ps}
+bookmark add wave bookmark50 {{201305 ps} {266263 ps}} 7
+bookmark add wave bookmark51 {{728057 ps} {794311 ps}} 6
+bookmark add wave bookmark52 {{770754 ps} {811500 ps}} 13
+bookmark add wave bookmark53 {{1931987 ps} {1965959 ps}} 9
+bookmark add wave bookmark54 {{780000 ps} {800000 ps}} 8
+bookmark add wave bookmark55 {{0 ps} {42010 ps}} 0

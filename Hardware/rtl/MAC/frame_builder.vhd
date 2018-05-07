@@ -52,6 +52,7 @@ architecture behav_frame_builder of frame_builder is
     signal data_1 : std_logic_vector(63 downto 0);
     signal data_2 : std_logic_vector(63 downto 0);
     signal data_3 : std_logic_vector(63 downto 0);
+    signal data_2_o : std_logic_vector(63 downto 0);
     signal data_3_o : std_logic_vector(63 downto 0);
 
     signal eop_reg_in : std_logic_vector(5 downto 0);
@@ -69,7 +70,7 @@ architecture behav_frame_builder of frame_builder is
     signal enable_regs : std_logic;
     signal wait_cnt : std_logic_vector(2 downto 0);
 
-    signal ipg_deficit : std_logic_vector(2 downto 0); -- HOW BIG CAN IT BE?
+    signal frame_shift : std_logic; -- Indicates whether the packet started at byte 0 or 16
 
   begin
 
@@ -88,9 +89,11 @@ architecture behav_frame_builder of frame_builder is
         data_2 <= (others=>'0');
         data_3 <= (others=>'0');
         data_3_o <= (others=>'0');
+        data_2_o <= (others=>'0');
         eop_reg_in <=  (others=>'0');
         sop_reg_in <= (others=>'0');
         val_reg_in <= '0';
+        frame_shift <= '0';
       elsif clk'event and clk = '1' then
         if (enable_regs = '1') then
           data_0 <= data_in(63 downto 0);
@@ -98,10 +101,26 @@ architecture behav_frame_builder of frame_builder is
           data_2 <= data_in(191 downto 128);
           data_3 <= data_in(255 downto 192);
           data_3_o <= data_3;
+          data_2_o <= data_2;
           eop_reg_in <= eop_in;
           sop_reg_in <= sop_in;
           val_reg_in <= val_in;
         end if;
+
+        if (sop_in = "10") then
+        -- Update
+          frame_shift <= '0';
+        elsif (sop_in = "11") then
+        -- Update
+          frame_shift <= '1';
+        elsif (val_in = '1') then
+        -- Keep it accross the packet
+          frame_shift <= frame_shift;
+        else
+        -- Default
+          frame_shift <= '0';
+        end if;
+
       end if;
     end process;
 
@@ -156,7 +175,7 @@ architecture behav_frame_builder of frame_builder is
           ren <= '1';
           wait_cnt <= "000";
 
-          if (sop_reg_in = "10") then
+          if (sop_reg_in = "10" or sop_reg_in = "11") then
             enable_regs <= '0'; -- So that CRC has time to calculate it
             ren <= '0';
           end if;
@@ -169,26 +188,43 @@ architecture behav_frame_builder of frame_builder is
           end if;
 
         when S_PREAM =>
-          frame_int <= data_2 & data_1 & data_0 & PREAMBLE;
           eop_int <= "100000";
-          sop_int <= "10";
           val_int <= '1';
           ren <= '1';
           wen <= '1';
+
+          if (frame_shift = '0') then
+            frame_int <= data_2 & data_1 & data_0 & PREAMBLE;
+            sop_int <= "10";
+          else
+            frame_int <= data_2 & PREAMBLE & data_1 & data_0;
+            sop_int <= "11";
+          end if;
 
         when S_READ_FIFO =>
-          frame_int <= data_2 & data_1 & data_0 & data_3_o;
           eop_int <= "100000";
-          sop_int <= "00";
           val_int <= '1';
           ren <= '1';
           wen <= '1';
+          sop_int <= "00";
+
+          if (frame_shift = '0') then
+            frame_int <= data_2 & data_1 & data_0 & data_3_o;
+          else
+            frame_int <= data_1 & data_0 & data_2_o & data_3_o;
+          end if;
 
         when S_EOP =>
-          frame_int <= data_2 & data_1 & data_0 & data_3_o;
-          eop_int <= eop_reg_in + 8;
           sop_int <= "00";
           val_int <= '1';
+
+          if (frame_shift = '0') then
+            frame_int <= data_2 & data_1 & data_0 & data_3_o;
+            eop_int <= eop_reg_in + 8;
+          else
+            frame_int <= data_1 & data_0 & data_3_o & data_2_o;
+            eop_int <= eop_reg_in + 16;
+          end if;
 
         when S_ERROR =>
           frame_int <= LANE_ERROR & LANE_ERROR & LANE_ERROR & LANE_ERROR;
@@ -206,7 +242,8 @@ architecture behav_frame_builder of frame_builder is
         when S_IDLE =>
           if (almost_e = '1') then
           -- If input is almost empty, stay in the idle state
-            if (sop_reg_in = "10") then
+            if (sop_reg_in = "10" or sop_reg_in = "11") then
+            -- If there is a packet starting at either lower or higher half
               ns_frame <= S_WAIT_CRC;
             end if;
           end if;
@@ -222,7 +259,6 @@ architecture behav_frame_builder of frame_builder is
           ns_frame <= S_READ_FIFO;
 
         when S_READ_FIFO =>
-          -- if (eop_reg_in = "100000") then
           if (eop_in = "100000") then
             ns_frame <= S_READ_FIFO;
           else

@@ -29,6 +29,8 @@ SC_MODULE(app_tx) {
 
   int counter;
 
+  bool shift;
+
   ifstream in_file;
   sc_event reset_event;
 
@@ -51,12 +53,22 @@ SC_MODULE(app_tx) {
         counter = counter + 1;
 
         if (counter == 2) {
-          // SOP
-          sop = "10";
-          eop = SC_LOGIC_0;
-          val = SC_LOGIC_1;
-          mod = "00000";
-          data = ((sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter); // Enquanto nao passarmos um pacote de verdade...
+          if(shift) {
+            // SOP
+            sop = "11";
+            eop = SC_LOGIC_0;
+            val = SC_LOGIC_1;
+            mod = "00000";
+            data = ((sc_lv<64 >)(counter+2),(sc_lv<64 >)(counter+1),(sc_lv<64 >)0,(sc_lv<64 >)0); // Enquanto nao passarmos um pacote de verdade...
+          } else {
+            sop = "10";
+            eop = SC_LOGIC_0;
+            val = SC_LOGIC_1;
+            mod = "00000";
+            data = ((sc_lv<64 >)(counter+4),(sc_lv<64 >)(counter+3),(sc_lv<64 >)(counter+2),(sc_lv<64 >)(counter+1)); // Enquanto nao passarmos um pacote de verdade...
+          }
+
+          shift = !shift;
 
         } else if (counter > 2 && counter < MAX_PL_CYCLES) {
           // PAYLOAD
@@ -95,6 +107,7 @@ SC_MODULE(app_tx) {
       val = SC_LOGIC_0;
       data = (sc_lv<256 >)0;
       counter  = 0;
+      shift = false;
     }
   }
 
