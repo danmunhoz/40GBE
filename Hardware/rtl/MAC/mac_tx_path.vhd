@@ -117,7 +117,7 @@ architecture behav_mac_tx_path of mac_tx_path is
       eop_in   => w_eop_fifo_1,
       sop_in   => w_sop_fifo_1,
       val_in   => w_val_fifo_1,
-      wen      => wen_fifo_1,
+      wen      => w_val_fifo_1,
       full     => full_fifo_1,
 
       data_out => r_frame_fifo_1,
