@@ -1196,20 +1196,20 @@ add wave -noupdate -expand -group mac_tx_path -group OUT /Top/rx_xgt4/inst_wrapp
 add wave -noupdate -expand -group mac_tx_path -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii_ctrl_2
 add wave -noupdate -expand -group mac_tx_path -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii_data_3
 add wave -noupdate -expand -group mac_tx_path -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii_ctrl_3
-add wave -noupdate -group payload_in -expand -group IN_fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/clk
-add wave -noupdate -group payload_in -expand -group IN_fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/rst
-add wave -noupdate -group payload_in -expand -group IN_fifo -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/data_in
-add wave -noupdate -group payload_in -expand -group IN_fifo -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/eop_in
-add wave -noupdate -group payload_in -expand -group IN_fifo -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/sop_in
-add wave -noupdate -group payload_in -expand -group IN_fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/val_in
-add wave -noupdate -group payload_in -expand -group IN_fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/wen
-add wave -noupdate -group payload_in -expand -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/ren
-add wave -noupdate -group payload_in -expand -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/data_out
-add wave -noupdate -group payload_in -expand -group OUT -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/eop_out
-add wave -noupdate -group payload_in -expand -group OUT -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/sop_out
-add wave -noupdate -group payload_in -expand -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/val_out
-add wave -noupdate -group payload_in -expand -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/full
-add wave -noupdate -group payload_in -expand -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/empty
+add wave -noupdate -expand -group payload_in -group IN_fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/clk
+add wave -noupdate -expand -group payload_in -group IN_fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/rst
+add wave -noupdate -expand -group payload_in -group IN_fifo -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/data_in
+add wave -noupdate -expand -group payload_in -group IN_fifo -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/eop_in
+add wave -noupdate -expand -group payload_in -group IN_fifo -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/sop_in
+add wave -noupdate -expand -group payload_in -group IN_fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/val_in
+add wave -noupdate -expand -group payload_in -group IN_fifo /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/wen
+add wave -noupdate -expand -group payload_in -expand -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/ren
+add wave -noupdate -expand -group payload_in -expand -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/data_out
+add wave -noupdate -expand -group payload_in -expand -group OUT -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/eop_out
+add wave -noupdate -expand -group payload_in -expand -group OUT -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/sop_out
+add wave -noupdate -expand -group payload_in -expand -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/val_out
+add wave -noupdate -expand -group payload_in -expand -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/full
+add wave -noupdate -expand -group payload_in -expand -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/empty
 add wave -noupdate -expand -group frame_builder -expand -group INPUTS /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/rst
 add wave -noupdate -expand -group frame_builder -expand -group INPUTS /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/clk
 add wave -noupdate -expand -group frame_builder -expand -group INPUTS /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/almost_f
@@ -1222,16 +1222,21 @@ add wave -noupdate -expand -group frame_builder -expand -group OUTPUTS -radix he
 add wave -noupdate -expand -group frame_builder -expand -group OUTPUTS -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/eop_out
 add wave -noupdate -expand -group frame_builder -expand -group OUTPUTS -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/sop_out
 add wave -noupdate -expand -group frame_builder -expand -group OUTPUTS /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/val_out
-add wave -noupdate -expand -group frame_builder -expand -group regs /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/ps_frame
-add wave -noupdate -expand -group frame_builder -expand -group regs -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/data_0
-add wave -noupdate -expand -group frame_builder -expand -group regs -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/data_1
-add wave -noupdate -expand -group frame_builder -expand -group regs -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/data_2
-add wave -noupdate -expand -group frame_builder -expand -group regs -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/data_3
-add wave -noupdate -expand -group frame_builder -expand -group regs -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/data_3_o
-add wave -noupdate -expand -group frame_builder -expand -group regs -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/eop_reg_in
-add wave -noupdate -expand -group frame_builder -expand -group regs -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/sop_reg_in
-add wave -noupdate -expand -group frame_builder -expand -group regs /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/frame_shift
-add wave -noupdate -expand -group frame_builder -expand -group regs /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/val_reg_in
+add wave -noupdate -expand -group frame_builder -expand -group regs -group frame /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/ps_frame
+add wave -noupdate -expand -group frame_builder -expand -group regs -group frame /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/frame_shift
+add wave -noupdate -expand -group frame_builder -expand -group regs -group frame -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/data_0
+add wave -noupdate -expand -group frame_builder -expand -group regs -group frame -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/data_1
+add wave -noupdate -expand -group frame_builder -expand -group regs -group frame -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/data_2
+add wave -noupdate -expand -group frame_builder -expand -group regs -group frame -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/data_3
+add wave -noupdate -expand -group frame_builder -expand -group regs -group frame -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/data_3_o
+add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/ps_crc
+add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/crc_by_byte
+add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/eop_reg_in
+add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/sop_reg_in
+add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/val_reg_in
+add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/crc_final
+add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/crc_reg
+add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/crc_done
 add wave -noupdate -group frame_out -group INPUTS_ /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/clk
 add wave -noupdate -group frame_out -group INPUTS_ /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/rst
 add wave -noupdate -group frame_out -group INPUTS_ /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/data_in
@@ -1247,8 +1252,8 @@ add wave -noupdate -group frame_out -group OUTPUTS /Top/rx_xgt4/inst_wrapper_mac
 add wave -noupdate -group frame_out -group OUTPUTS /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/full
 add wave -noupdate -group frame_out -group OUTPUTS /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/empty
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 4} {3396800 ps} 1} {{Cursor 5} {3313600 ps} 1} {{Cursor 6} {3316754 ps} 1} {{Cursor 7} {0 ps} 0} {{Cursor 5} {29916800 ps} 0}
-quietly wave cursor active 5
+WaveRestoreCursors {{Cursor 4} {3396800 ps} 1} {{Cursor 5} {3313600 ps} 1} {{Cursor 6} {3316754 ps} 1} {{Cursor 7} {35200 ps} 0} {{Cursor 5} {0 ps} 0}
+quietly wave cursor active 4
 configure wave -namecolwidth 264
 configure wave -valuecolwidth 298
 configure wave -justifyvalue left
@@ -1263,10 +1268,10 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {29891640 ps} {29941960 ps}
-bookmark add wave bookmark50 {{201305 ps} {266263 ps}} 7
-bookmark add wave bookmark51 {{728057 ps} {794311 ps}} 6
-bookmark add wave bookmark52 {{770754 ps} {811500 ps}} 13
-bookmark add wave bookmark53 {{1931987 ps} {1965959 ps}} 9
-bookmark add wave bookmark54 {{780000 ps} {800000 ps}} 8
-bookmark add wave bookmark55 {{0 ps} {42010 ps}} 0
+WaveRestoreZoom {10040 ps} {60360 ps}
+bookmark add wave bookmark85 {{780000 ps} {800000 ps}} 8
+bookmark add wave bookmark86 {{728057 ps} {794311 ps}} 6
+bookmark add wave bookmark87 {{0 ps} {42010 ps}} 0
+bookmark add wave bookmark88 {{1931987 ps} {1965959 ps}} 9
+bookmark add wave bookmark89 {{201305 ps} {266263 ps}} 7
+bookmark add wave bookmark90 {{770754 ps} {811500 ps}} 13

@@ -84,6 +84,13 @@ vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo_bram.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/core_interface.vhd
 
+vcom -novopt ../rtl/CRC_RX/CRC32_D8.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D32.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D64.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D128.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D256.vhd
+vcom -novopt ../rtl/CRC_RX/crc_rx.vhd
+
 vcom -novopt ../rtl/MAC/data_frame_fifo.vhd
 vcom -novopt ../rtl/MAC/frame_builder.vhd
 vcom -novopt ../rtl/MAC/mac_tx_path.vhd
@@ -103,10 +110,6 @@ vcom -novopt ../rtl/PCS/shuffle.vhd
 vcom -novopt ../rtl/PCS/bip_calculator.vhd
 vcom -novopt ../rtl/PCS/reorder_fifo.vhd
 vcom -novopt ../rtl/PCS/lane_reordering.vhd
-vcom -novopt ../rtl/CRC_RX/CRC32_D8.vhd
-vcom -novopt ../rtl/CRC_RX/CRC32_D64.vhd
-vcom -novopt ../rtl/CRC_RX/CRC32_D128.vhd
-vcom -novopt ../rtl/CRC_RX/crc_rx.vhd
 
 
 scgenmod tx_xgt4 > tx_xgt4.h

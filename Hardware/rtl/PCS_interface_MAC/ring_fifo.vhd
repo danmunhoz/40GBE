@@ -14,13 +14,14 @@ entity ring_fifo is
     clk_r      : in  std_logic;
 		rst_n	     : in  std_logic;
     data_in	   : in  std_logic_vector (WIDTH-1 downto 0);
-    data_out   : out std_logic_vector (WIDTH/2-1 downto 0);
     is_sop_in  : in  std_logic;
+    wen        : in  std_logic;
+    ren	       : in  std_logic;
     eop_addr_in: in  std_logic_vector(5 downto 0);
+
     is_sop_out : out  std_logic;
     eop_addr_out: out  std_logic_vector(4 downto 0);
-    wen        : in  std_logic;
-		ren	       : in  std_logic;
+    data_out   : out std_logic_vector (WIDTH/2-1 downto 0);
 		empty	     : out std_logic;
 		full	     : out std_logic
 	);
