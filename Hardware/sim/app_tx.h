@@ -56,13 +56,13 @@ SC_MODULE(app_tx) {
           if(shift) {
             // SOP
             sop = "11";
-            eop = SC_LOGIC_0;
+            eop = SC_LOGIC_1;
             val = SC_LOGIC_1;
             mod = "00000";
             data = ((sc_lv<64 >)(counter+2),(sc_lv<64 >)(counter+1),(sc_lv<64 >)0,(sc_lv<64 >)0); // Enquanto nao passarmos um pacote de verdade...
           } else {
             sop = "10";
-            eop = SC_LOGIC_0;
+            eop = SC_LOGIC_1;
             val = SC_LOGIC_1;
             mod = "00000";
             data = ((sc_lv<64 >)(counter+4),(sc_lv<64 >)(counter+3),(sc_lv<64 >)(counter+2),(sc_lv<64 >)(counter+1)); // Enquanto nao passarmos um pacote de verdade...
@@ -73,7 +73,7 @@ SC_MODULE(app_tx) {
         } else if (counter > 2 && counter < MAX_PL_CYCLES) {
           // PAYLOAD
           sop = "00";
-          eop = SC_LOGIC_0;
+          eop = SC_LOGIC_1;
           val = SC_LOGIC_1;
           mod = "00000";
           data = ((sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter);
@@ -81,7 +81,7 @@ SC_MODULE(app_tx) {
         } else if (counter == MAX_PL_CYCLES) {
           // EOP
           sop = "00";
-          eop = SC_LOGIC_1;
+          eop = SC_LOGIC_0;
           val = SC_LOGIC_1;
           mod = "00001";
           data = ((sc_lv<64 >)0,(sc_lv<64 >)0,(sc_lv<64 >)0,(sc_lv<64 >)43981);
@@ -89,7 +89,7 @@ SC_MODULE(app_tx) {
         } else if (counter > MAX_PL_CYCLES && counter < MAX_IPG_CYCLES) {
           // IDLE
           sop = "00";
-          eop = SC_LOGIC_0;
+          eop = SC_LOGIC_1;
           val = SC_LOGIC_0;
           mod = "00000";
           data = (sc_lv<256 >)0;
@@ -103,7 +103,7 @@ SC_MODULE(app_tx) {
     } else {
       mod = "00000";
       sop = "00";
-      eop = SC_LOGIC_0;
+      eop = SC_LOGIC_1;
       val = SC_LOGIC_0;
       data = (sc_lv<256 >)0;
       counter  = 0;

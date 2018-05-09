@@ -65,8 +65,7 @@ architecture behav_mac_tx_path of mac_tx_path is
     --
 
 
-    w_eop_fifo_0 <= "100000" when eop_in = '0' else
-                    '1' & mod_in;
+    w_eop_fifo_0 <= eop_in & mod_in;
 
     payload_in: entity work.data_frame_fifo port map(
       clk      => clk_156,
