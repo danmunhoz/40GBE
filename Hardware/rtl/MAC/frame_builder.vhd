@@ -2,27 +2,30 @@ library ieee;
   use ieee.std_logic_1164.all;
 
 package PKG_CODES is
-  constant SFD        : std_logic_vector(7 downto 0) := x"d5";
-  constant PREAM_8    : std_logic_vector(7 downto 0) := x"55";
-  constant START      : std_logic_vector(7 downto 0) := x"fb";
-  constant TERMINATE  : std_logic_vector(7 downto 0) := x"fd";
-  constant CODE_ERROR : std_logic_vector(7 downto 0) := x"fe";
-  constant LANE_ERROR : std_logic_vector(63 downto 0) := CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR;
-  constant PREAMBLE   : std_logic_vector(63 downto 0) := START & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & SFD;
+  constant SFD            : std_logic_vector(7 downto 0) := x"d5";
+  constant PREAM_8        : std_logic_vector(7 downto 0) := x"55";
+  constant START          : std_logic_vector(7 downto 0) := x"fb";
+  constant TERMINATE      : std_logic_vector(7 downto 0) := x"fd";
+  constant CODE_ERROR     : std_logic_vector(7 downto 0) := x"fe";
+  constant CODE_CTRL_IDLE : std_logic_vector(7 downto 0) := x"ff";
+  constant CODE_IDLE      : std_logic_vector(7 downto 0) := x"07";
+  constant LANE_ERROR     : std_logic_vector(63 downto 0) := CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR;
+  constant PREAMBLE       : std_logic_vector(63 downto 0) := START & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & SFD;
+  constant LANE_IDLE      : std_logic_vector(63 downto 0) := CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE;
 end PKG_CODES;
 
 library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
   use ieee.std_logic_unsigned.all;
-use work.PKG_CODES.all;
-use work.PCK_CRC32_D8.all;
-use work.PCK_CRC32_D32.all;
-use work.PCK_CRC32_D64.all;
-use work.PCK_CRC32_D128.all;
-use work.PCK_CRC32_D256.all;
-use work.lane_defs.all;
-use work.rev_func.all;
+  use work.PKG_CODES.all;
+  use work.PCK_CRC32_D8.all;
+  use work.PCK_CRC32_D32.all;
+  use work.PCK_CRC32_D64.all;
+  use work.PCK_CRC32_D128.all;
+  use work.PCK_CRC32_D256.all;
+  use work.lane_defs.all;
+  use work.rev_func.all;
 
 entity frame_builder is
   port(
