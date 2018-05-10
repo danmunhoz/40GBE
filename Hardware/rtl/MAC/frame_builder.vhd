@@ -245,7 +245,7 @@ architecture behav_frame_builder of frame_builder is
         when S_D256 =>
           if (eop_in(5) = '0') then
             -- Valid EOP
-            
+
             if (eop_in(4 downto 0) <= "00011") then
               ns_crc <= S_D8;
               -- crc_by_byte <= eop_in(2 downto 0);    -- EOP locations from 0 to 3
