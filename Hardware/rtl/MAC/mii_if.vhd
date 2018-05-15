@@ -205,7 +205,7 @@ architecture behav_mii_if of mii_if is
                               mii_data_s2 <= data_in(191 downto 128); mii_data_s3 <= x"07" & data_in(247 downto 192);
             when "011111" =>  mii_ctrl_s3 <= "00000000"; mii_ctrl_s0 <= x"00"; mii_ctrl_s1 <= x"00"; mii_ctrl_s2 <= x"00";
                               mii_data_s0 <= data_in(63 downto 0);    mii_data_s1 <= data_in(127 downto 64);
-                              mii_data_s2 <= data_in(191 downto 128); mii_data_s3 <= data_in(247 downto 192);
+                              mii_data_s2 <= data_in(191 downto 128); mii_data_s3 <= data_in(255 downto 192);
 
             when others   =>  mii_ctrl_s0 <= CODE_ERROR;
                               mii_ctrl_s1 <= CODE_ERROR;
