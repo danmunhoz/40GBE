@@ -1232,7 +1232,8 @@ add wave -noupdate -expand -group frame_builder -expand -group regs -expand -gro
 add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group frame -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/sop_reg_in
 add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group frame /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/val_reg_in
 add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/ps_crc
-add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/crc_by_byte
+add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/crc_by_byte
+add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/last_eop
 add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/eop_reg_in
 add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/sop_reg_in
 add wave -noupdate -expand -group frame_builder -expand -group regs -expand -group crc /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/val_reg_in
@@ -1270,7 +1271,7 @@ add wave -noupdate -expand -group frame_out -group OUTPUTS /Top/rx_xgt4/inst_wra
 add wave -noupdate -expand -group frame_out -group OUTPUTS /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/full
 add wave -noupdate -expand -group frame_out -group OUTPUTS /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/empty
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 4} {3396800 ps} 1} {{Cursor 5} {3313600 ps} 1} {{Cursor 6} {3316754 ps} 1} {{Cursor 7} {29456000 ps} 0} {{Cursor 5} {1957 ps} 0}
+WaveRestoreCursors {{Cursor 4} {3396800 ps} 1} {{Cursor 5} {3313600 ps} 1} {{Cursor 6} {3316754 ps} 1} {{Cursor 7} {29776000 ps} 0} {{Cursor 5} {342400 ps} 0}
 quietly wave cursor active 4
 configure wave -namecolwidth 264
 configure wave -valuecolwidth 298
@@ -1286,10 +1287,10 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {29443640 ps} {29493960 ps}
-bookmark add wave bookmark50 {{201305 ps} {266263 ps}} 7
-bookmark add wave bookmark51 {{728057 ps} {794311 ps}} 6
-bookmark add wave bookmark52 {{770754 ps} {811500 ps}} 13
-bookmark add wave bookmark53 {{1931987 ps} {1965959 ps}} 9
-bookmark add wave bookmark54 {{780000 ps} {800000 ps}} 8
-bookmark add wave bookmark55 {{0 ps} {42010 ps}} 0
+WaveRestoreZoom {29744660 ps} {29794980 ps}
+bookmark add wave bookmark25 {{0 ps} {42010 ps}} 0
+bookmark add wave bookmark26 {{201305 ps} {266263 ps}} 7
+bookmark add wave bookmark27 {{728057 ps} {794311 ps}} 6
+bookmark add wave bookmark28 {{770754 ps} {811500 ps}} 13
+bookmark add wave bookmark29 {{1931987 ps} {1965959 ps}} 9
+bookmark add wave bookmark30 {{780000 ps} {800000 ps}} 8

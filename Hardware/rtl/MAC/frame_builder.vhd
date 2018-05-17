@@ -85,6 +85,7 @@ architecture behav_frame_builder of frame_builder is
 
     signal frame_int_next  : std_logic_vector(255 downto 0);
     signal last_in  : std_logic_vector(255 downto 0);
+    signal last_eop : std_logic_vector(4 downto 0);
 
     signal ren_in  : std_logic;
 
@@ -96,7 +97,8 @@ architecture behav_frame_builder of frame_builder is
 
     signal frame_shift : std_logic; -- Indicates whether the packet started at byte 0 or 16
 
-    signal crc_by_byte : std_logic_vector(2 downto 0);
+    signal crc_by_byte : std_logic_vector(4 downto 0);
+    signal data_range : integer;
     signal crc_final : std_logic_vector(31 downto 0);
     signal crc_reg : std_logic_vector(31 downto 0);
     signal crc_next : std_logic_vector(31 downto 0);
@@ -192,7 +194,7 @@ architecture behav_frame_builder of frame_builder is
     -- CRC FINITE STATE MACHINE
     -- Will start calculating as soon as a new payload arrives. At the end of
     -- the reception of data, will output de frame crc value.
-    sunc_proc_crc: process(clk, rst)
+    sinc_proc_crc: process(clk, rst)
     begin
       if rst = '0' then
         ps_crc <= S_IDLE;
@@ -208,6 +210,8 @@ architecture behav_frame_builder of frame_builder is
         crc_done <= '0';
         ren_in <= '0';
         last_in <= (others=>'0');
+        last_eop <= (others=>'0');
+        crc_by_byte <= (others=>'0');
 
       elsif clk'event and clk = '1' then
         ren_in <= '0';
@@ -225,6 +229,32 @@ architecture behav_frame_builder of frame_builder is
             ren_in <= '1';
             if (eop_in(5) = '0') then
               last_in <= data_in;
+              last_eop <= eop_in(4 downto 0);
+
+              if (eop_in(4 downto 0) <= "00011") then       -- Byte 3
+                crc_by_byte <= eop_in(4 downto 0);
+
+              elsif (eop_in(4 downto 0) <= "00111") then    -- Byte 7
+                crc_by_byte <= eop_in(4 downto 0) - 3;
+
+              elsif (eop_in(4 downto 0) <= "01011") then    -- Byte 11
+                crc_by_byte <= eop_in(4 downto 0) - 7;
+
+              elsif (eop_in(4 downto 0) <= "01111") then    -- Byte 15
+                crc_by_byte <= eop_in(4 downto 0) - 7;
+
+              elsif (eop_in(4 downto 0) <= "10011") then    -- Byte 19
+                crc_by_byte <= eop_in(4 downto 0) - 15;
+
+              elsif (eop_in(4 downto 0) <= "10111") then    -- Byte 23
+                crc_by_byte <= eop_in(4 downto 0) - 15;
+
+              elsif (eop_in(4 downto 0) <= "11011") then    -- Byte 27
+                crc_by_byte <= eop_in(4 downto 0) - 23;
+
+              elsif (eop_in(4 downto 0) <= "11111") then    -- Byte 31
+                crc_by_byte <= eop_in(4 downto 0) - 23;
+              end if;
             end if;
 
             crc_reg <= nextCRC32_D256(reverse(data_in), crc_reg);
@@ -238,11 +268,9 @@ architecture behav_frame_builder of frame_builder is
             if (eop_in(5) = '0') then
               -- A packet is ending
               crc_reg <= nextCRC32_D128(reverse(last_in(127 downto 0)), crc_reg);
-              -- ren_in <= '0';
             else
               -- Packet started at higher half
               crc_reg <= nextCRC32_D128(reverse(data_in(255 downto 128)), crc_reg);
-              -- ren_in <= '1';
             end if;
 
           when S_D64 =>
@@ -270,9 +298,17 @@ architecture behav_frame_builder of frame_builder is
             end if;
 
           when S_D8 =>
+            -- crc_by_byte indicates how many bytes from the end of the
+            -- packet need to be calculated
             ren_in <= '1';
-            crc_done <= '1';
-            crc_reg <= nextCRC32_D8(reverse(last_in(7 downto 0)), crc_reg);
+
+            if (crc_by_byte > 0) then
+              crc_reg <= nextCRC32_D8(reverse(last_in( to_integer(unsigned(last_eop - crc_by_byte)) downto to_integer(unsigned(last_eop - crc_by_byte)) - 7) ), crc_reg);
+              crc_by_byte <= crc_by_byte - 1;
+              crc_done <= '0';
+            else
+              crc_done <= '1';
+            end if;
 
           when S_DONE =>
             -- ren_in <= '1';
@@ -347,7 +383,11 @@ architecture behav_frame_builder of frame_builder is
           ns_crc <= S_D8;
 
         when S_D8 =>
-          ns_crc <= S_DONE;
+          if (crc_done = '1') then
+            ns_crc <= S_DONE;
+          else
+            ns_crc <= S_D8;
+          end if;
 
         when S_DONE =>
           -- if (almost_e = '1') then
