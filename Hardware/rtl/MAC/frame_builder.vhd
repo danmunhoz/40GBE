@@ -214,7 +214,7 @@ architecture behav_frame_builder of frame_builder is
         crc_by_byte <= (others=>'0');
 
       elsif clk'event and clk = '1' then
-        ren_in <= '0';
+        -- ren_in <= '0';
         crc_done <= '0';
 
         case ps_crc is
@@ -226,7 +226,12 @@ architecture behav_frame_builder of frame_builder is
             end if;
 
           when S_D256 =>
-            ren_in <= '1';
+            if (almost_e = '1') then
+              ren_in <= '0';
+            else
+              ren_in <= '1';
+            end if;
+
             if (eop_in(5) = '0') then
               last_in <= data_in;
               last_eop <= eop_in(4 downto 0);
@@ -260,13 +265,16 @@ architecture behav_frame_builder of frame_builder is
             crc_reg <= nextCRC32_D256(reverse(data_in), crc_reg);
 
           when S_D128_64 =>
-            ren_in <= '1';
             crc_reg <= nextCRC32_D256(reverse(last_in(127 downto 0)), crc_reg);
 
           when S_D128 =>
             ren_in <= '1';
+
             if (eop_in(5) = '0') then
               -- A packet is ending
+              if (almost_e = '1') then
+                ren_in <= '0';
+              end if;
               crc_reg <= nextCRC32_D128(reverse(last_in(127 downto 0)), crc_reg);
             else
               -- Packet started at higher half
@@ -274,8 +282,6 @@ architecture behav_frame_builder of frame_builder is
             end if;
 
           when S_D64 =>
-            ren_in <= '1';
-
             if (eop_in(4 downto 0) > "00111" and eop_in(4 downto 0) < "01000") then
               -- Packet ending from 8th to 15th byte
               crc_reg <= nextCRC32_D64(reverse(last_in(63 downto 0)), crc_reg);
@@ -286,7 +292,6 @@ architecture behav_frame_builder of frame_builder is
             end if;
 
           when S_D32 =>
-            ren_in <= '1';
 
             if (eop_in(4 downto 0) > "00111" and eop_in(4 downto 0) < "01000") then
               -- Packet ending from 4th to 7th byte
@@ -300,7 +305,6 @@ architecture behav_frame_builder of frame_builder is
           when S_D8 =>
             -- crc_by_byte indicates how many bytes from the end of the
             -- packet need to be calculated
-            ren_in <= '1';
 
             if (crc_by_byte > 0) then
               crc_reg <= nextCRC32_D8(reverse(last_in( to_integer(unsigned(last_eop - crc_by_byte)) downto to_integer(unsigned(last_eop - crc_by_byte)) - 7) ), crc_reg);
@@ -311,7 +315,7 @@ architecture behav_frame_builder of frame_builder is
             end if;
 
           when S_DONE =>
-            -- ren_in <= '1';
+            ren_in <= '1';
             crc_reg <= (others=>'1');
 
           when others => null;
@@ -319,7 +323,7 @@ architecture behav_frame_builder of frame_builder is
       end if;
     end process;
 
-    crc_ns_decoder: process(ps_crc, data_in, eop_in, sop_in, almost_e)
+    crc_ns_decoder: process(ps_crc, data_in, eop_in, sop_in, almost_e, crc_done)
     begin
 
       case ps_crc is
@@ -421,6 +425,7 @@ architecture behav_frame_builder of frame_builder is
     begin
       enable_wait_cnt <= '0';
       frame_int <= (others=>'0');
+      frame_int_next <= (others=>'0');
       eop_int <= "100000";
       sop_int <= "00";
       val_int <= '0';
@@ -471,13 +476,12 @@ architecture behav_frame_builder of frame_builder is
           val_int <= '1';
 
           if (frame_shift = '0') then
-            -- frame_int <= data_2 & data_1 & data_0 & data_3_o;
             eop_int <= '0' & eop_reg_in(4 downto 0) + 8 + 4;
           else
-            -- frame_int <= data_1 & data_0 & data_3_o & data_2_o;
             eop_int <= '0' & eop_reg_in(4 downto 0) + 16 + 4;
           end if;
 
+          -- case eop_reg_in(4 downto 0) is
           case eop_reg_in(4 downto 0) is
             when "00000" =>
               if (frame_shift = '0') then
@@ -558,7 +562,7 @@ architecture behav_frame_builder of frame_builder is
 
             when "01011" =>
               if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 120) & crc_next & data_0(23 downto 0) & data_3_o;
+                frame_int <= ZEROS(255 downto 192) & crc_next & data_1(31 downto 0) & data_0 & data_3_o;
               else
                 frame_int <= ZEROS(255 downto 248) & crc_next & data_1(23 downto 0) & data_0 & data_3_o & data_2_o;
               end if;
