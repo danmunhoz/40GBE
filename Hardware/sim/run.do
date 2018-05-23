@@ -93,7 +93,7 @@ vcom -novopt ../rtl/CRC_RX/crc_rx.vhd
 
 vcom -novopt ../rtl/MAC/data_frame_fifo.vhd
 vcom -novopt ../rtl/MAC/frame_builder.vhd
-vcom -novopt ../rtl/MAC/mii_if.vhd
+vcom -novopt ../rtl/MAC/mii_if_SM.vhd
 vcom -novopt ../rtl/MAC/mac_tx_path.vhd
 
 # vcom -novopt ../rtl/PCS/pcs_selector.vhd
