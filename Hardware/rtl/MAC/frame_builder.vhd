@@ -564,146 +564,143 @@ architecture behav_frame_builder of frame_builder is
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 192) & crc_next & data_1(31 downto 0) & data_0 & data_3_o;
               else
-                frame_int <= ZEROS(255 downto 248) & crc_next & data_1(23 downto 0) & data_0 & data_3_o & data_2_o;
+                frame_int <= crc_next & data_1(31 downto 0) & data_0 & data_3_o & data_2_o;
+              end if;
+
+            when "01100" =>
+              if (frame_shift = '0') then
+                frame_int <= ZEROS(255 downto 192) & crc_next & data_1(31 downto 0) & data_0 & data_3_o;
+              else
+                frame_int <= crc_next(23 downto 0) & data_1(39 downto 0) & data_0 & data_3_o & data_2_o;
+                frame_int_next <= ZEROS(255 downto 248) & crc_next(31 downto 24) ;
               end if;
 
             when "01101" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 128) & crc_next & data_0(31 downto 0) & data_3_o;
               else
-                frame_int <= crc_next & data_1(31 downto 0) & data_0 & data_3_o & data_2_o;
+                frame_int <= crc_next(15 downto 0) & data_1(47 downto 0) & data_0 & data_3_o & data_2_o;
+                frame_int_next <= ZEROS(255 downto 240) & crc_next(31 downto 16);
               end if;
 
             when "01110" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 136) & crc_next & data_0(39 downto 0) & data_3_o;
               else
-                frame_int <= crc_next(23 downto 0) & data_1(39 downto 0) & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 32) & crc_next(31 downto 24);
+                frame_int <= crc_next(7 downto 0) & data_1(55 downto 0) & data_0 & data_3_o & data_2_o;
+                frame_int_next <= ZEROS(255 downto 232) & crc_next(31 downto 8);
               end if;
 
             when "01111" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 144) & crc_next & data_0(47 downto 0) & data_3_o;
               else
-                frame_int <= crc_next(15 downto 0) & data_1(47 downto 0) & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 32) & crc_next(31 downto 16);
+                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
+                frame_int_next <= ZEROS(255 downto 224) & crc_next;
               end if;
 
             when "10000" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 152) & crc_next & data_0(55 downto 0) & data_3_o;
               else
-                frame_int <= crc_next(7 downto 0) & data_1(55 downto 0) & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 32) & crc_next(31 downto 8);
+                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
+                frame_int_next <= ZEROS(255 downto 216) & crc_next & data_2(7 downto 0);
               end if;
 
             when "10001" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 160) & crc_next & data_0(63 downto 0) & data_3_o;
               else
-                -- Problem here; will be eop postponed??
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 32) & crc_next;
+                frame_int_next <= ZEROS(255 downto 208) & crc_next & data_2(15 downto 0);
               end if;
 
             when "10010" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 168) & crc_next & data_1(7 downto 0) & data_0 & data_3_o;
               else
-                -- Problem here; will be eop postponed??
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 40) & crc_next & data_0_o(7 downto 0);
+                frame_int_next <= ZEROS(255 downto 200) & crc_next & data_2(31 downto 0);
               end if;
 
             when "10011" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 176) & crc_next & data_1(15 downto 0) & data_0 & data_3_o;
               else
-                -- Problem here; will be eop postponed??
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 48) & crc_next & data_0_o(15 downto 0);
+                frame_int_next <= ZEROS(255 downto 192) & crc_next & data_2(39 downto 0);
               end if;
 
             when "10111" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 184) & crc_next & data_1(23 downto 0) & data_0 & data_3_o;
               else
-                -- Problem here; will be eop postponed??
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 56) & crc_next & data_0_o(23 downto 0);
+                frame_int_next <= ZEROS(255 downto 184) & crc_next & data_2(47 downto 0);
               end if;
 
             when "11000" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 192) & crc_next & data_1(31 downto 0) & data_0 & data_3_o;
               else
-                -- Problem here; will be eop postponed??
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 64) & crc_next & data_0_o(31 downto 0);
+                frame_int_next <= ZEROS(255 downto 176) & crc_next & data_2(55 downto 0);
               end if;
 
             when "11001" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 200) & crc_next & data_1(39 downto 0) & data_0 & data_3_o;
               else
-                -- Problem here; will be eop postponed??
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 72) & crc_next & data_0_o(39 downto 0);
+                frame_int_next <= ZEROS(255 downto 96) & crc_next & data_2;
               end if;
 
             when "11010" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 208) & crc_next & data_1(47 downto 0) & data_0 & data_3_o;
               else
-                -- Problem here; will be eop postponed??
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 80) & crc_next & data_0_o(47 downto 0);
+                frame_int_next <= ZEROS(255 downto 104) & crc_next & data_3(7 downto 0) & data_2;
               end if;
 
             when "11011" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 216) & crc_next & data_1(55 downto 0) & data_0 & data_3_o;
               else
-                -- Problem here; will be eop postponed??
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 88) & crc_next & data_0_o(55 downto 0);
+                frame_int_next <= ZEROS(255 downto 112) & crc_next & data_3(15 downto 0) & data_2;
               end if;
 
             when "11100" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 224) & crc_next & data_1(63 downto 0) & data_0 & data_3_o;
               else
-                -- Problem here; will be eop postponed??
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 96) & crc_next & data_0_o(63 downto 0);
+                frame_int_next <= ZEROS(255 downto 120) & crc_next & data_3(23 downto 0) & data_2;
               end if;
 
             when "11101" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 232) & crc_next & data_2(7 downto 0) & data_1 & data_0 & data_3_o;
               else
-                -- Problem here; will be eop postponed??
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 104) & crc_next & data_1_o(7 downto 0) & data_0_o;
+                frame_int_next <= ZEROS(255 downto 128) & crc_next & data_3(31 downto 0) & data_2;
               end if;
 
             when "11110" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 240) & crc_next & data_2(15 downto 0) & data_1 & data_0 & data_3_o;
               else
-                -- Problem here; will be eop postponed??
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 112) & crc_next & data_1_o(15 downto 0) & data_0_o;
+                frame_int_next <= ZEROS(255 downto 136) & crc_next & data_3(39 downto 0) & data_2;
               end if;
 
             when "11111" =>
               if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 248) & crc_next & data_2(23 downto 0) & data_1 & data_0 & data_3_o;
               else
-                -- Problem here; will be eop postponed??
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 120) & crc_next & data_1_o(23 downto 0) & data_0_o;
+                frame_int_next <= ZEROS(255 downto 144) & crc_next & data_3(47 downto 0) & data_2;
               end if;
             when others =>
           end case;
