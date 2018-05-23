@@ -56,7 +56,7 @@ architecture behav_frame_builder of frame_builder is
     signal ps_crc : crc_fsm_states;
     signal ns_crc : crc_fsm_states;
 
-    type frame_fsm_states is (S_IDLE, S_WAIT_CRC, S_PREAM, S_READ_FIFO, S_EOP, S_ERROR);
+    type frame_fsm_states is (S_IDLE, S_WAIT_CRC, S_PREAM, S_READ_FIFO, S_EXTRA_C, S_EOP, S_ERROR);
     signal ps_frame : frame_fsm_states;
     signal ns_frame : frame_fsm_states;
 
@@ -81,9 +81,13 @@ architecture behav_frame_builder of frame_builder is
     signal sop_int    : std_logic_vector(1 downto 0);
     signal val_int    : std_logic;
     signal eop_int    : std_logic_vector(5 downto 0);
+    signal eop_int_reg : std_logic_vector(5 downto 0);
     signal frame_int  : std_logic_vector(255 downto 0);
 
     signal frame_int_next  : std_logic_vector(255 downto 0);
+    signal frame_int_next_reg  : std_logic_vector(255 downto 0);
+    signal use_frame_next : std_logic;
+    signal use_frame_next_reg : std_logic;
     signal last_in  : std_logic_vector(255 downto 0);
     signal last_eop : std_logic_vector(4 downto 0);
 
@@ -108,8 +112,8 @@ architecture behav_frame_builder of frame_builder is
 
     ren_out <= ren_in when rst = '1' else '0';
     wen_out <= wen_hold when rst = '1' else '0';
-    frame_out <= frame_int;
-    eop_out <= eop_int;
+    frame_out <= frame_int when use_frame_next_reg = '0' else frame_int_next_reg;
+    eop_out <= eop_int when use_frame_next_reg = '0' and use_frame_next = '0' else eop_int_reg;
     sop_out <= sop_int;
     val_out <= val_int;
 
@@ -132,6 +136,10 @@ architecture behav_frame_builder of frame_builder is
         frame_shift <= '0';
         wait_cnt <= "000";
         crc_next <= (others=>'0');
+        use_frame_next_reg <= '0';
+        frame_int_next_reg <= (others=>'0');
+        eop_int_reg <= (others=>'0');
+
       elsif clk'event and clk = '1' then
         data_0 <= data_fifo_out(63 downto 0);
         data_1 <= data_fifo_out(127 downto 64);
@@ -144,6 +152,9 @@ architecture behav_frame_builder of frame_builder is
         eop_reg_in <= eop_fifo_out;
         sop_reg_in <= sop_fifo_out;
         val_reg_in <= val_fifo_out;
+        frame_int_next_reg <= frame_int_next;
+        use_frame_next_reg <= use_frame_next;
+        eop_int_reg <= eop_int;
 
         if (sop_fifo_out = "10") then
         -- Update
@@ -431,6 +442,7 @@ architecture behav_frame_builder of frame_builder is
       val_int <= '0';
       ren_hold <= '0';
       wen_hold <= '0';
+      use_frame_next <= '0';
 
       case ps_frame is
         when S_IDLE =>
@@ -572,7 +584,8 @@ architecture behav_frame_builder of frame_builder is
                 frame_int <= ZEROS(255 downto 192) & crc_next & data_1(31 downto 0) & data_0 & data_3_o;
               else
                 frame_int <= crc_next(23 downto 0) & data_1(39 downto 0) & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 248) & crc_next(31 downto 24) ;
+                frame_int_next <= ZEROS(255 downto 248) & crc_next(31 downto 24);
+                use_frame_next <= '1';
               end if;
 
             when "01101" =>
@@ -581,6 +594,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= crc_next(15 downto 0) & data_1(47 downto 0) & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 240) & crc_next(31 downto 16);
+                use_frame_next <= '1';
               end if;
 
             when "01110" =>
@@ -589,6 +603,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= crc_next(7 downto 0) & data_1(55 downto 0) & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 232) & crc_next(31 downto 8);
+                use_frame_next <= '1';
               end if;
 
             when "01111" =>
@@ -596,7 +611,8 @@ architecture behav_frame_builder of frame_builder is
                 frame_int <= ZEROS(255 downto 144) & crc_next & data_0(47 downto 0) & data_3_o;
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 224) & crc_next;
+                frame_int_next <= ZEROS(255 downto 32) & crc_next;
+                use_frame_next <= '1';
               end if;
 
             when "10000" =>
@@ -605,6 +621,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 216) & crc_next & data_2(7 downto 0);
+                use_frame_next <= '1';
               end if;
 
             when "10001" =>
@@ -613,6 +630,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 208) & crc_next & data_2(15 downto 0);
+                use_frame_next <= '1';
               end if;
 
             when "10010" =>
@@ -621,6 +639,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 200) & crc_next & data_2(31 downto 0);
+                use_frame_next <= '1';
               end if;
 
             when "10011" =>
@@ -629,6 +648,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 192) & crc_next & data_2(39 downto 0);
+                use_frame_next <= '1';
               end if;
 
             when "10111" =>
@@ -637,6 +657,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 184) & crc_next & data_2(47 downto 0);
+                use_frame_next <= '1';
               end if;
 
             when "11000" =>
@@ -645,6 +666,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 176) & crc_next & data_2(55 downto 0);
+                use_frame_next <= '1';
               end if;
 
             when "11001" =>
@@ -653,6 +675,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 96) & crc_next & data_2;
+                use_frame_next <= '1';
               end if;
 
             when "11010" =>
@@ -661,6 +684,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 104) & crc_next & data_3(7 downto 0) & data_2;
+                use_frame_next <= '1';
               end if;
 
             when "11011" =>
@@ -669,6 +693,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 112) & crc_next & data_3(15 downto 0) & data_2;
+                use_frame_next <= '1';
               end if;
 
             when "11100" =>
@@ -677,6 +702,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 120) & crc_next & data_3(23 downto 0) & data_2;
+                use_frame_next <= '1';
               end if;
 
             when "11101" =>
@@ -685,6 +711,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 128) & crc_next & data_3(31 downto 0) & data_2;
+                use_frame_next <= '1';
               end if;
 
             when "11110" =>
@@ -693,6 +720,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 136) & crc_next & data_3(39 downto 0) & data_2;
+                use_frame_next <= '1';
               end if;
 
             when "11111" =>
@@ -701,6 +729,7 @@ architecture behav_frame_builder of frame_builder is
               else
                 frame_int <= data_1 & data_0 & data_3_o & data_2_o;
                 frame_int_next <= ZEROS(255 downto 144) & crc_next & data_3(47 downto 0) & data_2;
+                use_frame_next <= '1';
               end if;
             when others =>
           end case;
@@ -741,12 +770,11 @@ architecture behav_frame_builder of frame_builder is
             ns_frame <= S_EOP;
           end if;
 
-          -- if (sop_reg_in /= "00") then
-          --   ns_frame <= S_ERROR;
-          -- end if;
+        when S_EXTRA_C =>
+          ns_frame <= S_IDLE;
 
         when S_EOP =>
-          ns_frame <= S_IDLE;
+            ns_frame <= S_IDLE;
 
         when S_ERROR =>
           ns_frame <= S_IDLE;
