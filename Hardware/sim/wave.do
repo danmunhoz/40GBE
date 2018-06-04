@@ -1172,22 +1172,22 @@ add wave -noupdate -group {SINAIS PARA LISTA} /Top/rx_xgt4/inst_wrapper_macpcs/I
 add wave -noupdate -group {SINAIS PARA LISTA} /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/w_ptr
 add wave -noupdate -group {SINAIS PARA LISTA} /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/r_ptr_h
 add wave -noupdate -divider APP_TX
-add wave -noupdate -group app_tx /Top/app_tx/reset_in
-add wave -noupdate -group app_tx /Top/app_tx/clock_in
-add wave -noupdate -group app_tx -radix hexadecimal /Top/app_tx/data
-add wave -noupdate -group app_tx -radix binary /Top/app_tx/mod
-add wave -noupdate -group app_tx /Top/app_tx/sop
-add wave -noupdate -group app_tx /Top/app_tx/eop
-add wave -noupdate -group app_tx /Top/app_tx/val
-add wave -noupdate -group app_tx -radix unsigned /Top/app_tx/counter
+add wave -noupdate -expand -group app_tx /Top/app_tx/reset_in
+add wave -noupdate -expand -group app_tx /Top/app_tx/clock_in
+add wave -noupdate -expand -group app_tx -radix hexadecimal /Top/app_tx/data
+add wave -noupdate -expand -group app_tx -radix binary /Top/app_tx/mod
+add wave -noupdate -expand -group app_tx -radix binary /Top/app_tx/sop
+add wave -noupdate -expand -group app_tx /Top/app_tx/eop
+add wave -noupdate -expand -group app_tx /Top/app_tx/val
+add wave -noupdate -expand -group app_tx -radix unsigned /Top/app_tx/counter
 add wave -noupdate -divider MAC_TX
-add wave -noupdate -expand -group mac_tx_path -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/clk_156
-add wave -noupdate -expand -group mac_tx_path -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/rst_n
-add wave -noupdate -expand -group mac_tx_path -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/data_in
-add wave -noupdate -expand -group mac_tx_path -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/sop_in
-add wave -noupdate -expand -group mac_tx_path -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/eop_in
-add wave -noupdate -expand -group mac_tx_path -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mod_in
-add wave -noupdate -expand -group mac_tx_path -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/val_in
+add wave -noupdate -expand -group mac_tx_path -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/clk_156
+add wave -noupdate -expand -group mac_tx_path -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/rst_n
+add wave -noupdate -expand -group mac_tx_path -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/data_in
+add wave -noupdate -expand -group mac_tx_path -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/sop_in
+add wave -noupdate -expand -group mac_tx_path -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/eop_in
+add wave -noupdate -expand -group mac_tx_path -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mod_in
+add wave -noupdate -expand -group mac_tx_path -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/val_in
 add wave -noupdate -expand -group mac_tx_path -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii_data_0
 add wave -noupdate -expand -group mac_tx_path -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii_ctrl_0
 add wave -noupdate -expand -group mac_tx_path -group OUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii_data_1
@@ -1284,7 +1284,7 @@ add wave -noupdate -expand -group mii_if -expand -group OUT -color Gold -radix h
 add wave -noupdate -expand -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_data_3
 add wave -noupdate -expand -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_ctrl_3
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 7} {662303 ps} 1} {{Cursor 3} {744094 ps} 0}
+WaveRestoreCursors {{Cursor 7} {662303 ps} 1} {{Cursor 3} {41600 ps} 0}
 quietly wave cursor active 2
 configure wave -namecolwidth 180
 configure wave -valuecolwidth 298
@@ -1300,7 +1300,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {726122 ps} {785659 ps}
+WaveRestoreZoom {20832 ps} {80369 ps}
 bookmark add wave bookmark50 {{201305 ps} {266263 ps}} 7
 bookmark add wave bookmark51 {{728057 ps} {794311 ps}} 6
 bookmark add wave bookmark52 {{770754 ps} {811500 ps}} 13

@@ -13,8 +13,9 @@ struct line {
   std::string ctrl;
 };
 
-#define MAX_PL_CYCLES 16
-#define MAX_IPG_CYCLES MAX_PL_CYCLES + 5
+#define MAX_PL_CYCLES 47
+// #define MAX_IPG_CYCLES MAX_PL_CYCLES + 5
+#define MAX_IPG_CYCLES MAX_PL_CYCLES + 1  // tanauan
 
 SC_MODULE(app_tx) {
 
@@ -59,13 +60,15 @@ SC_MODULE(app_tx) {
             eop = SC_LOGIC_1;
             val = SC_LOGIC_1;
             mod = "00000";
-            data = ((sc_lv<64 >)(counter+2),(sc_lv<64 >)(counter+1),(sc_lv<64 >)0,(sc_lv<64 >)0); // Enquanto nao passarmos um pacote de verdade...
+            // data = ((sc_lv<64 >)(counter+2),(sc_lv<64 >)(counter+1),(sc_lv<64 >)0,(sc_lv<64 >)0); // Enquanto nao passarmos um pacote de verdade...
+            data = ((sc_lv<64 >)(counter-1),(sc_lv<64 >)(counter-2),(sc_lv<64 >)0,(sc_lv<64 >)0); // tanauan
           } else {
             sop = "10";
             eop = SC_LOGIC_1;
             val = SC_LOGIC_1;
             mod = "00000";
-            data = ((sc_lv<64 >)(counter+4),(sc_lv<64 >)(counter+3),(sc_lv<64 >)(counter+2),(sc_lv<64 >)(counter+1)); // Enquanto nao passarmos um pacote de verdade...
+            // data = ((sc_lv<64 >)(counter+4),(sc_lv<64 >)(counter+3),(sc_lv<64 >)(counter+2),(sc_lv<64 >)(counter+1)); // Enquanto nao passarmos um pacote de verdade...
+            data = ((sc_lv<64 >)(counter+1),(sc_lv<64 >)(counter),(sc_lv<64 >)(counter-1),(sc_lv<64 >)(counter-2)); // tanauan
           }
 
           shift = !shift;
@@ -76,7 +79,7 @@ SC_MODULE(app_tx) {
           eop = SC_LOGIC_1;
           val = SC_LOGIC_1;
           mod = "00000";
-          data = ((sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter,(sc_lv<64 >)counter);
+          data = ((sc_lv<64 >)(counter+1),(sc_lv<64 >)(counter+1),(sc_lv<64 >)(counter+1),(sc_lv<64 >)(counter+1));
 
         } else if (counter == MAX_PL_CYCLES) {
           // EOP
@@ -97,7 +100,7 @@ SC_MODULE(app_tx) {
         } else if (counter == MAX_IPG_CYCLES) {
           // reset counter
           data = (sc_lv<256 >)0;
-          counter = 0;
+          counter = 1;
         }
 
     } else {
