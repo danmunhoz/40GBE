@@ -13,9 +13,8 @@ struct line {
   std::string ctrl;
 };
 
-#define MAX_PL_CYCLES 47
-// #define MAX_IPG_CYCLES MAX_PL_CYCLES + 5
-#define MAX_IPG_CYCLES MAX_PL_CYCLES + 1  // tanauan
+#define MAX_PL_CYCLES 16
+#define MAX_IPG_CYCLES MAX_PL_CYCLES + 2  // MAX_IPG_CYCLES sempre > (MAX_PL_CYCLES+1)
 
 SC_MODULE(app_tx) {
 

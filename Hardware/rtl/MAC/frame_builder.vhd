@@ -19,13 +19,41 @@ library ieee;
   use ieee.numeric_std.all;
   use ieee.std_logic_unsigned.all;
   use work.PKG_CODES.all;
-  use work.PCK_CRC32_D8.all;
-  use work.PCK_CRC32_D32.all;
-  use work.PCK_CRC32_D64.all;
-  use work.PCK_CRC32_D128.all;
-  use work.PCK_CRC32_D256.all;
   use work.lane_defs.all;
   use work.rev_func.all;
+
+  use work.PCK_CRC32_D8.all;
+  use work.PCK_CRC32_D16.all;
+  use work.PCK_CRC32_D24.all;
+  use work.PCK_CRC32_D32.all;
+  use work.PCK_CRC32_D40.all;
+  use work.PCK_CRC32_D48.all;
+  use work.PCK_CRC32_D56.all;
+  use work.PCK_CRC32_D64.all;
+  use work.PCK_CRC32_D72.all;
+  use work.PCK_CRC32_D80.all;
+  use work.PCK_CRC32_D88.all;
+  use work.PCK_CRC32_D96.all;
+  use work.PCK_CRC32_D104.all;
+  use work.PCK_CRC32_D112.all;
+  use work.PCK_CRC32_D120.all;
+  use work.PCK_CRC32_D128.all;
+  use work.PCK_CRC32_D136.all;
+  use work.PCK_CRC32_D144.all;
+  use work.PCK_CRC32_D152.all;
+  use work.PCK_CRC32_D160.all;
+  use work.PCK_CRC32_D168.all;
+  use work.PCK_CRC32_D176.all;
+  use work.PCK_CRC32_D184.all;
+  use work.PCK_CRC32_D192.all;
+  use work.PCK_CRC32_D200.all;
+  use work.PCK_CRC32_D208.all;
+  use work.PCK_CRC32_D216.all;
+  use work.PCK_CRC32_D224.all;
+  use work.PCK_CRC32_D232.all;
+  use work.PCK_CRC32_D240.all;
+  use work.PCK_CRC32_D248.all;
+  use work.PCK_CRC32_D256.all;
 
 entity frame_builder is
   port(
@@ -52,14 +80,16 @@ architecture behav_frame_builder of frame_builder is
 
     constant ZEROS : std_logic_vector(255 downto 0) := (others=>'0');
 
-    type crc_fsm_states is (S_IDLE, S_D256, S_D128_64, S_D128, S_D64, S_D32, S_D8, S_DONE);
+    -- type crc_fsm_states is (S_IDLE, S_D256, S_D128_64, S_D128, S_D64, S_D32, S_D8, S_DONE);
+    type crc_fsm_states is (S_IDLE, S_D256, S_D128, S_EOP, S_DONE);
     signal ps_crc : crc_fsm_states;
     signal ns_crc : crc_fsm_states;
 
-    type frame_fsm_states is (S_IDLE, S_WAIT_CRC, S_PREAM, S_READ_FIFO, S_EXTRA_C, S_EOP, S_ERROR);
+    type frame_fsm_states is (S_IDLE, S_PREAM, S_READ_FIFO, S_EOP, S_ERROR);
     signal ps_frame : frame_fsm_states;
     signal ns_frame : frame_fsm_states;
 
+    signal data_in_reg : std_logic_vector(255 downto 0);
     signal data_0 : std_logic_vector(63 downto 0);
     signal data_1 : std_logic_vector(63 downto 0);
     signal data_2 : std_logic_vector(63 downto 0);
@@ -95,6 +125,10 @@ architecture behav_frame_builder of frame_builder is
 
     signal ren_hold  : std_logic;
     signal wen_hold  : std_logic;
+    signal full_hold : std_logic;
+    signal empty_hold : std_logic;
+    signal almost_e_hold : std_logic;
+    signal almost_f_hold : std_logic;
 
     signal enable_wait_cnt : std_logic;
     signal wait_cnt : std_logic_vector(2 downto 0);
@@ -122,6 +156,7 @@ architecture behav_frame_builder of frame_builder is
     input_regs: process(clk, rst)
     begin
       if rst = '0' then
+        data_in_reg <= (others=>'0');
         data_0 <= (others=>'0');
         data_1 <= (others=>'0');
         data_2 <= (others=>'0');
@@ -141,17 +176,21 @@ architecture behav_frame_builder of frame_builder is
         eop_int_reg <= (others=>'0');
 
       elsif clk'event and clk = '1' then
-        data_0 <= data_fifo_out(63 downto 0);
-        data_1 <= data_fifo_out(127 downto 64);
-        data_2 <= data_fifo_out(191 downto 128);
-        data_3 <= data_fifo_out(255 downto 192);
+
+        data_in_reg <= data_in;
+        data_0 <= data_in_reg(63 downto 0);
+        data_1 <= data_in_reg(127 downto 64);
+        data_2 <= data_in_reg(191 downto 128);
+        data_3 <= data_in_reg(255 downto 192);
+        eop_reg_in <= eop_in;
+        sop_reg_in <= sop_in;
+        val_reg_in <= val_in;
+
         data_3_o <= data_3;
         data_2_o <= data_2;
         data_1_o <= data_1;
         data_0_o <= data_0;
-        eop_reg_in <= eop_fifo_out;
-        sop_reg_in <= sop_fifo_out;
-        val_reg_in <= val_fifo_out;
+
         frame_int_next_reg <= frame_int_next;
         use_frame_next_reg <= use_frame_next;
         eop_int_reg <= eop_int;
@@ -181,27 +220,6 @@ architecture behav_frame_builder of frame_builder is
       end if;
     end process;
 
-    -- HOLD FIFO
-    hold_fifo: entity work.data_frame_fifo port map(
-      clk      => clk,
-      rst_n    => rst,
-
-      data_in  => data_in,
-      eop_in   => eop_in,
-      sop_in   => sop_in,
-      val_in   => val_in,
-      wen      => val_in,
-      full     => open,
-      empty    => open,
-      almost_e => open,
-      almost_f => open,
-      ren      => ren_hold,
-      data_out => data_fifo_out,
-      eop_out  => eop_fifo_out,
-      sop_out  => sop_fifo_out,
-      val_out  => val_fifo_out
-      );
-
     -- CRC FINITE STATE MACHINE
     -- Will start calculating as soon as a new payload arrives. At the end of
     -- the reception of data, will output de frame crc value.
@@ -228,6 +246,8 @@ architecture behav_frame_builder of frame_builder is
         -- ren_in <= '0';
         crc_done <= '0';
 
+        last_in <= data_3 & data_2 & data_1 & data_0;
+
         case ps_crc is
           when S_IDLE =>
             if (almost_e = '1') then
@@ -243,87 +263,82 @@ architecture behav_frame_builder of frame_builder is
               ren_in <= '1';
             end if;
 
-            if (eop_in(5) = '0') then
-              last_in <= data_in;
-              last_eop <= eop_in(4 downto 0);
-
-              if (eop_in(4 downto 0) <= "00011") then       -- Byte 3
-                crc_by_byte <= eop_in(4 downto 0);
-
-              elsif (eop_in(4 downto 0) <= "00111") then    -- Byte 7
-                crc_by_byte <= eop_in(4 downto 0) - 3;
-
-              elsif (eop_in(4 downto 0) <= "01011") then    -- Byte 11
-                crc_by_byte <= eop_in(4 downto 0) - 7;
-
-              elsif (eop_in(4 downto 0) <= "01111") then    -- Byte 15
-                crc_by_byte <= eop_in(4 downto 0) - 7;
-
-              elsif (eop_in(4 downto 0) <= "10011") then    -- Byte 19
-                crc_by_byte <= eop_in(4 downto 0) - 15;
-
-              elsif (eop_in(4 downto 0) <= "10111") then    -- Byte 23
-                crc_by_byte <= eop_in(4 downto 0) - 15;
-
-              elsif (eop_in(4 downto 0) <= "11011") then    -- Byte 27
-                crc_by_byte <= eop_in(4 downto 0) - 23;
-
-              elsif (eop_in(4 downto 0) <= "11111") then    -- Byte 31
-                crc_by_byte <= eop_in(4 downto 0) - 23;
-              end if;
-            end if;
-
             crc_reg <= nextCRC32_D256(reverse(data_in), crc_reg);
-
-          when S_D128_64 =>
-            crc_reg <= nextCRC32_D256(reverse(last_in(127 downto 0)), crc_reg);
 
           when S_D128 =>
             ren_in <= '1';
 
-            if (eop_in(5) = '0') then
-              -- A packet is ending
-              if (almost_e = '1') then
-                ren_in <= '0';
-              end if;
-              crc_reg <= nextCRC32_D128(reverse(last_in(127 downto 0)), crc_reg);
-            else
-              -- Packet started at higher half
-              crc_reg <= nextCRC32_D128(reverse(data_in(255 downto 128)), crc_reg);
-            end if;
+            -- Packet started at higher half
+            crc_reg <= nextCRC32_D128(reverse(data_in(255 downto 128)), crc_reg);
 
-          when S_D64 =>
-            if (eop_in(4 downto 0) > "00111" and eop_in(4 downto 0) < "01000") then
-              -- Packet ending from 8th to 15th byte
-              crc_reg <= nextCRC32_D64(reverse(last_in(63 downto 0)), crc_reg);
-
-            elsif (eop_in(4 downto 0) > "10111" and eop_in(4 downto 0) < "11111") then
-              -- Packet ending from 23th to 31th byte
-              crc_reg <= nextCRC32_D64(reverse(last_in(191 downto 128)), crc_reg);
-            end if;
-
-          when S_D32 =>
-
-            if (eop_in(4 downto 0) > "00111" and eop_in(4 downto 0) < "01000") then
-              -- Packet ending from 4th to 7th byte
-              crc_reg <= nextCRC32_D32(reverse(last_in(31 downto 0)), crc_reg);
-
-            elsif (eop_in(4 downto 0) > "10111" and eop_in(4 downto 0) < "11111") then
-              -- Packet ending from 23th to 31th byte
-              crc_reg <= nextCRC32_D32(reverse(last_in(31 downto 0)), crc_reg);
-            end if;
-
-          when S_D8 =>
-            -- crc_by_byte indicates how many bytes from the end of the
-            -- packet need to be calculated
-
-            if (crc_by_byte > 0) then
-              crc_reg <= nextCRC32_D8(reverse(last_in( to_integer(unsigned(last_eop - crc_by_byte)) downto to_integer(unsigned(last_eop - crc_by_byte)) - 7) ), crc_reg);
-              crc_by_byte <= crc_by_byte - 1;
-              crc_done <= '0';
-            else
-              crc_done <= '1';
-            end if;
+          when S_EOP =>
+            case eop_in(4 downto 0) is
+              when "00000" =>
+                crc_reg <= nextCRC32_D8(reverse(last_in(7 downto 0)), crc_reg);
+              when "00001" =>
+                crc_reg <= nextCRC32_D16(reverse(last_in(15 downto 0)), crc_reg);
+              when "00010" =>
+                crc_reg <= nextCRC32_D24(reverse(last_in(23 downto 0)), crc_reg);
+              when "00011" =>
+                crc_reg <= nextCRC32_D32(reverse(last_in(31 downto 0)), crc_reg);
+              when "00100" =>
+                crc_reg <= nextCRC32_D40(reverse(last_in(39 downto 0)), crc_reg);
+              when "00101" =>
+                crc_reg <= nextCRC32_D48(reverse(last_in(47 downto 0)), crc_reg);
+              when "00110" =>
+                crc_reg <= nextCRC32_D56(reverse(last_in(55 downto 0)), crc_reg);
+              when "00111" =>
+                crc_reg <= nextCRC32_D64(reverse(last_in(63 downto 0)), crc_reg);
+              when "01000" =>
+                crc_reg <= nextCRC32_D72(reverse(last_in(71 downto 0)), crc_reg);
+              when "01001" =>
+                crc_reg <= nextCRC32_D80(reverse(last_in(79 downto 0)), crc_reg);
+              when "01010" =>
+                crc_reg <= nextCRC32_D88(reverse(last_in(87 downto 0)), crc_reg);
+              when "01011" =>
+                crc_reg <= nextCRC32_D96(reverse(last_in(95 downto 0)), crc_reg);
+              when "01100" =>
+                crc_reg <= nextCRC32_D104(reverse(last_in(103 downto 0)), crc_reg);
+              when "01101" =>
+                crc_reg <= nextCRC32_D112(reverse(last_in(111 downto 0)), crc_reg);
+              when "01110" =>
+                crc_reg <= nextCRC32_D120(reverse(last_in(119 downto 0)), crc_reg);
+              when "01111" =>
+                crc_reg <= nextCRC32_D128(reverse(last_in(127 downto 0)), crc_reg);
+              when "10000" =>
+                crc_reg <= nextCRC32_D136(reverse(last_in(135 downto 0)), crc_reg);
+              when "10001" =>
+                crc_reg <= nextCRC32_D144(reverse(last_in(143 downto 0)), crc_reg);
+              when "10010" =>
+                crc_reg <= nextCRC32_D152(reverse(last_in(151 downto 0)), crc_reg);
+              when "10011" =>
+                crc_reg <= nextCRC32_D160(reverse(last_in(159 downto 0)), crc_reg);
+              when "10100" =>
+                crc_reg <= nextCRC32_D168(reverse(last_in(167 downto 0)), crc_reg);
+              when "10101" =>
+                crc_reg <= nextCRC32_D176(reverse(last_in(175 downto 0)), crc_reg);
+              when "10110" =>
+                crc_reg <= nextCRC32_D184(reverse(last_in(183 downto 0)), crc_reg);
+              when "10111" =>
+                crc_reg <= nextCRC32_D192(reverse(last_in(191 downto 0)), crc_reg);
+              when "11000" =>
+                crc_reg <= nextCRC32_D200(reverse(last_in(199 downto 0)), crc_reg);
+              when "11001" =>
+                crc_reg <= nextCRC32_D208(reverse(last_in(207 downto 0)), crc_reg);
+              when "11010" =>
+                crc_reg <= nextCRC32_D216(reverse(last_in(215 downto 0)), crc_reg);
+              when "11011" =>
+                crc_reg <= nextCRC32_D224(reverse(last_in(223 downto 0)), crc_reg);
+              when "11100" =>
+                crc_reg <= nextCRC32_D232(reverse(last_in(231 downto 0)), crc_reg);
+              when "11101" =>
+                crc_reg <= nextCRC32_D240(reverse(last_in(239 downto 0)), crc_reg);
+              when "11110" =>
+                crc_reg <= nextCRC32_D248(reverse(last_in(247 downto 0)), crc_reg);
+              when "11111" =>
+                crc_reg <= nextCRC32_D256(reverse(last_in(255 downto 0)), crc_reg);
+              when others =>
+            end case;
 
           when S_DONE =>
             ren_in <= '1';
@@ -350,59 +365,16 @@ architecture behav_frame_builder of frame_builder is
 
         when S_D256 =>
           if (eop_in(5) = '0') then
-            -- Valid EOP
-            if (eop_in(4 downto 0) <= "00011") then       -- Byte 3
-              ns_crc <= S_D8;
-
-            elsif (eop_in(4 downto 0) <= "00111") then    -- Byte 7
-              ns_crc <= S_D32;
-
-            elsif (eop_in(4 downto 0) <= "01011") then    -- Byte 11
-              ns_crc <= S_D64;
-
-            elsif (eop_in(4 downto 0) <= "01111") then    -- Byte 15
-              ns_crc <= S_D64;
-
-            elsif (eop_in(4 downto 0) <= "10011") then    -- Byte 19
-              ns_crc <= S_D128;
-
-            elsif (eop_in(4 downto 0) <= "10111") then    -- Byte 23
-              ns_crc <= S_D128;
-
-            elsif (eop_in(4 downto 0) <= "11011") then    -- Byte 27
-              ns_crc <= S_D128_64;
-
-            elsif (eop_in(4 downto 0) <= "11111") then    -- Byte 31
-              ns_crc <= S_D128_64;
-            else
-              ns_crc <= S_IDLE;
-            end if;
+            ns_crc <= S_EOP;
           else
             ns_crc <= S_D256;
           end if;
-
-        when S_D128_64 =>
-          ns_crc <= S_D64;
 
         when S_D128 =>
-          if (eop_in(5) = '0') then
-            ns_crc <= S_D8;
-          else
-            ns_crc <= S_D256;
-          end if;
+          ns_crc <= S_D256;
 
-        when S_D64 =>
-          ns_crc <= S_D8;
-
-        when S_D32 =>
-          ns_crc <= S_D8;
-
-        when S_D8 =>
-          if (crc_done = '1') then
-            ns_crc <= S_DONE;
-          else
-            ns_crc <= S_D8;
-          end if;
+        when S_EOP =>
+          ns_crc <= S_DONE;
 
         when S_DONE =>
           -- if (almost_e = '1') then
@@ -448,13 +420,11 @@ architecture behav_frame_builder of frame_builder is
         when S_IDLE =>
           ren_hold <= '1';
 
-          if (sop_reg_in = "10" or sop_reg_in = "11") then
+          -- if (sop_reg_in = "10" or sop_reg_in = "11") then
+          if (sop_fifo_out = "10" or sop_fifo_out = "11") then
             -- enable_wait_cnt <= '0'; -- So that CRC has time to calculate it
             ren_hold <= '0';
           end if;
-
-        when S_WAIT_CRC =>
-          enable_wait_cnt <= '1';
 
         when S_PREAM =>
           eop_int <= "100000";
@@ -493,7 +463,6 @@ architecture behav_frame_builder of frame_builder is
             eop_int <= '0' & eop_reg_in(4 downto 0) + 16 + 4;
           end if;
 
-          -- case eop_reg_in(4 downto 0) is
           case eop_reg_in(4 downto 0) is
             when "00000" =>
               if (frame_shift = '0') then
@@ -744,19 +713,12 @@ architecture behav_frame_builder of frame_builder is
       end case;
     end process;
 
-    frame_ns_decoder: process(ps_frame, eop_fifo_out, sop_reg_in, data_0, data_1, data_2, data_3, wait_cnt)
+    frame_ns_decoder: process(ps_frame, eop_reg_in, sop_reg_in, data_0, data_1, data_2, data_3, wait_cnt)
     begin
       case ps_frame is
         when S_IDLE =>
           if (sop_reg_in = "10" or sop_reg_in = "11") then
           -- If there is a packet starting at either lower or higher half
-            ns_frame <= S_WAIT_CRC;
-          end if;
-
-        when S_WAIT_CRC =>
-          if (wait_cnt < "111") then
-            ns_frame <= S_WAIT_CRC;
-          else
             ns_frame <= S_PREAM;
           end if;
 
@@ -764,14 +726,11 @@ architecture behav_frame_builder of frame_builder is
           ns_frame <= S_READ_FIFO;
 
         when S_READ_FIFO =>
-          if (eop_fifo_out = "100000") then
+          if (eop_reg_in = "100000") then
             ns_frame <= S_READ_FIFO;
           else
             ns_frame <= S_EOP;
           end if;
-
-        when S_EXTRA_C =>
-          ns_frame <= S_IDLE;
 
         when S_EOP =>
             ns_frame <= S_IDLE;

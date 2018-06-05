@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 ##############################################################
 ## ESTE SCRIPT LIMPA O ARQUIVO DE SAIDA DEIXANDO APENAS DADOS

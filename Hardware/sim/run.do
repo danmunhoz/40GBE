@@ -85,10 +85,38 @@ vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo_bram.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/core_interface.vhd
 
 vcom -novopt ../rtl/CRC_RX/CRC32_D8.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D16.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D24.vhd
 vcom -novopt ../rtl/CRC_RX/CRC32_D32.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D40.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D48.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D56.vhd
 vcom -novopt ../rtl/CRC_RX/CRC32_D64.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D72.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D80.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D88.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D96.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D104.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D112.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D120.vhd
 vcom -novopt ../rtl/CRC_RX/CRC32_D128.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D136.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D144.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D152.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D160.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D168.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D176.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D184.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D192.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D200.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D208.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D216.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D224.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D232.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D240.vhd
+vcom -novopt ../rtl/CRC_RX/CRC32_D248.vhd
 vcom -novopt ../rtl/CRC_RX/CRC32_D256.vhd
+
 vcom -novopt ../rtl/CRC_RX/crc_rx.vhd
 
 vcom -novopt ../rtl/MAC/data_frame_fifo.vhd
