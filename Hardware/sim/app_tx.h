@@ -86,7 +86,7 @@ SC_MODULE(app_tx) {
           eop = SC_LOGIC_0;
           val = SC_LOGIC_1;
           mod = "01011";
-          data = ((sc_lv<64 >)0, (sc_lv<64 >)0, (sc_lv<64 >)2964376266, (sc_lv<64 >)counter);
+          data = ((sc_lv<64 >)0, (sc_lv<64 >)0, (sc_lv<64 >)12237514, (sc_lv<64 >)counter);
 
         } else if (counter > MAX_PL_CYCLES && counter < MAX_IPG_CYCLES) {
           // IDLE

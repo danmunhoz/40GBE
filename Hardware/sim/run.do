@@ -158,7 +158,8 @@ vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 -L secureip -L xilinxcorelib work.glbl \
 work.Top -t 1ps
 
-do wave.do
+#do wave.do
+do wave_korol.do
 #do wave_pcs_TX.do
 
 
