@@ -28,14 +28,7 @@ add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/FIFO_H0/WR
 add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/FIFO_H0/RDCOUNT
 add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/FIFO_H1/WRCOUNT
 add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/FIFO_H1/RDCOUNT
-add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/hold_fifo/FIFO_L0/WRCOUNT
-add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/hold_fifo/FIFO_L0/RDCOUNT
-add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/hold_fifo/FIFO_L1/WRCOUNT
-add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/hold_fifo/FIFO_L1/RDCOUNT
-add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/hold_fifo/FIFO_H0/WRCOUNT
-add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/hold_fifo/FIFO_H0/RDCOUNT
-add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/hold_fifo/FIFO_H1/WRCOUNT
-add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame/hold_fifo/FIFO_H1/RDCOUNT
+
 add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/FIFO_L0/WRCOUNT
 add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/FIFO_L0/RDCOUNT
 add list /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/FIFO_L1/WRCOUNT

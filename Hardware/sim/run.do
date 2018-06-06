@@ -158,10 +158,7 @@ vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 -L secureip -L xilinxcorelib work.glbl \
 work.Top -t 1ps
 
-#do wave.do
-do wave_korol.do
-#do wave_pcs_TX.do
-
+do wave.do
 
 run 30000 ns
 
@@ -172,5 +169,5 @@ exec cp lane3.txt lane3_rx.txt
 
 exec cp dump_mii_tx.txt dump_app.txt
 
-#do list.do
+do list.do
 exit
