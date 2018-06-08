@@ -170,4 +170,4 @@ exec cp lane3.txt lane3_rx.txt
 exec cp dump_mii_tx.txt dump_app.txt
 
 do list.do
-exit
+#exit

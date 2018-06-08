@@ -86,7 +86,7 @@ architecture behav_frame_builder of frame_builder is
     signal ps_crc : crc_fsm_states;
     signal ns_crc : crc_fsm_states;
 
-    type frame_fsm_states is (S_IDLE, S_PREAM, S_READ_FIFO, S_EOP, S_ERROR);
+    type frame_fsm_states is (S_IDLE, S_PREAM, S_READ_FIFO, S_EOP, S_EOP_N, S_ERROR);
     signal ps_frame : frame_fsm_states;
     signal ns_frame : frame_fsm_states;
 
@@ -117,7 +117,6 @@ architecture behav_frame_builder of frame_builder is
     signal frame_int  : std_logic_vector(255 downto 0);
 
     signal frame_int_next  : std_logic_vector(255 downto 0);
-    signal frame_int_next_reg  : std_logic_vector(255 downto 0);
     signal use_frame_next : std_logic;
     signal use_frame_next_reg : std_logic;
     signal last_in  : std_logic_vector(255 downto 0);
@@ -146,8 +145,8 @@ architecture behav_frame_builder of frame_builder is
 
     ren_out <= ren_in when rst = '1' else '0';
     wen_out <= wen_hold when rst = '1' else '0';
-    frame_out <= frame_int when use_frame_next_reg = '0' else frame_int_next_reg;
-    eop_out <= eop_int when use_frame_next_reg = '0' and use_frame_next = '0' else eop_int_reg;
+    frame_out <= frame_int_next when use_frame_next_reg = '1' and use_frame_next = '0' else frame_int;
+    eop_out <= eop_int;
     sop_out <= sop_int;
     val_out <= val_int;
 
@@ -165,15 +164,15 @@ architecture behav_frame_builder of frame_builder is
         data_2_o <= (others=>'0');
         data_1_o <= (others=>'0');
         data_0_o <= (others=>'0');
+        eop_int_reg <= (others=>'0');
         eop_reg_in <=  (others=>'0');
         eop_reg_reg_in <=  (others=>'0');
         sop_reg_in <= (others=>'0');
         val_reg_in <= '0';
         frame_shift <= '0';
         wait_cnt <= "000";
+        frame_int_next <= (others =>'0');
         use_frame_next_reg <= '0';
-        frame_int_next_reg <= (others=>'0');
-        eop_int_reg <= (others=>'0');
 
       elsif clk'event and clk = '1' then
 
@@ -192,9 +191,10 @@ architecture behav_frame_builder of frame_builder is
         data_1_o <= data_1;
         data_0_o <= data_0;
 
-        frame_int_next_reg <= frame_int_next;
         use_frame_next_reg <= use_frame_next;
-        eop_int_reg <= eop_int;
+        if (eop_reg_reg_in > 19) then
+          eop_int_reg <= eop_reg_reg_in - 20;
+        end if;
 
         if (sop_reg_in = "10") then
         -- Update
@@ -349,79 +349,9 @@ architecture behav_frame_builder of frame_builder is
             crc_reg <= nextCRC32_D128(reverse(data_in(255 downto 128)), crc_reg);
 
           when S_EOP =>
-            -- case eop_in(4 downto 0) is
-            --   when "00000" =>
-            --     crc_reg <= nextCRC32_D8(reverse(data_in_reg(7 downto 0)), crc_reg);
-            --   when "00001" =>
-            --     crc_reg <= nextCRC32_D16(reverse(data_in_reg(15 downto 0)), crc_reg);
-            --   when "00010" =>
-            --     crc_reg <= nextCRC32_D24(reverse(data_in_reg(23 downto 0)), crc_reg);
-            --   when "00011" =>
-            --     crc_reg <= nextCRC32_D32(reverse(data_in_reg(31 downto 0)), crc_reg);
-            --   when "00100" =>
-            --     crc_reg <= nextCRC32_D40(reverse(data_in_reg(39 downto 0)), crc_reg);
-            --   when "00101" =>
-            --     crc_reg <= nextCRC32_D48(reverse(data_in_reg(47 downto 0)), crc_reg);
-            --   when "00110" =>
-            --     crc_reg <= nextCRC32_D56(reverse(data_in_reg(55 downto 0)), crc_reg);
-            --   when "00111" =>
-            --     crc_reg <= nextCRC32_D64(reverse(data_in_reg(63 downto 0)), crc_reg);
-            --   when "01000" =>
-            --     crc_reg <= nextCRC32_D72(reverse(data_in_reg(71 downto 0)), crc_reg);
-            --   when "01001" =>
-            --     crc_reg <= nextCRC32_D80(reverse(data_in_reg(79 downto 0)), crc_reg);
-            --   when "01010" =>
-            --     crc_reg <= nextCRC32_D88(reverse(data_in_reg(87 downto 0)), crc_reg);
-            --   when "01011" =>
-            --     crc_reg <= nextCRC32_D96(reverse(data_in_reg(95 downto 0)), crc_reg);
-            --   when "01100" =>
-            --     crc_reg <= nextCRC32_D104(reverse(data_in_reg(103 downto 0)), crc_reg);
-            --   when "01101" =>
-            --     crc_reg <= nextCRC32_D112(reverse(data_in_reg(111 downto 0)), crc_reg);
-            --   when "01110" =>
-            --     crc_reg <= nextCRC32_D120(reverse(data_in_reg(119 downto 0)), crc_reg);
-            --   when "01111" =>
-            --     crc_reg <= nextCRC32_D128(reverse(data_in_reg(127 downto 0)), crc_reg);
-            --   when "10000" =>
-            --     crc_reg <= nextCRC32_D136(reverse(data_in_reg(135 downto 0)), crc_reg);
-            --   when "10001" =>
-            --     crc_reg <= nextCRC32_D144(reverse(data_in_reg(143 downto 0)), crc_reg);
-            --   when "10010" =>
-            --     crc_reg <= nextCRC32_D152(reverse(data_in_reg(151 downto 0)), crc_reg);
-            --   when "10011" =>
-            --     crc_reg <= nextCRC32_D160(reverse(data_in_reg(159 downto 0)), crc_reg);
-            --   when "10100" =>
-            --     crc_reg <= nextCRC32_D168(reverse(data_in_reg(167 downto 0)), crc_reg);
-            --   when "10101" =>
-            --     crc_reg <= nextCRC32_D176(reverse(data_in_reg(175 downto 0)), crc_reg);
-            --   when "10110" =>
-            --     crc_reg <= nextCRC32_D184(reverse(data_in_reg(183 downto 0)), crc_reg);
-            --   when "10111" =>
-            --     crc_reg <= nextCRC32_D192(reverse(data_in_reg(191 downto 0)), crc_reg);
-            --   when "11000" =>
-            --     crc_reg <= nextCRC32_D200(reverse(data_in_reg(199 downto 0)), crc_reg);
-            --   when "11001" =>
-            --     crc_reg <= nextCRC32_D208(reverse(data_in_reg(207 downto 0)), crc_reg);
-            --   when "11010" =>
-            --     crc_reg <= nextCRC32_D216(reverse(data_in_reg(215 downto 0)), crc_reg);
-            --   when "11011" =>
-            --     crc_reg <= nextCRC32_D224(reverse(data_in_reg(223 downto 0)), crc_reg);
-            --   when "11100" =>
-            --     crc_reg <= nextCRC32_D232(reverse(data_in_reg(231 downto 0)), crc_reg);
-            --   when "11101" =>
-            --     crc_reg <= nextCRC32_D240(reverse(data_in_reg(239 downto 0)), crc_reg);
-            --   when "11110" =>
-            --     crc_reg <= nextCRC32_D248(reverse(data_in_reg(247 downto 0)), crc_reg);
-            --   when "11111" =>
-            --     crc_reg <= nextCRC32_D256(reverse(data_in_reg(255 downto 0)), crc_reg);
-            --   when others =>
-            -- end case;
             ren_in <= '1';
             crc_reg <= (others=>'1');
 
-          -- when S_DONE =>
-          --   ren_in <= '1';
-          --   crc_reg <= (others=>'1');
 
           when others => null;
         end case;
@@ -460,14 +390,6 @@ architecture behav_frame_builder of frame_builder is
             ns_crc <= S_IDLE;
           end if;
 
-        -- when S_DONE =>
-        --   -- if (almost_e = '1') then
-        --     -- Wait some time here so the input fifo fill up
-        --     -- ns_crc <= S_DONE;
-        --   -- else
-        --     ns_crc <= S_IDLE;
-        --   -- end if;
-
         when others => null;
       end case;
     end process;
@@ -492,7 +414,7 @@ architecture behav_frame_builder of frame_builder is
     begin
       enable_wait_cnt <= '0';
       frame_int <= (others=>'0');
-      frame_int_next <= (others=>'0');
+      -- frame_int_next <= (others=>'0');
       eop_int <= "100000";
       sop_int <= "00";
       val_int <= '0';
@@ -530,263 +452,152 @@ architecture behav_frame_builder of frame_builder is
           ren_hold <= '1';
           wen_hold <= '1';
           sop_int <= "00";
-
-          if (frame_shift = '0') then
-            frame_int <= data_2 & data_1 & data_0 & data_3_o;
-          else
-            frame_int <= data_2 & data_1 & data_0 & data_3_o;
-          end if;
+          frame_int <= data_2 & data_1 & data_0 & data_3_o;
 
         when S_EOP =>
           sop_int <= "00";
           val_int <= '1';
+          eop_int <= '0' & eop_reg_in(4 downto 0) + 8 + 4;
 
-          if (frame_shift = '0') then
-            eop_int <= '0' & eop_reg_in(4 downto 0) + 8 + 4;
-          else
-            eop_int <= '0' & eop_reg_in(4 downto 0) + 16 + 4;
-          end if;
-
-          -- case eop_reg_in(4 downto 0) is
           case eop_reg_reg_in(4 downto 0) is
             when "00000" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 32) & crc_final;
-              else
-                frame_int <= ZEROS(255 downto 160) & crc_final & data_3_o & data_2_o;
-              end if;
+                frame_int <= ZEROS(255 downto 104) & crc_final & data_0(7 downto 0) & data_3_o;
 
             when "00001" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 40) & crc_final & data_3_o(7 downto 0);
-              else
-                frame_int <= ZEROS(255 downto 168) & crc_final & data_0(7 downto 0) & data_3_o & data_2_o;
-              end if;
+                frame_int <= ZEROS(255 downto 112) & crc_final & data_0(15 downto 0) & data_3_o;
 
             when "00010" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 48) & crc_final & data_3_o(15 downto 0);
-              else
-                frame_int <= ZEROS(255 downto 176) & crc_final & data_0(15 downto 0) & data_3_o & data_2_o;
-              end if;
+                frame_int <= ZEROS(255 downto 120) & crc_final & data_0(23 downto 0) & data_3_o;
 
             when "00011" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 56) & crc_final & data_3_o(23 downto 0);
-              else
-                frame_int <= ZEROS(255 downto 184) & crc_final & data_0(23 downto 0) & data_3_o & data_2_o;
-              end if;
+                frame_int <= ZEROS(255 downto 128) & crc_final & data_0(31 downto 0) & data_3_o;
 
             when "00100" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 64) & crc_final & data_3_o(31 downto 0);
-              else
-                frame_int <= ZEROS(255 downto 192) & crc_final & data_0(31 downto 0) & data_3_o & data_2_o;
-              end if;
+                frame_int <= ZEROS(255 downto 136) & crc_final & data_0(39 downto 0) & data_3_o;
 
             when "00101" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 72) & crc_final & data_3_o(39 downto 0);
-              else
-                frame_int <= ZEROS(255 downto 200) & crc_final & data_0(39 downto 0) & data_3_o & data_2_o;
-              end if;
+                frame_int <= ZEROS(255 downto 144) & crc_final & data_0(47 downto 0) & data_3_o;
 
             when "00110" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 80) & crc_final & data_3_o(47 downto 0);
-              else
-                frame_int <= ZEROS(255 downto 208) & crc_final & data_0(47 downto 0) & data_3_o & data_2_o;
-              end if;
+                frame_int <= ZEROS(255 downto 152) & crc_final & data_0(55 downto 0) & data_3_o;
 
             when "00111" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 88) & crc_final & data_3_o(55 downto 0);
-              else
-                frame_int <= ZEROS(255 downto 216) & crc_final & data_0(55 downto 0) & data_3_o & data_2_o;
-              end if;
+                frame_int <= ZEROS(255 downto 160) & crc_final & data_0 & data_3_o;
 
             when "01000" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 96) & crc_final & data_3_o(63 downto 0);
-              else
-                frame_int <= ZEROS(255 downto 224) & crc_final & data_0(63 downto 0) & data_3_o & data_2_o;
-              end if;
+                frame_int <= ZEROS(255 downto 168) & crc_final & data_1(7 downto 0) & data_0 & data_3_o;
 
             when "01001" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 72) & crc_final & data_0(7 downto 0) & data_3_o;
-              else
-                frame_int <= ZEROS(255 downto 232) & crc_final & data_1(7 downto 0) & data_0 & data_3_o & data_2_o;
-              end if;
+                frame_int <= ZEROS(255 downto 176) & crc_final & data_1(15 downto 0) & data_0 & data_3_o;
 
             when "01010" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 112) & crc_final & data_0(15 downto 0) & data_3_o;
-              else
-                frame_int <= ZEROS(255 downto 240) & crc_final & data_1(15 downto 0) & data_0 & data_3_o & data_2_o;
-              end if;
+                frame_int <= ZEROS(255 downto 184) & crc_final & data_1(23 downto 0) & data_0 & data_3_o;
 
             when "01011" =>
-              if (frame_shift = '0') then
                 frame_int <= ZEROS(255 downto 192) & crc_final & data_1(31 downto 0) & data_0 & data_3_o;
-              else
-                frame_int <= crc_final & data_1(31 downto 0) & data_0 & data_3_o & data_2_o;
-              end if;
 
             when "01100" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 192) & crc_final & data_1(31 downto 0) & data_0 & data_3_o;
-              else
-                frame_int <= crc_final(23 downto 0) & data_1(39 downto 0) & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 248) & crc_final(31 downto 24);
-                use_frame_next <= '1';
-              end if;
+                frame_int <= ZEROS(255 downto 200) & crc_final & data_1(39 downto 0) & data_0 & data_3_o;
 
             when "01101" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 128) & crc_final & data_0(31 downto 0) & data_3_o;
-              else
-                frame_int <= crc_final(15 downto 0) & data_1(47 downto 0) & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 240) & crc_final(31 downto 16);
-                use_frame_next <= '1';
-              end if;
+                frame_int <= ZEROS(255 downto 208) & crc_final & data_1(47 downto 0) & data_0 & data_3_o;
 
             when "01110" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 136) & crc_final & data_0(39 downto 0) & data_3_o;
-              else
-                frame_int <= crc_final(7 downto 0) & data_1(55 downto 0) & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 232) & crc_final(31 downto 8);
-                use_frame_next <= '1';
-              end if;
+                frame_int <= ZEROS(255 downto 216) & crc_final & data_1(55 downto 0) & data_0 & data_3_o;
 
             when "01111" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 144) & crc_final & data_0(47 downto 0) & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 32) & crc_final;
-                use_frame_next <= '1';
-              end if;
+                frame_int <= ZEROS(255 downto 224) & crc_final & data_1 & data_0 & data_3_o;
 
             when "10000" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 152) & crc_final & data_0(55 downto 0) & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 216) & crc_final & data_2(7 downto 0);
-                use_frame_next <= '1';
-              end if;
+                frame_int <= ZEROS(255 downto 232) & crc_final & data_2(7 downto 0) & data_1 & data_0 & data_3_o;
 
             when "10001" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 160) & crc_final & data_0(63 downto 0) & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 208) & crc_final & data_2(15 downto 0);
-                use_frame_next <= '1';
-              end if;
+                frame_int <= ZEROS(255 downto 240) & crc_final & data_2(15 downto 0) & data_1 & data_0 & data_3_o;
 
             when "10010" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 168) & crc_final & data_1(7 downto 0) & data_0 & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 200) & crc_final & data_2(31 downto 0);
-                use_frame_next <= '1';
-              end if;
+                frame_int <= ZEROS(255 downto 248) & crc_final & data_2(23 downto 0) & data_1 & data_0 & data_3_o;
 
             when "10011" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 176) & crc_final & data_1(15 downto 0) & data_0 & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 192) & crc_final & data_2(39 downto 0);
+                frame_int <= crc_final & data_2(31 downto 0) & data_1 & data_0 & data_3_o;
+
+            when "10100" =>
+                frame_int <= crc_final(23 downto 0) & data_2(39 downto 0) & data_1 & data_0 & data_3_o;
                 use_frame_next <= '1';
-              end if;
+                frame_int_next <= ZEROS(255 downto 8) & crc_final(31 downto 24);
+                eop_int <= "100000";
+
+            when "10101" =>
+                frame_int <= crc_final(15 downto 0) & data_2(47 downto 0) & data_1 & data_0 & data_3_o;
+                use_frame_next <= '1';
+                frame_int_next <= ZEROS(255 downto 16) & crc_final(31 downto 16);
+                eop_int <= "100000";
+
+            when "10110" =>
+                frame_int <= crc_final(7 downto 0) & data_2(55 downto 0) & data_1 & data_0 & data_3_o;
+                use_frame_next <= '1';
+                frame_int_next <= ZEROS(255 downto 24) & crc_final(31 downto 8);
+                eop_int <= "100000";
 
             when "10111" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 184) & crc_final & data_1(23 downto 0) & data_0 & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 184) & crc_final & data_2(47 downto 0);
+                frame_int <= data_2 & data_1 & data_0 & data_3_o;
                 use_frame_next <= '1';
-              end if;
+                frame_int_next <= ZEROS(255 downto 32) & crc_final;
+                eop_int <= "100000";
 
             when "11000" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 192) & crc_final & data_1(31 downto 0) & data_0 & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 176) & crc_final & data_2(55 downto 0);
+                frame_int <= data_2 & data_1 & data_0 & data_3_o;
                 use_frame_next <= '1';
-              end if;
+                frame_int_next <= ZEROS(255 downto 40) & crc_final & data_3(7 downto 0);
+                eop_int <= "100000";
 
             when "11001" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 200) & crc_final & data_1(39 downto 0) & data_0 & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 96) & crc_final & data_2;
+                frame_int <= data_2 & data_1 & data_0 & data_3_o;
                 use_frame_next <= '1';
-              end if;
+                frame_int_next <= ZEROS(255 downto 48) & crc_final & data_3(15 downto 0);
+                eop_int <= "100000";
 
             when "11010" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 208) & crc_final & data_1(47 downto 0) & data_0 & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 104) & crc_final & data_3(7 downto 0) & data_2;
+                frame_int <= data_2 & data_1 & data_0 & data_3_o;
                 use_frame_next <= '1';
-              end if;
+                frame_int_next <= ZEROS(255 downto 56) & crc_final & data_3(23 downto 0);
+                eop_int <= "100000";
 
             when "11011" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 216) & crc_final & data_1(55 downto 0) & data_0 & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 112) & crc_final & data_3(15 downto 0) & data_2;
+                frame_int <= data_2 & data_1 & data_0 & data_3_o;
                 use_frame_next <= '1';
-              end if;
+                frame_int_next <= ZEROS(255 downto 64) & crc_final & data_3(31 downto 0);
+                eop_int <= "100000";
 
             when "11100" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 224) & crc_final & data_1(63 downto 0) & data_0 & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 120) & crc_final & data_3(23 downto 0) & data_2;
+                frame_int <= data_2 & data_1 & data_0 & data_3_o;
                 use_frame_next <= '1';
-              end if;
+                frame_int_next <= ZEROS(255 downto 72) & crc_final & data_3(39 downto 0);
+                eop_int <= "100000";
 
             when "11101" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 232) & crc_final & data_2(7 downto 0) & data_1 & data_0 & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 128) & crc_final & data_3(31 downto 0) & data_2;
+                frame_int <= data_2 & data_1 & data_0 & data_3_o;
                 use_frame_next <= '1';
-              end if;
+                frame_int_next <= ZEROS(255 downto 80) & crc_final & data_3(47 downto 0);
+                eop_int <= "100000";
 
             when "11110" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 240) & crc_final & data_2(15 downto 0) & data_1 & data_0 & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 136) & crc_final & data_3(39 downto 0) & data_2;
+                frame_int <= data_2 & data_1 & data_0 & data_3_o;
                 use_frame_next <= '1';
-              end if;
+                frame_int_next <= ZEROS(255 downto 88) & crc_final & data_3(55 downto 0);
+                eop_int <= "100000";
 
             when "11111" =>
-              if (frame_shift = '0') then
-                frame_int <= ZEROS(255 downto 248) & crc_final & data_2(23 downto 0) & data_1 & data_0 & data_3_o;
-              else
-                frame_int <= data_1 & data_0 & data_3_o & data_2_o;
-                frame_int_next <= ZEROS(255 downto 144) & crc_final & data_3(47 downto 0) & data_2;
+                frame_int <= data_2 & data_1 & data_0 & data_3_o;
                 use_frame_next <= '1';
-              end if;
+                frame_int_next <= ZEROS(255 downto 96) & crc_final & data_3;
+                eop_int <= "100000";
+
             when others =>
           end case;
+
+        when S_EOP_N =>
+          val_int <= '1';
+          eop_int <=  '0' & eop_reg_in(4 downto 0) - 20;
 
         when S_ERROR =>
           frame_int <= LANE_ERROR & LANE_ERROR & LANE_ERROR & LANE_ERROR;
@@ -818,6 +629,15 @@ architecture behav_frame_builder of frame_builder is
           end if;
 
         when S_EOP =>
+          if eop_reg_reg_in(4 downto 0) >= "10100" then
+            ns_frame <= S_EOP_N;
+          elsif (sop_reg_in(1) = '1') then
+            ns_frame <= S_PREAM;
+          else
+            ns_frame <= S_IDLE;
+          end if;
+
+        when S_EOP_N =>
           if (sop_reg_in(1) = '1') then
             ns_frame <= S_PREAM;
           else

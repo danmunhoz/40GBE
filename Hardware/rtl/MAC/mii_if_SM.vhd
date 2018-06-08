@@ -132,6 +132,7 @@ architecture behav_mii_if of mii_if is
         -- shift <= "00";
 
       when S_IPG =>
+        fifo_wait <= '1';
         if sop_in_o(1) = '0' then
           ns_mii <= S_IDLE;
         else
