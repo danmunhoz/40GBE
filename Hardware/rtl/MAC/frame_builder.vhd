@@ -171,7 +171,6 @@ architecture behav_frame_builder of frame_builder is
         val_reg_in <= '0';
         frame_shift <= '0';
         wait_cnt <= "000";
-        frame_int_next <= (others =>'0');
         use_frame_next_reg <= '0';
 
       elsif clk'event and clk = '1' then
@@ -414,7 +413,7 @@ architecture behav_frame_builder of frame_builder is
     begin
       enable_wait_cnt <= '0';
       frame_int <= (others=>'0');
-      -- frame_int_next <= (others=>'0');
+      frame_int_next <= (others=>'0');
       eop_int <= "100000";
       sop_int <= "00";
       val_int <= '0';
