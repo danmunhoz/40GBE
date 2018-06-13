@@ -501,14 +501,14 @@ module wrapper_macpcs_rx(
      .mod_in     (pkt_tx_mod),
      .val_in     (pkt_tx_val),
 
-     .mii_data_0 (),
-     .mii_ctrl_0 (),
-     .mii_data_1 (),
-     .mii_ctrl_1 (),
-     .mii_data_2 (),
-     .mii_ctrl_2 (),
-     .mii_data_3 (),
-     .mii_ctrl_3 ()
+     .mii_data_0 (xgmii_txd_lane_0),
+     .mii_ctrl_0 (xgmii_txc_lane_0),
+     .mii_data_1 (xgmii_txd_lane_1),
+     .mii_ctrl_1 (xgmii_txc_lane_1),
+     .mii_data_2 (xgmii_txd_lane_2),
+     .mii_ctrl_2 (xgmii_txc_lane_2),
+     .mii_data_3 (xgmii_txd_lane_3),
+     .mii_ctrl_3 (xgmii_txc_lane_3)
    );
 
 
@@ -615,8 +615,8 @@ module wrapper_macpcs_rx(
         .tx_header_out      (tx_header_out_1[1:0]),
         .rxgearboxslip_out  (rxgearboxslip_out_1),
         .tx_sequence_out    (tx_sequence_out_1),
-        .xgmii_txc          (xgmii_txc_lane_0), // MII do zero POR ENQUANTO
-        .xgmii_txd          (xgmii_txd_lane_0), // MII do zero POR ENQUANTO
+        .xgmii_txc          (xgmii_txc_lane_1), // MII do zero POR ENQUANTO
+        .xgmii_txd          (xgmii_txd_lane_1), // MII do zero POR ENQUANTO
         .xgmii_rxd          (xgmii_rxd_lane_1),
         .xgmii_rxc          (xgmii_rxc_lane_1),
 
@@ -673,8 +673,8 @@ module wrapper_macpcs_rx(
         .tx_header_out      (tx_header_out_2[1:0]),
         .rxgearboxslip_out  (rxgearboxslip_out_2),
         .tx_sequence_out    (tx_sequence_out_2),
-        .xgmii_txc          (xgmii_txc_lane_0), // MII do zero POR ENQUANTO
-        .xgmii_txd          (xgmii_txd_lane_0), // MII do zero POR ENQUANTO
+        .xgmii_txc          (xgmii_txc_lane_2), // MII do zero POR ENQUANTO
+        .xgmii_txd          (xgmii_txd_lane_2), // MII do zero POR ENQUANTO
         .xgmii_rxd          (xgmii_rxd_lane_2),
         .xgmii_rxc          (xgmii_rxc_lane_2),
 
@@ -731,8 +731,8 @@ module wrapper_macpcs_rx(
         .tx_header_out      (tx_header_out_3[1:0]),
         .rxgearboxslip_out  (rxgearboxslip_out_3),
         .tx_sequence_out    (tx_sequence_out_3),
-        .xgmii_txc          (xgmii_txc_lane_0), // MII do zero POR ENQUANTO
-        .xgmii_txd          (xgmii_txd_lane_0), // MII do zero POR ENQUANTO
+        .xgmii_txc          (xgmii_txc_lane_3), // MII do zero POR ENQUANTO
+        .xgmii_txd          (xgmii_txd_lane_3), // MII do zero POR ENQUANTO
         .xgmii_rxd          (xgmii_rxd_lane_3),
         .xgmii_rxc          (xgmii_rxc_lane_3),
 
@@ -789,6 +789,7 @@ module wrapper_macpcs_rx(
 
         .xgmii_txc          (xgmii_txc_lane_0),
         .xgmii_txd          (xgmii_txd_lane_0),
+
         .xgmii_rxc_0        (xgmii_rxc_lane_0),
         .xgmii_rxd_0        (xgmii_rxd_lane_0),
         .xgmii_rxc_1        (xgmii_rxc_lane_1),
