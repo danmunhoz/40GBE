@@ -47,6 +47,7 @@ SC_MODULE(app_tx) {
   void buffer_lanes() {
     line pr0;
     std::string line0;
+    static int end = 0;
 
     if (reset_in == SC_LOGIC_1) {       // RESET ativo baixo
 
@@ -85,8 +86,11 @@ SC_MODULE(app_tx) {
           sop = "00";
           eop = SC_LOGIC_0;
           val = SC_LOGIC_1;
-          mod = "01011";
-          data = ((sc_lv<64 >)0, (sc_lv<64 >)0, (sc_lv<64 >)2964376266, (sc_lv<64 >)counter);
+          // mod = "01011";
+          // data = ((sc_lv<64 >)0, (sc_lv<64 >)0, (sc_lv<64 >)12237514, (sc_lv<64 >)(counter+1));
+          mod = sc_lv<5 >(end);
+          data = ((sc_lv<256 >)(-1));
+          end++;
 
         } else if (counter > MAX_PL_CYCLES && counter < MAX_IPG_CYCLES) {
           // IDLE
