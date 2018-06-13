@@ -274,30 +274,52 @@ module wrapper_macpcs_rx(
     reg [63:0]      old_data_0;
     reg [1:0]       old_header_0;
 
-    wire            terminate_out_0;
-    wire            terminate_out_1;
-    wire            terminate_out_2;
-    wire            terminate_out_3;
+    wire            terminate_out_0_rx;
+    wire            terminate_out_1_rx;
+    wire            terminate_out_2_rx;
+    wire            terminate_out_3_rx;
+    wire            terminate_out_0_tx;
+    wire            terminate_out_1_tx;
+    wire            terminate_out_2_tx;
+    wire            terminate_out_3_tx;
 
-    wire            start_out_0;
-    wire            start_out_1;
-    wire            start_out_2;
-    wire            start_out_3;
+    wire            start_out_0_rx;
+    wire            start_out_1_rx;
+    wire            start_out_2_rx;
+    wire            start_out_3_rx;
+    wire            start_out_0_tx;
+    wire            start_out_1_tx;
+    wire            start_out_2_tx;
+    wire            start_out_3_tx;
 
-    reg             start_out_0_r;
-    reg             start_out_1_r;
-    reg             start_out_2_r;
-    reg             start_out_3_r;
+    reg             start_out_0_rx_r;
+    reg             start_out_1_rx_r;
+    reg             start_out_2_rx_r;
+    reg             start_out_3_rx_r;
+    reg             start_out_0_tx_r;
+    reg             start_out_1_tx_r;
+    reg             start_out_2_tx_r;
+    reg             start_out_3_tx_r;
 
-    wire            terminate_in_0 = 1'b0;
-    wire            terminate_in_1 = terminate_out_0;
-    wire            terminate_in_2 = (terminate_out_0 || terminate_out_1);
-    wire            terminate_in_3 = (terminate_out_0 || terminate_out_1 || terminate_out_2);
+    wire            terminate_in_0_rx = 1'b0;
+    wire            terminate_in_1_rx = terminate_out_0_rx;
+    wire            terminate_in_2_rx = (terminate_out_0_rx || terminate_out_1_rx);
+    wire            terminate_in_3_rx = (terminate_out_0_rx || terminate_out_1_rx || terminate_out_2_rx);
 
-    wire            start_in_0 = (start_out_3_r || start_out_1_r || start_out_2_r);
-    wire            start_in_1 = (start_out_0_r || start_out_2_r || start_out_3_r || start_out_0);
-    wire            start_in_2 = (start_out_0_r || start_out_1_r || start_out_3_r || start_out_0 || start_out_1);
-    wire            start_in_3 = (start_out_0_r || start_out_1_r || start_out_2_r || start_out_0 || start_out_1 || start_out_2);
+    wire            terminate_in_0_tx = 1'b0;
+    wire            terminate_in_1_tx = terminate_out_0_tx;
+    wire            terminate_in_2_tx = (terminate_out_0_tx || terminate_out_1_tx);
+    wire            terminate_in_3_tx = (terminate_out_0_tx || terminate_out_1_tx || terminate_out_2_tx);
+
+    wire            start_in_0_rx = (start_out_3_rx_r || start_out_1_rx_r || start_out_2_rx_r);
+    wire            start_in_1_rx = (start_out_0_rx_r || start_out_2_rx_r || start_out_3_rx_r || start_out_0_rx);
+    wire            start_in_2_rx = (start_out_0_rx_r || start_out_1_rx_r || start_out_3_rx_r || start_out_0_rx || start_out_1_rx);
+    wire            start_in_3_rx = (start_out_0_rx_r || start_out_1_rx_r || start_out_2_rx_r || start_out_0_rx || start_out_1_rx || start_out_2_rx);
+
+    wire            start_in_0_tx = (start_out_3_tx_r || start_out_1_tx_r || start_out_2_tx_r);
+    wire            start_in_1_tx = (start_out_0_tx_r || start_out_2_tx_r || start_out_3_tx_r || start_out_0_tx);
+    wire            start_in_2_tx = (start_out_0_tx_r || start_out_1_tx_r || start_out_3_tx_r || start_out_0_tx || start_out_1_tx);
+    wire            start_in_3_tx = (start_out_0_tx_r || start_out_1_tx_r || start_out_2_tx_r || start_out_0_tx || start_out_1_tx || start_out_2_tx);
 
     wire            fifo_interface_full;
     wire            fifo_interface_empty;
@@ -395,16 +417,26 @@ module wrapper_macpcs_rx(
     // Start bit regs
     always @ (posedge clk_156 or negedge async_reset_n) begin
       if (!async_reset_n) begin
-        start_out_0_r <= 1'b0;
-        start_out_1_r <= 1'b0;
-        start_out_2_r <= 1'b0;
-        start_out_3_r <= 1'b0;
+        start_out_0_rx_r <= 1'b0;
+        start_out_1_rx_r <= 1'b0;
+        start_out_2_rx_r <= 1'b0;
+        start_out_3_rx_r <= 1'b0;
+
+        start_out_0_tx_r <= 1'b0;
+        start_out_1_tx_r <= 1'b0;
+        start_out_2_tx_r <= 1'b0;
+        start_out_3_tx_r <= 1'b0;
       end
       else begin
-        start_out_0_r <= start_out_0;
-        start_out_1_r <= start_out_1;
-        start_out_2_r <= start_out_2;
-        start_out_3_r <= start_out_3;
+        start_out_0_rx_r <= start_out_0_rx;
+        start_out_1_rx_r <= start_out_1_rx;
+        start_out_2_rx_r <= start_out_2_rx;
+        start_out_3_rx_r <= start_out_3_rx;
+
+        start_out_0_tx_r <= start_out_0_tx;
+        start_out_1_tx_r <= start_out_1_tx;
+        start_out_2_tx_r <= start_out_2_tx;
+        start_out_3_tx_r <= start_out_3_tx;
       end
     end
 
@@ -568,10 +600,15 @@ module wrapper_macpcs_rx(
         .rx_old_header_in   (old_header_0),
         .rx_old_data_in     (old_data_0),
 
-        .terminate_in       (terminate_in_0),
-        .terminate_out      (terminate_out_0),
-        .start_in           (start_in_0),
-        .start_out          (start_out_0)
+        .terminate_in_tx       (terminate_in_0_tx),
+        .terminate_out_tx      (terminate_out_0_tx),
+        .start_in_tx           (start_in_0_tx),
+        .start_out_tx          (start_out_0_tx),
+
+        .terminate_in_rx       (terminate_in_0_rx),
+        .terminate_out_rx      (terminate_out_0_rx),
+        .start_in_rx           (start_in_0_rx),
+        .start_out_rx          (start_out_0_rx)
     );
 
     PCS_core_rx INST_1_PCS_core
@@ -626,10 +663,15 @@ module wrapper_macpcs_rx(
         .rx_old_header_in   (pcs_0_header_out[1:0]),
         .rx_old_data_in     (pcs_0_data_out[63:0]),
 
-        .terminate_in       (terminate_in_1),
-        .terminate_out      (terminate_out_1),
-        .start_in           (start_in_1),
-        .start_out          (start_out_1)
+        .terminate_in_tx       (terminate_in_1_tx),
+        .terminate_out_tx      (terminate_out_1_tx),
+        .start_in_tx           (start_in_1_tx),
+        .start_out_tx          (start_out_1_tx),
+
+        .terminate_in_rx       (terminate_in_1_rx),
+        .terminate_out_rx      (terminate_out_1_rx),
+        .start_in_rx           (start_in_1_rx),
+        .start_out_rx          (start_out_1_rx)
     );
 
     PCS_core_rx INST_2_PCS_core
@@ -684,10 +726,15 @@ module wrapper_macpcs_rx(
         .rx_old_header_in   (pcs_1_header_out[1:0]),
         .rx_old_data_in     (pcs_1_data_out[63:0]),
 
-        .terminate_in       (terminate_in_2),
-        .terminate_out      (terminate_out_2),
-        .start_in           (start_in_2),
-        .start_out          (start_out_2)
+        .terminate_in_tx       (terminate_in_2_tx),
+        .terminate_out_tx      (terminate_out_2_tx),
+        .start_in_tx           (start_in_2_tx),
+        .start_out_tx          (start_out_2_tx),
+
+        .terminate_in_rx       (terminate_in_2_rx),
+        .terminate_out_rx      (terminate_out_2_rx),
+        .start_in_rx           (start_in_2_rx),
+        .start_out_rx          (start_out_2_rx)
     );
 
     PCS_core_rx INST_3_PCS_core
@@ -742,10 +789,15 @@ module wrapper_macpcs_rx(
         .rx_old_header_in   (pcs_2_header_out[1:0]),
         .rx_old_data_in     (pcs_2_data_out[63:0]),
 
-        .terminate_in       (terminate_in_3),
-        .terminate_out      (terminate_out_3),
-        .start_in           (start_in_3),
-        .start_out          (start_out_3)
+        .terminate_in_tx       (terminate_in_3_tx),
+        .terminate_out_tx      (terminate_out_3_tx),
+        .start_in_tx           (start_in_3_tx),
+        .start_out_tx          (start_out_3_tx),
+
+        .terminate_in_rx       (terminate_in_3_rx),
+        .terminate_out_rx     (terminate_out_3_rx),
+        .start_in_rx           (start_in_3_rx),
+        .start_out_rx          (start_out_3_rx)
     );
 
 
