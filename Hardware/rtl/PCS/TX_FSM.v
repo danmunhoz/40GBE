@@ -62,27 +62,59 @@
 
 `include "definitions.v"
 
-module  TX_FSM (clk156 , rstb, T_TYPE, coded_vec, txdata, bypass_66encoder, TXD_encoded, txlf);
-    
+module  TX_FSM (clk156 , rstb, T_TYPE, coded_vec, txdata, bypass_66encoder,
+                TXD_encoded, txlf, terminate_in, terminate_out, start_in, start_out);
+
     input [63:0] txdata;
     input        bypass_66encoder;
     input        clk156; wire clk156;
-    input        rstb; wire rstb; 
+    input        rstb; wire rstb;
     input [65:0] coded_vec; wire [65:0] coded_vec;
     input [2:0]  T_TYPE ; wire [2:0] T_TYPE ;
+    input        terminate_in; wire terminate_in;
+    input        start_in; wire start_in;
+
     output [65:0] TXD_encoded; reg [65:0] TXD_encoded;
     output        txlf;reg txlf;
+    output        terminate_out; reg terminate_out;
+    output        start_out;
+
     reg [2:0]     Current_state, Next_state;
     reg [65:0]    Code;
     reg [2:0]     TYPE;
 
+    reg start_in_r;
+    reg start_out_i;
+    assign start_out = start_out_i;
 
+    // Rise terminate flag for others FSMs
+    always @(TYPE or rstb) begin
+      if (!rstb)
+        terminate_out <= 1'b0;
+      else
+        if (TYPE == `T)
+          terminate_out <= 1'b1;
+        else
+          terminate_out <= 1'b0;
+
+        if (TYPE == `S)
+          start_out_i <= 1'b1;
+        else
+          start_out_i <= 1'b0;
+    end
+
+    always @ (negedge rstb) begin
+    if (!rstb)
+      start_in_r <= 1'b0;
+    else
+      start_in_r <= start_in;
+    end
 
     // Detect Local Fault
     always @(posedge clk156 or negedge rstb)
         if (!rstb)
             txlf <= 1'b0;
-        else if (Current_state == `TX_INIT) 
+        else if (Current_state == `TX_INIT)
             txlf <= 1'b1;
         else
             txlf <= 1'b0;
@@ -98,9 +130,9 @@ module  TX_FSM (clk156 , rstb, T_TYPE, coded_vec, txdata, bypass_66encoder, TXD_
 	        if (!bypass_66encoder) begin
                 TYPE <= T_TYPE;
                 Code <= coded_vec;
-                if (Next_state == `TX_E) 
+                if (Next_state == `TX_E)
 	                TXD_encoded <= `EBLOCK_T;
-                else 
+                else
 	                TXD_encoded <= Code;
                 Current_state <= Next_state;
             end
@@ -109,46 +141,62 @@ module  TX_FSM (clk156 , rstb, T_TYPE, coded_vec, txdata, bypass_66encoder, TXD_
         end
 
 
-    always @(Current_state or TYPE or Code) begin
+    always @(Current_state or TYPE or Code or terminate_in or start_in) begin
         case (Current_state)
-	        `TX_INIT: if ((TYPE == `E) || (TYPE == `D) || (TYPE == `T))
+	        `TX_INIT:
+            if ((TYPE == `E) || (TYPE == `D) || (TYPE == `T))
                 Next_state = `TX_E;
-            else if (TYPE == `S)
+            else if (TYPE == `S || TYPE == `D)
 	            Next_state = `TX_D;
-	        else
+	          else
 	            Next_state = `TX_C;
-	        
-	        `TX_C:   if (TYPE == `C)
-                Next_state = `TX_C;
-            else if (TYPE == `S)
-	            Next_state = `TX_D;
-	        else
-	            Next_state = `TX_E;
-	        
-	        `TX_D:   if (TYPE == `D)
+
+	        `TX_C:
+            if (terminate_in == 1'b1)
+              Next_state = `RX_INIT;
+            else
+              if (TYPE == `S || (TYPE == `D && start_in == 1'b1))
                 Next_state = `TX_D;
-            else if (TYPE == `T)
-	            Next_state = `TX_T;
-	        else
-	            Next_state = `TX_E;
-	        `TX_T:   if (TYPE == `C)
+              else if (TYPE == `C)
+                  Next_state = `TX_C;
+  	          else
+  	            Next_state = `TX_E;
+
+	        `TX_D:
+            if (terminate_in == 1'b1)
+              Next_state = `RX_INIT;
+            else
+              if (TYPE == `D || TYPE == `S)
+                  Next_state = `TX_D;
+              else if (TYPE == `T)
+  	            Next_state = `TX_T;
+  	          else
+  	            Next_state = `TX_E;
+
+          `TX_T:
+            if (TYPE == `C)
                 Next_state = `TX_C;
             else if (TYPE == `S)
 	            Next_state = `TX_D;
             else
 	            Next_state = `TX_E;
-	        `TX_E:   if (TYPE == `D)
-                Next_state = `TX_D;
-            else if (TYPE == `C)
-	            Next_state = `TX_C;
-            else if (TYPE == `T)
-	            Next_state = `TX_T;
+
+          `TX_E:
+            if (terminate_in == 1'b1)
+                Next_state = `RX_INIT;
             else
-	            Next_state = `TX_E;
-	        default:   
-	            Next_state = `TX_INIT;   
+              if (TYPE == `D)
+                  Next_state = `TX_D;
+              else if (TYPE == `C)
+  	            Next_state = `TX_C;
+              else if (TYPE == `T)
+  	            Next_state = `TX_T;
+              else
+  	            Next_state = `TX_E;
+
+          default:
+	            Next_state = `TX_INIT;
         endcase
     end
 
 endmodule
-

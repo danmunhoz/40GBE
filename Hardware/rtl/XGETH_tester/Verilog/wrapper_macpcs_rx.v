@@ -355,6 +355,9 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire [7:0]  xgmii_rxc_lane_3;
     (* syn_keep = "true"*) wire [63:0] xgmii_rxd_lane_3;
 
+    wire [7:0]  xgmii_txc;
+    wire [63:0] xgmii_txd;
+
     // For Testbench
     assign dump_xgmii_rxc_0 = xgmii_rxc_lane_0;
     assign dump_xgmii_rxd_0 = xgmii_rxd_lane_0;
@@ -787,8 +790,8 @@ module wrapper_macpcs_rx(
         .eop_in_from_if     (mac_eop),
         .sop_in_from_if     (mac_sop),
 
-        .xgmii_txc          (xgmii_txc_lane_0),
-        .xgmii_txd          (xgmii_txd_lane_0),
+        .xgmii_txc          (xgmii_txc),
+        .xgmii_txd          (xgmii_txd),
 
         .xgmii_rxc_0        (xgmii_rxc_lane_0),
         .xgmii_rxd_0        (xgmii_rxd_lane_0),
