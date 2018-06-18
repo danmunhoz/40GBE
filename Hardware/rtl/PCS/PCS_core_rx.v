@@ -69,6 +69,7 @@ module PCS_core_rx  (  /*AUTOARG*/
                     rx_header_valid_in, rx_header_in, rx_data_valid_in, rx_data_in,
                     rx_old_header_in, rx_old_data_in,
                     terminate_in_rx, start_in_rx, terminate_in_tx, start_in_tx,
+                    tx_old_encod_data_in, tx_old_encod_data_out,
                     // Outputs
                     jtest_errc, ber_cnt, hi_ber, blk_lock, linkstatus, rx_fifo_spill,
                     tx_fifo_spill, rxlf, txlf, errd_blks, xgmii_rxc, xgmii_rxd,
@@ -109,6 +110,9 @@ module PCS_core_rx  (  /*AUTOARG*/
 
     input [1:0]   rx_old_header_in;
     input [63:0]  rx_old_data_in;
+
+    input  [65:0]	tx_old_encod_data_in;
+    output [65:0]	tx_old_encod_data_out;
 
     input          terminate_in_rx;
     wire           terminate_in_rx;
@@ -171,20 +175,22 @@ module PCS_core_rx  (  /*AUTOARG*/
 
 
 tx_path INST_tx_path(   // Inputs
-                        .clk156             (clk156),
-                        .tx_clk161          (tx_clk161),
-                        .arstb              (reset_tx_n),
-                        .bypass_66encoder   (bypass_66encoder),
-                        .bypass_scram       (bypass_scram),
-                        .tx_jtm_en          (tx_jtm_en),
-                        .jtm_dps_0          (jtm_dps_0),
-                        .jtm_dps_1          (jtm_dps_1),
-                        .seed_A             (seed_A),
-                        .seed_B             (seed_B),
-                        .xgmii_txc          (xgmii_txc[7:0]),
-                        .xgmii_txd          (xgmii_txd[63:0]),
-                        .terminate_in       (terminate_in_tx),
-                        .start_in           (start_in_tx),
+                        .clk156                (clk156),
+                        .tx_clk161             (tx_clk161),
+                        .arstb                 (reset_tx_n),
+                        .bypass_66encoder      (bypass_66encoder),
+                        .bypass_scram          (bypass_scram),
+                        .tx_jtm_en             (tx_jtm_en),
+                        .jtm_dps_0             (jtm_dps_0),
+                        .jtm_dps_1             (jtm_dps_1),
+                        .seed_A                (seed_A),
+                        .seed_B                (seed_B),
+                        .xgmii_txc             (xgmii_txc[7:0]),
+                        .xgmii_txd             (xgmii_txd[63:0]),
+                        .terminate_in          (terminate_in_tx),
+                        .start_in              (start_in_tx),
+                        .tx_old_encod_data_in	 (tx_old_encod_data_in),
+                        .tx_old_encod_data_out (tx_old_encod_data_out),
                         // Outputs
                         .txlf               (txlf),
                         .spill              (tx_fifo_spill),

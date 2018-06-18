@@ -37,6 +37,7 @@ vlog -novopt ../rtl/PCS/rx_path_rx.v
 vlog -novopt ../rtl/PCS/PCS_to_XGMII.v
 vlog -novopt ../rtl/PCS/definitions.v
 vlog -novopt ../rtl/PCS/scramble.v
+vlog -novopt ../rtl/PCS/scramble_tx.v
 vlog -novopt ../rtl/PCS/R_TYPE_Decode.v
 vlog -novopt ../rtl/PCS/Encode.v
 vlog -novopt ../rtl/PCS/Encode_tx.v

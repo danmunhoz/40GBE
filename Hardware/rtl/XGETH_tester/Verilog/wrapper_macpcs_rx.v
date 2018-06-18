@@ -337,23 +337,30 @@ module wrapper_macpcs_rx(
     assign empty_fifo = fifo_interface_empty;
     assign full_fifo = fifo_interface_full;
 
-    (* syn_keep = "true"*) wire [1:0]   pcs_0_header_out;
-    (* syn_keep = "true"*) wire [63:0]  pcs_0_data_out;
-    (* syn_keep = "true"*) wire [1:0]   pcs_1_header_out;
-    (* syn_keep = "true"*) wire [63:0]  pcs_1_data_out;
-    (* syn_keep = "true"*) wire [1:0]   pcs_2_header_out;
-    (* syn_keep = "true"*) wire [63:0]  pcs_2_data_out;
-    (* syn_keep = "true"*) wire [1:0]   pcs_3_header_out;
-    (* syn_keep = "true"*) wire [63:0]  pcs_3_data_out;
+    (* syn_keep = "true"*) wire [1:0]  pcs_0_header_out;
+    (* syn_keep = "true"*) wire [63:0] pcs_0_data_out;
+    (* syn_keep = "true"*) wire [1:0]  pcs_1_header_out;
+    (* syn_keep = "true"*) wire [63:0] pcs_1_data_out;
+    (* syn_keep = "true"*) wire [1:0]  pcs_2_header_out;
+    (* syn_keep = "true"*) wire [63:0] pcs_2_data_out;
+    (* syn_keep = "true"*) wire [1:0]  pcs_3_header_out;
+    (* syn_keep = "true"*) wire [63:0] pcs_3_data_out;
 
-    (* syn_keep = "true"*) wire [1:0]   pcs_0_header_sel;
-    (* syn_keep = "true"*) wire [63:0]  pcs_0_data_sel;
-    (* syn_keep = "true"*) wire [1:0]   pcs_1_header_sel;
-    (* syn_keep = "true"*) wire [63:0]  pcs_1_data_sel;
-    (* syn_keep = "true"*) wire [1:0]   pcs_2_header_sel;
-    (* syn_keep = "true"*) wire [63:0]  pcs_2_data_sel;
-    (* syn_keep = "true"*) wire [1:0]   pcs_3_header_sel;
-    (* syn_keep = "true"*) wire [63:0]  pcs_3_data_sel;
+    (* syn_keep = "true"*) wire [65:0] tx_old_encod_data_out_0;
+    (* syn_keep = "true"*) wire [65:0] tx_old_encod_data_out_1;
+    (* syn_keep = "true"*) wire [65:0] tx_old_encod_data_out_2;
+    (* syn_keep = "true"*) wire [65:0] tx_old_encod_data_out_3;
+
+    (* syn_keep = "true"*) reg  [65:0] tx_old_encod_data_out_3_reg;
+
+    (* syn_keep = "true"*) wire [1:0]  pcs_0_header_sel;
+    (* syn_keep = "true"*) wire [63:0] pcs_0_data_sel;
+    (* syn_keep = "true"*) wire [1:0]  pcs_1_header_sel;
+    (* syn_keep = "true"*) wire [63:0] pcs_1_data_sel;
+    (* syn_keep = "true"*) wire [1:0]  pcs_2_header_sel;
+    (* syn_keep = "true"*) wire [63:0] pcs_2_data_sel;
+    (* syn_keep = "true"*) wire [1:0]  pcs_3_header_sel;
+    (* syn_keep = "true"*) wire [63:0] pcs_3_data_sel;
 
 
     // MAC/PCS XGMII Interconnection
@@ -411,6 +418,15 @@ module wrapper_macpcs_rx(
         // Nao atualiza registrador com valores invalidos
         old_header_0 <= pcs_3_header_out[1:0];
         old_data_0   <= pcs_3_data_out[63:0];
+      end
+    end
+
+    always @ (posedge tx_clk_161_13 or negedge async_reset_n) begin
+      if (!async_reset_n) begin
+        tx_old_encod_data_out_3_reg   <= 66'h0;
+      end
+      else begin
+        tx_old_encod_data_out_3_reg <= tx_old_encod_data_out_3;
       end
     end
 
@@ -600,6 +616,9 @@ module wrapper_macpcs_rx(
         .rx_old_header_in   (old_header_0),
         .rx_old_data_in     (old_data_0),
 
+        .tx_old_encod_data_out (tx_old_encod_data_out_0),
+        .tx_old_encod_data_in	 (tx_old_encod_data_out_3_reg),
+
         .terminate_in_tx       (terminate_in_0_tx),
         .terminate_out_tx      (terminate_out_0_tx),
         .start_in_tx           (start_in_0_tx),
@@ -662,6 +681,9 @@ module wrapper_macpcs_rx(
 
         .rx_old_header_in   (pcs_0_header_out[1:0]),
         .rx_old_data_in     (pcs_0_data_out[63:0]),
+
+        .tx_old_encod_data_out (tx_old_encod_data_out_1),
+        .tx_old_encod_data_in	 (tx_old_encod_data_out_0),
 
         .terminate_in_tx       (terminate_in_1_tx),
         .terminate_out_tx      (terminate_out_1_tx),
@@ -726,6 +748,9 @@ module wrapper_macpcs_rx(
         .rx_old_header_in   (pcs_1_header_out[1:0]),
         .rx_old_data_in     (pcs_1_data_out[63:0]),
 
+        .tx_old_encod_data_out (tx_old_encod_data_out_2),
+        .tx_old_encod_data_in	 (tx_old_encod_data_out_1),
+
         .terminate_in_tx       (terminate_in_2_tx),
         .terminate_out_tx      (terminate_out_2_tx),
         .start_in_tx           (start_in_2_tx),
@@ -788,6 +813,9 @@ module wrapper_macpcs_rx(
 
         .rx_old_header_in   (pcs_2_header_out[1:0]),
         .rx_old_data_in     (pcs_2_data_out[63:0]),
+
+        .tx_old_encod_data_out (tx_old_encod_data_out_3),
+        .tx_old_encod_data_in	 (tx_old_encod_data_out_2),
 
         .terminate_in_tx       (terminate_in_3_tx),
         .terminate_out_tx      (terminate_out_3_tx),
