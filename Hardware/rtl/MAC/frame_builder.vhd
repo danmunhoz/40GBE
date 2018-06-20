@@ -10,7 +10,7 @@ package PKG_CODES is
   constant CODE_CTRL_IDLE : std_logic_vector(7 downto 0) := x"ff";
   constant CODE_IDLE      : std_logic_vector(7 downto 0) := x"07";
   constant LANE_ERROR     : std_logic_vector(63 downto 0) := CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR;
-  constant PREAMBLE       : std_logic_vector(63 downto 0) := START & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & SFD;
+  constant PREAMBLE       : std_logic_vector(63 downto 0) := SFD & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & START;
   constant LANE_IDLE      : std_logic_vector(63 downto 0) := CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE;
 end PKG_CODES;
 
@@ -89,6 +89,7 @@ architecture behav_frame_builder of frame_builder is
     signal ns_frame : frame_fsm_states;
 
     signal data_in_reg : std_logic_vector(255 downto 0);
+    signal data_in_int : std_logic_vector(255 downto 0);
     signal data_0 : std_logic_vector(63 downto 0);
     signal data_1 : std_logic_vector(63 downto 0);
     signal data_2 : std_logic_vector(63 downto 0);
@@ -154,6 +155,20 @@ architecture behav_frame_builder of frame_builder is
     val_out <= val_int;
 
     crc_final <= not(reverse(crc_reg));
+
+    -- Converte endianismo para pcs
+    data_in_int <= data_in(199 downto 192) & data_in(207 downto 200) & data_in(215 downto 208) & data_in(223 downto 216) &
+                   data_in(231 downto 224) & data_in(239 downto 232) & data_in(247 downto 240) & data_in(255 downto 248) &
+
+                   data_in(135 downto 128) & data_in(143 downto 136) & data_in(151 downto 144) & data_in(159 downto 152) &
+                   data_in(167 downto 160) & data_in(175 downto 168) & data_in(183 downto 176) & data_in(191 downto 184) &
+
+                   data_in( 71 downto  64) & data_in( 79 downto  72) & data_in( 87 downto  80) & data_in( 95 downto  88) &
+                   data_in(103 downto  96) & data_in(111 downto 104) & data_in(119 downto 112) & data_in(127 downto 120) &
+
+                   data_in( 7 downto  0) & data_in(15 downto  8) & data_in(23 downto 16) & data_in(31 downto 24) &
+                   data_in(39 downto 32) & data_in(47 downto 40) & data_in(55 downto 48) & data_in(63 downto 56);
+
 
     input_regs: process(clk, rst)
     begin
@@ -271,9 +286,9 @@ architecture behav_frame_builder of frame_builder is
 
             -- Para nao perder um ciclo
             if (sop_in = "10") then
-              crc_reg <= nextCRC32_D256(reverse(data_in), crc_reg);
+              crc_reg <= nextCRC32_D256(reverse(data_in_int), crc_reg);
             elsif (sop_in = "11") then
-              crc_reg <= nextCRC32_D128(reverse(data_in(255 downto 128)), crc_reg);
+              crc_reg <= nextCRC32_D128(reverse(data_in_int(255 downto 128)), crc_reg);
             end if;
 
           when S_D256 =>
@@ -368,7 +383,7 @@ architecture behav_frame_builder of frame_builder is
             ren_in <= '1';
 
             -- Packet started at higher half
-            crc_reg <= nextCRC32_D128(reverse(data_in(255 downto 128)), crc_reg);
+            crc_reg <= nextCRC32_D128(reverse(data_in_int(255 downto 128)), crc_reg);
 
           when S_EOP =>
             ren_in <= '1';
@@ -386,7 +401,7 @@ architecture behav_frame_builder of frame_builder is
       end if;
     end process;
 
-    crc_ns_decoder: process(ps_crc, data_in, eop_in, sop_in, almost_e)
+    crc_ns_decoder: process(ps_crc, data_in_int, eop_in, sop_in, almost_e)
     begin
 
       case ps_crc is
@@ -432,7 +447,7 @@ architecture behav_frame_builder of frame_builder is
     -- FRAME FINITE STATE MACHINE
     -- At the beginning of a new payload, wait for some time so the crc is ready
     -- by the end of the transmission. Then, outputs the preamble and SFD followed
-    -- by the data coming from data_in. Finally, finishes the frame writing the
+    -- by the data coming from data_in_int. Finally, finishes the frame writing the
     -- crc value. Note that IPG control is done by the mii_if module
 
     sync_proc_frame: process(clk, rst)

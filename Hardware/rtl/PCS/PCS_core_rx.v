@@ -67,12 +67,14 @@ module PCS_core_rx  (  /*AUTOARG*/
                     clear_errblk, clear_ber_cnt, tx_jtm_en, jtm_dps_0, jtm_dps_1,
                     seed_A, seed_B, xgmii_txc, xgmii_txd,
                     rx_header_valid_in, rx_header_in, rx_data_valid_in, rx_data_in,
-                    rx_old_header_in, rx_old_data_in, terminate_in, start_in,
+                    rx_old_header_in, rx_old_data_in,
+                    terminate_in_rx, start_in_rx, terminate_in_tx, start_in_tx,
+                    tx_old_encod_data_in, tx_old_encod_data_out,
                     // Outputs
                     jtest_errc, ber_cnt, hi_ber, blk_lock, linkstatus, rx_fifo_spill,
                     tx_fifo_spill, rxlf, txlf, errd_blks, xgmii_rxc, xgmii_rxd,
                     tx_data_out, tx_header_out, tx_sequence_out, rxgearboxslip_out,
-                    terminate_out, start_out,
+                    terminate_out_rx, start_out_rx, terminate_out_tx, start_out_tx,
                     // Para uso do Testbench
         						start_fifo
                     );
@@ -109,11 +111,18 @@ module PCS_core_rx  (  /*AUTOARG*/
     input [1:0]   rx_old_header_in;
     input [63:0]  rx_old_data_in;
 
-    // Do we need extra valid_ins??
-    input          terminate_in;
-    wire           terminate_in;
-    input          start_in;
-    wire           start_in;
+    input  [65:0]	tx_old_encod_data_in;
+    output [65:0]	tx_old_encod_data_out;
+
+    input          terminate_in_rx;
+    wire           terminate_in_rx;
+    input          start_in_rx;
+    wire           start_in_rx;
+
+    input          terminate_in_tx;
+    wire           terminate_in_tx;
+    input          start_in_tx;
+    wire           start_in_tx;
 
 
     //For Testbench use
@@ -136,10 +145,15 @@ module PCS_core_rx  (  /*AUTOARG*/
     output        rxgearboxslip_out;
     output [6:0]  tx_sequence_out;
 
-    output         terminate_out;
-    wire           terminate_out;
-    output         start_out;
-    wire           start_out;
+    output         terminate_out_rx;
+    wire           terminate_out_rx;
+    output         start_out_rx;
+    wire           start_out_rx;
+
+    output         terminate_out_tx;
+    wire           terminate_out_tx;
+    output         start_out_tx;
+    wire           start_out_tx;
 
     wire          txpclkn_int;
     wire          txpclkp_int;
@@ -161,24 +175,30 @@ module PCS_core_rx  (  /*AUTOARG*/
 
 
 tx_path INST_tx_path(   // Inputs
-                        .clk156             (clk156),
-                        .tx_clk161          (tx_clk161),
-                        .arstb              (reset_tx_n),
-                        .bypass_66encoder   (bypass_66encoder),
-                        .bypass_scram       (bypass_scram),
-                        .tx_jtm_en          (tx_jtm_en),
-                        .jtm_dps_0          (jtm_dps_0),
-                        .jtm_dps_1          (jtm_dps_1),
-                        .seed_A             (seed_A),
-                        .seed_B             (seed_B),
-                        .xgmii_txc          (xgmii_txc[7:0]),
-                        .xgmii_txd          (xgmii_txd[63:0]),
+                        .clk156                (clk156),
+                        .tx_clk161             (tx_clk161),
+                        .arstb                 (reset_tx_n),
+                        .bypass_66encoder      (bypass_66encoder),
+                        .bypass_scram          (bypass_scram),
+                        .tx_jtm_en             (tx_jtm_en),
+                        .jtm_dps_0             (jtm_dps_0),
+                        .jtm_dps_1             (jtm_dps_1),
+                        .seed_A                (seed_A),
+                        .seed_B                (seed_B),
+                        .xgmii_txc             (xgmii_txc[7:0]),
+                        .xgmii_txd             (xgmii_txd[63:0]),
+                        .terminate_in          (terminate_in_tx),
+                        .start_in              (start_in_tx),
+                        .tx_old_encod_data_in	 (tx_old_encod_data_in),
+                        .tx_old_encod_data_out (tx_old_encod_data_out),
                         // Outputs
                         .txlf               (txlf),
                         .spill              (tx_fifo_spill),
                         .tx_data_out        (tx_data_out[63:0]),
                         .tx_header_out      (tx_header_out[1:0]),
                         .tx_sequence_out    (tx_sequence_out),
+                        .terminate_out      (terminate_out_tx),
+                        .start_out          (start_out_tx),
                         .start_fifo         (start_fifo)
                         );
 
@@ -200,8 +220,8 @@ rx_path_rx INST_rx_path(   // Input Ports
                         .rx_data_in         (rx_data_in[63:0]),
                         .rx_old_header_in   (rx_old_header_in),
                         .rx_old_data_in     (rx_old_data_in),
-                        .terminate_in       (terminate_in),
-                        .start_in           (start_in),
+                        .terminate_in       (terminate_in_rx),
+                        .start_in           (start_in_rx),
 
                         // Output Ports
                         .xgmii_rxc          (xgmii_rxc[7:0]),
@@ -215,8 +235,8 @@ rx_path_rx INST_rx_path(   // Input Ports
                         .rxlf               (rxlf),
                         .errd_blks          (errd_blks),
                         .rxgearboxslip_out  (rxgearboxslip_out),
-                        .terminate_out      (terminate_out),
-                        .start_out          (start_out),
+                        .terminate_out      (terminate_out_rx),
+                        .start_out          (start_out_rx),
                         .start_fifo         (start_fifo)
                         );
 

@@ -30,14 +30,17 @@ vlog -novopt ../rtl/PCS/timescale.v
 vlog -novopt ../rtl/PCS/XGMII_to_PCS.v
 vlog -novopt ../rtl/PCS/opt_fifo_new.v
 vlog -novopt ../rtl/PCS/TX_FSM.v
+vlog -novopt ../rtl/PCS/TX_FSM_tx.v
 vlog -novopt ../rtl/PCS/defines_PCS.v
 vlog -novopt ../rtl/PCS/rx_path.v
 vlog -novopt ../rtl/PCS/rx_path_rx.v
 vlog -novopt ../rtl/PCS/PCS_to_XGMII.v
 vlog -novopt ../rtl/PCS/definitions.v
 vlog -novopt ../rtl/PCS/scramble.v
+vlog -novopt ../rtl/PCS/scramble_tx.v
 vlog -novopt ../rtl/PCS/R_TYPE_Decode.v
 vlog -novopt ../rtl/PCS/Encode.v
+vlog -novopt ../rtl/PCS/Encode_tx.v
 vlog -novopt ../rtl/PCS/Decode.v
 vlog -novopt ../rtl/PCS/Decode_rx.v
 vlog -novopt ../rtl/PCS/frame_sync.v

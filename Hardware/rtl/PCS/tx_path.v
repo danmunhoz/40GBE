@@ -67,6 +67,8 @@ module tx_path (/*AUTOARG*/
 		        bypass_66encoder, bypass_scram, clk156, tx_clk161, jtm_dps_0, jtm_dps_1,
 		        arstb, seed_A, seed_B, tx_jtm_en,
 		        xgmii_txc, xgmii_txd,
+						terminate_in, terminate_out, start_in, start_out,
+						tx_old_encod_data_in, tx_old_encod_data_out,
 						// Para uso do Testbench
 						start_fifo, start_fifo_rd
 
@@ -87,6 +89,11 @@ module tx_path (/*AUTOARG*/
     input [7:0]   xgmii_txc;
     input [63:0]  xgmii_txd;
     input         arstb;
+		input 				terminate_in;
+    input 				start_in;
+
+		input  [65:0]	tx_old_encod_data_in;
+		output [65:0]	tx_old_encod_data_out;
 
 		//For Testbench use
 		input					start_fifo;
@@ -99,7 +106,8 @@ module tx_path (/*AUTOARG*/
     output [63:0] tx_data_out;
     output [1:0]  tx_header_out;
     output [6:0]  tx_sequence_out;
-
+		output 				terminate_out;
+    output 				start_out;
 
     wire          bypass_66encoder;
     wire          bypass_scram;
@@ -126,6 +134,8 @@ module tx_path (/*AUTOARG*/
     assign tx_header_out = TXD_Scr[1:0];
     assign tx_data_out = TXD_Scr[65:2];
 
+		assign tx_old_encod_data_out = fifo_rd_data[65:0];
+
     txsequence_counter INST_txsequence_counter
         (
         .clk_161_in             (tx_clk161),
@@ -136,7 +146,7 @@ module tx_path (/*AUTOARG*/
 
 
 
-    scramble  INST_TX_PATH_SCRAMBLE
+    scramble_tx  INST_TX_PATH_SCRAMBLE
         (
          .TXD_encoded           (fifo_rd_data[65:0]),
          .tx_jtm_en             (tx_jtm_en),
@@ -145,8 +155,9 @@ module tx_path (/*AUTOARG*/
          .seed_A                (seed_A[57:0]),
          .seed_B                (seed_B[57:0]),
          .bypass_scram          (bypass_scram),
-         .TXD_Scr               (TXD_Scr[65:0]),
          .clk                   (tx_clk161),
+				 .TXD_Scr               (TXD_Scr[65:0]),
+				 .tx_old_encod_data_in	(tx_old_encod_data_in),
         //  .scram_en              (data_pause),
          .scram_en              (data_pause & (~spill)),
          .rst                   (!arstb)
@@ -159,7 +170,8 @@ module tx_path (/*AUTOARG*/
           .rclk                  (tx_clk161),
           //.readen                (data_pause),
 					// .readen                (data_pause & start_fifo_rd),
-					.readen                (data_pause & start_fifo_rd &(~spill)),
+					// .readen                (data_pause & start_fifo_rd &(~spill)),
+					.readen                (data_pause & start_fifo &(~spill)),
           .wclk                  (clk156),
           //.writen                (1'b1),
 					.writen                (1'b1 & start_fifo),
@@ -167,7 +179,7 @@ module tx_path (/*AUTOARG*/
           .rst                   (!arstb)
           );
 
-    Encode  INST_TX_PATH_ENCODE
+    Encode_tx  INST_TX_PATH_ENCODE
         (
          .bypass_66encoder      (bypass_66encoder),
          .clk156                (clk156),
@@ -175,7 +187,11 @@ module tx_path (/*AUTOARG*/
          .txcontrol             (xgmii_txc[7:0]),
          .txdata                (xgmii_txd[63:0]),
          .TXD_encoded           (encoded_data[65:0]),
-         .txlf                  (txlf)
+         .txlf                  (txlf),
+				 .terminate_in(terminate_in),
+	       .terminate_out(terminate_out),
+	       .start_in(start_in),
+	       .start_out(start_out)
          );
 
 endmodule
