@@ -14,7 +14,7 @@ struct line {
 };
 
 #define MAX_PL_CYCLES 16
-#define MAX_IPG_CYCLES MAX_PL_CYCLES + 2  // MAX_IPG_CYCLES sempre > (MAX_PL_CYCLES+1)
+#define MAX_IPG_CYCLES MAX_PL_CYCLES + 1  // MAX_IPG_CYCLES sempre > (MAX_PL_CYCLES+1)
 
 SC_MODULE(app_tx) {
 
@@ -91,6 +91,9 @@ SC_MODULE(app_tx) {
           mod = sc_lv<5 >(end);
           data = ((sc_lv<256 >)(-1));
           end++;
+
+          if (MAX_IPG_CYCLES == (MAX_PL_CYCLES+1))
+            counter = 1;
 
         } else if (counter > MAX_PL_CYCLES && counter < MAX_IPG_CYCLES) {
           // IDLE

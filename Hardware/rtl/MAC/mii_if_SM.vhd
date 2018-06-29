@@ -114,6 +114,8 @@ architecture behav_mii_if of mii_if is
         -- if sop_in(1) = '0' and eop_in < "010100" then -- Garante IPG sem SOP, com EOP < 20°byte
         if sop_in(1) = '0' and eop_in < "010011" then -- Garante IPG sem SOP, com EOP < 19°byte
           ns_mii <= S_IDLE;
+        elsif sop_in(1) = '1' and eop_in_o < "010011" then -- Garante IPG - Tanauan
+          ns_mii <= S_TX;
         elsif ren_int = '1' and val_in = '1' and sop_in = "11" and eop_in < "000100" then -- Garante IPG com SOP e EOP < 3° byte
           ns_mii <= S_IDLE;
         -- elsif sop_in(1) = '0' and eop_in > "010011" then -- EOP > 19ºbyte
@@ -135,7 +137,7 @@ architecture behav_mii_if of mii_if is
         -- shift <= "00";
 
       when S_IPG =>
-        fifo_wait <= '1';
+        -- fifo_wait <= '1';
         if sop_in_o(1) = '0' then
           ns_mii <= S_IDLE;
         else
