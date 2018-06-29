@@ -68,7 +68,7 @@ module tx_path (/*AUTOARG*/
 		        arstb, seed_A, seed_B, tx_jtm_en,
 		        xgmii_txc, xgmii_txd,
 						terminate_in, terminate_out, start_in, start_out,
-						tx_old_encod_data_in, tx_old_encod_data_out,
+						tx_old_scr_data_in, tx_old_scr_data_out,
 						// Para uso do Testbench
 						start_fifo, start_fifo_rd
 
@@ -92,8 +92,8 @@ module tx_path (/*AUTOARG*/
 		input 				terminate_in;
     input 				start_in;
 
-		input  [65:0]	tx_old_encod_data_in;
-		output [65:0]	tx_old_encod_data_out;
+		input  [63:0]	tx_old_scr_data_in;
+		output [63:0]	tx_old_scr_data_out;
 
 		//For Testbench use
 		input					start_fifo;
@@ -134,7 +134,6 @@ module tx_path (/*AUTOARG*/
     assign tx_header_out = TXD_Scr[1:0];
     assign tx_data_out = TXD_Scr[65:2];
 
-		assign tx_old_encod_data_out = fifo_rd_data[65:0];
 
     txsequence_counter INST_txsequence_counter
         (
@@ -144,9 +143,7 @@ module tx_path (/*AUTOARG*/
         .DATA_PAUSE             (data_pause)
         );
 
-
-
-    scramble_tx  INST_TX_PATH_SCRAMBLE
+		scramble  INST_TX_PATH_SCRAMBLE
         (
          .TXD_encoded           (fifo_rd_data[65:0]),
          .tx_jtm_en             (tx_jtm_en),
@@ -157,7 +154,6 @@ module tx_path (/*AUTOARG*/
          .bypass_scram          (bypass_scram),
          .clk                   (tx_clk161),
 				 .TXD_Scr               (TXD_Scr[65:0]),
-				 .tx_old_encod_data_in	(tx_old_encod_data_in),
         //  .scram_en              (data_pause),
          .scram_en              (data_pause & (~spill)),
          .rst                   (!arstb)
@@ -171,7 +167,7 @@ module tx_path (/*AUTOARG*/
           //.readen                (data_pause),
 					// .readen                (data_pause & start_fifo_rd),
 					// .readen                (data_pause & start_fifo_rd &(~spill)),
-					.readen                (data_pause & start_fifo &(~spill)),
+					.readen                (start_fifo &(~spill)),
           .wclk                  (clk156),
           //.writen                (1'b1),
 					.writen                (1'b1 & start_fifo),

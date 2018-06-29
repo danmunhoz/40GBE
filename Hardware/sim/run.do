@@ -23,12 +23,14 @@ vlog -novopt /soft64/xilinx/ferramentas/Vivado/2016.2/Vivado/2016.2/ids_lite/ISE
 vlog -novopt ../rtl/PCS/descramble.v
 vlog -novopt ../rtl/PCS/descramble_rx.v
 vlog -novopt ../rtl/PCS/tx_path.v
+vlog -novopt ../rtl/PCS/tx_path_tx.v
 vlog -novopt ../rtl/PCS/RX_FSM.v
 vlog -novopt ../rtl/PCS/RX_FSM_rx.v
 vlog -novopt ../rtl/PCS/T_TYPE_Encode.v
 vlog -novopt ../rtl/PCS/timescale.v
 vlog -novopt ../rtl/PCS/XGMII_to_PCS.v
 vlog -novopt ../rtl/PCS/opt_fifo_new.v
+vlog -novopt ../rtl/PCS/opt_fifo_new_tx.v
 vlog -novopt ../rtl/PCS/TX_FSM.v
 vlog -novopt ../rtl/PCS/TX_FSM_tx.v
 vlog -novopt ../rtl/PCS/defines_PCS.v
@@ -38,6 +40,7 @@ vlog -novopt ../rtl/PCS/PCS_to_XGMII.v
 vlog -novopt ../rtl/PCS/definitions.v
 vlog -novopt ../rtl/PCS/scramble.v
 vlog -novopt ../rtl/PCS/scramble_tx.v
+vlog -novopt ../rtl/PCS/SCRAMBLER_TX_TESTE.v
 vlog -novopt ../rtl/PCS/R_TYPE_Decode.v
 vlog -novopt ../rtl/PCS/Encode.v
 vlog -novopt ../rtl/PCS/Encode_tx.v
@@ -152,6 +155,7 @@ scgenmod shuffle > shuffle.h
 
 sccom dump_output.cpp
 sccom pkt_buffer.cpp
+sccom pkt_buffer_tx40.cpp
 sccom fiber.cpp
 sccom app_tx.cpp
 sccom -novopt -g sc_tb.cpp
@@ -169,6 +173,11 @@ exec cp lane0.txt lane0_rx.txt
 exec cp lane1.txt lane1_rx.txt
 exec cp lane2.txt lane2_rx.txt
 exec cp lane3.txt lane3_rx.txt
+
+exec cp lane0_tx40.txt lane0_rx40.txt
+exec cp lane1_tx40.txt lane1_rx40.txt
+exec cp lane2_tx40.txt lane2_rx40.txt
+exec cp lane3_tx40.txt lane3_rx40.txt
 
 exec cp dump_mii_tx.txt dump_app.txt
 

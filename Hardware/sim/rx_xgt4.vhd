@@ -54,6 +54,15 @@ entity rx_xgt4 is
       pkt_rx_val          : out  std_logic;
       --pkt_tx_full         : out  std_logic;
 
+      tx_data_out_0       : out std_logic_vector(63 downto 0);
+      tx_header_out_0     : out std_logic_vector(1 downto 0);
+      tx_data_out_1       : out std_logic_vector(63 downto 0);
+      tx_header_out_1     : out std_logic_vector(1 downto 0);
+      tx_data_out_2       : out std_logic_vector(63 downto 0);
+      tx_header_out_2     : out std_logic_vector(1 downto 0);
+      tx_data_out_3       : out std_logic_vector(63 downto 0);
+      tx_header_out_3     : out std_logic_vector(1 downto 0);
+
       dump_xgmii_rxc_0 : out std_logic_vector(7 downto 0);
       dump_xgmii_rxd_0 : out std_logic_vector(63 downto 0);
       dump_xgmii_rxc_1 : out std_logic_vector(7 downto 0);
@@ -90,10 +99,16 @@ architecture behav of rx_xgt4 is
   	signal	reset_rx_n          : std_logic;
 
   		-- PCS Data Outputs
-  	signal	tx_data_out         : std_logic_vector(63 downto 0);
-  	signal	tx_header_out       : std_logic_vector(1 downto 0);
   	signal	rxgearboxslip_out   : std_logic;
   	signal	tx_sequence_out     : std_logic_vector(6 downto 0);
+    -- signal	tx_data_out_0       : std_logic_vector(63 downto 0);
+    -- signal	tx_header_out_0     : std_logic_vector(1 downto 0);
+    -- signal	tx_data_out_1       : std_logic_vector(63 downto 0);
+    -- signal	tx_header_out_1     : std_logic_vector(1 downto 0);
+    -- signal	tx_data_out_2       : std_logic_vector(63 downto 0);
+    -- signal	tx_header_out_2     : std_logic_vector(1 downto 0);
+    -- signal	tx_data_out_3       : std_logic_vector(63 downto 0);
+    -- signal	tx_header_out_3     : std_logic_vector(1 downto 0);
 
     signal pkt_tx_full :std_logic;
 
@@ -258,10 +273,16 @@ begin
             mac_eop                      => mac_eop_wire,
 
             -- PCS OUT
-            tx_data_out        => tx_data_out,
-            tx_header_out      => tx_header_out,
             rxgearboxslip_out  => rxgearboxslip_out,
             tx_sequence_out    => tx_sequence_out,
+            tx_data_out_0      => tx_data_out_0,
+            tx_header_out_0    => tx_header_out_0,
+            tx_data_out_1      => tx_data_out_1,
+            tx_header_out_1    => tx_header_out_1,
+            tx_data_out_2      => tx_data_out_2,
+            tx_header_out_2    => tx_header_out_2,
+            tx_data_out_3      => tx_data_out_3,
+            tx_header_out_3    => tx_header_out_3,
 
             -- MAC
             pkt_rx_data     => pkt_rx_data,

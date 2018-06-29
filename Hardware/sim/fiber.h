@@ -263,28 +263,32 @@ SC_MODULE(fiber) {
 
   SC_CTOR(fiber) {
 
-    lanes[0].open("lane0_rx.txt");
+    // lanes[0].open("lane0_rx.txt");
+    lanes[0].open("lane0_rx40.txt");
     if (lanes[0].is_open()){
       cout << "[fiber] File lanes[0].txt opened." << endl;
     } else {
       cout << "[fiber] ERROR opening lanes[0].txt" << endl;
     }
 
-    lanes[1].open("lane1_rx.txt");
+    // lanes[1].open("lane1_rx.txt");
+    lanes[1].open("lane1_rx40.txt");
     if (lanes[1].is_open()){
       cout << "[fiber] File lanes[1].txt opened." << endl;
     } else {
       cout << "[fiber] ERROR opening lanes[1].txt" << endl;
     }
 
-    lanes[2].open("lane2_rx.txt");
+    // lanes[2].open("lane2_rx.txt");
+    lanes[2].open("lane2_rx40.txt");
     if (lanes[2].is_open()){
       cout << "[fiber] File lanes[2].txt opened." << endl;
     } else {
       cout << "[fiber] ERROR opening lanes[2].txt" << endl;
     }
 
-    lanes[3].open("lane3_rx.txt");
+    // lanes[3].open("lane3_rx.txt");
+    lanes[3].open("lane3_rx40.txt");
     if (lanes[3].is_open()){
       cout << "[fiber] File lanes[3].txt opened." << endl;
     } else {

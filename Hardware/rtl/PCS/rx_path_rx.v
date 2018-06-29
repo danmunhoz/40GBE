@@ -178,35 +178,35 @@ module rx_path_rx (/*AUTOARG*/
 
    // assign linkstatus = blk_lock;
 
-    descramble_rx  INST_RX_PATH_DESCRAMBLE
-        (
-         .clr_jtest_errc    (1'b0),
-         .write_enable      (rx_data_valid_in),
-         .bypass_descram    (bypass_descram),
-         .rx_jtm_en         (rx_jtm_en),
-         .blk_lock          (blk_lock),
-         .jtest_errc        (jtest_errc),
-         .RXD_Sync          (rxd_sync_out[65:0]),
-         .DeScr_RXD         (descram_data[65:0]),
-         .clk               (rx_clk161),
-         .rstb              (arstb),
-         .rx_old_header_in  (rx_old_header_in),
-         .rx_old_data_in    (rx_old_data_in)
-         );
+    // descramble_rx  INST_RX_PATH_DESCRAMBLE
+    //     (
+    //      .clr_jtest_errc    (1'b0),
+    //      .write_enable      (rx_data_valid_in),
+    //      .bypass_descram    (bypass_descram),
+    //      .rx_jtm_en         (rx_jtm_en),
+    //      .blk_lock          (blk_lock),
+    //      .jtest_errc        (jtest_errc),
+    //      .RXD_Sync          (rxd_sync_out[65:0]),
+    //      .DeScr_RXD         (descram_data[65:0]),
+    //      .clk               (rx_clk161),
+    //      .rstb              (arstb),
+    //      .rx_old_header_in  (rx_old_header_in),
+    //      .rx_old_data_in    (rx_old_data_in)
+    //      );
 
-  //  descramble  INST_RX_PATH_DESCRAMBLE
-  //      (
-  //       .clr_jtest_errc    (1'b0),
-  //       .write_enable      (rx_data_valid_in),
-  //       .bypass_descram    (bypass_descram),
-  //       .rx_jtm_en         (rx_jtm_en),
-  //       .blk_lock          (blk_lock),
-  //       .jtest_errc        (jtest_errc),
-  //       .RXD_Sync          (rxd_sync_out[65:0]),
-  //       .DeScr_RXD         (descram_data[65:0]),
-  //       .clk               (rx_clk161),
-  //       .rstb              (arstb)
-  //       );
+   descramble  INST_RX_PATH_DESCRAMBLE
+       (
+        .clr_jtest_errc    (1'b0),
+        .write_enable      (rx_data_valid_in),
+        .bypass_descram    (bypass_descram),
+        .rx_jtm_en         (rx_jtm_en),
+        .blk_lock          (blk_lock),
+        .jtest_errc        (jtest_errc),
+        .RXD_Sync          (rxd_sync_out[65:0]),
+        .DeScr_RXD         (descram_data[65:0]),
+        .clk               (rx_clk161),
+        .rstb              (arstb)
+        );
 
     opt_fifo_new  INST_RX_PATH_FIFO
         (

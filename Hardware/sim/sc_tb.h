@@ -10,11 +10,11 @@
 #include "rx_xgt4.h"
 #include "scoreboard.h"
 #include "pkt_buffer.h"
+#include "pkt_buffer_tx40.h"
 #include "dump_mii.h"
 #include "dump_output.h"
 #include "fiber.h"
 #include "app_tx.h"
-// #include "lane_reorder.h"
 
 SC_MODULE(Top) {
   sc_clock clk_156;
@@ -88,6 +88,14 @@ SC_MODULE(Top) {
   sc_signal<sc_lv<2 > > pcs_2_header_out;
   sc_signal<sc_lv<2 > > pcs_3_header_out;
 
+  sc_signal<sc_lv<64 > > tx_data_out_0;
+  sc_signal<sc_lv<2 > >  tx_header_out_0;
+  sc_signal<sc_lv<64 > > tx_data_out_1;
+  sc_signal<sc_lv<2 > >  tx_header_out_1;
+  sc_signal<sc_lv<64 > > tx_data_out_2;
+  sc_signal<sc_lv<2 > >  tx_header_out_2;
+  sc_signal<sc_lv<64 > > tx_data_out_3;
+  sc_signal<sc_lv<2 > >  tx_header_out_3;
 
   // sinais de saida da FIFO
   sc_signal<sc_lv<128> > mac_data;
@@ -101,19 +109,19 @@ SC_MODULE(Top) {
   sc_signal<sc_logic>    app_tx_eop;
   sc_signal<sc_logic>    app_tx_val;
 
-  tx_xgt4      * tx_xgt4_inst;
-  rx_xgt4      * rx_xgt4_inst;
-  scoreboard   * scoreboard_inst;
-  pkt_buffer   * pkt_buffer_inst;
-  dump_mii     * dump_mii_tx_inst;
-  dump_mii     * dump_mii_rx_inst_0;
-  dump_mii     * dump_mii_rx_inst_1;
-  dump_mii     * dump_mii_rx_inst_2;
-  dump_mii     * dump_mii_rx_inst_3;
-  fiber        * fiber_inst;
-  dump_output  * dump_output_inst;
-  app_tx       * app_tx_inst;
-  // lane_reorder * lane_reorder_inst;
+  tx_xgt4         * tx_xgt4_inst;
+  rx_xgt4         * rx_xgt4_inst;
+  scoreboard      * scoreboard_inst;
+  pkt_buffer      * pkt_buffer_inst;
+  pkt_buffer_tx40 * pkt_buffer_tx40_inst;
+  dump_mii        * dump_mii_tx_inst;
+  dump_mii        * dump_mii_rx_inst_0;
+  dump_mii        * dump_mii_rx_inst_1;
+  dump_mii        * dump_mii_rx_inst_2;
+  dump_mii        * dump_mii_rx_inst_3;
+  fiber           * fiber_inst;
+  dump_output     * dump_output_inst;
+  app_tx          * app_tx_inst;
 
   void clock_assign();
   void reset_generator();
@@ -132,8 +140,9 @@ SC_MODULE(Top) {
     rx_xgt4_inst = new rx_xgt4("rx_xgt4","rx_xgt4");
     scoreboard_inst = new scoreboard("scoreboard");
     pkt_buffer_inst = new pkt_buffer("pkt_buffer");
-    dump_mii_tx_inst = new dump_mii("dump_mii_tx","dump_mii_tx.txt");
+    pkt_buffer_tx40_inst = new pkt_buffer_tx40("pkt_buffer_tx40");
 
+    dump_mii_tx_inst = new dump_mii("dump_mii_tx","dump_mii_tx.txt");
     dump_mii_rx_inst_0 = new dump_mii("dump_mii_rx_0","dump_mii_rx_0.txt");
     dump_mii_rx_inst_1 = new dump_mii("dump_mii_rx_1","dump_mii_rx_1.txt");
     dump_mii_rx_inst_2 = new dump_mii("dump_mii_rx_2","dump_mii_rx_2.txt");
@@ -212,6 +221,15 @@ SC_MODULE(Top) {
     rx_xgt4_inst->pkt_tx_sop(app_tx_sop);
     rx_xgt4_inst->pkt_tx_val(app_tx_val);
 
+    rx_xgt4_inst->tx_data_out_0(tx_data_out_0);
+    rx_xgt4_inst->tx_header_out_0(tx_header_out_0);
+    rx_xgt4_inst->tx_data_out_1(tx_data_out_1);
+    rx_xgt4_inst->tx_header_out_1(tx_header_out_1);
+    rx_xgt4_inst->tx_data_out_2(tx_data_out_2);
+    rx_xgt4_inst->tx_header_out_2(tx_header_out_2);
+    rx_xgt4_inst->tx_data_out_3(tx_data_out_3);
+    rx_xgt4_inst->tx_header_out_3(tx_header_out_3);
+
     // output dumped to file for comparison
     dump_output_inst->clock_in(iclock312);
     dump_output_inst->reset_n(reset);
@@ -227,6 +245,21 @@ SC_MODULE(Top) {
     pkt_buffer_inst->header_in(header_from_xgt4);
     pkt_buffer_inst->block_in(block_from_xgt4);
     pkt_buffer_inst->data_valid_in(rx_data_valid_in); //Passar para o data_valid do TX
+
+    pkt_buffer_tx40_inst->clock_in161(iclock161);
+    pkt_buffer_tx40_inst->reset_n(reset);
+    pkt_buffer_tx40_inst->block_in_0(tx_data_out_0);
+    pkt_buffer_tx40_inst->header_in_0(tx_header_out_0);
+    pkt_buffer_tx40_inst->block_in_1(tx_data_out_1);
+    pkt_buffer_tx40_inst->header_in_1(tx_header_out_1);
+    pkt_buffer_tx40_inst->block_in_2(tx_data_out_2);
+    pkt_buffer_tx40_inst->header_in_2(tx_header_out_2);
+    pkt_buffer_tx40_inst->block_in_3(tx_data_out_3);
+    pkt_buffer_tx40_inst->header_in_3(tx_header_out_3);
+    pkt_buffer_tx40_inst->data_valid_in_0(rx_data_valid_in);
+    pkt_buffer_tx40_inst->data_valid_in_1(rx_data_valid_in);
+    pkt_buffer_tx40_inst->data_valid_in_2(rx_data_valid_in);
+    pkt_buffer_tx40_inst->data_valid_in_3(rx_data_valid_in);
 
     dump_mii_tx_inst->clock_in(iclock156);
     dump_mii_tx_inst->reset_n(reset);

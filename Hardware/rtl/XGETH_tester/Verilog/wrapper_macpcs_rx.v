@@ -19,7 +19,9 @@ module wrapper_macpcs_rx(
                         // Resets
                         async_reset_n, reset_tx_n, reset_rx_n, reset_tx_done, reset_rx_done,
                         // PHY -> Output of PCS
-                        tx_data_out, tx_header_out,tx_sequence_out, rxgearboxslip_out,
+                        tx_sequence_out, rxgearboxslip_out,
+                        tx_data_out_0, tx_header_out_0, tx_data_out_1, tx_header_out_1,
+                        tx_data_out_2, tx_header_out_2, tx_data_out_3, tx_header_out_3,
                         // PCS
                         rx_jtm_en, bypass_descram, bypass_scram, bypass_66decoder, bypass_66encoder, clear_errblk, clear_ber_cnt, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, seed_B,
                         // XMAC
@@ -127,10 +129,16 @@ module wrapper_macpcs_rx(
     output [5:0]  ber_cnt;
     output [7:0]  errd_blks;
     output [15:0] jtest_errc;
-    output [63:0] tx_data_out;
-    output [1:0]  tx_header_out;
     output        rxgearboxslip_out;
     output [6:0]  tx_sequence_out;
+    output [63:0] tx_data_out_0;
+    output [1:0]  tx_header_out_0;
+    output [63:0] tx_data_out_1;
+    output [1:0]  tx_header_out_1;
+    output [63:0] tx_data_out_2;
+    output [1:0]  tx_header_out_2;
+    output [63:0] tx_data_out_3;
+    output [1:0]  tx_header_out_3;
 
     wire        hi_ber_0;
     wire        blk_lock_0;
@@ -346,12 +354,12 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire [1:0]  pcs_3_header_out;
     (* syn_keep = "true"*) wire [63:0] pcs_3_data_out;
 
-    (* syn_keep = "true"*) wire [65:0] tx_old_encod_data_out_0;
-    (* syn_keep = "true"*) wire [65:0] tx_old_encod_data_out_1;
-    (* syn_keep = "true"*) wire [65:0] tx_old_encod_data_out_2;
-    (* syn_keep = "true"*) wire [65:0] tx_old_encod_data_out_3;
+    (* syn_keep = "true"*) wire [63:0] tx_old_encod_data_out_0;
+    (* syn_keep = "true"*) wire [63:0] tx_old_encod_data_out_1;
+    (* syn_keep = "true"*) wire [63:0] tx_old_encod_data_out_2;
+    (* syn_keep = "true"*) wire [63:0] tx_old_encod_data_out_3;
 
-    (* syn_keep = "true"*) reg  [65:0] tx_old_encod_data_out_3_reg;
+    (* syn_keep = "true"*) reg  [63:0] tx_old_encod_data_out_3_reg;
 
     (* syn_keep = "true"*) wire [1:0]  pcs_0_header_sel;
     (* syn_keep = "true"*) wire [63:0] pcs_0_data_sel;
@@ -423,7 +431,7 @@ module wrapper_macpcs_rx(
 
     always @ (posedge tx_clk_161_13 or negedge async_reset_n) begin
       if (!async_reset_n) begin
-        tx_old_encod_data_out_3_reg   <= 66'h0;
+        tx_old_encod_data_out_3_reg   <= 64'h3;
       end
       else begin
         tx_old_encod_data_out_3_reg <= tx_old_encod_data_out_3;
@@ -564,8 +572,9 @@ module wrapper_macpcs_rx(
 
 
 
-    PCS_core_rx INST_0_PCS_core
-    (
+    PCS_core_rx #(
+        .PCS_ID(0)
+      ) INST_0_PCS_core (
         // CLOCKS
         .clk156             (clk_156),
         .tx_clk161          (tx_clk_161_13),
@@ -616,8 +625,8 @@ module wrapper_macpcs_rx(
         .rx_old_header_in   (old_header_0),
         .rx_old_data_in     (old_data_0),
 
-        .tx_old_encod_data_out (tx_old_encod_data_out_0),
-        .tx_old_encod_data_in	 (tx_old_encod_data_out_3_reg),
+        .tx_old_scr_data_out (tx_old_encod_data_out_0),
+        .tx_old_scr_data_in	 (tx_old_encod_data_out_3_reg),
 
         .terminate_in_tx       (terminate_in_0_tx),
         .terminate_out_tx      (terminate_out_0_tx),
@@ -630,8 +639,9 @@ module wrapper_macpcs_rx(
         .start_out_rx          (start_out_0_rx)
     );
 
-    PCS_core_rx INST_1_PCS_core
-    (
+    PCS_core_rx #(
+        .PCS_ID(1)
+      ) INST_1_PCS_core (
         // CLOCKS
         .clk156             (clk_156),
         .tx_clk161          (tx_clk_161_13),
@@ -682,8 +692,8 @@ module wrapper_macpcs_rx(
         .rx_old_header_in   (pcs_0_header_out[1:0]),
         .rx_old_data_in     (pcs_0_data_out[63:0]),
 
-        .tx_old_encod_data_out (tx_old_encod_data_out_1),
-        .tx_old_encod_data_in	 (tx_old_encod_data_out_0),
+        .tx_old_scr_data_out (tx_old_encod_data_out_1),
+        .tx_old_scr_data_in	 (tx_old_encod_data_out_0),
 
         .terminate_in_tx       (terminate_in_1_tx),
         .terminate_out_tx      (terminate_out_1_tx),
@@ -696,8 +706,9 @@ module wrapper_macpcs_rx(
         .start_out_rx          (start_out_1_rx)
     );
 
-    PCS_core_rx INST_2_PCS_core
-    (
+    PCS_core_rx #(
+        .PCS_ID(2)
+      ) INST_2_PCS_core (
         // CLOCKS
         .clk156             (clk_156),
         .tx_clk161          (tx_clk_161_13),
@@ -748,8 +759,8 @@ module wrapper_macpcs_rx(
         .rx_old_header_in   (pcs_1_header_out[1:0]),
         .rx_old_data_in     (pcs_1_data_out[63:0]),
 
-        .tx_old_encod_data_out (tx_old_encod_data_out_2),
-        .tx_old_encod_data_in	 (tx_old_encod_data_out_1),
+        .tx_old_scr_data_out (tx_old_encod_data_out_2),
+        .tx_old_scr_data_in	 (tx_old_encod_data_out_1),
 
         .terminate_in_tx       (terminate_in_2_tx),
         .terminate_out_tx      (terminate_out_2_tx),
@@ -762,8 +773,9 @@ module wrapper_macpcs_rx(
         .start_out_rx          (start_out_2_rx)
     );
 
-    PCS_core_rx INST_3_PCS_core
-    (
+    PCS_core_rx #(
+        .PCS_ID(3)
+      ) INST_3_PCS_core (
         // CLOCKS
         .clk156             (clk_156),
         .tx_clk161          (tx_clk_161_13),
@@ -814,8 +826,8 @@ module wrapper_macpcs_rx(
         .rx_old_header_in   (pcs_2_header_out[1:0]),
         .rx_old_data_in     (pcs_2_data_out[63:0]),
 
-        .tx_old_encod_data_out (tx_old_encod_data_out_3),
-        .tx_old_encod_data_in	 (tx_old_encod_data_out_2),
+        .tx_old_scr_data_out (tx_old_encod_data_out_3),
+        .tx_old_scr_data_in	 (tx_old_encod_data_out_2),
 
         .terminate_in_tx       (terminate_in_3_tx),
         .terminate_out_tx      (terminate_out_3_tx),
