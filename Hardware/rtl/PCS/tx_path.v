@@ -145,7 +145,8 @@ module tx_path (/*AUTOARG*/
 
 		scramble  INST_TX_PATH_SCRAMBLE
         (
-         .TXD_encoded           (fifo_rd_data[65:0]),
+         // .TXD_encoded           (fifo_rd_data[65:0]),
+				 .TXD_encoded           (66'd55555555555555555),
          .tx_jtm_en             (tx_jtm_en),
          .jtm_dps_0             (jtm_dps_0),
          .jtm_dps_1             (jtm_dps_1),

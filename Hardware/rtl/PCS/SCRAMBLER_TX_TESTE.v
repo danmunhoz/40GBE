@@ -78,7 +78,10 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
    input [57:0] seed_A, seed_B; wire [57:0] seed_A, seed_B;
    input [65:0] TXD_encoded; wire [65:0] TXD_encoded;
    input        scram_en; wire scram_en;
-   output [65:0] TXD_Scr ; reg [65:0] TXD_Scr ;
+   output [65:0] TXD_Scr ;
+   reg [65:0] TXD_Scr ;
+   reg [65:0] TXD_Scr_10 ;
+   wire [65:0] TXD_Scr_40 ;
 
    input  [63:0] tx_old_scr_data_in;
    output [63:0] tx_old_scr_data_out;
@@ -93,8 +96,13 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
    reg [1:0]     current_jtm_state,next_jtm_state;
    wire [63:0]   Scr_wire;
 
-   assign tx_old_scr_data_out = Scr_wire;
+   reg scram_en_d;
 
+   reg [1:0] cnt;
+
+   assign tx_old_scr_data_out[63:0] = Scr_wire[63:0];
+
+   // always @ (negedge rst or scram_en or tx_old_scr_data_in) begin
    always @ (posedge clk or negedge rst) begin
      if (rst) begin
       tx_old_scr_data_reg[63:0] <= 64'd0;
@@ -104,12 +112,107 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
      end
    end
 
-   always @ ( negedge rst or tx_old_scr_data_in or scram_en) begin
+   always @ (posedge clk or negedge rst) begin
+     if (rst) begin
+      scram_en_d <= 1'b0;
+     end
+     if (scram_en) begin
+      scram_en_d <= scram_en;
+     end
+   end
+
+   assign TXD_Scr_40 = {Scr_wire[63:0], Sync_header[1:0]};
+
+   always @ ( TXD_Scr_10 or TXD_Scr_40 ) begin
+    if (PCS_ID == 32'd0 && cnt < 2'd2)
+      TXD_Scr[65:0] <= TXD_Scr_10[65:0];
+    else
+      TXD_Scr[65:0] <= TXD_Scr_40[65:0];
+   end
+
+   always @ (posedge clk or negedge rst) begin
+     if (rst) begin
+      cnt <= 2'd0;
+     end begin
+       if (scram_en)
+        if (cnt != 2'b11)
+          cnt <= cnt + 1;
+     end
+   end
+
+
+   always @ ( negedge rst or tx_old_scr_data_reg or tx_old_scr_data_in or scram_en_d or cnt) begin
    // always @ (posedge clk or negedge rst ) begin
       if (rst) begin
         tx_old_scr[57:0] <= 58'h0;
       end
-      else if (scram_en) begin
+      else if ( scram_en_d && (PCS_ID == 32'd0 || PCS_ID == 32'd1) && cnt < 2'd2) begin
+          tx_old_scr[57] <= tx_old_scr_data_reg[6];
+          tx_old_scr[56] <= tx_old_scr_data_reg[7];
+          tx_old_scr[55] <= tx_old_scr_data_reg[8];
+          tx_old_scr[54] <= tx_old_scr_data_reg[9];
+          tx_old_scr[53] <= tx_old_scr_data_reg[10];
+          tx_old_scr[52] <= tx_old_scr_data_reg[11];
+          tx_old_scr[51] <= tx_old_scr_data_reg[12];
+          tx_old_scr[50] <= tx_old_scr_data_reg[13];
+
+          tx_old_scr[49] <= tx_old_scr_data_reg[14];
+          tx_old_scr[48] <= tx_old_scr_data_reg[15];
+          tx_old_scr[47] <= tx_old_scr_data_reg[16];
+          tx_old_scr[46] <= tx_old_scr_data_reg[17];
+          tx_old_scr[45] <= tx_old_scr_data_reg[18];
+          tx_old_scr[44] <= tx_old_scr_data_reg[19];
+          tx_old_scr[43] <= tx_old_scr_data_reg[20];
+          tx_old_scr[42] <= tx_old_scr_data_reg[21];
+
+          tx_old_scr[41] <= tx_old_scr_data_reg[22];
+          tx_old_scr[40] <= tx_old_scr_data_reg[23];
+          tx_old_scr[39] <= tx_old_scr_data_reg[24];
+          tx_old_scr[38] <= tx_old_scr_data_reg[25];
+          tx_old_scr[37] <= tx_old_scr_data_reg[26];
+          tx_old_scr[36] <= tx_old_scr_data_reg[27];
+          tx_old_scr[35] <= tx_old_scr_data_reg[28];
+          tx_old_scr[34] <= tx_old_scr_data_reg[29];
+
+          tx_old_scr[33] <= tx_old_scr_data_reg[30];
+          tx_old_scr[32] <= tx_old_scr_data_reg[31];
+          tx_old_scr[31] <= tx_old_scr_data_reg[32];
+          tx_old_scr[30] <= tx_old_scr_data_reg[33];
+          tx_old_scr[29] <= tx_old_scr_data_reg[34];
+          tx_old_scr[28] <= tx_old_scr_data_reg[35];
+          tx_old_scr[27] <= tx_old_scr_data_reg[36];
+          tx_old_scr[26] <= tx_old_scr_data_reg[37];
+
+          tx_old_scr[25] <= tx_old_scr_data_reg[38];
+          tx_old_scr[24] <= tx_old_scr_data_reg[39];
+          tx_old_scr[23] <= tx_old_scr_data_reg[40];
+          tx_old_scr[22] <= tx_old_scr_data_reg[41];
+          tx_old_scr[21] <= tx_old_scr_data_reg[42];
+          tx_old_scr[20] <= tx_old_scr_data_reg[43];
+          tx_old_scr[19] <= tx_old_scr_data_reg[44];
+          tx_old_scr[18] <= tx_old_scr_data_reg[45];
+
+          tx_old_scr[17] <= tx_old_scr_data_reg[46];
+          tx_old_scr[16] <= tx_old_scr_data_reg[47];
+          tx_old_scr[15] <= tx_old_scr_data_reg[48];
+          tx_old_scr[14] <= tx_old_scr_data_reg[49];
+          tx_old_scr[13] <= tx_old_scr_data_reg[50];
+          tx_old_scr[12] <= tx_old_scr_data_reg[51];
+          tx_old_scr[11] <= tx_old_scr_data_reg[52];
+          tx_old_scr[10] <= tx_old_scr_data_reg[53];
+
+          tx_old_scr[9] <= tx_old_scr_data_reg[54];
+          tx_old_scr[8] <= tx_old_scr_data_reg[55];
+          tx_old_scr[7] <= tx_old_scr_data_reg[56];
+          tx_old_scr[6] <= tx_old_scr_data_reg[57];
+          tx_old_scr[5] <= tx_old_scr_data_reg[58];
+          tx_old_scr[4] <= tx_old_scr_data_reg[59];
+          tx_old_scr[3] <= tx_old_scr_data_reg[60];
+          tx_old_scr[2] <= tx_old_scr_data_reg[61];
+          tx_old_scr[1] <= tx_old_scr_data_reg[62];
+          tx_old_scr[0] <= tx_old_scr_data_reg[63];
+        end
+        else if (scram_en) begin
           tx_old_scr[57] <= tx_old_scr_data_in[6];
           tx_old_scr[56] <= tx_old_scr_data_in[7];
           tx_old_scr[55] <= tx_old_scr_data_in[8];
@@ -175,7 +278,7 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
           tx_old_scr[1] <= tx_old_scr_data_in[62];
           tx_old_scr[0] <= tx_old_scr_data_in[63];
         end
-        else if (PCS_ID == 0) begin
+        else if (PCS_ID == 32'd0) begin
           tx_old_scr[57:0] <= 58'h3;
         end
     end
@@ -258,7 +361,7 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
         Scrambler_Register[57:0] <= 58'h3;
         TXD_input[63:0] <= 0;
         Sync_header[1:0] <= 2'b10;
-        TXD_Scr[65:0] <= 66'h2;
+        TXD_Scr_10[65:0] <= 66'h2;
 	    jtm_counter   <= 7'h0;
 	    current_jtm_state <=  2'h0;
         next_jtm_state <=  2'h0;
@@ -268,7 +371,7 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
 	    Scrambler_Register[57:0] <= Scrambler_Register[57:0];
         TXD_input[63:0] <= TXD_input[63:0];
         Sync_header[1:0] <= Sync_header[1:0];
-        TXD_Scr[65:0] <= TXD_Scr[65:0];
+        TXD_Scr_10[65:0] <= TXD_Scr[65:0];
 	    jtm_counter   <= jtm_counter;
 	    current_jtm_state <=  current_jtm_state;
         next_jtm_state <=  next_jtm_state;
@@ -277,7 +380,7 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
      else if (bypass_scram) begin
         TXD_input[63:0] <= TXD_encoded[65:2];
         Sync_header[1:0] <= TXD_encoded[1:0];
-      	TXD_Scr[65:0] <= {TXD_input[63:0],Sync_header[1:0]};
+      	TXD_Scr_10[65:0] <= {TXD_input[63:0],Sync_header[1:0]};
 	    jtm_counter   <= 7'h0;
 	    current_jtm_state <=  2'h0;
 	    next_jtm_state <=  2'h0;
@@ -288,7 +391,7 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
 	      begin
       	     TXD_input[63:0] <= TXD_encoded[65:2];
              Sync_header[1:0] <= TXD_encoded[1:0];
-	         TXD_Scr[65:0] <= {Scr_wire[63:0], Sync_header[1:0]};
+	           TXD_Scr_10[65:0] <= {Scr_wire[63:0], Sync_header[1:0]};
              jtm_counter   <= 7'h0;
 	         current_jtm_state <=  2'h0;
 	         next_jtm_state <=  2'h0;
@@ -365,7 +468,7 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
 	           begin
 	              jtm_counter <= jtm_counter + 1;
 
-                  TXD_Scr[65:0] <= {Scr_wire[63:0],2'b10};
+                  TXD_Scr_10[65:0] <= {Scr_wire[63:0],2'b10};
                   if (jtm_counter != 0) begin
 		             current_jtm_state <= next_jtm_state;
 		             Scrambler_Register[57] <= Scr_wire[6];
@@ -474,7 +577,7 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
 	           end // if (!jtm_dps_1)
 	         else             // Square Wave Test
                begin         // I have temporarely chosen to send a sequence of 11 zeros and 11 ones
-	              TXD_Scr[65:0] <= 66'h0007FF001FFC007FF;
+	              TXD_Scr_10[65:0] <= 66'h0007FF001FFC007FF;
 	              current_jtm_state <= 2'b0;
 	              jtm_counter <= 7'b0;
 	           end // else: !if(!jtm_dps_1)

@@ -430,6 +430,7 @@ module wrapper_macpcs_rx(
     end
 
     always @ (posedge tx_clk_161_13 or negedge async_reset_n) begin
+    // always @ (tx_old_encod_data_out_3 or negedge async_reset_n) begin
       if (!async_reset_n) begin
         tx_old_encod_data_out_3_reg   <= 64'h3;
       end

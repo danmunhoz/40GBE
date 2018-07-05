@@ -148,7 +148,8 @@ module tx_path_tx (/*AUTOARG*/
     scramble_tx2 #(
 					.PCS_ID(PCS_ID)
 				)  INST_TX_PATH_SCRAMBLE (
-         .TXD_encoded           (fifo_rd_data[65:0]),
+         // .TXD_encoded           (fifo_rd_data[65:0]),
+				 .TXD_encoded           (66'd55555555555555555),
          .tx_jtm_en             (tx_jtm_en),
          .jtm_dps_0             (jtm_dps_0),
          .jtm_dps_1             (jtm_dps_1),
@@ -160,7 +161,7 @@ module tx_path_tx (/*AUTOARG*/
 				 .tx_old_scr_data_in	(tx_old_scr_data_in),
 				 .tx_old_scr_data_out	(tx_old_scr_data_out),
         //  .scram_en              (data_pause),
-         .scram_en              (data_pause & (~spill)),
+         .scram_en              ((~spill)),
          .rst                   (!arstb)
          );
 		// scramble  INST_TX_PATH_SCRAMBLE
