@@ -114,8 +114,10 @@ architecture behav of rx_xgt4 is
 
     signal reset_in_pcs : std_logic;
 
-    signal start_fifo : std_logic;
-    signal read_fifo  : std_logic;
+    signal start_fifo     : std_logic;
+    signal start_fifo_rd  : std_logic;
+    signal RDEN_FIFO_PCS40: std_logic;
+    signal read_fifo      : std_logic;
 
     signal lane_0_header_valid_in  : std_logic;
     signal lane_0_header_in        : std_logic_vector(1 downto 0);
@@ -177,7 +179,13 @@ begin
 
           reset_in_pcs <= '0', '1' after 40 ns;
 
-          start_fifo <= '0', '1' after 600 ns;
+          -- start_fifo <= '0', '1' after 600 ns;
+          start_fifo <= '0', '1' after 200 ns;
+          -- start_fifo_rd <= '0', '1' after 381.669 ns; -- tanauan, leitura FIFOs_PCS->SCRAMBLER
+          start_fifo_rd <= '0', '1' after 600 ns; -- tanauan, leitura FIFOs_PCS->SCRAMBLER
+
+          -- RDEN_FIFO_PCS40 <= '0', '1' after 450 ns; -- tanauan, testando recepção do TX40 no RX40
+          RDEN_FIFO_PCS40 <= '0', '1' after 600 ns; -- tanauan, testando recepção do TX40 no RX40
 
           -- read_fifo <= '0', '1' after 400 ns; -- original
           read_fifo <= '0', '1' after 600 ns;
@@ -230,7 +238,10 @@ begin
             reset_rx_done       => reset_in_mii_rx,
 
             -- For testbench use only
-            start_fifo => start_fifo,
+            start_fifo    => start_fifo,
+            start_fifo_rd => start_fifo_rd,
+            RDEN_FIFO_PCS40 => RDEN_FIFO_PCS40,
+
 
             dump_xgmii_rxc_0 => dump_xgmii_rxc_0,
             dump_xgmii_rxd_0 => dump_xgmii_rxd_0,

@@ -44,6 +44,8 @@ module wrapper_macpcs_rx(
                         wb_ack_o, wb_dat_o, wb_int_o,
                         // Para uso do Testbench
             						start_fifo,
+                        start_fifo_rd,
+                        RDEN_FIFO_PCS40,
 
                         dump_xgmii_rxc_0,
                         dump_xgmii_rxd_0,
@@ -116,6 +118,8 @@ module wrapper_macpcs_rx(
 
     //For Testbench use
 		input					start_fifo;
+		input					start_fifo_rd;
+		input					RDEN_FIFO_PCS40;
     input         read_fifo;
 
     // PCS Outputs
@@ -342,6 +346,11 @@ module wrapper_macpcs_rx(
     wire            pcs_2_valid_out;
     wire            pcs_3_valid_out;
 
+    wire            pcs_0_scram_en;
+    wire            pcs_1_scram_en;
+    wire            pcs_2_scram_en;
+    wire            pcs_3_scram_en;
+
     assign empty_fifo = fifo_interface_empty;
     assign full_fifo = fifo_interface_full;
 
@@ -435,7 +444,8 @@ module wrapper_macpcs_rx(
         tx_old_encod_data_out_3_reg   <= 64'h3;
       end
       else begin
-        tx_old_encod_data_out_3_reg <= tx_old_encod_data_out_3;
+        if (pcs_0_scram_en == 1'b1)
+          tx_old_encod_data_out_3_reg <= tx_old_encod_data_out_3;
       end
     end
 
@@ -586,6 +596,8 @@ module wrapper_macpcs_rx(
         .reset_rx_n         (reset_rx_n),
 
         .start_fifo         (start_fifo),
+        .start_fifo_rd      (start_fifo_rd),
+        .RDEN_FIFO_PCS40    (RDEN_FIFO_PCS40),
 
         // PCS Signals
         .rx_jtm_en          (rx_jtm_en),
@@ -628,6 +640,7 @@ module wrapper_macpcs_rx(
 
         .tx_old_scr_data_out (tx_old_encod_data_out_0),
         .tx_old_scr_data_in	 (tx_old_encod_data_out_3_reg),
+        .scram_en            (pcs_0_scram_en),
 
         .terminate_in_tx       (terminate_in_0_tx),
         .terminate_out_tx      (terminate_out_0_tx),
@@ -653,6 +666,8 @@ module wrapper_macpcs_rx(
         .reset_rx_n         (reset_rx_n),
 
         .start_fifo         (start_fifo),
+        .start_fifo_rd      (start_fifo_rd),
+        .RDEN_FIFO_PCS40    (RDEN_FIFO_PCS40),
 
         // PCS Signals
         .rx_jtm_en          (rx_jtm_en),
@@ -692,6 +707,7 @@ module wrapper_macpcs_rx(
 
         .rx_old_header_in   (pcs_0_header_out[1:0]),
         .rx_old_data_in     (pcs_0_data_out[63:0]),
+        .scram_en           (pcs_1_scram_en),
 
         .tx_old_scr_data_out (tx_old_encod_data_out_1),
         .tx_old_scr_data_in	 (tx_old_encod_data_out_0),
@@ -720,6 +736,8 @@ module wrapper_macpcs_rx(
         .reset_rx_n         (reset_rx_n),
 
         .start_fifo         (start_fifo),
+        .start_fifo_rd      (start_fifo_rd),
+        .RDEN_FIFO_PCS40    (RDEN_FIFO_PCS40),
 
         // PCS Signals
         .rx_jtm_en          (rx_jtm_en),
@@ -762,6 +780,7 @@ module wrapper_macpcs_rx(
 
         .tx_old_scr_data_out (tx_old_encod_data_out_2),
         .tx_old_scr_data_in	 (tx_old_encod_data_out_1),
+        .scram_en            (pcs_2_scram_en),
 
         .terminate_in_tx       (terminate_in_2_tx),
         .terminate_out_tx      (terminate_out_2_tx),
@@ -787,6 +806,8 @@ module wrapper_macpcs_rx(
         .reset_rx_n         (reset_rx_n),
 
         .start_fifo         (start_fifo),
+        .start_fifo_rd      (start_fifo_rd),
+        .RDEN_FIFO_PCS40    (RDEN_FIFO_PCS40),
 
         // PCS Signals
         .rx_jtm_en          (rx_jtm_en),
@@ -829,6 +850,7 @@ module wrapper_macpcs_rx(
 
         .tx_old_scr_data_out (tx_old_encod_data_out_3),
         .tx_old_scr_data_in	 (tx_old_encod_data_out_2),
+        .scram_en            (pcs_3_scram_en),
 
         .terminate_in_tx       (terminate_in_3_tx),
         .terminate_out_tx      (terminate_out_3_tx),

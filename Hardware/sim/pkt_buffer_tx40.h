@@ -65,6 +65,7 @@ SC_MODULE(pkt_buffer_tx40) {
   ofstream lane1;
   ofstream lane2;
   ofstream lane3;
+  ofstream TESTE_FILE;
 
   // ofstream dbg_bip;
 
@@ -224,40 +225,44 @@ SC_MODULE(pkt_buffer_tx40) {
 
     block_counter++;
 
-    // if ( block_in_old_o_0 != block_in_lv_0 ) {
+    if ( block_in_old_o_0 != block_in_lv_0 ) {
       buffer_0 << header_in_0 << "-" << block_in_0 << "=" << d_valid_in_wire_0;
       lane0 << buffer_0.str() << endl;
+      TESTE_FILE << buffer_0.str() << endl;
       // last_blk_0 = block_in_0;
       // last_hdr_0 = header_in_0;
       bip_calculator (&lane0_bip, block_in_0, header_in_0);
-    // }
+    }
 
-    // if ( block_in_old_o_1 != block_in_lv_1 ) {
+    if ( block_in_old_o_1 != block_in_lv_1 ) {
       buffer_1 << header_in_1 << "-" << block_in_1 << "=" << d_valid_in_wire_1;
       lane1 << buffer_1.str() << endl;
+      TESTE_FILE << buffer_1.str() << endl;
       // last_blk_1 = block_in_1;
       // last_hdr_1 = header_in_1;
       // block_counter++;
       bip_calculator (&lane1_bip, block_in_1, header_in_1);
-    // }
+    }
 
-    // if ( block_in_old_o_2 != block_in_lv_2 ) {
+    if ( block_in_old_o_2 != block_in_lv_2 ) {
       buffer_2 << header_in_2 << "-" << block_in_2 << "=" << d_valid_in_wire_2;
       lane2 << buffer_2.str() << endl;
+      TESTE_FILE << buffer_2.str() << endl;
       // last_blk_2 = block_in;
       // last_hdr_2 = header_in;
       // block_counter++;
       bip_calculator (&lane2_bip, block_in_2, header_in_2);
-    // }
+    }
 
-    // if ( block_in_old_o_3 != block_in_lv_3 ) {
+    if ( block_in_old_o_3 != block_in_lv_3 ) {
       buffer_3 << header_in_3 << "-" << block_in_3 << "=" << d_valid_in_wire_3;
       lane3 << buffer_3.str() << endl;
+      TESTE_FILE << buffer_3.str() << endl;
       // last_blk_3 = block_in;
       // last_hdr_3 = header_in;
       // block_counter++;
       bip_calculator (&lane3_bip, block_in_3, header_in_3);
-    // }
+    }
 
     buffer_0.str("");
     buffer_1.str("");
@@ -289,6 +294,7 @@ SC_MODULE(pkt_buffer_tx40) {
         */
 
         lane0 << "10-" << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << "=1" << endl;
+        TESTE_FILE << "10-" << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip << "=1" << endl;
         str_temp << SYNC_LANE0_LOW << lane0_bip << SYNC_LANE0_HIGH << ~lane0_bip;
         blk_temp = str_temp.str().c_str();
         hdr_temp = "10";
@@ -296,6 +302,7 @@ SC_MODULE(pkt_buffer_tx40) {
         bip_calculator (&lane0_bip, blk_temp, hdr_temp);
 
         lane1 << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << "=1" << endl;
+        TESTE_FILE << "10-" << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane1_bip << "=1" << endl;
         str_temp << SYNC_LANE1_LOW << lane1_bip << SYNC_LANE1_HIGH << ~lane0_bip;
         blk_temp = str_temp.str().c_str();
         hdr_temp = "10";
@@ -303,6 +310,7 @@ SC_MODULE(pkt_buffer_tx40) {
         bip_calculator (&lane1_bip, blk_temp, hdr_temp);
 
         lane2 << "10-" << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << "=1" << endl;
+        TESTE_FILE << "10-" << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane2_bip << "=1" << endl;
         str_temp << SYNC_LANE2_LOW << lane2_bip << SYNC_LANE2_HIGH << ~lane0_bip;
         blk_temp = str_temp.str().c_str();
         hdr_temp = "10";
@@ -310,6 +318,7 @@ SC_MODULE(pkt_buffer_tx40) {
         bip_calculator (&lane2_bip, blk_temp, hdr_temp);
 
         lane3 << "10-" << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip  << "=1" << endl;
+        TESTE_FILE << "10-" << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane3_bip  << "=1" << endl;
         str_temp << SYNC_LANE3_LOW << lane3_bip << SYNC_LANE3_HIGH << ~lane0_bip;
         blk_temp = str_temp.str().c_str();
         hdr_temp = "10";
@@ -323,7 +332,7 @@ SC_MODULE(pkt_buffer_tx40) {
   }
 
   SC_CTOR(pkt_buffer_tx40) {
-    block_counter = 65500; //Start transmisison writing alignment blocks
+    block_counter = 65420; //Start transmisison writing alignment blocks
 
     SC_METHOD(rx);
     sensitive<<clock_in161.pos();
@@ -333,6 +342,7 @@ SC_MODULE(pkt_buffer_tx40) {
     sensitive<<clock_in161.pos();
     dont_initialize();
 
+    TESTE_FILE.open("teste_40g.txt");
     lane0.open("lane0_tx40.txt");
     if (lane0.is_open()){
       cout << "[pkt_buffer] File lane0_tx40.txt opened." << endl;

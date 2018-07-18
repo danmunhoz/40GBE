@@ -65,7 +65,8 @@
 
 `include "definitions.v"
 
-module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, seed_B, bypass_scram, TXD_Scr, clk, rst, scram_en,
+module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A,
+  seed_B, bypass_scram, TXD_Scr, clk, rst, scram_en,
   tx_old_scr_data_in, tx_old_scr_data_out);
 
    parameter PCS_ID = 2;
@@ -96,6 +97,7 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
    reg [1:0]     current_jtm_state,next_jtm_state;
    wire [63:0]   Scr_wire;
 
+   reg seeded;
    reg scram_en_d;
 
    reg [1:0] cnt;
@@ -145,8 +147,10 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
    // always @ (posedge clk or negedge rst ) begin
       if (rst) begin
         tx_old_scr[57:0] <= 58'h0;
+        seeded <= 1'b0;
       end
       else if ( scram_en_d && (PCS_ID == 32'd0 || PCS_ID == 32'd1) && cnt < 2'd2) begin
+          seeded <= 1'b1;
           tx_old_scr[57] <= tx_old_scr_data_reg[6];
           tx_old_scr[56] <= tx_old_scr_data_reg[7];
           tx_old_scr[55] <= tx_old_scr_data_reg[8];
@@ -213,6 +217,7 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
           tx_old_scr[0] <= tx_old_scr_data_reg[63];
         end
         else if (scram_en) begin
+          seeded <= 1'b1;
           tx_old_scr[57] <= tx_old_scr_data_in[6];
           tx_old_scr[56] <= tx_old_scr_data_in[7];
           tx_old_scr[55] <= tx_old_scr_data_in[8];
@@ -278,7 +283,7 @@ module  scramble_tx2 ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, see
           tx_old_scr[1] <= tx_old_scr_data_in[62];
           tx_old_scr[0] <= tx_old_scr_data_in[63];
         end
-        else if (PCS_ID == 32'd0) begin
+        else if (PCS_ID == 32'd0 && seeded == 1'b0) begin
           tx_old_scr[57:0] <= 58'h3;
         end
     end

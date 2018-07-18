@@ -134,6 +134,28 @@ module tx_path (/*AUTOARG*/
     assign tx_header_out = TXD_Scr[1:0];
     assign tx_data_out = TXD_Scr[65:2];
 
+		reg [63:0] cnt;
+		reg [1:0]  cnt_h;
+		reg en_reg;
+
+		always @ (posedge tx_clk161 or negedge arstb) begin
+      if (!arstb) begin
+        cnt   <= 64'h0;
+				cnt_h	<= 1'b0;
+				en_reg <= 1'b0;
+      end
+      else begin
+				cnt_h <= 2'd2;
+				en_reg <= data_pause & (~spill);
+				// if (en_reg)
+				if (data_pause & (~spill))
+        	cnt <= cnt + 1;
+
+				if ( !(data_pause & (~spill)) & !en_reg)
+					cnt <= 64'd1;
+      end
+    end
+
 
     txsequence_counter INST_txsequence_counter
         (
@@ -145,8 +167,8 @@ module tx_path (/*AUTOARG*/
 
 		scramble  INST_TX_PATH_SCRAMBLE
         (
-         // .TXD_encoded           (fifo_rd_data[65:0]),
-				 .TXD_encoded           (66'd55555555555555555),
+         .TXD_encoded           (fifo_rd_data[65:0]),
+				 // .TXD_encoded           ({cnt,cnt_h}),
          .tx_jtm_en             (tx_jtm_en),
          .jtm_dps_0             (jtm_dps_0),
          .jtm_dps_1             (jtm_dps_1),
@@ -162,15 +184,13 @@ module tx_path (/*AUTOARG*/
 
 		opt_fifo_new  INST_TX_PATH_FIFO
          (
-          .readdata              (fifo_rd_data[65:0]),
           .spill                 (spill),
-          .rclk                  (tx_clk161),
-          //.readen                (data_pause),
 					// .readen                (data_pause & start_fifo_rd),
-					// .readen                (data_pause & start_fifo_rd &(~spill)),
-					.readen                (start_fifo &(~spill)),
+					//.readen                (start_fifo &(~spill)),
+					.rclk                  (tx_clk161),
+					.readen                (data_pause & start_fifo_rd &(~spill)),
+					.readdata              (fifo_rd_data[65:0]),
           .wclk                  (clk156),
-          //.writen                (1'b1),
 					.writen                (1'b1 & start_fifo),
           .writedata             (encoded_data[65:0]),
           .rst                   (!arstb)

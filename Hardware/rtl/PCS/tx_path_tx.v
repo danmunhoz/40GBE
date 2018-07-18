@@ -68,7 +68,7 @@ module tx_path_tx (/*AUTOARG*/
 		        arstb, seed_A, seed_B, tx_jtm_en,
 		        xgmii_txc, xgmii_txd,
 						terminate_in, terminate_out, start_in, start_out,
-						tx_old_scr_data_in, tx_old_scr_data_out,
+						tx_old_scr_data_in, tx_old_scr_data_out, scram_en,
 						// Para uso do Testbench
 						start_fifo, start_fifo_rd
 
@@ -109,6 +109,7 @@ module tx_path_tx (/*AUTOARG*/
     output [6:0]  tx_sequence_out;
 		output 				terminate_out;
     output 				start_out;
+		output 				scram_en;
 
     wire          bypass_66encoder;
     wire          bypass_scram;
@@ -137,6 +138,37 @@ module tx_path_tx (/*AUTOARG*/
 
 		// assign tx_old_scr_data_out = TXD_Scr[65:0];
 
+		// test with cont
+		reg [63:0] cnt;
+		reg [1:0]  cnt_h;
+		reg scr_en_d;
+
+		always @ (posedge tx_clk161 or negedge arstb) begin
+      if (!arstb) begin
+				scr_en_d <= 1'b0;
+				cnt_h <= 1'b0;
+				if (PCS_ID == 0) begin
+        	cnt   <= 64'h0;
+				end
+				else if (PCS_ID == 1) begin
+        	cnt   <= 64'h1;
+				end
+				else if (PCS_ID == 2) begin
+	        cnt   <= 64'h2;
+				end
+				else begin
+	        cnt   <= 64'h3;
+				end
+      end
+      else begin
+				scr_en_d <= scram_en;
+				cnt_h <= 2'd2;
+				if (scram_en == 1'b1) begin
+        	cnt <= cnt + 4;
+				end
+      end
+    end
+
     txsequence_counter INST_txsequence_counter
         (
         .clk_161_in             (tx_clk161),
@@ -145,11 +177,11 @@ module tx_path_tx (/*AUTOARG*/
         .DATA_PAUSE             (data_pause)
         );
 
-    scramble_tx2 #(
+    scramble_tx #(
 					.PCS_ID(PCS_ID)
 				)  INST_TX_PATH_SCRAMBLE (
-         // .TXD_encoded           (fifo_rd_data[65:0]),
-				 .TXD_encoded           (66'd55555555555555555),
+         .TXD_encoded           (fifo_rd_data[65:0]),
+				 // .TXD_encoded           ({cnt,cnt_h}),
          .tx_jtm_en             (tx_jtm_en),
          .jtm_dps_0             (jtm_dps_0),
          .jtm_dps_1             (jtm_dps_1),
@@ -160,37 +192,19 @@ module tx_path_tx (/*AUTOARG*/
 				 .TXD_Scr               (TXD_Scr[65:0]),
 				 .tx_old_scr_data_in	(tx_old_scr_data_in),
 				 .tx_old_scr_data_out	(tx_old_scr_data_out),
-        //  .scram_en              (data_pause),
-         .scram_en              ((~spill)),
+         .scram_en              (scram_en),
          .rst                   (!arstb)
          );
-		// scramble  INST_TX_PATH_SCRAMBLE
-    //     (
-    //      .TXD_encoded           (fifo_rd_data[65:0]),
-    //      .tx_jtm_en             (tx_jtm_en),
-    //      .jtm_dps_0             (jtm_dps_0),
-    //      .jtm_dps_1             (jtm_dps_1),
-    //      .seed_A                (seed_A[57:0]),
-    //      .seed_B                (seed_B[57:0]),
-    //      .bypass_scram          (bypass_scram),
-    //      .clk                   (tx_clk161),
-		// 		 .TXD_Scr               (TXD_Scr[65:0]),
-    //     //  .scram_en              (data_pause),
-    //      .scram_en              (data_pause & (~spill)),
-    //      .rst                   (!arstb)
-    //      );
 
-		opt_fifo_new_tx  INST_TX_PATH_FIFO
+		assign scram_en = ~spill & start_fifo_rd;
+
+			 opt_fifo_new_tx  INST_TX_PATH_FIFO
          (
           .readdata              (fifo_rd_data[65:0]),
           .spill                 (spill),
           .rclk                  (tx_clk161),
-          //.readen                (data_pause),
-					// .readen                (data_pause & start_fifo_rd),
-					// .readen                (data_pause & start_fifo_rd &(~spill)),
-					.readen                (start_fifo &(~spill)),
+					.readen                (start_fifo_rd &(~spill)), //tanau1
           .wclk                  (clk156),
-          //.writen                (1'b1),
 					.writen                (1'b1 & start_fifo),
           .writedata             (encoded_data[65:0]),
           .rst                   (!arstb)

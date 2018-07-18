@@ -72,11 +72,11 @@ module PCS_core_rx  (  /*AUTOARG*/
                     tx_old_scr_data_in, tx_old_scr_data_out,
                     // Outputs
                     jtest_errc, ber_cnt, hi_ber, blk_lock, linkstatus, rx_fifo_spill,
-                    tx_fifo_spill, rxlf, txlf, errd_blks, xgmii_rxc, xgmii_rxd,
+                    tx_fifo_spill, rxlf, txlf, errd_blks, xgmii_rxc, xgmii_rxd, scram_en,
                     tx_data_out, tx_header_out, tx_sequence_out, rxgearboxslip_out,
                     terminate_out_rx, start_out_rx, terminate_out_tx, start_out_tx,
                     // Para uso do Testbench
-        						start_fifo
+        						RDEN_FIFO_PCS40, start_fifo, start_fifo_rd
                     );
 
     parameter PCS_ID = 2;
@@ -129,6 +129,8 @@ module PCS_core_rx  (  /*AUTOARG*/
 
     //For Testbench use
 		input					start_fifo;
+		input					start_fifo_rd;
+		input					RDEN_FIFO_PCS40;
 
     output        hi_ber;
     output        blk_lock;
@@ -146,6 +148,7 @@ module PCS_core_rx  (  /*AUTOARG*/
     output [1:0]  tx_header_out;
     output        rxgearboxslip_out;
     output [6:0]  tx_sequence_out;
+    output        scram_en;
 
     output         terminate_out_rx;
     wire           terminate_out_rx;
@@ -195,6 +198,8 @@ tx_path_tx #(
                         .start_in              (start_in_tx),
                         .tx_old_scr_data_in	 (tx_old_scr_data_in),
                         .tx_old_scr_data_out (tx_old_scr_data_out),
+                        .start_fifo         (start_fifo),
+                        .start_fifo_rd      (start_fifo_rd),
                         // Outputs
                         .txlf               (txlf),
                         .spill              (tx_fifo_spill),
@@ -203,7 +208,7 @@ tx_path_tx #(
                         .tx_sequence_out    (tx_sequence_out),
                         .terminate_out      (terminate_out_tx),
                         .start_out          (start_out_tx),
-                        .start_fifo         (start_fifo)
+                        .scram_en           (scram_en)
                         );
 
 rx_path_rx INST_rx_path(   // Input Ports
@@ -241,6 +246,7 @@ rx_path_rx INST_rx_path(   // Input Ports
                         .rxgearboxslip_out  (rxgearboxslip_out),
                         .terminate_out      (terminate_out_rx),
                         .start_out          (start_out_rx),
+                        .RDEN_FIFO_PCS40    (RDEN_FIFO_PCS40),
                         .start_fifo         (start_fifo)
                         );
 
