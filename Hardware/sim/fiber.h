@@ -9,17 +9,17 @@
 #include <fstream>
 #include <time.h>
 //ORDER
-#define PICK_RANDOM_ORDER 1
+#define PICK_RANDOM_ORDER 0
 
 // It counts from time ZERO (not from reset)
 //SKEW_0
-#define SKEW_0_NS 90
+#define SKEW_0_NS 40
 //SKEW_1
-#define SKEW_1_NS 70
+#define SKEW_1_NS 40
 //SKEW_2
-#define SKEW_2_NS 110
+#define SKEW_2_NS 40
 //SKEW_3
-#define SKEW_3_NS 65
+#define SKEW_3_NS 40
 
 struct line_data {
   std::string hdr;

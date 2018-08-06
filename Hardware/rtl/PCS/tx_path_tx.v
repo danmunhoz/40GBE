@@ -196,14 +196,15 @@ module tx_path_tx (/*AUTOARG*/
          .rst                   (!arstb)
          );
 
-		assign scram_en = ~spill & start_fifo_rd;
+		// assign scram_en = ~spill & start_fifo_rd;
+		assign scram_en = data_pause & start_fifo_rd; // tanauan testando
 
 			 opt_fifo_new_tx  INST_TX_PATH_FIFO
          (
           .readdata              (fifo_rd_data[65:0]),
           .spill                 (spill),
           .rclk                  (tx_clk161),
-					.readen                (start_fifo_rd &(~spill)), //tanau1
+					.readen                (scram_en),
           .wclk                  (clk156),
 					.writen                (1'b1 & start_fifo),
           .writedata             (encoded_data[65:0]),
@@ -212,17 +213,17 @@ module tx_path_tx (/*AUTOARG*/
 
     Encode_tx  INST_TX_PATH_ENCODE
         (
-         .bypass_66encoder      (bypass_66encoder),
-         .clk156                (clk156),
-         .rstb                  (arstb),
-         .txcontrol             (xgmii_txc[7:0]),
-         .txdata                (xgmii_txd[63:0]),
-         .TXD_encoded           (encoded_data[65:0]),
-         .txlf                  (txlf),
-				 .terminate_in(terminate_in),
-	       .terminate_out(terminate_out),
-	       .start_in(start_in),
-	       .start_out(start_out)
+          .bypass_66encoder      (bypass_66encoder),
+          .clk156                (clk156),
+          .rstb                  (arstb),
+          .txcontrol             (xgmii_txc[7:0]),
+          .txdata                (xgmii_txd[63:0]),
+          .TXD_encoded           (encoded_data[65:0]),
+          .txlf                  (txlf),
+				  .terminate_in(terminate_in),
+	        .terminate_out(terminate_out),
+	        .start_in(start_in),
+	        .start_out(start_out)
          );
 
 endmodule
