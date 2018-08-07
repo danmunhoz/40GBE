@@ -216,7 +216,7 @@ module  scramble_tx ( TXD_encoded, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A,
           tx_old_scr[1] <= tx_old_scr_data_reg[62];
           tx_old_scr[0] <= tx_old_scr_data_reg[63];
         end
-        else if (scram_en) begin
+        else if (scram_en_d) begin
           seeded <= 1'b1;
           tx_old_scr[57] <= tx_old_scr_data_in[6];
           tx_old_scr[56] <= tx_old_scr_data_in[7];
