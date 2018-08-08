@@ -104,8 +104,13 @@ architecture behav_mii_if of mii_if is
         if ren_int = '1' and val_in = '1' and sop_in(1) = '0' and
            eop_in = "100000" then
           ns_mii <= S_TX;
-        elsif ren_int = '1' and val_in = '1' and eop_in /= "100000" then
+        elsif ren_int = '1' and val_in = '1' and eop_in /= "100000" and sop_in(1) = '0' then
           ns_mii <= S_EOP;
+
+        elsif ren_int = '1' and val_in = '1' and eop_in /= "100000" and sop_in(1) = '1'then
+          ns_mii <= S_EOP;
+          fifo_wait <= '1';
+
         else
           --ns_mii <= S_ERROR;
         end if;
@@ -114,8 +119,13 @@ architecture behav_mii_if of mii_if is
         -- if sop_in(1) = '0' and eop_in < "010100" then -- Garante IPG sem SOP, com EOP < 20°byte
         if sop_in(1) = '0' and eop_in < "010011" then -- Garante IPG sem SOP, com EOP < 19°byte
           ns_mii <= S_IDLE;
-        elsif sop_in(1) = '1' and eop_in_o < "010011" then -- Garante IPG - Tanauan
+        -- elsif sop_in(1) = '1' and eop_in_o < "010011" then -- Garante IPG - Tanauan
+        --   ns_mii <= S_TX;
+        elsif sop_in(1) = '1' and eop_in_o < "010011" and sop_in_o(1) = '0' then
           ns_mii <= S_TX;
+        elsif sop_in(1) = '1' and eop_in_o < "001111" and sop_in_o(1) = '1'then
+          ns_mii <= S_WAIT_1C;
+
         elsif ren_int = '1' and val_in = '1' and sop_in = "11" and eop_in < "000100" then -- Garante IPG com SOP e EOP < 3° byte
           ns_mii <= S_IDLE;
         -- elsif sop_in(1) = '0' and eop_in > "010011" then -- EOP > 19ºbyte
@@ -149,9 +159,12 @@ architecture behav_mii_if of mii_if is
         ns_mii <= S_TX;
 
       when S_WAIT_1C =>
-        ns_mii <= S_IDLE;
-        -- shift <= "00";
-        -- ns_mii <= S_TX;
+        if sop_in_o(1) = '1' then
+          ns_mii <= S_TX;
+        else
+          ns_mii <= S_IDLE;
+        end if;
+
 
       when others =>
 
@@ -597,7 +610,7 @@ architecture behav_mii_if of mii_if is
 
       when S_WAIT_1C =>
         shift <= "00";
-        if eop_in_o < "010000" then
+        if eop_in_o_o < "010000" then
           mii_data_0 <= LANE_IDLE;
           mii_data_1 <= LANE_IDLE;
           mii_data_2 <= LANE_IDLE;
@@ -607,76 +620,83 @@ architecture behav_mii_if of mii_if is
           mii_ctrl_2 <= x"ff";
           mii_ctrl_3 <= x"ff";
 
-        elsif eop_in_o >= "010000" then -- talvez ... 001111
-          case eop_in_o is
+        elsif eop_in_o_o >= "010000" then -- talvez ... 00111, a principio dando krep
+          case eop_in_o_o is
             when "010000" =>
               mii_ctrl_0 <= "11111110"; mii_ctrl_1 <= x"ff"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= x"070707070707FD" & data_0_o(7 downto 0);
+              mii_data_0 <= x"070707070707FD" & data_2_o_o(7 downto 0);
               mii_data_1 <= LANE_IDLE; mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "010001" =>
               mii_ctrl_0 <= "11111100"; mii_ctrl_1 <= x"ff"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= x"0707070707FD" & data_0_o(15 downto 0);
+              mii_data_0 <= x"0707070707FD" & data_2_o_o(15 downto 0);
               mii_data_1 <= LANE_IDLE; mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "010010" =>
               mii_ctrl_0 <= "11111000"; mii_ctrl_1 <= x"ff"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= x"07070707FD" & data_0_o(23 downto 0);
+              mii_data_0 <= x"07070707FD" & data_2_o_o(23 downto 0);
               mii_data_1 <= LANE_IDLE; mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "010011" =>
               mii_ctrl_0 <= "11110000"; mii_ctrl_1 <= x"ff"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= x"070707FD" & data_0_o(31 downto 0);
+              mii_data_0 <= x"070707FD" & data_2_o_o(31 downto 0);
               mii_data_1 <= LANE_IDLE; mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "010100" =>
               mii_ctrl_0 <= "11100000"; mii_ctrl_1 <= x"ff"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= x"0707FD" & data_0_o(39 downto 0);
+              mii_data_0 <= x"0707FD" & data_2_o_o(39 downto 0);
               mii_data_1 <= LANE_IDLE; mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "010101" =>
               mii_ctrl_0 <= "11000000"; mii_ctrl_1 <= x"ff"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= x"07FD" & data_0_o(47 downto 0);
+              mii_data_0 <= x"07FD" & data_2_o_o(47 downto 0);
               mii_data_1 <= LANE_IDLE; mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "010110" =>
               mii_ctrl_0 <= "10000000"; mii_ctrl_1 <= x"ff"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= x"FD" & data_0_o(55 downto 0);
+              mii_data_0 <= x"FD" & data_2_o_o(55 downto 0);
               mii_data_1 <= LANE_IDLE; mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "010111" =>
               mii_ctrl_0 <= "00000000"; mii_ctrl_1 <= x"ff"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= data_0_o(63 downto 0); mii_data_1 <= x"07070707070707FD";
+              mii_data_0 <= data_2_o_o(63 downto 0); mii_data_1 <= x"07070707070707FD";
               mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             ------------------------------------------------------------------------------------------
             when "011000" =>
               mii_ctrl_0 <= x"00"; mii_ctrl_1 <= "11111110"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= data_0_o(63 downto 0); mii_data_1 <= x"070707070707FD" & data_1_o(7 downto 0);
+              mii_data_0 <= data_2_o_o(63 downto 0); mii_data_1 <= x"070707070707FD" & data_3_o_o(7 downto 0);
               mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "011001" =>
               mii_ctrl_0 <= x"00"; mii_ctrl_1 <= "11111100"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= data_0_o(63 downto 0); mii_data_1 <= x"0707070707FD" & data_1_o(15 downto 0);
+              mii_data_0 <= data_2_o_o(63 downto 0); mii_data_1 <= x"0707070707FD" & data_3_o_o(15 downto 0);
               mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "011010" =>
               mii_ctrl_0 <= x"00"; mii_ctrl_1 <= "11111000"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= data_0_o(63 downto 0); mii_data_1 <= x"07070707FD" & data_1_o(23 downto 0);
+              mii_data_0 <= data_2_o_o(63 downto 0); mii_data_1 <= x"07070707FD" & data_3_o_o(23 downto 0);
               mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "011011" =>
               mii_ctrl_0 <= x"00"; mii_ctrl_1 <= "11110000"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= data_0_o(63 downto 0); mii_data_1 <= x"070707FD" & data_1_o(31 downto 0);
+              mii_data_0 <= data_2_o_o(63 downto 0); mii_data_1 <= x"070707FD" & data_3_o_o(31 downto 0);
               mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "011100" =>
               mii_ctrl_0 <= x"00"; mii_ctrl_1 <= "11100000"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= data_0_o(63 downto 0); mii_data_1 <= x"0707FD" & data_1_o(39 downto 0);
+              mii_data_0 <= data_2_o_o(63 downto 0); mii_data_1 <= x"0707FD" & data_3_o_o(39 downto 0);
               mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "011101" =>
               mii_ctrl_0 <= x"00"; mii_ctrl_1 <= "11000000"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= data_0_o(63 downto 0); mii_data_1 <= x"07FD" & data_1_o(47 downto 0);
+              mii_data_0 <= data_2_o_o(63 downto 0); mii_data_1 <= x"07FD" & data_3_o_o(47 downto 0);
               mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "011110" =>
               mii_ctrl_0 <= x"00"; mii_ctrl_1 <= "10000000"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= data_0_o(63 downto 0); mii_data_1 <= x"FD" & data_1_o(55 downto 0);
+              mii_data_0 <= data_2_o_o(63 downto 0); mii_data_1 <= x"FD" & data_3_o_o(55 downto 0);
               mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
             when "011111" =>
               mii_ctrl_0 <= x"00"; mii_ctrl_1 <= "00000000"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
-              mii_data_0 <= data_0_o(63 downto 0); mii_data_1 <= data_1_o(63 downto 0);
+              mii_data_0 <= data_2_o_o(63 downto 0); mii_data_1 <= data_3_o_o(63 downto 0);
               mii_data_2 <= x"07070707070707FD"; mii_data_3 <= LANE_IDLE;
 
             when others =>
           end case;
+        end if;
+
+        if sop_in_o = "11" and sop_in = "00" then
+          mii_ctrl_2 <= x"01";
+          mii_ctrl_3 <= x"00";
+          mii_data_2 <= data_2_o_o;
+          mii_data_3 <= data_3_o_o;
         end if;
 
       when others =>
