@@ -69,7 +69,7 @@ module PCS_core_rx  (  /*AUTOARG*/
                     rx_header_valid_in, rx_header_in, rx_data_valid_in, rx_data_in,
                     rx_old_header_in, rx_old_data_in,
                     terminate_in_rx, start_in_rx, terminate_in_tx, start_in_tx,
-                    tx_old_scr_data_in, tx_old_scr_data_out,
+                    tx_old_scr_data_in, tx_old_scr_data_out, pcs_sync,
                     // Outputs
                     jtest_errc, ber_cnt, hi_ber, blk_lock, linkstatus, rx_fifo_spill,
                     tx_fifo_spill, rxlf, txlf, errd_blks, xgmii_rxc, xgmii_rxd, scram_en,
@@ -115,6 +115,8 @@ module PCS_core_rx  (  /*AUTOARG*/
 
     input  [65:0]	tx_old_scr_data_in;
     output [65:0]	tx_old_scr_data_out;
+
+    input 				pcs_sync;
 
     input          terminate_in_rx;
     wire           terminate_in_rx;
@@ -200,6 +202,7 @@ tx_path_tx #(
                         .tx_old_scr_data_out (tx_old_scr_data_out),
                         .start_fifo         (start_fifo),
                         .start_fifo_rd      (start_fifo_rd),
+                        .pcs_sync           (pcs_sync),
                         // Outputs
                         .txlf               (txlf),
                         .spill              (tx_fifo_spill),

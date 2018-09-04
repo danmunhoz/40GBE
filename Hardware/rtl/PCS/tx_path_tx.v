@@ -66,7 +66,7 @@ module tx_path_tx (/*AUTOARG*/
 		        // Inputs
 		        bypass_66encoder, bypass_scram, clk156, tx_clk161, jtm_dps_0, jtm_dps_1,
 		        arstb, seed_A, seed_B, tx_jtm_en,
-		        xgmii_txc, xgmii_txd,
+		        xgmii_txc, xgmii_txd, pcs_sync,
 						terminate_in, terminate_out, start_in, start_out,
 						tx_old_scr_data_in, tx_old_scr_data_out, scram_en,
 						// Para uso do Testbench
@@ -92,6 +92,7 @@ module tx_path_tx (/*AUTOARG*/
     input         arstb;
 		input 				terminate_in;
     input 				start_in;
+    input 				pcs_sync;
 
 		input  [63:0]	tx_old_scr_data_in;
 		output [63:0]	tx_old_scr_data_out;
@@ -197,7 +198,8 @@ module tx_path_tx (/*AUTOARG*/
          );
 
 		// assign scram_en = ~spill & start_fifo_rd;
-		assign scram_en = data_pause & start_fifo_rd; // tanauan testando
+		// assign scram_en = data_pause & start_fifo_rd; // tanauan testando
+		assign scram_en = data_pause & start_fifo_rd & (~pcs_sync);
 
 			 opt_fifo_new_tx  INST_TX_PATH_FIFO
          (

@@ -295,6 +295,7 @@ module wrapper_macpcs_rx(
     wire            terminate_out_2_tx;
     wire            terminate_out_3_tx;
 
+    wire            pcs_sync;
     wire            start_out_0_rx;
     wire            start_out_1_rx;
     wire            start_out_2_rx;
@@ -595,6 +596,7 @@ module wrapper_macpcs_rx(
         .reset_tx_n         (reset_tx_n),
         .reset_rx_n         (reset_rx_n),
 
+        .pcs_sync           (pcs_sync),
         .start_fifo         (start_fifo),
         .start_fifo_rd      (start_fifo_rd),
         .RDEN_FIFO_PCS40    (RDEN_FIFO_PCS40),
@@ -665,6 +667,7 @@ module wrapper_macpcs_rx(
         .reset_tx_n         (reset_tx_n),
         .reset_rx_n         (reset_rx_n),
 
+        .pcs_sync           (pcs_sync),
         .start_fifo         (start_fifo),
         .start_fifo_rd      (start_fifo_rd),
         .RDEN_FIFO_PCS40    (RDEN_FIFO_PCS40),
@@ -735,6 +738,7 @@ module wrapper_macpcs_rx(
         .reset_tx_n         (reset_tx_n),
         .reset_rx_n         (reset_rx_n),
 
+        .pcs_sync           (pcs_sync),
         .start_fifo         (start_fifo),
         .start_fifo_rd      (start_fifo_rd),
         .RDEN_FIFO_PCS40    (RDEN_FIFO_PCS40),
@@ -805,6 +809,7 @@ module wrapper_macpcs_rx(
         .reset_tx_n         (reset_tx_n),
         .reset_rx_n         (reset_rx_n),
 
+        .pcs_sync           (pcs_sync),
         .start_fifo         (start_fifo),
         .start_fifo_rd      (start_fifo_rd),
         .RDEN_FIFO_PCS40    (RDEN_FIFO_PCS40),
@@ -916,6 +921,36 @@ module wrapper_macpcs_rx(
         .xgmii_rxd_2        (xgmii_rxd_lane_2),
         .xgmii_rxc_3        (xgmii_rxc_lane_3),
         .xgmii_rxd_3        (xgmii_rxd_lane_3)
+    );
+
+    pcs_alignment INST_pcs_alignment
+    (
+        .clk_161            (tx_clk_161_13),
+        .rst                (reset_rx_n),
+        .lane_0_data_in     (tx_data_out_0[63:0]),
+        .lane_0_header_in   (tx_header_out_0[1:0]),
+        .lane_1_data_in     (tx_data_out_1[63:0]),
+        .lane_1_header_in   (tx_header_out_1[1:0]),
+        .lane_2_data_in     (tx_data_out_2[63:0]),
+        .lane_2_header_in   (tx_header_out_2[1:0]),
+        .lane_3_data_in     (tx_data_out_3[63:0]),
+        .lane_3_header_in   (tx_header_out_3[1:0]),
+        .tx_sequence_cnt_in (tx_sequence_out_0[6:0]),
+        .scr_en_in          (pcs_1_scram_en),
+
+        .pause_scr_alignm   (pcs_sync),
+        .lane_0_valid_out   (),
+        .lane_0_data_out    (),
+        .lane_0_header_out  (),
+        .lane_1_valid_out   (),
+        .lane_1_data_out    (),
+        .lane_1_header_out  (),
+        .lane_2_valid_out   (),
+        .lane_2_data_out    (),
+        .lane_2_header_out  (),
+        .lane_3_valid_out   (),
+        .lane_3_data_out    (),
+        .lane_3_header_out  ()
     );
 
 endmodule
