@@ -96,6 +96,10 @@ SC_MODULE(Top) {
   sc_signal<sc_lv<2 > >  tx_header_out_2;
   sc_signal<sc_lv<64 > > tx_data_out_3;
   sc_signal<sc_lv<2 > >  tx_header_out_3;
+  sc_signal<sc_logic>    tx_valid_out_0;
+  sc_signal<sc_logic>    tx_valid_out_1;
+  sc_signal<sc_logic>    tx_valid_out_2;
+  sc_signal<sc_logic>    tx_valid_out_3;
 
   // sinais de saida da FIFO
   sc_signal<sc_lv<128> > mac_data;
@@ -229,6 +233,10 @@ SC_MODULE(Top) {
     rx_xgt4_inst->tx_header_out_2(tx_header_out_2);
     rx_xgt4_inst->tx_data_out_3(tx_data_out_3);
     rx_xgt4_inst->tx_header_out_3(tx_header_out_3);
+    rx_xgt4_inst->tx_valid_out_0(tx_valid_out_0); // tanauan, pcs alignment
+    rx_xgt4_inst->tx_valid_out_1(tx_valid_out_1);
+    rx_xgt4_inst->tx_valid_out_2(tx_valid_out_2);
+    rx_xgt4_inst->tx_valid_out_3(tx_valid_out_3);
 
     // output dumped to file for comparison
     dump_output_inst->clock_in(iclock312);
@@ -256,10 +264,14 @@ SC_MODULE(Top) {
     pkt_buffer_tx40_inst->header_in_2(tx_header_out_2);
     pkt_buffer_tx40_inst->block_in_3(tx_data_out_3);
     pkt_buffer_tx40_inst->header_in_3(tx_header_out_3);
-    pkt_buffer_tx40_inst->data_valid_in_0(rx_data_valid_in);
-    pkt_buffer_tx40_inst->data_valid_in_1(rx_data_valid_in);
-    pkt_buffer_tx40_inst->data_valid_in_2(rx_data_valid_in);
-    pkt_buffer_tx40_inst->data_valid_in_3(rx_data_valid_in);
+    // pkt_buffer_tx40_inst->data_valid_in_0(rx_data_valid_in); // valid gerado por system c
+    // pkt_buffer_tx40_inst->data_valid_in_1(rx_data_valid_in);
+    // pkt_buffer_tx40_inst->data_valid_in_2(rx_data_valid_in);
+    // pkt_buffer_tx40_inst->data_valid_in_3(rx_data_valid_in);
+    pkt_buffer_tx40_inst->data_valid_in_0(tx_valid_out_0);  // valid gerado pcs_alignment
+    pkt_buffer_tx40_inst->data_valid_in_1(tx_valid_out_1);
+    pkt_buffer_tx40_inst->data_valid_in_2(tx_valid_out_2);
+    pkt_buffer_tx40_inst->data_valid_in_3(tx_valid_out_3);
 
     dump_mii_tx_inst->clock_in(iclock156);
     dump_mii_tx_inst->reset_n(reset);

@@ -182,7 +182,8 @@ SC_MODULE(pkt_buffer_tx40) {
     static int c_counter_2 = 0;
     static int c_counter_3 = 0;
 
-    static int first = 0;
+    static int first = 0; // original korool
+    // static int first = 1;
     if (first == 0) {
         first ++;
         lane0_bip = "00000000";
@@ -225,43 +226,47 @@ SC_MODULE(pkt_buffer_tx40) {
 
     block_counter++;
 
-    if ( block_in_old_o_0 != block_in_lv_0 ) {
+    // if ( block_in_old_o_0 != block_in_lv_0 ) {
+    if ( 1 ) {
       buffer_0 << header_in_0 << "-" << block_in_0 << "=" << d_valid_in_wire_0;
       lane0 << buffer_0.str() << endl;
       TESTE_FILE << buffer_0.str() << endl;
       // last_blk_0 = block_in_0;
       // last_hdr_0 = header_in_0;
-      bip_calculator (&lane0_bip, block_in_0, header_in_0);
+      // bip_calculator (&lane0_bip, block_in_0, header_in_0);
     }
 
-    if ( block_in_old_o_1 != block_in_lv_1 ) {
+    // if ( block_in_old_o_1 != block_in_lv_1 ) {
+    if ( 1 ) {
       buffer_1 << header_in_1 << "-" << block_in_1 << "=" << d_valid_in_wire_1;
       lane1 << buffer_1.str() << endl;
       TESTE_FILE << buffer_1.str() << endl;
       // last_blk_1 = block_in_1;
       // last_hdr_1 = header_in_1;
       // block_counter++;
-      bip_calculator (&lane1_bip, block_in_1, header_in_1);
+      // bip_calculator (&lane1_bip, block_in_1, header_in_1);
     }
 
-    if ( block_in_old_o_2 != block_in_lv_2 ) {
+    // if ( block_in_old_o_2 != block_in_lv_2 ) {
+    if ( 1 ) {
       buffer_2 << header_in_2 << "-" << block_in_2 << "=" << d_valid_in_wire_2;
       lane2 << buffer_2.str() << endl;
       TESTE_FILE << buffer_2.str() << endl;
       // last_blk_2 = block_in;
       // last_hdr_2 = header_in;
       // block_counter++;
-      bip_calculator (&lane2_bip, block_in_2, header_in_2);
+      // bip_calculator (&lane2_bip, block_in_2, header_in_2);
     }
 
-    if ( block_in_old_o_3 != block_in_lv_3 ) {
+    // if ( block_in_old_o_3 != block_in_lv_3 ) {
+    if ( 1 ) {
       buffer_3 << header_in_3 << "-" << block_in_3 << "=" << d_valid_in_wire_3;
       lane3 << buffer_3.str() << endl;
       TESTE_FILE << buffer_3.str() << endl;
       // last_blk_3 = block_in;
       // last_hdr_3 = header_in;
       // block_counter++;
-      bip_calculator (&lane3_bip, block_in_3, header_in_3);
+      // bip_calculator (&lane3_bip, block_in_3, header_in_3);
     }
 
     buffer_0.str("");
@@ -269,7 +274,8 @@ SC_MODULE(pkt_buffer_tx40) {
     buffer_2.str("");
     buffer_3.str("");
 
-    if( block_counter == PKTS_BTW_SYNC && first == 1) {
+    // if( block_counter == PKTS_BTW_SYNC && first == 1) {
+    if(0) {
       first++;
         /*
         **  BIT INTERLEAVED PARITY

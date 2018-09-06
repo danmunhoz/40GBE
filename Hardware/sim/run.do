@@ -131,6 +131,7 @@ vcom -novopt ../rtl/MAC/mac_tx_path.vhd
 
 # vcom -novopt ../rtl/PCS/pcs_selector.vhd
 
+vcom -novopt ../rtl/PCS/pcs_alignment.vhd
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs_rx.v
 
@@ -166,7 +167,7 @@ work.Top -t 1ps
 
 do wave.do
 
-run 30000 ns
+run 50000 ns
 
 exec cp lane0.txt lane0_rx.txt
 exec cp lane1.txt lane1_rx.txt

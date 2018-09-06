@@ -20,8 +20,9 @@ module wrapper_macpcs_rx(
                         async_reset_n, reset_tx_n, reset_rx_n, reset_tx_done, reset_rx_done,
                         // PHY -> Output of PCS
                         tx_sequence_out, rxgearboxslip_out,
-                        tx_data_out_0, tx_header_out_0, tx_data_out_1, tx_header_out_1,
-                        tx_data_out_2, tx_header_out_2, tx_data_out_3, tx_header_out_3,
+                        tx_valid_out_0,   tx_valid_out_1,   tx_valid_out_2,   tx_valid_out_3,
+                        tx_header_out_0,  tx_header_out_1,  tx_header_out_2,  tx_header_out_3,
+                        tx_data_out_0,    tx_data_out_1,    tx_data_out_2,    tx_data_out_3,
                         // PCS
                         rx_jtm_en, bypass_descram, bypass_scram, bypass_66decoder, bypass_66encoder, clear_errblk, clear_ber_cnt, tx_jtm_en, jtm_dps_0, jtm_dps_1, seed_A, seed_B,
                         // XMAC
@@ -143,6 +144,21 @@ module wrapper_macpcs_rx(
     output [1:0]  tx_header_out_2;
     output [63:0] tx_data_out_3;
     output [1:0]  tx_header_out_3;
+
+    output        tx_valid_out_0;
+    output        tx_valid_out_1;
+    output        tx_valid_out_2;
+    output        tx_valid_out_3;
+
+    // tanauan pcs alignment
+    wire [63:0] tx_data_int_0;
+    wire [1:0]  tx_header_int_0;
+    wire [63:0] tx_data_int_1;
+    wire [1:0]  tx_header_int_1;
+    wire [63:0] tx_data_int_2;
+    wire [1:0]  tx_header_int_2;
+    wire [63:0] tx_data_int_3;
+    wire [1:0]  tx_header_int_3;
 
     wire        hi_ber_0;
     wire        blk_lock_0;
@@ -628,8 +644,10 @@ module wrapper_macpcs_rx(
         .ber_cnt            (ber_cnt_0[5:0]),
         .errd_blks          (errd_blks_0[7:0]),
         .jtest_errc         (jtest_errc_0[15:0]),
-        .tx_data_out        (tx_data_out_0[63:0]),
-        .tx_header_out      (tx_header_out_0[1:0]),
+        // .tx_data_out        (tx_data_out_0[63:0]),
+        // .tx_header_out      (tx_header_out_0[1:0]),
+        .tx_data_out        (tx_data_int_0[63:0]),
+        .tx_header_out      (tx_header_int_0[1:0]),
         .rxgearboxslip_out  (rxgearboxslip_out_0),
         .tx_sequence_out    (tx_sequence_out_0),
         .xgmii_txc          (xgmii_txc_lane_0),
@@ -699,8 +717,10 @@ module wrapper_macpcs_rx(
         .ber_cnt            (ber_cnt_1[5:0]),
         .errd_blks          (errd_blks_1[7:0]),
         .jtest_errc         (jtest_errc_1[15:0]),
-        .tx_data_out        (tx_data_out_1[63:0]),
-        .tx_header_out      (tx_header_out_1[1:0]),
+        // .tx_data_out        (tx_data_out_1[63:0]),
+        // .tx_header_out      (tx_header_out_1[1:0]),
+        .tx_data_out        (tx_data_int_1[63:0]),
+        .tx_header_out      (tx_header_int_1[1:0]),
         .rxgearboxslip_out  (rxgearboxslip_out_1),
         .tx_sequence_out    (tx_sequence_out_1),
         .xgmii_txc          (xgmii_txc_lane_1), // MII do zero POR ENQUANTO
@@ -770,8 +790,10 @@ module wrapper_macpcs_rx(
         .ber_cnt            (ber_cnt_2[5:0]),
         .errd_blks          (errd_blks_2[7:0]),
         .jtest_errc         (jtest_errc_2[15:0]),
-        .tx_data_out        (tx_data_out_2[63:0]),
-        .tx_header_out      (tx_header_out_2[1:0]),
+        // .tx_data_out        (tx_data_out_2[63:0]),
+        // .tx_header_out      (tx_header_out_2[1:0]),
+        .tx_data_out        (tx_data_int_2[63:0]),
+        .tx_header_out      (tx_header_int_2[1:0]),
         .rxgearboxslip_out  (rxgearboxslip_out_2),
         .tx_sequence_out    (tx_sequence_out_2),
         .xgmii_txc          (xgmii_txc_lane_2), // MII do zero POR ENQUANTO
@@ -841,8 +863,10 @@ module wrapper_macpcs_rx(
         .ber_cnt            (ber_cnt_3[5:0]),
         .errd_blks          (errd_blks_3[7:0]),
         .jtest_errc         (jtest_errc_3[15:0]),
-        .tx_data_out        (tx_data_out_3[63:0]),
-        .tx_header_out      (tx_header_out_3[1:0]),
+        // .tx_data_out        (tx_data_out_3[63:0]),
+        // .tx_header_out      (tx_header_out_3[1:0]),
+        .tx_data_out        (tx_data_int_3[63:0]),
+        .tx_header_out      (tx_header_int_3[1:0]),
         .rxgearboxslip_out  (rxgearboxslip_out_3),
         .tx_sequence_out    (tx_sequence_out_3),
         .xgmii_txc          (xgmii_txc_lane_3), // MII do zero POR ENQUANTO
@@ -927,30 +951,30 @@ module wrapper_macpcs_rx(
     (
         .clk_161            (tx_clk_161_13),
         .rst                (reset_rx_n),
-        .lane_0_data_in     (tx_data_out_0[63:0]),
-        .lane_0_header_in   (tx_header_out_0[1:0]),
-        .lane_1_data_in     (tx_data_out_1[63:0]),
-        .lane_1_header_in   (tx_header_out_1[1:0]),
-        .lane_2_data_in     (tx_data_out_2[63:0]),
-        .lane_2_header_in   (tx_header_out_2[1:0]),
-        .lane_3_data_in     (tx_data_out_3[63:0]),
-        .lane_3_header_in   (tx_header_out_3[1:0]),
+        .lane_0_data_in     (tx_data_int_0[63:0]),
+        .lane_0_header_in   (tx_header_int_0[1:0]),
+        .lane_1_data_in     (tx_data_int_1[63:0]),
+        .lane_1_header_in   (tx_header_int_1[1:0]),
+        .lane_2_data_in     (tx_data_int_2[63:0]),
+        .lane_2_header_in   (tx_header_int_2[1:0]),
+        .lane_3_data_in     (tx_data_int_3[63:0]),
+        .lane_3_header_in   (tx_header_int_3[1:0]),
         .tx_sequence_cnt_in (tx_sequence_out_0[6:0]),
         .scr_en_in          (pcs_1_scram_en),
 
         .pause_scr_alignm   (pcs_sync),
-        .lane_0_valid_out   (),
-        .lane_0_data_out    (),
-        .lane_0_header_out  (),
-        .lane_1_valid_out   (),
-        .lane_1_data_out    (),
-        .lane_1_header_out  (),
-        .lane_2_valid_out   (),
-        .lane_2_data_out    (),
-        .lane_2_header_out  (),
-        .lane_3_valid_out   (),
-        .lane_3_data_out    (),
-        .lane_3_header_out  ()
+        .lane_0_valid_out   (tx_valid_out_0),
+        .lane_0_data_out    (tx_data_out_0[63:0]),
+        .lane_0_header_out  (tx_header_out_0[1:0]),
+        .lane_1_valid_out   (tx_valid_out_1),
+        .lane_1_data_out    (tx_data_out_1[63:0]),
+        .lane_1_header_out  (tx_header_out_1[1:0]),
+        .lane_2_valid_out   (tx_valid_out_2),
+        .lane_2_data_out    (tx_data_out_2[63:0]),
+        .lane_2_header_out  (tx_header_out_2[1:0]),
+        .lane_3_valid_out   (tx_valid_out_3),
+        .lane_3_data_out    (tx_data_out_3[63:0]),
+        .lane_3_header_out  (tx_header_out_3[1:0])
     );
 
 endmodule

@@ -54,12 +54,16 @@ entity rx_xgt4 is
       pkt_rx_val          : out  std_logic;
       --pkt_tx_full         : out  std_logic;
 
+      tx_valid_out_0      : out std_logic;
       tx_data_out_0       : out std_logic_vector(63 downto 0);
       tx_header_out_0     : out std_logic_vector(1 downto 0);
+      tx_valid_out_1      : out std_logic;
       tx_data_out_1       : out std_logic_vector(63 downto 0);
       tx_header_out_1     : out std_logic_vector(1 downto 0);
+      tx_valid_out_2      : out std_logic;
       tx_data_out_2       : out std_logic_vector(63 downto 0);
       tx_header_out_2     : out std_logic_vector(1 downto 0);
+      tx_valid_out_3      : out std_logic;
       tx_data_out_3       : out std_logic_vector(63 downto 0);
       tx_header_out_3     : out std_logic_vector(1 downto 0);
 
@@ -294,6 +298,10 @@ begin
             tx_header_out_2    => tx_header_out_2,
             tx_data_out_3      => tx_data_out_3,
             tx_header_out_3    => tx_header_out_3,
+            tx_valid_out_0     => tx_valid_out_0,
+            tx_valid_out_1     => tx_valid_out_1,
+            tx_valid_out_2     => tx_valid_out_2,
+            tx_valid_out_3     => tx_valid_out_3,
 
             -- MAC
             pkt_rx_data     => pkt_rx_data,

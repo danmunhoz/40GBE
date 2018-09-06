@@ -40,12 +40,16 @@ public:
     sc_out<sc_lv<3> > pkt_rx_mod;
     sc_out<sc_logic> pkt_rx_sop;
     sc_out<sc_logic> pkt_rx_val;
+    sc_out<sc_logic> tx_valid_out_0;
     sc_out<sc_lv<64> > tx_data_out_0;
     sc_out<sc_lv<2> > tx_header_out_0;
+    sc_out<sc_logic> tx_valid_out_1;
     sc_out<sc_lv<64> > tx_data_out_1;
     sc_out<sc_lv<2> > tx_header_out_1;
+    sc_out<sc_logic> tx_valid_out_2;
     sc_out<sc_lv<64> > tx_data_out_2;
     sc_out<sc_lv<2> > tx_header_out_2;
+    sc_out<sc_logic> tx_valid_out_3;
     sc_out<sc_lv<64> > tx_data_out_3;
     sc_out<sc_lv<2> > tx_header_out_3;
     sc_out<sc_lv<8> > dump_xgmii_rxc_0;
@@ -98,12 +102,16 @@ public:
        pkt_rx_mod("pkt_rx_mod"),
        pkt_rx_sop("pkt_rx_sop"),
        pkt_rx_val("pkt_rx_val"),
+       tx_valid_out_0("tx_valid_out_0"),
        tx_data_out_0("tx_data_out_0"),
        tx_header_out_0("tx_header_out_0"),
+       tx_valid_out_1("tx_valid_out_1"),
        tx_data_out_1("tx_data_out_1"),
        tx_header_out_1("tx_header_out_1"),
+       tx_valid_out_2("tx_valid_out_2"),
        tx_data_out_2("tx_data_out_2"),
        tx_header_out_2("tx_header_out_2"),
+       tx_valid_out_3("tx_valid_out_3"),
        tx_data_out_3("tx_data_out_3"),
        tx_header_out_3("tx_header_out_3"),
        dump_xgmii_rxc_0("dump_xgmii_rxc_0"),
