@@ -167,7 +167,9 @@ work.Top -t 1ps
 
 do wave.do
 
-run 50000 ns
+run 20 us
+#run 50 us
+#run 200 us
 
 exec cp lane0.txt lane0_rx.txt
 exec cp lane1.txt lane1_rx.txt

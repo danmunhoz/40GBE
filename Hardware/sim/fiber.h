@@ -13,13 +13,31 @@
 
 // It counts from time ZERO (not from reset)
 //SKEW_0
-#define SKEW_0_NS 90
+// #define SKEW_0_NS
 //SKEW_1
-#define SKEW_1_NS 70
+// #define SKEW_1_NS
 //SKEW_2
-#define SKEW_2_NS 150
+// #define SKEW_2_NS
 //SKEW_3
-#define SKEW_3_NS 65
+// #define SKEW_3_NS
+
+// #define SKEW_0_NS 40
+// #define SKEW_1_NS 46
+// #define SKEW_2_NS 52
+// #define SKEW_3_NS 58
+
+// #define SKEW_0_NS 90
+// #define SKEW_1_NS 70
+// #define SKEW_2_NS 110
+// #define SKEW_3_NS 65
+
+#define SKEW_0_NS 50
+#define SKEW_1_NS 50
+#define SKEW_2_NS 50
+#define SKEW_3_NS 50
+
+
+
 
 struct line_data {
   std::string hdr;

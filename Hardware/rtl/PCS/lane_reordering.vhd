@@ -281,8 +281,43 @@ architecture behav_lane_reorder of lane_reorder is
     signal fifo_wen_2 : std_logic;
     signal fifo_wen_3 : std_logic;
 
+    signal val_lane_0     : std_logic;
+    signal val_lane_1     : std_logic;
+    signal val_lane_2     : std_logic;
+    signal val_lane_3     : std_logic;
+    signal val_block_0_d0 : std_logic;
+    signal val_block_1_d0 : std_logic;
+    signal val_block_2_d0 : std_logic;
+    signal val_block_3_d0 : std_logic;
+
 begin
   reset_n <= not reset;
+
+  sync_block: process (clock,reset)
+  begin
+      if reset = '0' then
+        val_block_0_d0 <= '0';
+        val_block_1_d0 <= '0';
+        val_block_2_d0 <= '0';
+        val_block_3_d0 <= '0';
+        val_lane_0 <= '0';
+        val_lane_1 <= '0';
+        val_lane_2 <= '0';
+        val_lane_3 <= '0';
+      elsif clock 'event and clock = '1' then
+        val_block_0_d0 <= lane_0_valid_in;
+        val_block_1_d0 <= lane_1_valid_in;
+        val_block_2_d0 <= lane_2_valid_in;
+        val_block_3_d0 <= lane_3_valid_in;
+      end if;
+
+      if lane_0_valid_in = '1' and val_block_0_d0 = '0' then
+        val_lane_0 <= '1';
+        val_lane_1 <= '1';
+        val_lane_2 <= '1';
+        val_lane_3 <= '1';
+      end if;
+    end process;
 
   --==============================================================================
   -- first_stage - FIND SYNC BLOCK and ACCOUNT FOR SKEW
@@ -348,16 +383,19 @@ begin
 
   -- calcula BIP
   bip_calculator_0: entity work.bip_calculator port map (clk => clock, rst => reset, enable => enable_lane_0,
-           data_in => barreira_skew.data_0, header_in => barreira_skew.header_0, is_sync => barreira_skew.is_sync_0, bip_ok => bip_lane_0_int);
+           data_in => barreira_bip.data_0, header_in => barreira_bip.header_0, valid_in => barreira_bip.valid_0, is_sync => barreira_skew.is_sync_0, bip_ok => bip_lane_0_int);
 
-  bip_calculator_1: entity work.bip_calculator port map (clk => clock, rst => reset, enable => enable_lane_1,
-           data_in => barreira_skew.data_1, header_in => barreira_skew.header_1, is_sync => barreira_skew.is_sync_1, bip_ok => bip_lane_1_int);
-
-  bip_calculator_2: entity work.bip_calculator port map (clk => clock, rst => reset, enable => enable_lane_2,
-           data_in => barreira_skew.data_2, header_in => barreira_skew.header_2, is_sync => barreira_skew.is_sync_2, bip_ok => bip_lane_2_int);
-
-  bip_calculator_3: entity work.bip_calculator port map (clk => clock, rst => reset, enable => enable_lane_3,
-           data_in => barreira_skew.data_3, header_in => barreira_skew.header_3, is_sync => barreira_skew.is_sync_3, bip_ok => bip_lane_3_int);
+  -- bip_calculator_0: entity work.bip_calculator port map (clk => clock, rst => reset, enable => enable_lane_0,
+  --          data_in => barreira_skew.data_0, header_in => barreira_skew.header_0, is_sync => barreira_skew.is_sync_0, bip_ok => bip_lane_0_int);
+  --
+  -- bip_calculator_1: entity work.bip_calculator port map (clk => clock, rst => reset, enable => enable_lane_1,
+  --          data_in => barreira_skew.data_1, header_in => barreira_skew.header_1, is_sync => barreira_skew.is_sync_1, bip_ok => bip_lane_1_int);
+  --
+  -- bip_calculator_2: entity work.bip_calculator port map (clk => clock, rst => reset, enable => enable_lane_2,
+  --          data_in => barreira_skew.data_2, header_in => barreira_skew.header_2, is_sync => barreira_skew.is_sync_2, bip_ok => bip_lane_2_int);
+  --
+  -- bip_calculator_3: entity work.bip_calculator port map (clk => clock, rst => reset, enable => enable_lane_3,
+  --          data_in => barreira_skew.data_3, header_in => barreira_skew.header_3, is_sync => barreira_skew.is_sync_3, bip_ok => bip_lane_3_int);
 
 
   reg_bip_read_lanes: entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>read_from_fifos_int, Q=>barreira_bip.read_from_fifos);
@@ -395,10 +433,36 @@ begin
   reg_bip_logic_lane_3: entity work.regnbit generic map (size=>3)  port map (ck=>clock, rst=>reset, ce=>'1', D=>barreira_skew.logical_lane_3,  Q=>barreira_bip.logical_lane_3);
 
   -- Inicia escrita apos respectivo alinhamento e não escreve palavras de alinhamento
-  wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' or barreira_skew.logical_lane_0 = "100" else '1';
-  wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' or barreira_skew.logical_lane_1 = "100" else '1';
-  wen_2_int <= '0' when barreira_skew.is_sync_2 = '1' or barreira_skew.logical_lane_2 = "100" else '1';
-  wen_3_int <= '0' when barreira_skew.is_sync_3 = '1' or barreira_skew.logical_lane_3 = "100" else '1';
+  -- wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' or barreira_skew.logical_lane_0 = "100" else '1';
+  -- wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' or barreira_skew.logical_lane_1 = "100" else '1';
+  -- wen_2_int <= '0' when barreira_skew.is_sync_2 = '1' or barreira_skew.logical_lane_2 = "100" else '1';
+  -- wen_3_int <= '0' when barreira_skew.is_sync_3 = '1' or barreira_skew.logical_lane_3 = "100" else '1';
+  -- -- wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' else '1';
+  -- -- wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' else '1';
+  -- -- wen_2_int <= '0' when barreira_skew.is_sync_2 = '1' else '1';
+  -- -- wen_3_int <= '0' when barreira_skew.is_sync_3 = '1' else '1';
+
+  -- Tanauan
+  -- wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' or barreira_bip.valid_0 = '0' else '1';
+  -- wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' or barreira_bip.valid_1 = '0' else '1';
+  -- wen_2_int <= '0' when barreira_skew.is_sync_2 = '1' or barreira_bip.valid_2 = '0' else '1';
+  -- wen_3_int <= '0' when barreira_skew.is_sync_3 = '1' or barreira_bip.valid_3 = '0' else '1';
+  -- -- wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' or lane_0_valid_in = '0' else '1';
+  -- -- wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' or lane_1_valid_in = '0' else '1';
+  -- -- wen_2_int <= '0' when barreira_skew.is_sync_2 = '1' or lane_2_valid_in = '0' else '1';
+  -- -- wen_3_int <= '0' when barreira_skew.is_sync_3 = '1' or lane_3_valid_in = '0' else '1';
+
+  -- não grava repetição nas fifos
+  -- wen_0_int <= '0' when is_sync_0_int = '1' or lane_0_valid_in = '0' else '1';
+  -- wen_1_int <= '0' when is_sync_1_int = '1' or lane_1_valid_in = '0' else '1';
+  -- wen_2_int <= '0' when is_sync_2_int = '1' or lane_2_valid_in = '0' else '1';
+  -- wen_3_int <= '0' when is_sync_3_int = '1' or lane_3_valid_in = '0' else '1';
+  wen_0_int <= '0' when is_sync_0_int = '1' or val_lane_0 = '0' else '1';
+  wen_1_int <= '0' when is_sync_1_int = '1' or val_lane_1 = '0' else '1';
+  wen_2_int <= '0' when is_sync_2_int = '1' or val_lane_2 = '0' else '1';
+  wen_3_int <= '0' when is_sync_3_int = '1' or val_lane_3 = '0' else '1';
+
+
 
   reg_xbar_read_lanes: entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>barreira_bip.read_from_fifos, Q=>barreira_xbar.read_from_fifos);
 
@@ -442,7 +506,11 @@ begin
         empty       =>	fifo_empty_0,
 				almost_e    =>	almost_e_0
   );
-  fifo_in_0 <= (others => '0') when barreira_skew.logical_lane_0 = "100" else
+  -- fifo_in_0 <= (others => '0') when barreira_skew.logical_lane_0 = "100" else
+  --              barreira_bip.valid_0 & barreira_bip.header_0 & barreira_bip.data_0;
+  -- fifo_in_0 <= (others => '0') when barreira_bip.valid_0 = '0' else
+  --              barreira_bip.valid_0 & barreira_bip.header_0 & barreira_bip.data_0;
+  fifo_in_0 <= (others => '0') when val_lane_0 = '0' else
                barreira_bip.valid_0 & barreira_bip.header_0 & barreira_bip.data_0;
 
   fifo_1 : entity work.reorder_fifo
@@ -459,9 +527,12 @@ begin
       empty       =>	fifo_empty_1,
  			almost_e    =>	almost_e_1
   );
-  fifo_in_1 <= (others => '0') when barreira_skew.logical_lane_1 = "100" else
-                barreira_bip.valid_1 & barreira_bip.header_1 & barreira_bip.data_1;
-
+  -- fifo_in_1 <= (others => '0') when barreira_skew.logical_lane_1 = "100" else
+  --               barreira_bip.valid_1 & barreira_bip.header_1 & barreira_bip.data_1;
+  -- fifo_in_1 <= (others => '0') when barreira_bip.valid_1 = '0' else
+  --              barreira_bip.valid_1 & barreira_bip.header_1 & barreira_bip.data_1;
+  fifo_in_1 <= (others => '0') when val_lane_1 = '0' else
+               barreira_bip.valid_1 & barreira_bip.header_1 & barreira_bip.data_1;
 
   fifo_2 : entity work.reorder_fifo
   port map (
@@ -476,10 +547,12 @@ begin
         empty       =>	fifo_empty_2,
 				almost_e    =>	almost_e_2
   );
-  fifo_in_2 <= (others => '0') when barreira_skew.logical_lane_2 = "100" else
+  -- fifo_in_2 <= (others => '0') when barreira_skew.logical_lane_2 = "100" else
+  --              barreira_bip.valid_2 & barreira_bip.header_2 & barreira_bip.data_2;
+  -- fifo_in_2 <= (others => '0') when barreira_bip.valid_2 = '0' else
+  --              barreira_bip.valid_2 & barreira_bip.header_2 & barreira_bip.data_2;
+  fifo_in_2 <= (others => '0') when val_lane_2 = '0' else
                barreira_bip.valid_2 & barreira_bip.header_2 & barreira_bip.data_2;
-
-
 
   fifo_3 : entity work.reorder_fifo
   port map (
@@ -494,7 +567,11 @@ begin
         empty       =>	fifo_empty_3,
 				almost_e    =>	almost_e_3
   );
-  fifo_in_3 <= (others => '0') when barreira_skew.logical_lane_3 = "100" else
+  -- fifo_in_3 <= (others => '0') when barreira_skew.logical_lane_3 = "100" else
+  --              barreira_bip.valid_3 & barreira_bip.header_3 & barreira_bip.data_3;
+  -- fifo_in_3 <= (others => '0') when barreira_bip.valid_3 = '0' else
+  --              barreira_bip.valid_3 & barreira_bip.header_3 & barreira_bip.data_3;
+  fifo_in_3 <= (others => '0') when val_lane_3 = '0' else
                barreira_bip.valid_3 & barreira_bip.header_3 & barreira_bip.data_3;
 
  --==============================================================================
