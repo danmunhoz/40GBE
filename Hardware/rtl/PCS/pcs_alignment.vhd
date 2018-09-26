@@ -40,14 +40,15 @@ architecture behav_pcs_alignment of pcs_alignment is
     --  Intervalo de blocos para ser inserido alinhamento
     constant N_BLOCKS       : natural := 512 ;
 
-    signal sync_lane0_high  : std_logic_vector(23 downto 0):= x"907647";
-    signal sync_lane1_high  : std_logic_vector(23 downto 0):= x"f0c4e6";
-    signal sync_lane2_high  : std_logic_vector(23 downto 0):= x"c5659b";
-    signal sync_lane3_high  : std_logic_vector(23 downto 0):= x"a2793d";
-    signal sync_lane0_low   : std_logic_vector(23 downto 0):= x"6f89b8";
-    signal sync_lane1_low   : std_logic_vector(23 downto 0):= x"0f3b19";
-    signal sync_lane2_low   : std_logic_vector(23 downto 0):= x"3a9a64";
-    signal sync_lane3_low   : std_logic_vector(23 downto 0):= x"5d86c2";
+    constant sync_lane0_high  : std_logic_vector(23 downto 0):= x"907647";
+    constant sync_lane1_high  : std_logic_vector(23 downto 0):= x"f0c4e6";
+    constant sync_lane2_high  : std_logic_vector(23 downto 0):= x"c5659b";
+    constant sync_lane3_high  : std_logic_vector(23 downto 0):= x"a2793d";
+    constant sync_lane0_low   : std_logic_vector(23 downto 0):= x"6f89b8";
+    constant sync_lane1_low   : std_logic_vector(23 downto 0):= x"0f3b19";
+    constant sync_lane2_low   : std_logic_vector(23 downto 0):= x"3a9a64";
+    constant sync_lane3_low   : std_logic_vector(23 downto 0):= x"5d86c2";
+
     signal lane_0_header    : std_logic_vector( 1 downto 0);
     signal lane_1_header    : std_logic_vector( 1 downto 0);
     signal lane_2_header    : std_logic_vector( 1 downto 0);
