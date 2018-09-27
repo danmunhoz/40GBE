@@ -188,6 +188,9 @@ architecture behav_pcs_alignment of pcs_alignment is
 
           if tx_sequence_cnt = x"20" and scr_en_o = '1' and scr_en = '0' and scr_en_in = '1' then
             lane_0_valid_out <= '0';
+            lane_1_valid_out <= '0';
+            lane_2_valid_out <= '0';
+            lane_3_valid_out <= '0';
 
           elsif ((scr_en_o = '0' and scr_en = '0' and scr_en_in = '0') or
                  (scr_en_o = '0' and scr_en = '0' and scr_en_in = '1') or

@@ -9,7 +9,7 @@
 #include <fstream>
 #include <time.h>
 //ORDER
-#define PICK_RANDOM_ORDER 0
+#define PICK_RANDOM_ORDER 1
 
 // It counts from time ZERO (not from reset)
 //SKEW_0
@@ -26,15 +26,15 @@
 // #define SKEW_2_NS 52
 // #define SKEW_3_NS 58
 
-// #define SKEW_0_NS 90
-// #define SKEW_1_NS 70
-// #define SKEW_2_NS 110
-// #define SKEW_3_NS 65
+#define SKEW_0_NS 90
+#define SKEW_1_NS 70
+#define SKEW_2_NS 110
+#define SKEW_3_NS 65
 
-#define SKEW_0_NS 50
-#define SKEW_1_NS 50
-#define SKEW_2_NS 50
-#define SKEW_3_NS 50
+// #define SKEW_0_NS 50
+// #define SKEW_1_NS 50
+// #define SKEW_2_NS 50
+// #define SKEW_3_NS 50
 
 
 
