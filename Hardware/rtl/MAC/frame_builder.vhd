@@ -262,7 +262,8 @@ architecture behav_frame_builder of frame_builder is
       end if;
     end process;
 
-    crc_output_decoder: process(ps_crc, clk, rst, almost_e)
+    -- crc_output_decoder: process(ps_crc, clk, rst, almost_e)
+    crc_output_decoder: process(clk, rst)
     begin
       if rst = '0' then
         crc_reg <= (others=>'1');
@@ -293,11 +294,11 @@ architecture behav_frame_builder of frame_builder is
 
           when S_D256 =>
             if ren_reg_in = '1' then
-              if (almost_e = '1') then
-                ren_in <= '0';
-              else
-                ren_in <= '1';
-              end if;
+              -- if (almost_e = '1' and sop_in(1) = '1') then
+              --   ren_in <= '0';
+              -- else
+              --   ren_in <= '1';
+              -- end if;
 
               -- Para quando nao passou pelo S_DONE
               if (sop_in = "10") then
@@ -391,6 +392,11 @@ architecture behav_frame_builder of frame_builder is
             if eop_reg_in >= "10100" and eop_reg_in < "100000" and sop_in = "10" then -- tanauan eop acima do 20ºbyte
               ren_in <= '0';
             end if;
+            if (almost_e = '1') then
+              ren_in <= '0';
+            else
+              ren_in <= '1';
+            end if;
 
           when S_EOP_N =>
             ren_in <= '0';
@@ -428,7 +434,9 @@ architecture behav_frame_builder of frame_builder is
         when S_EOP =>
           -- if (eop_reg_in(4 downto 0) >= "01100") then
           --   ns_crc <= S_EOP_N;
-          if (sop_in = "10") then
+          if (almost_e = '1') then
+            ns_crc <= S_EOP;
+          elsif (sop_in = "10") then
             ns_crc <= S_D256;
           elsif (sop_in = "11") then
             ns_crc <= S_D128;
