@@ -566,7 +566,7 @@ module wrapper_macpcs_rx(
       .mac_data (mac_data),
       .mac_sop  (mac_sop),
       .mac_eop  (mac_eop),
-      .almost_full (),
+      //.almost_full (),
       .app_data (app_data),
       .app_sop  (app_sop),
       .app_val  (app_val),
