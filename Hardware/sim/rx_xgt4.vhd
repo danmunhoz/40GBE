@@ -189,7 +189,8 @@ begin
           start_fifo_rd <= '0', '1' after 600 ns; -- tanauan, leitura FIFOs_PCS->SCRAMBLER
 
           -- RDEN_FIFO_PCS40 <= '0', '1' after 450 ns; -- tanauan, testando recepção do TX40 no RX40
-          RDEN_FIFO_PCS40 <= '0', '1' after 600 ns; -- tanauan, testando recepção do TX40 no RX40
+          -- RDEN_FIFO_PCS40 <= '0', '1' after 600 ns; -- tanauan, testando recepção do TX40 no RX40
+          RDEN_FIFO_PCS40 <= '0', '1' after 4000 ns; -- tanauan, testando recepção do TX40 no RX40
 
           -- read_fifo <= '0', '1' after 400 ns; -- original
           read_fifo <= '0', '1' after 600 ns;

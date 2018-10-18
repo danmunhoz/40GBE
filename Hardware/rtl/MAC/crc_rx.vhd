@@ -43,6 +43,7 @@ entity crc_rx is
   mac_eop         : in std_logic_vector(4 downto 0);
 
   --OUTPUTS
+  almost_full     : out std_logic;
   app_data        : out std_logic_vector(127 downto 0);
   app_sop         : out std_logic;
   app_eop         : out std_logic_vector(4 downto 0);
@@ -109,6 +110,7 @@ architecture behav_crc_rx of crc_rx is
     fifo_eop_out <= do_h(5 downto 1);
     fifo_sop_out <= do_h(0);
     di_h <= mac_data(127 downto 64) & mac_eop & mac_sop;
+    almost_full <= almost_f_l or almost_f_l;
 
     ren <= ren_int;
     wen <= wen_int;

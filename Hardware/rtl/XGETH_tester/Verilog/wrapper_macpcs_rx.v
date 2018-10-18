@@ -497,21 +497,41 @@ module wrapper_macpcs_rx(
       .clock (rx_clk_161_13),
       .reset (reset_rx_n),
 
-      .lane_0_data_in    (rx_lane_0_data_in[63:0]),
-      .lane_0_header_in  (rx_lane_0_header_in[1:0]),
-      .lane_0_valid_in   (rx_lane_0_data_valid_in),
+      // LIGAÇÃO POR ARQUIVOS
+      //
+      // .lane_0_data_in    (rx_lane_0_data_in[63:0]),
+      // .lane_0_header_in  (rx_lane_0_header_in[1:0]),
+      // .lane_0_valid_in   (rx_lane_0_data_valid_in),
+      //
+      // .lane_1_data_in    (rx_lane_1_data_in[63:0]),
+      // .lane_1_header_in  (rx_lane_1_header_in[1:0]),
+      // .lane_1_valid_in   (rx_lane_1_data_valid_in),
+      //
+      // .lane_2_data_in    (rx_lane_2_data_in[63:0]),
+      // .lane_2_header_in  (rx_lane_2_header_in[1:0]),
+      // .lane_2_valid_in   (rx_lane_2_data_valid_in),
+      //
+      // .lane_3_data_in    (rx_lane_3_data_in[63:0]),
+      // .lane_3_header_in  (rx_lane_3_header_in[1:0]),
+      // .lane_3_valid_in   (rx_lane_3_data_valid_in),
 
-      .lane_1_data_in    (rx_lane_1_data_in[63:0]),
-      .lane_1_header_in  (rx_lane_1_header_in[1:0]),
-      .lane_1_valid_in   (rx_lane_1_data_valid_in),
+      // LIGAÇÃO POR FIOS
+      //
+      .lane_0_data_in    (tx_data_out_0[63:0]),
+      .lane_0_header_in  (tx_header_out_0[1:0]),
+      .lane_0_valid_in   (tx_valid_out_0),
 
-      .lane_2_data_in    (rx_lane_2_data_in[63:0]),
-      .lane_2_header_in  (rx_lane_2_header_in[1:0]),
-      .lane_2_valid_in   (rx_lane_2_data_valid_in),
+      .lane_1_data_in    (tx_data_out_1[63:0]),
+      .lane_1_header_in  (tx_header_out_1[1:0]),
+      .lane_1_valid_in   (tx_valid_out_1),
 
-      .lane_3_data_in    (rx_lane_3_data_in[63:0]),
-      .lane_3_header_in  (rx_lane_3_header_in[1:0]),
-      .lane_3_valid_in   (rx_lane_3_data_valid_in),
+      .lane_2_data_in    (tx_data_out_2[63:0]),
+      .lane_2_header_in  (tx_header_out_2[1:0]),
+      .lane_2_valid_in   (tx_valid_out_2),
+
+      .lane_3_data_in    (tx_data_out_3[63:0]),
+      .lane_3_header_in  (tx_header_out_3[1:0]),
+      .lane_3_valid_in   (tx_valid_out_3),
 
       .pcs_0_valid_out  (pcs_0_valid_out),
       .pcs_0_header_out (pcs_0_header_out[1:0]),
@@ -546,6 +566,7 @@ module wrapper_macpcs_rx(
       .mac_data (mac_data),
       .mac_sop  (mac_sop),
       .mac_eop  (mac_eop),
+      .almost_full (),
       .app_data (app_data),
       .app_sop  (app_sop),
       .app_val  (app_val),
@@ -630,10 +651,12 @@ module wrapper_macpcs_rx(
         .jtm_dps_1          (jtm_dps_1),
         .seed_A             (seed_A),
         .seed_B             (seed_B),
+
         .rx_header_valid_in (pcs_0_valid_out),
         .rx_data_valid_in   (pcs_0_valid_out),
         .rx_header_in       (pcs_0_header_out[1:0]),
         .rx_data_in         (pcs_0_data_out[63:0]),
+
         .hi_ber             (hi_ber_0),
         .blk_lock           (blk_lock_0),
         .linkstatus         (linkstatus_0),
@@ -703,10 +726,12 @@ module wrapper_macpcs_rx(
         .jtm_dps_1          (jtm_dps_1),
         .seed_A             (seed_A),
         .seed_B             (seed_B),
+
         .rx_header_valid_in (pcs_1_valid_out),
         .rx_data_valid_in   (pcs_1_valid_out),
         .rx_header_in       (pcs_1_header_out[1:0]),
         .rx_data_in         (pcs_1_data_out[63:0]),
+
         .hi_ber             (hi_ber_1),
         .blk_lock           (blk_lock_1),
         .linkstatus         (linkstatus_1),
@@ -776,10 +801,12 @@ module wrapper_macpcs_rx(
         .jtm_dps_1          (jtm_dps_1),
         .seed_A             (seed_A),
         .seed_B             (seed_B),
+
         .rx_header_valid_in (pcs_2_valid_out),
         .rx_data_valid_in   (pcs_2_valid_out),
         .rx_header_in       (pcs_2_header_out[1:0]),
         .rx_data_in         (pcs_2_data_out[63:0]),
+
         .hi_ber             (hi_ber_2),
         .blk_lock           (blk_lock_2),
         .linkstatus         (linkstatus_2),
@@ -849,10 +876,12 @@ module wrapper_macpcs_rx(
         .jtm_dps_1          (jtm_dps_1),
         .seed_A             (seed_A),
         .seed_B             (seed_B),
+
         .rx_header_valid_in (pcs_3_valid_out),
         .rx_data_valid_in   (pcs_3_valid_out),
         .rx_header_in       (pcs_3_header_out[1:0]),
         .rx_data_in         (pcs_3_data_out[63:0]),
+
         .hi_ber             (hi_ber_3),
         .blk_lock           (blk_lock_3),
         .linkstatus         (linkstatus_3),

@@ -265,15 +265,15 @@ add wave -noupdate -height 30 -expand -group RX -divider -height 16 {ESTAGIO 1}
 add wave -noupdate -height 30 -expand -group RX -childformat {{/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.data_0 -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.data_1 -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.data_2 -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.data_3 -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.header_0 -radix binary} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.header_1 -radix binary} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.header_2 -radix binary} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.header_3 -radix binary} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.logical_lane_0 -radix unsigned} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.logical_lane_1 -radix unsigned} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.logical_lane_2 -radix unsigned} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.logical_lane_3 -radix unsigned}} -subitemconfig {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.data_0 {-height 16 -radix hexadecimal} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.data_1 {-height 16 -radix hexadecimal} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.data_2 {-height 16 -radix hexadecimal} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.data_3 {-height 16 -radix hexadecimal} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.header_0 {-height 16 -radix binary} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.header_1 {-height 16 -radix binary} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.header_2 {-height 16 -radix binary} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.header_3 {-height 16 -radix binary} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.logical_lane_0 {-height 16 -radix unsigned} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.logical_lane_1 {-height 16 -radix unsigned} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.logical_lane_2 {-height 16 -radix unsigned} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew.logical_lane_3 {-height 16 -radix unsigned}} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_skew
 add wave -noupdate -height 30 -expand -group RX -divider -height 16 {ESTAGIO 2}
 add wave -noupdate -height 30 -expand -group RX -childformat {{/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.data_0 -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.data_1 -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.data_2 -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.data_3 -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.header_0 -radix binary} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.header_1 -radix binary} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.header_2 -radix binary} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.header_3 -radix binary} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.logical_lane_0 -radix unsigned} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.logical_lane_1 -radix unsigned} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.logical_lane_2 -radix unsigned} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.logical_lane_3 -radix unsigned}} -subitemconfig {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.data_0 {-height 16 -radix hexadecimal} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.data_1 {-height 16 -radix hexadecimal} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.data_2 {-height 16 -radix hexadecimal} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.data_3 {-height 16 -radix hexadecimal} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.header_0 {-height 16 -radix binary} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.header_1 {-height 16 -radix binary} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.header_2 {-height 16 -radix binary} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.header_3 {-height 16 -radix binary} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.logical_lane_0 {-height 16 -radix unsigned} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.logical_lane_1 {-height 16 -radix unsigned} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.logical_lane_2 {-height 16 -radix unsigned} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip.logical_lane_3 {-height 16 -radix unsigned}} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/barreira_bip
-add wave -noupdate -height 30 -expand -group RX -group bip_0 -color Thistle /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/clk
-add wave -noupdate -height 30 -expand -group RX -group bip_0 -color Thistle /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/rst
-add wave -noupdate -height 30 -expand -group RX -group bip_0 -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/valid_in
-add wave -noupdate -height 30 -expand -group RX -group bip_0 -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/header_in
-add wave -noupdate -height 30 -expand -group RX -group bip_0 -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/data_in
-add wave -noupdate -height 30 -expand -group RX -group bip_0 -color Thistle /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/enable
-add wave -noupdate -height 30 -expand -group RX -group bip_0 -color Magenta /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/is_sync
-add wave -noupdate -height 30 -expand -group RX -group bip_0 -color Yellow -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/bip_current
-add wave -noupdate -height 30 -expand -group RX -group bip_0 -color Thistle /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/bip_ok
+add wave -noupdate -height 30 -expand -group RX -expand -group bip_0 -color Thistle /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/clk
+add wave -noupdate -height 30 -expand -group RX -expand -group bip_0 -color Thistle /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/rst
+add wave -noupdate -height 30 -expand -group RX -expand -group bip_0 -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/valid_in
+add wave -noupdate -height 30 -expand -group RX -expand -group bip_0 -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/header_in
+add wave -noupdate -height 30 -expand -group RX -expand -group bip_0 -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/data_in
+add wave -noupdate -height 30 -expand -group RX -expand -group bip_0 -color Thistle /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/enable
+add wave -noupdate -height 30 -expand -group RX -expand -group bip_0 -color Magenta /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/is_sync
+add wave -noupdate -height 30 -expand -group RX -expand -group bip_0 -color Yellow -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/bip_current
+add wave -noupdate -height 30 -expand -group RX -expand -group bip_0 -color Thistle /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_0/bip_ok
 add wave -noupdate -height 30 -expand -group RX -group bip_1 /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_1/clk
 add wave -noupdate -height 30 -expand -group RX -group bip_1 /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_1/rst
 add wave -noupdate -height 30 -expand -group RX -group bip_1 -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/bip_calculator_1/data_in
@@ -405,38 +405,42 @@ add wave -noupdate -height 30 -expand -group RX -group shuffle /Top/rx_xgt4/inst
 add wave -noupdate -height 30 -expand -group RX -group shuffle /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/shuffle_lanes/out_1
 add wave -noupdate -height 30 -expand -group RX -group shuffle /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/shuffle_lanes/out_2
 add wave -noupdate -height 30 -expand -group RX -group shuffle /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/shuffle_lanes/out_3
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/clock
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/reset
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -radix binary -childformat {{/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_header_out(1) -radix binary} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_header_out(0) -radix binary}} -subitemconfig {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_header_out(1) {-height 16 -radix binary} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_header_out(0) {-height 16 -radix binary}} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_header_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_data_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_1_header_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_1_data_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_header_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_data_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_header_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_data_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/clock
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/reset
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -group INPUT -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_0_header_in
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -group INPUT -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_1_header_in
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -group INPUT -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_2_header_in
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -group INPUT -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_3_header_in
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -group INPUT -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_0_data_in
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -group INPUT -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_1_data_in
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -group INPUT -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_2_data_in
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -group INPUT -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_3_data_in
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -group INPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_0_valid_in
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -group INPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_1_valid_in
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -group INPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_2_valid_in
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -group INPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_3_valid_in
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_data_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_1_data_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_data_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_data_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_header_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_1_header_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_header_out
-add wave -noupdate -height 30 -expand -group RX -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_header_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/clock
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/reset
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -radix binary -childformat {{/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_header_out(1) -radix binary} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_header_out(0) -radix binary}} -subitemconfig {/Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_header_out(1) {-height 16 -radix binary} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_header_out(0) {-height 16 -radix binary}} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_header_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_data_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_1_header_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_1_data_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_header_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_data_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_header_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_data_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/clock
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/reset
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group INPUT -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_0_header_in
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group INPUT -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_1_header_in
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group INPUT -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_2_header_in
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group INPUT -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_3_header_in
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group INPUT -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_0_data_in
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group INPUT -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_1_data_in
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group INPUT -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_2_data_in
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group INPUT -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_3_data_in
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group INPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_0_valid_in
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group INPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_1_valid_in
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group INPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_2_valid_in
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group INPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/lane_3_valid_in
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_data_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_1_data_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_data_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_data_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_header_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_1_header_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_header_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_header_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_0_valid_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_1_valid_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_2_valid_out
+add wave -noupdate -height 30 -expand -group RX -expand -group {Lane Reorder I/O} -expand -group OUTPUT /Top/rx_xgt4/inst_wrapper_macpcs/INST_lane_reorder/pcs_3_valid_out
 add wave -noupdate -height 30 -expand -group RX -divider -height 30 {RX PCS's}
 add wave -noupdate -height 30 -expand -group RX -group in_0 -color Magenta -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/pcs_0_valid_out
 add wave -noupdate -height 30 -expand -group RX -group in_0 -color Magenta -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/pcs_0_header_out
@@ -458,175 +462,175 @@ add wave -noupdate -height 30 -expand -group RX -group in_3 -color Magenta -radi
 add wave -noupdate -height 30 -expand -group RX -group in_3 -color Magenta -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/pcs_3_data_out
 add wave -noupdate -height 30 -expand -group RX -group in_3 -color Yellow -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/rx_old_header_in
 add wave -noupdate -height 30 -expand -group RX -group in_3 -color Yellow -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/rx_old_data_in
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/Code
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/rx_data
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/coded_data
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/DeScr_RXD_reg
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/DeScr_RXD
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_out
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/sync_header
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/block_type_dec_r
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/R_TYPE
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/TYPE
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/Next_state
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/Current_state
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/block_type_dec
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_in
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/start_in
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/start_out
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/Code
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/rx_data
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/coded_data
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/DeScr_RXD_reg
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/DeScr_RXD
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_out
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/sync_header
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/block_type_dec_r
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/R_TYPE
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/TYPE
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/Next_state
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/Current_state
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/block_type_dec
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_in
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/TIMER_MAX
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/LOCK_INIT
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/INVALID_SH
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/SLIP
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/SLIP_W
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/TEST_SH
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/VALID_SH
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/RESET_BER
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/GOOD_BER
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/S_HI_BER
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/START_TIMER
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/TEST
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rstb
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_clk161
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_jtm_en
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/clear_ber_count
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_header_in
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_header_valid_in
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/hi_ber
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/blk_lock
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/linkstatus
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/ber_count
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/slip_out
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/sh_valid
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/timer_done
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_sync_ce
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/start_timer
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/sh_cnt
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/sh_invalid_cnt
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/slip
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/timer
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/ber_cnt
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/LOCK_current
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/visual_RESET_BER_current
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/TIMER_MAX
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/LOCK_INIT
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/INVALID_SH
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/SLIP
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/SLIP_W
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/TEST_SH
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/VALID_SH
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/RESET_BER
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/GOOD_BER
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/S_HI_BER
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/START_TIMER
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/TEST
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rstb
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_clk161
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_jtm_en
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/clear_ber_count
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_header_in
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_header_valid_in
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/hi_ber
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/blk_lock
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/linkstatus
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/ber_count
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/slip_out
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/sh_valid
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/timer_done
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_sync_ce
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/start_timer
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/sh_cnt
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/sh_invalid_cnt
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/slip
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/timer
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/ber_cnt
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/LOCK_current
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/visual_RESET_BER_current
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Descramble -divider inputs
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/clk
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/rstb
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/write_enable
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Descramble -color Khaki /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/RXD_Sync
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/bypass_descram
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/clr_jtest_errc
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/rx_jtm_en
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/blk_lock
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Descramble -divider outputs
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Descramble -color Yellow /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/DeScr_RXD
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/rclk
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/wclk
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/rst
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_FIFO -color Violet /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/FIFO_DUALCLOCK_MACRO_inst/RDEN
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_FIFO -color Violet -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/readen
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_FIFO -color Yellow -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/writen
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_FIFO -color Yellow /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/writedata
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/spill
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_FIFO -color Violet -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/readdata
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/almostempty
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/almostfull
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/empty
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/full
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group R_TYPE_DECOD -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/rstb156
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group R_TYPE_DECOD -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/clk156
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group R_TYPE_DECOD -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/DeScr_RXD
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group R_TYPE_DECOD -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/R_TYPE
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group R_TYPE_DECOD -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/rx_data
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group R_TYPE_DECOD -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/rx_control
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/clk156
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/rstb156
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/DeScr_RXD
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/clear_errblk
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/hi_ber
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/blk_lock
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/bypass_66decoder
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/rx_data
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/rx_control
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/R_TYPE
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/lpbk
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/terminate_in
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/start_in
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/rxlf
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/rxcontrol
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/rxdata
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/errd_blks
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/terminate_out
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/start_out
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -divider inputs
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/DeScr_RXD
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/blk_lock
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/bypass_66decoder
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/lpbk
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/clear_errblk
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/clk156
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/hi_ber
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/rstb156
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_in
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/start_in
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -divider outputs
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/rxlf
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/errd_blks
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/rxcontrol
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/rxdata
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_out
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/start_out
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/xgmii_rxc
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/xgmii_rxd
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/start_in
-add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_0 -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/start_out
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/Code
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/rx_data
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/coded_data
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/DeScr_RXD_reg
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/DeScr_RXD
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_out
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/sync_header
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/block_type_dec_r
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/R_TYPE
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/TYPE
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/Next_state
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/Current_state
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/block_type_dec
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_in
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/start_in
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/start_out
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/Code
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/rx_data
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/coded_data
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/DeScr_RXD_reg
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/DeScr_RXD
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_out
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/sync_header
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/block_type_dec_r
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/R_TYPE
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/TYPE
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/Next_state
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/Current_state
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/block_type_dec
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_in
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/TIMER_MAX
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/LOCK_INIT
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/INVALID_SH
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/SLIP
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/SLIP_W
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/TEST_SH
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/VALID_SH
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/RESET_BER
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/GOOD_BER
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/S_HI_BER
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/START_TIMER
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/TEST
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rstb
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_clk161
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_jtm_en
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/clear_ber_count
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_header_in
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_header_valid_in
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/hi_ber
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/blk_lock
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/linkstatus
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/ber_count
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/slip_out
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/sh_valid
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/timer_done
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_sync_ce
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/start_timer
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/sh_cnt
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/sh_invalid_cnt
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/slip
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/timer
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/ber_cnt
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/LOCK_current
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/visual_RESET_BER_current
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/TIMER_MAX
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/LOCK_INIT
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/INVALID_SH
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/SLIP
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/SLIP_W
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/TEST_SH
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/VALID_SH
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/RESET_BER
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/GOOD_BER
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/S_HI_BER
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/START_TIMER
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/TEST
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rstb
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_clk161
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_jtm_en
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/clear_ber_count
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_header_in
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_header_valid_in
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/hi_ber
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/blk_lock
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/linkstatus
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/ber_count
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/slip_out
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/sh_valid
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/timer_done
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/rx_sync_ce
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/start_timer
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/sh_cnt
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/sh_invalid_cnt
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/slip
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/timer
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/ber_cnt
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/LOCK_current
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Frame_sync /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_FRAME_SYNC/visual_RESET_BER_current
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -expand -group PCS0_Descramble -divider inputs
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -expand -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/clk
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -expand -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/rstb
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -expand -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/write_enable
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -expand -group PCS0_Descramble -color Khaki /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/RXD_Sync
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -expand -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/bypass_descram
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -expand -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/clr_jtest_errc
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -expand -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/rx_jtm_en
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -expand -group PCS0_Descramble -color Khaki -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/blk_lock
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -expand -group PCS0_Descramble -divider outputs
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -expand -group PCS0_Descramble -color Yellow /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DESCRAMBLE/DeScr_RXD
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/rclk
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/wclk
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/rst
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_FIFO -color Violet /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/FIFO_DUALCLOCK_MACRO_inst/RDEN
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_FIFO -color Violet -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/readen
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_FIFO -color Yellow -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/writen
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_FIFO -color Yellow /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/writedata
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/spill
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_FIFO -color Violet -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/readdata
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/almostempty
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/almostfull
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/empty
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_FIFO -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_FIFO/full
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group R_TYPE_DECOD -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/rstb156
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group R_TYPE_DECOD -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/clk156
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group R_TYPE_DECOD -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/DeScr_RXD
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group R_TYPE_DECOD -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/R_TYPE
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group R_TYPE_DECOD -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/rx_data
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group R_TYPE_DECOD -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/rx_control
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/clk156
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/rstb156
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/DeScr_RXD
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/clear_errblk
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/hi_ber
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/blk_lock
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/bypass_66decoder
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/rx_data
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/rx_control
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/R_TYPE
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/lpbk
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/terminate_in
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/start_in
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/rxlf
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/rxcontrol
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/rxdata
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/errd_blks
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/terminate_out
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -group RX_FSM -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/start_out
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -divider inputs
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/DeScr_RXD
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/blk_lock
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/bypass_66decoder
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/lpbk
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/clear_errblk
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/clk156
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/hi_ber
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/rstb156
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_in
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/start_in
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -divider outputs
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/rxlf
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/errd_blks
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/rxcontrol
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/rxdata
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_out
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -group PCS0_Decoder -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/start_out
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/xgmii_rxc
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/xgmii_rxd
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/start_in
+add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -expand -group PCS_0 -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/RX_FSM/start_out
 add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_1 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_1_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_in
 add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_1 -group dbg /Top/rx_xgt4/inst_wrapper_macpcs/INST_1_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/terminate_out
 add wave -noupdate -height 30 -expand -group RX -expand -group RX_PCS -group PCS_1 -group dbg -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_1_PCS_core/INST_rx_path/INST_RX_PATH_DECODER/R_TYPE_Decode/sync_header
@@ -1228,6 +1232,24 @@ add wave -noupdate -height 30 -expand -group RX -group fifo_BRAM -group dgp_BRAM
 add wave -noupdate -height 30 -expand -group RX -group fifo_BRAM -group dgp_BRAM -color Pink -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/almost_f
 add wave -noupdate -height 30 -expand -group RX -group fifo_BRAM -group dgp_BRAM -color Pink -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/almost_e
 add wave -noupdate -height 30 -expand -group RX -group fifo_BRAM -group dgp_BRAM -color Pink -radix binary /Top/rx_xgt4/pause_read
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/clk_312
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/rst_n
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/mac_data
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/mac_sop
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/mac_eop
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/app_data
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/app_sop
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/app_val
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/app_eop
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/crc_ok
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/almost_empty_l
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/almost_empty_h
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/almost_full_l
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/almost_full_h
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/full_l
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/full_h
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/empty_l
+add wave -noupdate -height 30 -expand -group RX -expand -group CRC_RX->APP /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/empty_h
 add wave -noupdate -height 30 -expand -group RX -group CRC /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/ps_crc
 add wave -noupdate -height 30 -expand -group RX -group CRC -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/eop_reg
 add wave -noupdate -height 30 -expand -group RX -group CRC -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx/d64_reg
@@ -1335,39 +1357,39 @@ add wave -noupdate -group frame_out -group OUTPUTS -color Gold -radix hexadecima
 add wave -noupdate -group frame_out -group OUTPUTS -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/eop_out
 add wave -noupdate -group frame_out -group OUTPUTS -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/sop_out
 add wave -noupdate -group frame_out -group OUTPUTS -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/val_out
-add wave -noupdate -group mii_if -expand -group IN -color Coral /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/clk
-add wave -noupdate -group mii_if -expand -group IN -color Coral /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/rst
-add wave -noupdate -group mii_if -expand -group IN -color Coral -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_in
-add wave -noupdate -group mii_if -expand -group IN -color Coral -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/eop_in
-add wave -noupdate -group mii_if -expand -group IN -color Coral -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/sop_in
-add wave -noupdate -group mii_if -expand -group IN -color Coral /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/val_in
-add wave -noupdate -group mii_if -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/almost_e
-add wave -noupdate -group mii_if -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/almost_f
-add wave -noupdate -group mii_if -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/empty
-add wave -noupdate -group mii_if -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/full
-add wave -noupdate -group mii_if -expand -group SIGNALS -color Magenta /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/ps_mii
-add wave -noupdate -group mii_if -expand -group SIGNALS /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/ren_int
-add wave -noupdate -group mii_if -expand -group SIGNALS -color {Orange Red} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/shift
-add wave -noupdate -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_0_o
-add wave -noupdate -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_1_o
-add wave -noupdate -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_2_o
-add wave -noupdate -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_3_o
-add wave -noupdate -group mii_if -expand -group SIGNALS -color {Orange Red} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/eop_in_o
-add wave -noupdate -group mii_if -expand -group SIGNALS -color {Orange Red} -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/eop_in_o_o
-add wave -noupdate -group mii_if -expand -group SIGNALS -color {Orange Red} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/sop_in_o
-add wave -noupdate -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_0_o_o
-add wave -noupdate -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_1_o_o
-add wave -noupdate -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_2_o_o
-add wave -noupdate -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_3_o_o
-add wave -noupdate -group mii_if -expand -group OUT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/ren_out
-add wave -noupdate -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_data_0
-add wave -noupdate -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_ctrl_0
-add wave -noupdate -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_data_1
-add wave -noupdate -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_ctrl_1
-add wave -noupdate -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_data_2
-add wave -noupdate -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_ctrl_2
-add wave -noupdate -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_data_3
-add wave -noupdate -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_ctrl_3
+add wave -noupdate -expand -group mii_if -expand -group IN -color Coral /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/clk
+add wave -noupdate -expand -group mii_if -expand -group IN -color Coral /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/rst
+add wave -noupdate -expand -group mii_if -expand -group IN -color Coral -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_in
+add wave -noupdate -expand -group mii_if -expand -group IN -color Coral -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/eop_in
+add wave -noupdate -expand -group mii_if -expand -group IN -color Coral -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/sop_in
+add wave -noupdate -expand -group mii_if -expand -group IN -color Coral /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/val_in
+add wave -noupdate -expand -group mii_if -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/almost_e
+add wave -noupdate -expand -group mii_if -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/almost_f
+add wave -noupdate -expand -group mii_if -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/empty
+add wave -noupdate -expand -group mii_if -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/full
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS -color Magenta /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/ps_mii
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/ren_int
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS -color {Orange Red} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/shift
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_0_o
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_1_o
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_2_o
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_3_o
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS -color {Orange Red} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/eop_in_o
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS -color {Orange Red} -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/eop_in_o_o
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS -color {Orange Red} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/sop_in_o
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_0_o_o
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_1_o_o
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_2_o_o
+add wave -noupdate -expand -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_3_o_o
+add wave -noupdate -expand -group mii_if -expand -group OUT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/ren_out
+add wave -noupdate -expand -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_data_0
+add wave -noupdate -expand -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_ctrl_0
+add wave -noupdate -expand -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_data_1
+add wave -noupdate -expand -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_ctrl_1
+add wave -noupdate -expand -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_data_2
+add wave -noupdate -expand -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_ctrl_2
+add wave -noupdate -expand -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_data_3
+add wave -noupdate -expand -group mii_if -expand -group OUT -color Gold -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/mii_ctrl_3
 add wave -noupdate -divider -height 30 TX_PCS
 add wave -noupdate -height 30 -group TX_PCS -expand -group PCS_0 -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/xgmii_txc
 add wave -noupdate -height 30 -group TX_PCS -expand -group PCS_0 -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/xgmii_txd
@@ -1656,47 +1678,47 @@ add wave -noupdate -height 30 -group TX_PCS -expand -group PCS_3 -group tx_count
 add wave -noupdate -height 30 -group TX_PCS -expand -group PCS_3 -group tx_counter_PCS3 -color Magenta /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/INST_tx_path/INST_txsequence_counter/DATA_PAUSE
 add wave -noupdate -height 30 -group TX_PCS -expand -group PCS_3 -group tx_counter_PCS3 /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/INST_tx_path/INST_txsequence_counter/txseq_counter_r
 add wave -noupdate -height 30 -group TX_PCS -divider <NULL>
-add wave -noupdate -group PCS_ALIGNMENT -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/clk_161
-add wave -noupdate -group PCS_ALIGNMENT -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/rst
-add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_header_in
-add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_header_in
-add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_header_in
-add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_header_in
-add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_data_in
-add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_data_in
-add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_data_in
-add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_data_in
-add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_in
-add wave -noupdate -group PCS_ALIGNMENT -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/scr_en_in
-add wave -noupdate -group PCS_ALIGNMENT /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/scr_en
-add wave -noupdate -group PCS_ALIGNMENT /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/scr_en_o
-add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_header
-add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_header
-add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_header
-add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_header
-add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_data
-add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_data
-add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_data
-add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_data
-add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -color {Orange Red} -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/count
-add wave -noupdate -group PCS_ALIGNMENT -expand -group signals /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/pause_scr_alignm
-add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/is_alignment
-add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/is_alignment_o
-add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -color Plum -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt
-add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_header_out
-add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_header_out
-add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_header_out
-add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_header_out
-add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_data_out
-add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_data_out
-add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_data_out
-add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_data_out
-add wave -noupdate -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_valid_out
-add wave -noupdate -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_valid_out
-add wave -noupdate -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_valid_out
-add wave -noupdate -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_valid_out
-add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix hexadecimal -childformat {{/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(6) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(5) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(4) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(3) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(2) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(1) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(0) -radix hexadecimal}} -radixshowbase 0 -subitemconfig {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(6) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(5) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(4) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(3) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(2) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(1) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(0) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0}} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out
-add wave -noupdate -group PCS_ALIGNMENT -color {Orange Red} -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/count_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/clk_161
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/rst
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_header_in
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_header_in
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_header_in
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_header_in
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_data_in
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_data_in
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_data_in
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_data_in
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_in
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/scr_en_in
+add wave -noupdate -expand -group PCS_ALIGNMENT /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/scr_en
+add wave -noupdate -expand -group PCS_ALIGNMENT /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/scr_en_o
+add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_header
+add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_header
+add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_header
+add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_header
+add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_data
+add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_data
+add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_data
+add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_data
+add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -color {Orange Red} -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/count
+add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/pause_scr_alignm
+add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/is_alignment
+add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/is_alignment_o
+add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -color Plum -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_header_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_header_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_header_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_header_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_data_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_data_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_data_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_data_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_valid_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_valid_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_valid_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_valid_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix hexadecimal -childformat {{/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(6) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(5) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(4) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(3) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(2) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(1) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(0) -radix hexadecimal}} -radixshowbase 0 -subitemconfig {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(6) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(5) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(4) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(3) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(2) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(1) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(0) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0}} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out
+add wave -noupdate -expand -group PCS_ALIGNMENT -color {Orange Red} -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/count_out
 add wave -noupdate -divider PCS_RX_40
 add wave -noupdate -group PLOT_FIFOs /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/FIFO_L0/WRCOUNT
 add wave -noupdate -group PLOT_FIFOs /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/FIFO_L0/RDCOUNT
@@ -1756,7 +1778,7 @@ add wave -noupdate -group {SINAIS PARA LISTA} /Top/rx_xgt4/inst_wrapper_macpcs/I
 add wave -noupdate -group {SINAIS PARA LISTA} /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/w_ptr
 add wave -noupdate -group {SINAIS PARA LISTA} /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_b/r_ptr_h
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{bip rx} {3286075 ps} 1} {{bip tx} {3217811 ps} 1} {{Cursor 3} {3366755 ps} 0}
+WaveRestoreCursors {{bip rx} {3286075 ps} 1} {{bip tx} {3217811 ps} 1} {{Cursor 3} {19277321 ps} 0}
 quietly wave cursor active 3
 configure wave -namecolwidth 261
 configure wave -valuecolwidth 185
@@ -1772,7 +1794,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {3313670 ps} {3382849 ps}
+WaveRestoreZoom {19271290 ps} {19315571 ps}
 bookmark add wave bookmark5 {{770754 ps} {811500 ps}} 13
 bookmark add wave bookmark6 {{780000 ps} {800000 ps}} 8
 bookmark add wave bookmark7 {{0 ps} {42010 ps}} 0
