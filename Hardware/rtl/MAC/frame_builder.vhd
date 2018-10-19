@@ -294,11 +294,11 @@ architecture behav_frame_builder of frame_builder is
 
           when S_D256 =>
             if ren_reg_in = '1' then
-              -- if (almost_e = '1' and sop_in(1) = '1') then
-              --   ren_in <= '0';
-              -- else
-              --   ren_in <= '1';
-              -- end if;
+              if (almost_e = '1' and eop_in(5) = '0') then
+                ren_in <= '0';
+              else
+                ren_in <= '1';
+              end if;
 
               -- Para quando nao passou pelo S_DONE
               if (sop_in = "10") then
@@ -387,7 +387,7 @@ architecture behav_frame_builder of frame_builder is
             crc_reg <= nextCRC32_D128(reverse(data_in_int(255 downto 128)), crc_reg);
 
           when S_EOP =>
-            ren_in <= '1';
+            -- ren_in <= '1';
             crc_reg <= (others=>'1');
             if eop_reg_in >= "10100" and eop_reg_in < "100000" and sop_in = "10" then -- tanauan eop acima do 20ºbyte
               ren_in <= '0';

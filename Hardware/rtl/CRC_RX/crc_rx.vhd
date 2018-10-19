@@ -64,7 +64,8 @@ entity crc_rx is
   app_sop         : out std_logic;
   app_val         : out std_logic;
   app_eop         : out std_logic_vector(4 downto 0);
-  crc_ok          : out std_logic
+  crc_ok          : out std_logic;
+  almost_empty    : out std_logic
   );
 end entity;
 
@@ -144,6 +145,9 @@ architecture behav_crc_rx of crc_rx is
     app_data <= input_reg when sop_reg = '1' or valid_frame = '1' else (others=>'0');
     app_sop  <= sop_reg;
     app_eop  <= eop_reg when valid_frame = '1' else (others=>'0');
+
+    -- Signal if any fifo is almost empty
+    almost_empty <= '1' when almost_empty_l= '1' or almost_empty_h = '1' else '0';
 
     -- Hold fifo. Needed to wait for at most 8 cycles
     FIFO_hold_l : FIFO_SYNC_MACRO

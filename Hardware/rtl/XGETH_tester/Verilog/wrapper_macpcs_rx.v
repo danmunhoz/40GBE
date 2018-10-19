@@ -11,6 +11,8 @@
 //// Description: read document x10giga_eth_tester_functional.pdf   ////
 ////                                                                ////
 ////////////////////////////////////////////////////////////////////////
+`timescale 1ns/10ps
+
 module wrapper_macpcs_rx(
                         //---- -------- Inputs ----------------//
 
@@ -418,6 +420,35 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire [7:0]  xgmii_rxc_lane_3;
     (* syn_keep = "true"*) wire [63:0] xgmii_rxd_lane_3;
 
+        //ECHO GEN WIRES and REGS
+    (* syn_keep = "true"*) wire [255:0] cj_pkt_tx_data;
+    (* syn_keep = "true"*) wire         cj_pkt_tx_val;
+    (* syn_keep = "true"*) wire [1:0]   cj_pkt_tx_sop;
+    (* syn_keep = "true"*) wire         cj_pkt_tx_eop;
+    (* syn_keep = "true"*) wire [4:0]   cj_pkt_tx_mod;
+    (* syn_keep = "true"*) wire [31:0]  cj_pkt_lost_counter;
+    (* syn_keep = "true"*) reg         start_tx_begin;
+    //END ECHO GEN WIRES
+
+    //ECHO RECEIVER WIRES
+    (* syn_keep = "true"*) wire [47:0]  mac_source_rx;
+    (* syn_keep = "true"*) wire [47:0]  mac_destination;
+    (* syn_keep = "true"*) wire [31:0]  ip_source;
+    (* syn_keep = "true"*) wire [31:0]  ip_destination;
+    (* syn_keep = "true"*) wire [47:0]  time_stamp_out;
+    (* syn_keep = "true"*) wire         received_packet;
+    (* syn_keep = "true"*) wire         end_latency;
+    (* syn_keep = "true"*) wire [63:0]  packets_lost;
+    (* syn_keep = "true"*) wire         RESET_done;
+
+    //RX mac interface
+    (* syn_keep = "true"*) wire [127:0]  IDLE_count;
+    (* syn_keep = "true"*) wire          pkt_sequence_error_flag;
+    (* syn_keep = "true"*) wire          pkt_sequence_error;
+    (* syn_keep = "true"*) wire [127:0]  cont_error;
+    //END RECEIVER WIRES
+
+
     wire [7:0]  xgmii_txc;
     wire [63:0] xgmii_txd;
 
@@ -559,6 +590,55 @@ module wrapper_macpcs_rx(
     // MAC POR ENQUANTO "QUEBRADO" DENTRO DO WRAPPER: CORE_INTERFACE, CRC CHECKER, FAULTS, ETC...
     // TODO: CRIAR UM MODULO PARA ORGANIZAR TUDO
 
+        //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+           // ECHO receiver
+           // Review pkt_rx_avail
+
+       (* dont_touch = "true" *) echo_receiver_128 INST_echo_receiver_128
+        (
+         //IMPUT
+         .clock              (clk_312),
+         .reset              (reset_rx_n),
+         //Packet Info
+         .mac_source         (48'h00AA11BB22CC),
+         .timestamp_base     (48'h000000000000), // from RFC2544
+         //RX mac interface
+         .pkt_rx_avail       (!app_avail),
+         .pkt_rx_data        (app_data),
+         .pkt_rx_eop         (app_eop[4]),
+         .pkt_rx_err         (crc_ok),
+         .pkt_rx_mod         (app_eop[3:0]),
+         .pkt_rx_sop         (app_sop),
+         .pkt_rx_val         (app_val),
+         .verify_system_rec  (1'b1),
+         .reset_test         (1'b1),
+         .pkt_sequence_in    (16'h00),
+         .payload_type       (3'b000),
+
+       //LFSR Initialization - ECHO GENERATOR
+         .lfsr_seed          (128'h00000000000000000000000C00000003),
+         .lfsr_polynomial    (2'b10),
+         .valid_seed         (1'b1),
+         //OUTPUT
+         //Packet Info
+         .mac_source_rx         (mac_source_rx),
+         .mac_destination       (mac_destination),
+         .ip_source             (ip_source),
+         .ip_destination        (ip_destination),
+         .time_stamp_out        (time_stamp_out),
+         .received_packet       (received_packet),
+         .end_latency           (end_latency),
+         .packets_lost          (packets_lost),
+         .RESET_done            (RESET_done),
+       //RX mac interface
+         .pkt_rx_ren                (pkt_rx_ren),
+         .IDLE_count                (IDLE_count),
+         .pkt_sequence_error_flag   (pkt_sequence_error_flag),
+         .pkt_sequence_error        (pkt_sequence_error),
+         .cont_error                (cont_error)
+     );
+
+
     (* dont_touch = "true" *) crc_rx INST_crc_rx
     (
       .clk_312  (clk_312),
@@ -571,7 +651,9 @@ module wrapper_macpcs_rx(
       .app_sop  (app_sop),
       .app_val  (app_val),
       .app_eop  (app_eop),
-      .crc_ok   (crc_ok)
+      .crc_ok   (crc_ok),
+      //added app_avail
+      .almost_empty (app_avail)
     );
 
     (* dont_touch = "true" *) core_interface INST_core_interface
@@ -599,15 +681,64 @@ module wrapper_macpcs_rx(
         .fifo_almost_e      (fifo_almost_e)
    );
 
+     //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    // inst echo generator 256
+
+   initial begin
+    #500
+    start_tx_begin = 1'b1;
+   end
+
+    (* dont_touch = "true" *) echo_generator_256 INST_echo_generator_256
+    (
+      //INPUT
+      .clock        (clk_156),
+      .reset          (async_reset_n),
+      .start          (start_tx_begin),
+
+      //MAC AND IP
+      .mac_source        (48'h00AA11BB22CC),
+      .mac_destination   (48'hAA00BB11CC22),
+      .ip_source         (32'h0ABCDE01),
+      .ip_destination    (32'h0ABCDE02),
+      .packet_length     (16'h05EE),
+      .timestamp_base    (48'h0),
+      .time_stamp_flag   (1'h0),
+      .pkt_tx_full       (pkt_tx_full),
+      .payload_type      (2'b00),
+      .payload_cycles    (32'h0000000A),
+      .payload_last_size (3'h0),
+      //LFSR Initialization - ECHO GENERATOR
+      .lfsr_seed          (128'h00000000000000000000000C00000003),
+      .lfsr_polynomial    (2'b10),
+      .valid_seed         (1'b1),
+
+      //OUTPUT
+      .pkt_tx_data    (cj_pkt_tx_data),
+      .pkt_tx_sop     (cj_pkt_tx_sop),
+      .pkt_tx_eop     (cj_pkt_tx_eop),
+      .pkt_tx_mod     (cj_pkt_tx_mod),
+      .pkt_tx_val     (cj_pkt_tx_val),
+      .pkt_lost_counter (cj_pkt_lost_counter)
+
+    );
+    // END ECHO GEN 256 INST
+   //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
    (* dont_touch = "true" *) mac_tx_path INST_mac_tx_path
    (
      .clk_156    (clk_156),
      .rst_n      (async_reset_n),
-     .data_in    (pkt_tx_data),
-     .sop_in     (pkt_tx_sop),
-     .eop_in     (pkt_tx_eop),
-     .mod_in     (pkt_tx_mod),
-     .val_in     (pkt_tx_val),
+     // .data_in    (pkt_tx_data),
+     // .sop_in     (pkt_tx_sop),
+     // .eop_in     (pkt_tx_eop),
+     // .mod_in     (pkt_tx_mod),
+     // .val_in     (pkt_tx_val),
+     .data_in    (cj_pkt_tx_data),
+     .sop_in     (cj_pkt_tx_sop),
+     .eop_in     (cj_pkt_tx_eop),
+     .mod_in     (cj_pkt_tx_mod),
+     .val_in     (cj_pkt_tx_val),
 
      .mii_data_0 (xgmii_txd_lane_0),
      .mii_ctrl_0 (xgmii_txc_lane_0),
