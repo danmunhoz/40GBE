@@ -38,7 +38,7 @@ entity echo_generator_256 is
     start               : in  std_logic;  -- Enable the packet generation
 
     --LFSR Initialization
-    lfsr_seed       : in std_logic_vector(127 downto 0);
+    lfsr_seed       : in std_logic_vector(255 downto 0);
     valid_seed      : in std_logic;
     lfsr_polynomial : in std_logic_vector(1 downto 0);
 
@@ -90,8 +90,7 @@ architecture arch_echo_generator of echo_generator_256 is
   signal ID_COUNTER_L : std_logic_vector(127 downto 0);
 
   signal SEED        : std_logic_vector(255 downto 0);
-  signal RANDOM_EVEN : std_logic_vector(127 downto 0);
-  signal RANDOM_ODD  : std_logic_vector(127 downto 0);
+  signal RANDOM : std_logic_vector(255 downto 0);
   signal start_lfsr  : std_logic;
 
 
@@ -99,6 +98,9 @@ architecture arch_echo_generator of echo_generator_256 is
   signal pkt_tx_data_N_L  : std_logic_vector(127 downto 0);
   signal pkt_tx_data_N  : std_logic_vector(255 downto 0);
   signal pkt_tx_data_buffer : std_logic_vector(255 downto 0);
+
+  signal preset_lfsr : std_logic;
+  signal count :  integer range 0 to 15;
 
   -------------------------------------------------------------------------------
   -- LEGACY SIGNALS
@@ -146,17 +148,6 @@ function invert_bytes(bytes : std_logic_vector)
     return bytes_N;
 end function invert_bytes;
 --TBD
-function invert_bytes_127(bytes : std_logic_vector(127 DOWNTO 0))
-                 return std_logic_vector
-  is
-    variable bytes_N : std_logic_vector(127 downto 0) := (others => '0');
-    variable i_N : integer range 0 to 127;
-    begin
-      for i in 1 to 16 loop
-        bytes_N(((i*8)-1) downto ((i-1)*8)) := bytes((127-(8*(i-1))) downto (127-((8*(i-1))+7)));
-    end loop;
-    return bytes_N;
-end function invert_bytes_127;
 
 BEGIN
 
@@ -164,10 +155,8 @@ BEGIN
 pkt_tx_mod <= pkt_tx_mod_int when pkt_tx_eop_int = '0' else (others=>'0');
 pkt_tx_eop <= pkt_tx_eop_int;
 
-pkt_tx_data <= pkt_tx_data_buffer;
+pkt_tx_data <= pkt_tx_data_N;
 pkt_tx_data_N <= invert_bytes(pkt_tx_data_buffer);
-pkt_tx_data_N_H <= invert_bytes_127(pkt_tx_data_buffer(255 downto 128));
-pkt_tx_data_N_L <= invert_bytes_127(pkt_tx_data_buffer(127 downto 0));
 pkt_tx_data_buffer <= PAYLOAD when current_s = S_PAYLOAD else
                       IDLE_VALUE when current_s = S_IDLE else
                       HEADER;
@@ -254,10 +243,10 @@ EOH_SOF  <= IP(63 downto 0) & UPD_INFO & ALL_ZERO(47 downto 0);
               start_lfsr <= '1';
             end if;
           when S_HEADER_L =>
-            SEED <=  RANDOM_EVEN & RANDOM_ODD;
+            SEED <=  RANDOM;
           when S_PAYLOAD =>
             start_lfsr <= '1';
-            SEED <=  RANDOM_EVEN & RANDOM_ODD;
+            SEED <=  RANDOM;
             ID_COUNTER_L <= ID_COUNTER_L + 2;
             ID_COUNTER_H <= ID_COUNTER_H + 2;
             it_payload <= it_payload + 2;
@@ -274,33 +263,39 @@ EOH_SOF  <= IP(63 downto 0) & UPD_INFO & ALL_ZERO(47 downto 0);
     -------------------------------------------------------------------------------
 
 
-    LFSR_GEN_1: entity work.LFSR_GEN
-    generic map (DATA_SIZE => 128,
-                 PPL_SIZE => 2)
+
+    process (clock, reset)
+    begin
+      if reset = '0' then
+         preset_lfsr <= '0';
+       else
+         if rising_edge(clock) then
+            if(count = 13) then
+              preset_lfsr <= '0';
+            else
+              count <= count + 1;
+              preset_lfsr <= '1';
+            end if;
+          end if;
+        end if;
+     end process;
+
+
+    LFSR_GEN: entity work.LFSR_GEN
+    generic map (DATA_SIZE => 256,
+                 PPL_SIZE => 4)
     port map(
       clock => clock,
       reset_N => reset,
       seed => lfsr_seed,
       valid_seed => valid_seed,
       polynomial => lfsr_polynomial,
-      data_in => RANDOM_EVEN,
+      data_in => RANDOM,
       start => start_lfsr,
-      data_out => RANDOM_EVEN
+      preset => preset_lfsr,
+      data_out => RANDOM
     );
 
-    LFSR_GEN_2: entity work.LFSR_GEN
-    generic map (DATA_SIZE => 128,
-                 PPL_SIZE => 2)
-    port map(
-      clock => clock,
-      reset_N => reset,
-      --seed => X"535550455220434f4f4c204a45535553",
-      seed => lfsr_seed,
-      valid_seed => valid_seed,
-      polynomial => lfsr_polynomial,
-      data_in => RANDOM_ODD,
-      start => start_lfsr,
-      data_out => RANDOM_ODD
-    );
+
 
 end arch_echo_generator;

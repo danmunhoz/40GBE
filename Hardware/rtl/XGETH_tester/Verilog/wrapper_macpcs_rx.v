@@ -428,6 +428,7 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire [4:0]   cj_pkt_tx_mod;
     (* syn_keep = "true"*) wire [31:0]  cj_pkt_lost_counter;
     (* syn_keep = "true"*) reg         start_tx_begin;
+    (* syn_keep = "true"*) reg         start_tx_begin_delay;
     //END ECHO GEN WIRES
 
     //ECHO RECEIVER WIRES
@@ -750,9 +751,22 @@ module wrapper_macpcs_rx(
     // inst echo generator 256
 
    initial begin
-    #500
-    start_tx_begin = 1'b1;
+   start_tx_begin_delay = 1'b0;
+   start_tx_begin = 1'b0;
+    #105
+    start_tx_begin_delay = 1'b1;
    end
+
+   always begin
+   wait (start_tx_begin_delay == 1'b1);
+    #56
+    start_tx_begin = 1'b1;
+    wait (pkt_tx_eop == 1'b0);
+    start_tx_begin = 1'b0;
+   end
+
+
+
 
     (* dont_touch = "true" *) echo_generator_256 INST_echo_generator_256
     (
