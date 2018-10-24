@@ -26,6 +26,8 @@ end entity;
 
 architecture behav_mac_tx_path of mac_tx_path is
     signal w_eop_fifo_0  : std_logic_vector(5 downto 0);
+    signal val_in_reg    : std_logic;
+    signal val_in_reg2   : std_logic;
 
     signal r_data_fifo_0 : std_logic_vector(255 downto 0);
     signal r_eop_fifo_0  : std_logic_vector(5 downto 0);
@@ -66,7 +68,17 @@ architecture behav_mac_tx_path of mac_tx_path is
     --    0xxxxx - Packet ending at byte xxxxx
     --
 
-
+    process(clk_156, rst_n)
+    begin
+      if rst_n = '0' then
+        val_in_reg <= '0';
+        val_in_reg2 <= '0';
+      elsif clk_156'event and clk_156 = '1' then
+        val_in_reg <= val_in;
+        val_in_reg2 <= val_in_reg;
+      end if;
+    end process;
+    wen_fifo_0 <= val_in or val_in_reg2;
     w_eop_fifo_0 <= eop_in & mod_in;
 
     payload_in: entity work.data_frame_fifo port map(
@@ -77,7 +89,7 @@ architecture behav_mac_tx_path of mac_tx_path is
       eop_in   => w_eop_fifo_0,
       sop_in   => sop_in,
       val_in   => val_in,
-      wen      => val_in,
+      wen      => wen_fifo_0,
       full     => full_fifo_0,
 
       data_out => r_data_fifo_0,
