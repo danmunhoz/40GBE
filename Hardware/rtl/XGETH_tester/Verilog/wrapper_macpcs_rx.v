@@ -448,6 +448,23 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire [127:0]  cont_error;
     //END RECEIVER WIRES
 
+    //ECHO RECEIVER WIRES v2
+    (* syn_keep = "true"*) wire [47:0]  mac_source_rx_2;
+    (* syn_keep = "true"*) wire [47:0]  mac_destination_2;
+    (* syn_keep = "true"*) wire [31:0]  ip_source_2;
+    (* syn_keep = "true"*) wire [31:0]  ip_destination_2;
+    (* syn_keep = "true"*) wire [47:0]  time_stamp_out_2;
+    (* syn_keep = "true"*) wire         received_packet_2;
+    (* syn_keep = "true"*) wire         end_latency_2;
+    (* syn_keep = "true"*) wire [63:0]  packets_lost_2;
+    (* syn_keep = "true"*) wire         RESET_done_2;
+
+    //RX mac interface
+    (* syn_keep = "true"*) wire [127:0]  IDLE_count_2;
+    (* syn_keep = "true"*) wire          pkt_sequence_error_flag_2;
+    (* syn_keep = "true"*) wire          pkt_sequence_error_2;
+    (* syn_keep = "true"*) wire [127:0]  cont_error_2;
+    //END RECEIVER WIRES
 
     wire [7:0]  xgmii_txc;
     wire [63:0] xgmii_txd;
@@ -637,6 +654,54 @@ module wrapper_macpcs_rx(
          .pkt_sequence_error        (pkt_sequence_error),
          .cont_error                (cont_error)
      );
+
+             //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+                // ECHO receiver v2
+                // Review pkt_rx_avail
+
+            (* dont_touch = "true" *) echo_receiver_128_v2 INST_echo_receiver_128_v2
+             (
+              //IMPUT
+              .clock              (clk_312),
+              .reset              (reset_rx_n),
+              //Packet Info
+              .mac_source         (48'h00AA11BB22CC),
+              .timestamp_base     (48'h000000000000), // from RFC2544
+              //RX mac interface
+              .pkt_rx_avail       (!app_avail),
+              .pkt_rx_data        (app_data),
+              .pkt_rx_eop         (app_eop[4]),
+              .pkt_rx_err         (crc_ok),
+              .pkt_rx_mod         (app_eop[3:0]),
+              .pkt_rx_sop         (app_sop),
+              .pkt_rx_val         (app_val),
+              .verify_system_rec  (1'b1),
+              .reset_test         (1'b1),
+              .pkt_sequence_in    (16'h00),
+              .payload_type       (2'b00),
+
+            //LFSR Initialization - ECHO GENERATOR
+              .lfsr_seed          (128'h00000000000000000000000C00000003),
+              .lfsr_polynomial    (2'b10),
+              .valid_seed         (1'b1),
+              //OUTPUT
+              //Packet Info
+              .mac_source_rx         (mac_source_rx_2),
+              .mac_destination       (mac_destination_2),
+              .ip_source             (ip_source_2),
+              .ip_destination        (ip_destination_2),
+              .time_stamp_out        (time_stamp_out_2),
+              .received_packet       (received_packet_2),
+              .end_latency           (end_latency_2),
+              .packets_lost          (packets_lost_2),
+              .RESET_done            (RESET_done_2),
+            //RX mac interface
+              .pkt_rx_ren                (pkt_rx_ren_2),
+              .IDLE_count                (IDLE_count_2),
+              .pkt_sequence_error_flag   (pkt_sequence_error_flag_2),
+              .pkt_sequence_error        (pkt_sequence_error_2),
+              .cont_error                (cont_error_2)
+          );
 
 
     (* dont_touch = "true" *) crc_rx INST_crc_rx

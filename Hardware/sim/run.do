@@ -142,6 +142,7 @@ vcom -novopt ../rtl/XGETH_tester/VHD/LFSR_GEN.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/LFSR_REC.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator_256.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/echo_receiver_128.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/echo_receiver_128_v2.vhd
 
 vcom -novopt tx_xgt4.vhd
 vcom -novopt rx_xgt4.vhd
@@ -169,8 +170,8 @@ vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 -L secureip -L xilinxcorelib work.glbl \
 work.Top -t 1ps
 
-do wave.do
-
+#do wave.do
+do wave_susin.do
 run 20 us
 #run 50 us
 #run 200 us
