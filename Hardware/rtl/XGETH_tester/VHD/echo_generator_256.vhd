@@ -226,6 +226,7 @@ EOH_SOF  <= IP(63 downto 0) & UPD_INFO & ALL_ZERO(47 downto 0);
     begin
       if(reset = '0') then
         current_s <= S_IDLE;
+        pkt_tx_sop <= "00";
         ID_COUNTER_L <= (OTHERS => '0');
         ID_COUNTER_H <= ALL_ZERO(126 downto 0) & '1';
         it_payload <= (OTHERS => '0');
@@ -235,7 +236,7 @@ EOH_SOF  <= IP(63 downto 0) & UPD_INFO & ALL_ZERO(47 downto 0);
         current_s <= next_s;
         case current_s is
           when S_IDLE =>
-            pkt_tx_sop <= "10";
+            if (next_s = S_HEADER_H) then pkt_tx_sop <= "10"; end if;
             it_payload <= (OTHERS => '0');
           when S_HEADER_H =>
             pkt_tx_sop <= "00";
@@ -253,6 +254,7 @@ EOH_SOF  <= IP(63 downto 0) & UPD_INFO & ALL_ZERO(47 downto 0);
             if(it_payload >= payload_cycles-1) then
               start_lfsr <= '0';
               pkt_tx_mod_int <= "11111";
+              pkt_tx_sop <= "00";
             end if;
         end case;
       end if;
