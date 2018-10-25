@@ -750,20 +750,20 @@ module wrapper_macpcs_rx(
      //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     // inst echo generator 256
 
-   initial begin
-   start_tx_begin_delay = 1'b0;
-   start_tx_begin = 1'b0;
-    #105
-    start_tx_begin_delay = 1'b1;
-   end
-
-   always begin
-   wait (start_tx_begin_delay == 1'b1);
-    #56
-    start_tx_begin = 1'b1;
-    wait (pkt_tx_eop == 1'b0);
-    start_tx_begin = 1'b0;
-   end
+   // initial begin
+   // start_tx_begin_delay = 1'b0;
+   // start_tx_begin = 1'b0;
+   //  #105
+   //  start_tx_begin_delay = 1'b1;
+   // end
+   //
+   // always begin
+   // wait (start_tx_begin_delay == 1'b1);
+   //  #56
+   //  start_tx_begin = 1'b1;
+   //  wait (pkt_tx_eop == 1'b0);
+   //  start_tx_begin = 1'b0;
+   // end
 
 
 
@@ -773,7 +773,7 @@ module wrapper_macpcs_rx(
       //INPUT
       .clock        (clk_156),
       .reset          (async_reset_n),
-      .start          (start_tx_begin),
+      .start          (1'b1),
 
       //MAC AND IP
       .mac_source        (48'h00AA11BB22CC),
@@ -788,7 +788,7 @@ module wrapper_macpcs_rx(
       .payload_cycles    (32'h0000000A),
       .payload_last_size (3'h0),
       //LFSR Initialization - ECHO GENERATOR
-      .lfsr_seed          (128'h00000000000000000000000C00000003),
+      .lfsr_seed          (256'h0000000000000000000000000000000000000000000000000000000C00000003),
       .lfsr_polynomial    (2'b10),
       .valid_seed         (1'b1),
 
