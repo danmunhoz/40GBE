@@ -750,6 +750,7 @@ module wrapper_macpcs_rx(
      //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     // inst echo generator 256
 
+<<<<<<< HEAD
    // initial begin
    // start_tx_begin_delay = 1'b0;
    // start_tx_begin = 1'b0;
@@ -764,7 +765,22 @@ module wrapper_macpcs_rx(
    //  wait (pkt_tx_eop == 1'b0);
    //  start_tx_begin = 1'b0;
    // end
+=======
+   initial begin
+   start_tx_begin_delay = 1'b0;
+   start_tx_begin = 1'b0;
+    #200
+    start_tx_begin_delay = 1'b1;
+   end
 
+   always begin
+   wait (start_tx_begin_delay == 1'b1);
+    #135
+    start_tx_begin = 1'b1;
+    wait(cj_pkt_tx_eop == 1'b0 );
+    start_tx_begin = 1'b0;
+   end
+>>>>>>> ed41e906887f370db1c80eb11b0e03235f3874bb
 
 
 
