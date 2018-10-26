@@ -104,6 +104,8 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     end function invert_bytes_127;
 
 begin
+
+    pkt_rx_data_N <= invert_bytes_127(pkt_rx_data);
   -------------------------------------------------------------------------------
   -- Combinational Logic
   -------------------------------------------------------------------------------
@@ -120,7 +122,6 @@ begin
             when S_REST_IP => next_s <= S_START_PAYLOAD;
             when S_START_PAYLOAD => next_s <= S_PAYLOAD;
             when S_PAYLOAD => if pkt_rx_eop = '1' then next_s <= S_IDLE; end if;
-            when others => next_s <= S_IDLE;
         end case;
       end if;
     end process;
@@ -129,6 +130,10 @@ begin
     begin
       if reset = '0' then
           current_s <= S_IDLE;
+      elsif pkt_rx_sop = '1' and next_s /= S_IP  then
+          current_s <= S_ETHERNET;
+      elsif pkt_rx_eop = '1' then
+            current_s <= S_IDLE;
       elsif rising_edge(clock)  then
           current_s <= next_s;
       end if;
@@ -167,7 +172,6 @@ begin
         IDLE_count_reg <= (others => '0');
         pkt_id_counter <= (others => '0');
       elsif rising_edge(clock) then
-        pkt_rx_data_N <= invert_bytes_127(pkt_rx_data);
         case current_s is
           when S_IDLE =>
             if pkt_rx_avail = '1' then
