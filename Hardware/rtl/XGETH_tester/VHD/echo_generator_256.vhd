@@ -173,6 +173,13 @@ IP       <= ip_message_length & x"000000000A11" & ip_checksum &
             ip_source & ip_destination & x"C020C021" & udp_message_length;
 EOH_SOF  <= IP(63 downto 0) & UPD_INFO & ALL_ZERO(47 downto 0);
 
+pkt_tx_val <= '0' when current_s = S_IDLE
+              else '1';
+
+pkt_tx_eop_int <= '1' when current_s = S_IDLE else
+              '0' when it_payload >= payload_cycles;
+
+
 -------------------------------------------------------------------------------
 -- LEGACY
 -------------------------------------------------------------------------------
@@ -195,7 +202,7 @@ EOH_SOF  <= IP(63 downto 0) & UPD_INFO & ALL_ZERO(47 downto 0);
   -- FSM NEXT_STATE CONTROL
   -------------------------------------------------------------------------------
 
-  process (current_s, reset, clock)
+  NEXT_CTR : process (current_s, reset, clock)
   begin
     if reset='0' then
       next_s <= S_IDLE;
@@ -216,13 +223,8 @@ EOH_SOF  <= IP(63 downto 0) & UPD_INFO & ALL_ZERO(47 downto 0);
   -------------------------------------------------------------------------------
   -- FSM CURRENT_STATE SIGNALS CONTROL
   -------------------------------------------------------------------------------
-    pkt_tx_val <= '0' when current_s = S_IDLE
-                  else '1';
 
-    pkt_tx_eop_int <= '1' when current_s = S_IDLE else
-                  '0' when it_payload >= payload_cycles;
-
-    process (reset, clock)
+    STATE_CTR: process (reset, clock)
     begin
       if(reset = '0') then
         current_s <= S_IDLE;
@@ -264,9 +266,7 @@ EOH_SOF  <= IP(63 downto 0) & UPD_INFO & ALL_ZERO(47 downto 0);
     -- LFSR
     -------------------------------------------------------------------------------
 
-
-
-    process (clock, reset)
+    PRESET_LFSR_CTR: process (clock, reset)
     begin
       if reset = '0' then
          preset_lfsr <= '0';
@@ -290,7 +290,6 @@ EOH_SOF  <= IP(63 downto 0) & UPD_INFO & ALL_ZERO(47 downto 0);
       clock => clock,
       reset_N => reset,
       seed => lfsr_seed,
-      valid_seed => valid_seed,
       polynomial => lfsr_polynomial,
       data_in => RANDOM,
       start => start_lfsr,

@@ -57,7 +57,6 @@ entity LFSR_REC is
     clock               : in  std_logic;
     reset_N               : in  std_logic;
     seed                : in  std_logic_vector(DATA_SIZE-1 downto 0);
-    valid_seed          : in  std_logic;
     polynomial          : in  std_logic_vector(1 downto 0);
     data_in             : in  std_logic_vector(DATA_SIZE-1 downto 0);
     start               : in  std_logic;

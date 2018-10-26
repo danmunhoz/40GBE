@@ -750,22 +750,6 @@ module wrapper_macpcs_rx(
      //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     // inst echo generator 256
 
-<<<<<<< HEAD
-   // initial begin
-   // start_tx_begin_delay = 1'b0;
-   // start_tx_begin = 1'b0;
-   //  #105
-   //  start_tx_begin_delay = 1'b1;
-   // end
-   //
-   // always begin
-   // wait (start_tx_begin_delay == 1'b1);
-   //  #56
-   //  start_tx_begin = 1'b1;
-   //  wait (pkt_tx_eop == 1'b0);
-   //  start_tx_begin = 1'b0;
-   // end
-=======
    initial begin
    start_tx_begin_delay = 1'b0;
    start_tx_begin = 1'b0;
@@ -775,12 +759,11 @@ module wrapper_macpcs_rx(
 
    always begin
    wait (start_tx_begin_delay == 1'b1);
-    #135
+    #270
     start_tx_begin = 1'b1;
     wait(cj_pkt_tx_eop == 1'b0 );
     start_tx_begin = 1'b0;
    end
->>>>>>> ed41e906887f370db1c80eb11b0e03235f3874bb
 
 
 
@@ -789,7 +772,7 @@ module wrapper_macpcs_rx(
       //INPUT
       .clock        (clk_156),
       .reset          (async_reset_n),
-      .start          (1'b1),
+      .start          (start_tx_begin),
 
       //MAC AND IP
       .mac_source        (48'h00AA11BB22CC),
@@ -800,7 +783,7 @@ module wrapper_macpcs_rx(
       .timestamp_base    (48'h0),
       .time_stamp_flag   (1'h0),
       .pkt_tx_full       (pkt_tx_full),
-      .payload_type      (2'b00),
+      .payload_type      (2'b01),
       .payload_cycles    (32'h0000000A),
       .payload_last_size (3'h0),
       //LFSR Initialization - ECHO GENERATOR
