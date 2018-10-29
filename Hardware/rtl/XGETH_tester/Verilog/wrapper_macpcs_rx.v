@@ -679,7 +679,7 @@ module wrapper_macpcs_rx(
               .verify_system_rec  (1'b1),
               .reset_test         (1'b1),
               .pkt_sequence_in    (16'h00),
-              .payload_type       (2'b00),
+              .payload_type       (2'b01),
 
             //LFSR Initialization - ECHO GENERATOR
               .lfsr_seed          (128'h00000000000000000000000C00000003),
@@ -759,7 +759,7 @@ module wrapper_macpcs_rx(
 
    always begin
    wait (start_tx_begin_delay == 1'b1);
-    #270
+    #135
     start_tx_begin = 1'b1;
     wait(cj_pkt_tx_eop == 1'b0 );
     start_tx_begin = 1'b0;

@@ -64,8 +64,10 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     -------------------------------------------------------------------------------
     -- State
     -------------------------------------------------------------------------------
-    type   state_type is (S_ETHERNET,S_IP, S_PAYLOAD, S_REST_IP ,S_IDLE, S_START_PAYLOAD);
-    signal current_s, next_s : state_type;
+    type   fsm_state_type is (S_IDLE, S_ETHERNET,S_IP, S_REST_IP , S_PAYLOAD, S_START_PAYLOAD);
+    type   lfsr_state_type is (S_IDLE, S_CONFIG, S_START);
+    signal current_s, next_s : fsm_state_type ;
+    signal lfsr_state : lfsr_state_type;
 
     signal pkt_rx_data_N : std_logic_vector(127 downto 0);
     signal pkt_rx_data_NC : std_logic_vector(127 downto 0);
@@ -88,8 +90,12 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     --------------------------------------------------------------------------------
     --LFSR AND BERT SIGNALS
     signal RANDOM : std_logic_vector(127 downto 0);
-    signal start : std_logic;
-
+    signal pkt_rx_data_bert : std_logic_vector(127 downto 0);
+    signal lfsr_start : std_logic;
+    signal lfsr_fsm_begin : std_logic;
+    signal lfsr_test_begin : std_logic;
+    signal delay_B0, delay_B1, delay_B2, lfsr_resync : std_logic_vector (127 downto 0);
+    signal lfsr_counter : integer range 0 to 15;
 
     function invert_bytes_127(bytes : std_logic_vector(127 DOWNTO 0))
                      return std_logic_vector
@@ -130,9 +136,9 @@ begin
     begin
       if reset = '0' then
           current_s <= S_IDLE;
-      elsif pkt_rx_sop = '1' and next_s /= S_IP  then
+      elsif pkt_rx_sop = '1' and next_s /= S_IP and pkt_rx_avail = '1' then
           current_s <= S_ETHERNET;
-      elsif pkt_rx_eop = '1' then
+      elsif pkt_rx_eop = '1' and pkt_rx_avail = '1' then
             current_s <= S_IDLE;
       elsif rising_edge(clock)  then
           current_s <= next_s;
@@ -165,17 +171,20 @@ begin
                       (others => '0') when current_s = S_IDLE;
     reg_ip_message_length <= pkt_rx_data_N (127 downto 112) when current_s = S_IP else
                       (others => '0') when current_s = S_IDLE;
+    lfsr_start <= '1' when current_s = S_PAYLOAD else '0' when current_s = S_IDLE;
 
     package_updater : process(reset, clock)
     begin
       if reset = '0' then
         IDLE_count_reg <= (others => '0');
         pkt_id_counter <= (others => '0');
+        lfsr_fsm_begin <= '0';
       elsif rising_edge(clock) then
         case current_s is
           when S_IDLE =>
             if pkt_rx_avail = '1' then
               IDLE_count_reg <= IDLE_count_reg + '1';
+              lfsr_fsm_begin <= '0';
             end if;
           when S_ETHERNET =>
             null;
@@ -184,7 +193,7 @@ begin
           when S_REST_IP =>
             null;
           when S_START_PAYLOAD =>
-            null;
+            lfsr_fsm_begin <= '1';
           when S_PAYLOAD =>
             if payload_type = "00" then
               pkt_id_counter <= pkt_rx_data_N;
@@ -207,6 +216,59 @@ begin
     -- BERT TEST LFSR
     -------------------------------------------------------------------------------
 
+    pipelined_lfsr_inputs : process(reset, clock)
+    begin
+      if reset = '0' then
+          Delay_B0 <= (others => '0');
+          Delay_B1 <= (others => '0');
+          Delay_B2 <= (others => '0');
+          lfsr_resync <= (others => '0');
+          lfsr_counter <= 0;
+      elsif rising_edge(clock) then
+        case lfsr_state is
+          when S_IDLE =>
+            lfsr_counter <= 0;
+            Delay_B0 <= (others => '0');
+            Delay_B1 <= (others => '0');
+            Delay_B2 <= (others => '0');
+            if lfsr_fsm_begin = '1' then
+              lfsr_state <= S_CONFIG;
+            end if;
+          when S_CONFIG =>
+            Delay_B0 <= pkt_rx_data_N;
+            Delay_B1 <= Delay_B0;
+            Delay_B2 <= Delay_B1;
+            if lfsr_counter = 2 then
+              lfsr_counter <= 0;
+              lfsr_test_begin <= '1';
+              lfsr_state <= S_START;
+            elsif lfsr_counter = 1 then
+              lfsr_resync <= pkt_rx_data_N;
+              lfsr_counter <= lfsr_counter +1;
+            else
+              lfsr_counter <= lfsr_counter +1;
+            end if;
+          when S_START =>
+            Delay_B0 <= pkt_rx_data_N;
+            Delay_B1 <= Delay_B0;
+            Delay_B2 <= Delay_B1;
+            if lfsr_fsm_begin = '0' Then
+              lfsr_state <= S_IDLE;
+           elsif lfsr_counter = 3 then
+              lfsr_counter <= 0;
+            elsif lfsr_counter = 1 then
+              lfsr_resync <= pkt_rx_data_N;
+              lfsr_counter <= lfsr_counter +1;
+            else
+              lfsr_counter <= lfsr_counter +1;
+            end if;
+        end case;
+      end if;
+    end process;
+
+    pkt_rx_data_bert <= lfsr_resync when lfsr_counter = 0 else
+                        Delay_B2;
+
     LFSR_REC: entity work.LFSR_REC
     generic map (DATA_SIZE => 128,
                  PPL_SIZE => 4)
@@ -216,7 +278,7 @@ begin
       seed => lfsr_seed,
       polynomial => lfsr_polynomial,
       data_in => pkt_rx_data_N,
-      start => start,
+      start => lfsr_start,
       data_out => RANDOM
     );
 

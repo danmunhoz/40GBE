@@ -608,7 +608,6 @@ end process;
           clock => clock,
           reset_N => reset,
           seed => lfsr_seed_wire,
-          valid_seed => valid_seed_wire,
           polynomial => lfsr_polynomial,
           data_in => pkt_rx_data,
           start => start,

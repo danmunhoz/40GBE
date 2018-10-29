@@ -171,7 +171,7 @@ vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 work.Top -t 1ps
 
 #do wave.do
-do wave_susin.do
+do wave_matheus.do
 run 20 us
 #run 50 us
 #run 200 us
