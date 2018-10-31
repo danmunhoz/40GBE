@@ -95,6 +95,9 @@ begin
  begin
    if reset_N = '0' then
       reg_i <= seed;
+      Delay_B0 <= (others=>'0');
+      Delay_B1 <= (others=>'0');
+      Delay_B2 <= (others=>'0');
     else
       if rising_edge(clock) then
         if start = '1' then
@@ -107,7 +110,8 @@ begin
     end if;
   end process;
 
-   data_out <= linear_feedback(3,31);
+   data_out <= (others => '0') when reset_N = '0' else
+               linear_feedback(3,31);
 
 
 end arch_lfsr;

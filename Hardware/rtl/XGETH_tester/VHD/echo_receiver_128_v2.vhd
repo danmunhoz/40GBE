@@ -65,13 +65,14 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     -- State
     -------------------------------------------------------------------------------
     type   fsm_state_type is (S_IDLE, S_ETHERNET,S_IP, S_REST_IP , S_PAYLOAD, S_START_PAYLOAD);
-    type   lfsr_state_type is (S_IDLE, S_CONFIG, S_START);
+    type   lfsr_state_type is (S_IDLE, S_SETUP_PIPELINE, S_SETUP_DELAY, S_RUN);
+    type   recovery_state_type is (S_WAIT_START, S_WAIT_STOP, S_RECOVERY);
+
     signal current_s, next_s : fsm_state_type ;
     signal lfsr_state : lfsr_state_type;
+    signal recovery_state : recovery_state_type;
 
     signal pkt_rx_data_N : std_logic_vector(127 downto 0);
-    signal pkt_rx_data_NC : std_logic_vector(127 downto 0);
-
 
     --------------------------------------------------------------------------------
     -- MAC n IP reg
@@ -90,15 +91,39 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     --------------------------------------------------------------------------------
     --LFSR AND BERT SIGNALS
     signal RANDOM : std_logic_vector(127 downto 0);
-    signal pkt_rx_data_bert : std_logic_vector(127 downto 0);
+    signal lfsr_bert : std_logic_vector(127 downto 0);
+    signal start : std_logic;
     signal lfsr_start : std_logic;
+    signal lfsr_start_delay : std_logic;
+    signal lfsr_resync_ON : std_logic;
     signal lfsr_fsm_begin : std_logic;
     signal lfsr_test_begin : std_logic;
-    signal delay_B0, delay_B1, delay_B2, lfsr_resync : std_logic_vector (127 downto 0);
+    signal delay_B0, delay_B1, delay_B2: std_logic_vector (127 downto 0);
+    signal lfsr_resync_SIGNAL : std_logic_vector (127 downto 0);
+    signal lfsr_resync_RANDOM : std_logic_vector (127 downto 0);
     signal lfsr_counter : integer range 0 to 15;
 
-    function invert_bytes_127(bytes : std_logic_vector(127 DOWNTO 0))
-                     return std_logic_vector
+    signal const_test_begin : std_logic;
+
+    signal bert_target_lfsr : std_logic_vector (127 downto 0);
+    signal bert_xor : std_logic_vector (127 downto 0);
+    signal bert_cycle_wrong : std_logic_vector (127 downto 0);
+    signal bert_n_flipped_b : std_logic_vector (127 downto 0);
+    signal bert_count_flip : std_logic_vector (127 downto 0);
+    signal bert_test_begin : std_logic;
+
+    signal ALL_ONE : std_logic_vector(127 downto 0) := (OTHERS => '1');
+    signal ALL_ZERO : std_logic_vector(127 downto 0) := (OTHERS => '0');
+
+    signal recovery_n_flipped_b : std_logic_vector(127 downto 0);
+    signal recovery_cycle_wrong : std_logic_vector(127 downto 0);
+    signal recovery_ON : std_logic;
+    signal recovery_start_pkt : std_logic;
+    signal recovery_stop_pkt : std_logic;
+
+
+
+    function invert_bytes_127(bytes : std_logic_vector(127 DOWNTO 0)) return std_logic_vector
       is
         variable bytes_N : std_logic_vector(127 downto 0) := (others => '0');
         variable i_N : integer range 0 to 127;
@@ -108,6 +133,16 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
         end loop;
         return bytes_N;
     end function invert_bytes_127;
+
+    function count_ones(s : std_logic_vector) return std_logic_vector is
+        variable temp : std_logic_vector(127 downto 0) := (others => '0');
+    begin
+      for i in s'range loop
+        if s(i) = '1' then temp := temp + '1';
+        end if;
+      end loop;
+      return temp;
+    end function count_ones;
 
 begin
 
@@ -153,38 +188,31 @@ begin
 
     pkt_rx_ren <= '0' when current_s = S_IDLE else '1';
 
-    reg_mac_source <= pkt_rx_data_N (127 downto 80) when current_s = S_ETHERNET else
-                      (others => '0') when current_s = S_IDLE;
-    reg_mac_destination <= pkt_rx_data_N (79 downto 32) when current_s = S_ETHERNET else
-                      (others => '0') when current_s = S_IDLE;
-    reg_ethernet_type <= pkt_rx_data_N (31 downto 16) when current_s = S_ETHERNET else
-                      (others => '0') when current_s = S_IDLE;
-    reg_ip_source <= pkt_rx_data_N (47 downto 16) when current_s = S_IP else
-                      (others => '0') when current_s = S_IDLE;
-    reg_ip_destination <= ip_high & ip_low when current_s = S_REST_IP else
-                      (others => '0') when current_s = S_IDLE;
-    ip_high <= pkt_rx_data_N (15 downto 0) when current_s = S_IP else
-                      (others => '0') when current_s = S_IDLE;
-    ip_low <= pkt_rx_data_N (127 downto 112) when current_s = S_REST_IP else
-                      (others => '0') when current_s = S_IDLE;
-    reg_ip_protocol <= pkt_rx_data_N (71 downto 64) when current_s = S_IP else
-                      (others => '0') when current_s = S_IDLE;
-    reg_ip_message_length <= pkt_rx_data_N (127 downto 112) when current_s = S_IP else
-                      (others => '0') when current_s = S_IDLE;
-    lfsr_start <= '1' when current_s = S_PAYLOAD else '0' when current_s = S_IDLE;
+    reg_mac_source <= pkt_rx_data_N (127 downto 80) when current_s = S_ETHERNET else (others => '0') when current_s = S_IDLE;
+    reg_mac_destination <= pkt_rx_data_N (79 downto 32) when current_s = S_ETHERNET else (others => '0') when current_s = S_IDLE;
+    reg_ethernet_type <= pkt_rx_data_N (31 downto 16) when current_s = S_ETHERNET else (others => '0') when current_s = S_IDLE;
+    reg_ip_source <= pkt_rx_data_N (47 downto 16) when current_s = S_IP else (others => '0') when current_s = S_IDLE;
+    reg_ip_destination <= ip_high & ip_low when current_s = S_REST_IP else (others => '0') when current_s = S_IDLE;
+    ip_high <= pkt_rx_data_N (15 downto 0) when current_s = S_IP else (others => '0') when current_s = S_IDLE;
+    ip_low <= pkt_rx_data_N (127 downto 112) when current_s = S_REST_IP else (others => '0') when current_s = S_IDLE;
+    reg_ip_protocol <= pkt_rx_data_N (71 downto 64) when current_s = S_IP else (others => '0') when current_s = S_IDLE;
+    reg_ip_message_length <= pkt_rx_data_N (127 downto 112) when current_s = S_IP else (others => '0') when current_s = S_IDLE;
+
+    const_test_begin <= '1' when current_s = S_PAYLOAD and (payload_type = "10" or payload_type = "11") else '0';
+    lfsr_start <= '1' when current_s = S_PAYLOAD and payload_type = "01"  else '0';
 
     package_updater : process(reset, clock)
     begin
       if reset = '0' then
         IDLE_count_reg <= (others => '0');
         pkt_id_counter <= (others => '0');
-        lfsr_fsm_begin <= '0';
       elsif rising_edge(clock) then
         case current_s is
           when S_IDLE =>
             if pkt_rx_avail = '1' then
               IDLE_count_reg <= IDLE_count_reg + '1';
               lfsr_fsm_begin <= '0';
+              lfsr_start <= '0';
             end if;
           when S_ETHERNET =>
             null;
@@ -193,16 +221,18 @@ begin
           when S_REST_IP =>
             null;
           when S_START_PAYLOAD =>
-            lfsr_fsm_begin <= '1';
+            if payload_type = "01" then
+              lfsr_fsm_begin <= '1';
+            end if;
           when S_PAYLOAD =>
             if payload_type = "00" then
               pkt_id_counter <= pkt_rx_data_N;
             elsif payload_type = "01" then
-
+              null;
             elsif payload_type = "10" then
-
+              null;
             else
-
+              null;
             end if;
 
           when others => null;
@@ -213,52 +243,81 @@ begin
 
 
     -------------------------------------------------------------------------------
-    -- BERT TEST LFSR
+    -- BERT TEST AND LFSR
     -------------------------------------------------------------------------------
 
     pipelined_lfsr_inputs : process(reset, clock)
     begin
       if reset = '0' then
+          lfsr_start_delay <= '0';
+          lfsr_test_begin <= '0';
           Delay_B0 <= (others => '0');
           Delay_B1 <= (others => '0');
           Delay_B2 <= (others => '0');
-          lfsr_resync <= (others => '0');
+          lfsr_resync_RANDOM <= (others => '0');
+          lfsr_resync_SIGNAL <= (others => '0');
           lfsr_counter <= 0;
+          lfsr_resync_ON <= '0';
       elsif rising_edge(clock) then
         case lfsr_state is
           when S_IDLE =>
+            lfsr_test_begin <= '0';
+            lfsr_resync_ON <= '0';
+            lfsr_start_delay <= '0';
             lfsr_counter <= 0;
             Delay_B0 <= (others => '0');
             Delay_B1 <= (others => '0');
             Delay_B2 <= (others => '0');
             if lfsr_fsm_begin = '1' then
-              lfsr_state <= S_CONFIG;
+              lfsr_state <= S_SETUP_PIPELINE;
             end if;
-          when S_CONFIG =>
+          when S_SETUP_PIPELINE =>
+            lfsr_start_delay <= '1';
             Delay_B0 <= pkt_rx_data_N;
             Delay_B1 <= Delay_B0;
             Delay_B2 <= Delay_B1;
             if lfsr_counter = 2 then
               lfsr_counter <= 0;
               lfsr_test_begin <= '1';
-              lfsr_state <= S_START;
-            elsif lfsr_counter = 1 then
-              lfsr_resync <= pkt_rx_data_N;
-              lfsr_counter <= lfsr_counter +1;
+              lfsr_state <= S_SETUP_DELAY;
             else
               lfsr_counter <= lfsr_counter +1;
             end if;
-          when S_START =>
+          when S_SETUP_DELAY =>
+              Delay_B0 <= pkt_rx_data_N;
+              Delay_B1 <= Delay_B0;
+              Delay_B2 <= Delay_B1;
+              if lfsr_fsm_begin = '0' Then
+                lfsr_start_delay <= '0';
+                lfsr_state <= S_IDLE;
+             elsif lfsr_counter = 7 then
+                lfsr_test_begin <= '1';
+                lfsr_state <= S_RUN;
+                lfsr_counter <= 0;
+                lfsr_resync_RANDOM <= RANDOM;
+              elsif lfsr_counter = 6 then
+                lfsr_test_begin <= '0';
+                lfsr_counter <= lfsr_counter +1;
+              else
+                lfsr_counter <= lfsr_counter +1;
+              end if;
+          when S_RUN =>
             Delay_B0 <= pkt_rx_data_N;
             Delay_B1 <= Delay_B0;
             Delay_B2 <= Delay_B1;
             if lfsr_fsm_begin = '0' Then
+              lfsr_start_delay <= '0';
               lfsr_state <= S_IDLE;
-           elsif lfsr_counter = 3 then
+           elsif lfsr_counter = 7 then
+              lfsr_resync_RANDOM <= RANDOM;
               lfsr_counter <= 0;
-            elsif lfsr_counter = 1 then
-              lfsr_resync <= pkt_rx_data_N;
+              lfsr_resync_ON <= '0';
+            elsif lfsr_counter = 6 then
+              lfsr_resync_ON <= '1';
               lfsr_counter <= lfsr_counter +1;
+            elsif lfsr_counter = 3 then
+              lfsr_counter <= lfsr_counter +1;
+              lfsr_resync_SIGNAL <= Delay_B0;
             else
               lfsr_counter <= lfsr_counter +1;
             end if;
@@ -266,7 +325,8 @@ begin
       end if;
     end process;
 
-    pkt_rx_data_bert <= lfsr_resync when lfsr_counter = 0 else
+    start <= lfsr_start or lfsr_start_delay;
+    lfsr_bert <= lfsr_resync_SIGNAL when lfsr_resync_ON = '1' else
                         Delay_B2;
 
     LFSR_REC: entity work.LFSR_REC
@@ -278,9 +338,77 @@ begin
       seed => lfsr_seed,
       polynomial => lfsr_polynomial,
       data_in => pkt_rx_data_N,
-      start => lfsr_start,
+      start => start,
       data_out => RANDOM
     );
+
+    bert_target_lfsr <= lfsr_resync_RANDOM when lfsr_resync_ON = '1' else
+                   RANDOM;
+
+    bert_xor <= pkt_rx_data_N xor ALL_ONE when payload_type = "11" else
+                pkt_rx_data_N xor ALL_ZERO when payload_type = "10" else
+                bert_target_lfsr xor lfsr_bert when payload_type = "01" else
+                (others=>'0');
+
+    bert_test_begin <= (lfsr_test_begin or const_test_begin);
+
+    bert_count_flip <= count_ones(bert_xor);
+
+    BERT: process (clock, reset)
+    begin
+      if(reset = '0') then
+        bert_n_flipped_b <= (others=>'0');
+        bert_cycle_wrong <= (others=>'0');
+      elsif rising_edge(clock) then
+        if recovery_ON = '1' then
+          bert_n_flipped_b <= recovery_n_flipped_b;
+          bert_cycle_wrong <= recovery_cycle_wrong;
+        elsif bert_test_begin = '1' then
+            bert_n_flipped_b <= bert_n_flipped_b + bert_count_flip;
+            if (bert_count_flip /= 0 ) then
+                bert_cycle_wrong <= bert_cycle_wrong + 1;
+            end if;
+        end if;
+      end if;
+    end process;
+
+
+
+    -------------------------------------------------------------------------------
+    -- ERROR CORRECTION
+    -------------------------------------------------------------------------------
+
+    recovery_start_pkt <= pkt_rx_sop and pkt_rx_avail;
+    recovery_stop_pkt <= pkt_rx_eop and pkt_rx_avail;
+
+
+    ERROR_RECOVERY: process (clock, reset)
+    begin
+      if(reset = '0') then
+        recovery_state <= S_WAIT_START;
+        recovery_n_flipped_b <= (others => '0');
+        recovery_cycle_wrong <= (others => '0');
+      elsif rising_edge(clock) then
+        case recovery_state is
+          when S_WAIT_START =>
+            if recovery_start_pkt = '1' then
+              recovery_state <= S_WAIT_STOP;
+              recovery_n_flipped_b <= bert_n_flipped_b;
+              recovery_cycle_wrong <= bert_cycle_wrong;
+            end if;
+          when S_WAIT_STOP =>
+            if recovery_stop_pkt = '1' then
+              recovery_state <= S_WAIT_START;
+            elsif recovery_start_pkt = '1' then
+              recovery_state <= S_RECOVERY;
+              recovery_ON <= '1';
+            end if;
+          when S_RECOVERY =>
+            recovery_ON <= '0';
+            recovery_state <= S_WAIT_STOP;
+        end case;
+      end if;
+    end process;
 
 
 end arch_echo_receiver_128_v2;

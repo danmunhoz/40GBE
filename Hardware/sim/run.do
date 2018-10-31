@@ -172,8 +172,8 @@ work.Top -t 1ps
 
 #do wave.do
 do wave_matheus.do
-run 20 us
-#run 50 us
+
+run 50 us
 #run 200 us
 
 exec cp lane0.txt lane0_rx.txt
