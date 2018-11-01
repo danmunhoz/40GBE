@@ -73,6 +73,9 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     signal recovery_state : recovery_state_type;
 
     signal pkt_rx_data_N : std_logic_vector(127 downto 0);
+    signal pkt_rx_data_NC : std_logic_vector(127 downto 0);
+    signal pkt_sequence_error_flag_aux : std_logic;
+
 
     --------------------------------------------------------------------------------
     -- MAC n IP reg
@@ -86,7 +89,12 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     --------------------------------------------------------------------------------
     --Registers
     signal IDLE_count_reg : std_logic_vector(127 downto 0) := (OTHERS => '0');
-    signal pkt_id_counter : std_logic_vector(127 downto 0) := (OTHERS => '0');
+    signal id_pkt_counter : std_logic_vector(127 downto 0) := (OTHERS => '0');
+    signal id_sequence_counter : std_logic_vector(31 downto 0) := (OTHERS => '0');
+    signal id_checker_reg : std_logic_vector(127 downto 0) := (OTHERS => '0');
+    signal pkt_zeros      : std_logic_vector(127 downto 0) := (OTHERS => '0');
+    signal pkt_ones       : std_logic_vector(127 downto 0) := (OTHERS => '0');
+
 
     --------------------------------------------------------------------------------
     --LFSR AND BERT SIGNALS
@@ -188,16 +196,24 @@ begin
 
     pkt_rx_ren <= '0' when current_s = S_IDLE else '1';
 
-    reg_mac_source <= pkt_rx_data_N (127 downto 80) when current_s = S_ETHERNET else (others => '0') when current_s = S_IDLE;
-    reg_mac_destination <= pkt_rx_data_N (79 downto 32) when current_s = S_ETHERNET else (others => '0') when current_s = S_IDLE;
-    reg_ethernet_type <= pkt_rx_data_N (31 downto 16) when current_s = S_ETHERNET else (others => '0') when current_s = S_IDLE;
-    reg_ip_source <= pkt_rx_data_N (47 downto 16) when current_s = S_IP else (others => '0') when current_s = S_IDLE;
-    reg_ip_destination <= ip_high & ip_low when current_s = S_REST_IP else (others => '0') when current_s = S_IDLE;
-    ip_high <= pkt_rx_data_N (15 downto 0) when current_s = S_IP else (others => '0') when current_s = S_IDLE;
-    ip_low <= pkt_rx_data_N (127 downto 112) when current_s = S_REST_IP else (others => '0') when current_s = S_IDLE;
-    reg_ip_protocol <= pkt_rx_data_N (71 downto 64) when current_s = S_IP else (others => '0') when current_s = S_IDLE;
-    reg_ip_message_length <= pkt_rx_data_N (127 downto 112) when current_s = S_IP else (others => '0') when current_s = S_IDLE;
-
+    reg_mac_source <= pkt_rx_data_N (127 downto 80) when current_s = S_ETHERNET else
+                      (others => '0') when current_s = S_IDLE;
+    reg_mac_destination <= pkt_rx_data_N (79 downto 32) when current_s = S_ETHERNET else
+                      (others => '0') when current_s = S_IDLE;
+    reg_ethernet_type <= pkt_rx_data_N (31 downto 16) when current_s = S_ETHERNET else
+                      (others => '0') when current_s = S_IDLE;
+    reg_ip_source <= pkt_rx_data_N (47 downto 16) when current_s = S_IP else
+                      (others => '0') when current_s = S_IDLE;
+    reg_ip_destination <= ip_high & ip_low when current_s = S_REST_IP else
+                      (others => '0') when current_s = S_IDLE;
+    ip_high <= pkt_rx_data_N (15 downto 0) when current_s = S_IP else
+                      (others => '0') when current_s = S_IDLE;
+    ip_low <= pkt_rx_data_N (127 downto 112) when current_s = S_REST_IP else
+                      (others => '0') when current_s = S_IDLE;
+    reg_ip_protocol <= pkt_rx_data_N (71 downto 64) when current_s = S_IP else
+                      (others => '0') when current_s = S_IDLE;
+    reg_ip_message_length <= pkt_rx_data_N (127 downto 112) when current_s = S_IP else
+                      (others => '0') when current_s = S_IDLE;
     const_test_begin <= '1' when current_s = S_PAYLOAD and (payload_type = "10" or payload_type = "11") else '0';
     lfsr_start <= '1' when current_s = S_PAYLOAD and payload_type = "01"  else '0';
 
@@ -205,7 +221,8 @@ begin
     begin
       if reset = '0' then
         IDLE_count_reg <= (others => '0');
-        pkt_id_counter <= (others => '0');
+        id_pkt_counter <= (others => '0');
+        lfsr_fsm_begin <= '0';
       elsif rising_edge(clock) then
         case current_s is
           when S_IDLE =>
@@ -221,12 +238,21 @@ begin
           when S_REST_IP =>
             null;
           when S_START_PAYLOAD =>
-            if payload_type = "01" then
-              lfsr_fsm_begin <= '1';
+
+            if payload_type = "00" then
+
+              id_pkt_counter <= pkt_rx_data_N;
+            elsif payload_type = "01" then
+ 		lfsr_fsm_begin <= '1';
+
+            elsif payload_type = "10" then -- all 1s
+              pkt_zeros <= pkt_rx_data_N;
+            else -- all 0s
+              pkt_ones <= pkt_rx_data_N;
             end if;
           when S_PAYLOAD =>
             if payload_type = "00" then
-              pkt_id_counter <= pkt_rx_data_N;
+              id_pkt_counter <= pkt_rx_data_N;
             elsif payload_type = "01" then
               null;
             elsif payload_type = "10" then
@@ -240,7 +266,30 @@ begin
       end if;
     end process;
 
+    --------------------------------------------------------------------------------
+    -- ID CHECKER
+    --------------------------------------------------------------------------------
+    pkt_sequence_error_flag <= pkt_sequence_error_flag_aux;
 
+    id_checker : process(reset, clock)
+    begin
+      if reset = '0' then
+        id_sequence_counter <= (others => '0');
+        pkt_sequence_error_flag_aux <= '0';
+      elsif rising_edge(clock) then
+        if current_s = S_PAYLOAD and payload_type = "00" then
+           if id_pkt_counter = (pkt_rx_data_N - '1') then
+             pkt_sequence_error_flag_aux <= '0';
+             id_sequence_counter <= id_sequence_counter + '1';
+           else
+             pkt_sequence_error_flag_aux <= '1';
+             id_sequence_counter <= (others => '0');
+           end if;
+        else
+          pkt_sequence_error_flag_aux <= '0';
+        end if;
+      end if;
+    end process;
 
     -------------------------------------------------------------------------------
     -- BERT TEST AND LFSR
