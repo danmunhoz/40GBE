@@ -29,7 +29,7 @@ entity echo_receiver_128_v2 is
         time_stamp_out  : out std_logic_vector(47 downto 0);  -- Packet timestamp
         received_packet : out std_logic;  -- Asserted when a valid UDP packet is received
         end_latency     : out std_logic;
-        packets_lost    : out std_logic_vector(63 downto 0);
+        packets_lost    : out std_logic_vector(127 downto 0);
         RESET_done      : out std_logic; -- to RFC254|
         -------------------------------------------------------------------------------
         -- RX mac interface
@@ -46,11 +46,11 @@ entity echo_receiver_128_v2 is
         pkt_rx_mod               : in  std_logic_vector(3 downto 0);  -- Indicates valid bytes during last word -- added 0 in all pkt_rx_mod most val bit position
         payload_type             : in std_logic_vector(1 downto 0);
         verify_system_rec        : in std_logic;
-        reset_test             : in std_logic;       -- activates reset test
-        pkt_sequence_in          : in std_logic_vector(15 downto 0);   -- number of packets to define if recovery is completed
+        reset_test               : in std_logic;       -- activates reset test
+        pkt_sequence_in          : in std_logic_vector(31 downto 0);   -- number of packets to define if recovery is completed
         pkt_sequence_error_flag  : out std_logic; -- to RFC254|
         pkt_sequence_error       : out std_logic;                -- '0' if sequence is ok, '1' if error in sequence and not recovered -- to RFC254|
-        cont_error               : out std_logic_vector(127 downto 0);
+        count_error               : out std_logic_vector(127 downto 0);
         IDLE_count               : out std_logic_vector(127 downto 0)
     );
 end echo_receiver_128_v2;
@@ -85,13 +85,23 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     signal reg_ip_protocol                     : std_logic_vector(7 downto 0);
     signal reg_ip_message_length               : std_logic_vector(15 downto 0);
     signal ip_low, ip_high                     : std_logic_vector(15 downto 0);
-
+    signal ip_pkt_type                         : std_logic;
+    signal udp_pkt_type                        : std_logic;
+    signal received_packet_reg                 : std_logic;
     --------------------------------------------------------------------------------
-    --Registers
-    signal IDLE_count_reg : std_logic_vector(127 downto 0) := (OTHERS => '0');
-    signal id_pkt_counter : std_logic_vector(127 downto 0) := (OTHERS => '0');
+    --ID TESTS
+
+    signal id_pkt_tester : std_logic_vector(127 downto 0) := (OTHERS => '0');
     signal id_sequence_counter : std_logic_vector(31 downto 0) := (OTHERS => '0');
     signal id_checker_reg : std_logic_vector(127 downto 0) := (OTHERS => '0');
+
+    signal lost_pkt_flag : std_logic;
+    signal not_lost_pkt_test : std_logic;
+    signal lost_counter : std_logic_vector(31 downto 0) := (OTHERS => '0');
+    signal lost_pkt_tester : std_logic_vector(127 downto 0) := (OTHERS => '0');
+
+    ------------------------------------------------------------------------------
+    signal IDLE_count_reg : std_logic_vector(127 downto 0) := (OTHERS => '0');
     signal pkt_zeros      : std_logic_vector(127 downto 0) := (OTHERS => '0');
     signal pkt_ones       : std_logic_vector(127 downto 0) := (OTHERS => '0');
 
@@ -155,6 +165,12 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
 begin
 
     pkt_rx_data_N <= invert_bytes_127(pkt_rx_data);
+
+    ip_pkt_type <= '1' when reg_ethernet_type = x"0800" else '0';
+
+    udp_pkt_type <= '1' when reg_ip_protocol = x"11" else '0';
+
+
   -------------------------------------------------------------------------------
   -- Combinational Logic
   -------------------------------------------------------------------------------
@@ -190,9 +206,9 @@ begin
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+    received_packet <= received_packet_reg;
 
-
-  IDLE_count <= IDLE_count_reg;
+    IDLE_count <= IDLE_count_reg;
 
     pkt_rx_ren <= '0' when current_s = S_IDLE else '1';
 
@@ -221,8 +237,9 @@ begin
     begin
       if reset = '0' then
         IDLE_count_reg <= (others => '0');
-        id_pkt_counter <= (others => '0');
+        id_pkt_tester <= (others => '0');
         lfsr_fsm_begin <= '0';
+        received_packet_reg <= '0';
       elsif rising_edge(clock) then
         case current_s is
           when S_IDLE =>
@@ -234,17 +251,19 @@ begin
           when S_ETHERNET =>
             null;
           when S_IP =>
+            if mac_source = reg_mac_destination then
+              received_packet_reg <= '1';
+            else
+              received_packet_reg <= '0';
+            end if;
             null;
           when S_REST_IP =>
             null;
           when S_START_PAYLOAD =>
-
             if payload_type = "00" then
-
-              id_pkt_counter <= pkt_rx_data_N;
+            --  id_pkt_tester <= pkt_rx_data_N;
             elsif payload_type = "01" then
- 		lfsr_fsm_begin <= '1';
-
+ 		           --lfsr_fsm_begin <= '1';
             elsif payload_type = "10" then -- all 1s
               pkt_zeros <= pkt_rx_data_N;
             else -- all 0s
@@ -252,9 +271,10 @@ begin
             end if;
           when S_PAYLOAD =>
             if payload_type = "00" then
-              id_pkt_counter <= pkt_rx_data_N;
+              id_pkt_tester <= pkt_rx_data_N;
             elsif payload_type = "01" then
-              null;
+              lfsr_fsm_begin <= '1';
+              --null;
             elsif payload_type = "10" then
               null;
             else
@@ -269,6 +289,7 @@ begin
     --------------------------------------------------------------------------------
     -- ID CHECKER
     --------------------------------------------------------------------------------
+    pkt_sequence_error <= '1' when (id_sequence_counter < pkt_sequence_in) else '0';
     pkt_sequence_error_flag <= pkt_sequence_error_flag_aux;
 
     id_checker : process(reset, clock)
@@ -277,8 +298,8 @@ begin
         id_sequence_counter <= (others => '0');
         pkt_sequence_error_flag_aux <= '0';
       elsif rising_edge(clock) then
-        if current_s = S_PAYLOAD and payload_type = "00" then
-           if id_pkt_counter = (pkt_rx_data_N - '1') then
+        if current_s = S_PAYLOAD and payload_type = "00" and verify_system_rec = '1' then
+           if (id_pkt_tester = (pkt_rx_data_N - '1')) then
              pkt_sequence_error_flag_aux <= '0';
              id_sequence_counter <= id_sequence_counter + '1';
            else
@@ -287,6 +308,34 @@ begin
            end if;
         else
           pkt_sequence_error_flag_aux <= '0';
+        end if;
+      end if;
+    end process;
+
+
+    packets_lost <= lost_pkt_tester;
+    RESET_done   <= '1' when lost_counter >= 1000 else '0';
+
+    reset_id_diff_test : process(reset, clock)
+    begin
+      if reset = '0' then
+        lost_pkt_flag <= '0';
+        lost_pkt_tester <= (others => '0');
+        not_lost_pkt_test <= '0';
+        lost_counter <= (others => '0');
+      elsif rising_edge(clock) then
+        if current_s = S_PAYLOAD and payload_type = "00" and reset_test = '1' then
+          if (id_pkt_tester = (pkt_rx_data_N - '1')) then
+            if lost_pkt_flag = '1' then
+              lost_counter <= lost_counter + '1';
+            end if;
+            not_lost_pkt_test <= '1';
+          else
+            lost_pkt_tester <= lost_pkt_tester + pkt_rx_data_N - id_pkt_tester - '1';
+            lost_counter <= (others => '0');
+            lost_pkt_flag <= '1';
+            not_lost_pkt_test <= '0';
+          end if;
         end if;
       end if;
     end process;
@@ -402,6 +451,9 @@ begin
     bert_test_begin <= (lfsr_test_begin or const_test_begin);
 
     bert_count_flip <= count_ones(bert_xor);
+
+    count_error <= bert_n_flipped_b;
+
 
     BERT: process (clock, reset)
     begin

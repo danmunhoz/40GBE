@@ -457,14 +457,14 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire [47:0]  time_stamp_out_2;
     (* syn_keep = "true"*) wire         received_packet_2;
     (* syn_keep = "true"*) wire         end_latency_2;
-    (* syn_keep = "true"*) wire [63:0]  packets_lost_2;
+    (* syn_keep = "true"*) wire [127:0]  packets_lost_2;
     (* syn_keep = "true"*) wire         RESET_done_2;
 
     //RX mac interface
     (* syn_keep = "true"*) wire [127:0]  IDLE_count_2;
     (* syn_keep = "true"*) wire          pkt_sequence_error_flag_2;
     (* syn_keep = "true"*) wire          pkt_sequence_error_2;
-    (* syn_keep = "true"*) wire [127:0]  cont_error_2;
+    (* syn_keep = "true"*) wire [127:0]  count_error_2;
     //END RECEIVER WIRES
 
     wire [7:0]  xgmii_txc;
@@ -678,8 +678,8 @@ module wrapper_macpcs_rx(
               .pkt_rx_val         (app_val),
               .verify_system_rec  (1'b1),
               .reset_test         (1'b1),
-              .pkt_sequence_in    (16'h00),
-              .payload_type       (2'b01),
+              .pkt_sequence_in    (32'h0000),
+              .payload_type       (2'b00),
 
             //LFSR Initialization - ECHO GENERATOR
               .lfsr_seed          (128'h00000000000000000000000C00000003),
@@ -701,7 +701,7 @@ module wrapper_macpcs_rx(
               .IDLE_count                (IDLE_count_2),
               .pkt_sequence_error_flag   (pkt_sequence_error_flag_2),
               .pkt_sequence_error        (pkt_sequence_error_2),
-              .cont_error                (cont_error_2)
+              .count_error                (count_error_2)
           );
 
 
@@ -783,7 +783,7 @@ module wrapper_macpcs_rx(
       .timestamp_base    (48'h0),
       .time_stamp_flag   (1'h0),
       .pkt_tx_full       (pkt_tx_full),
-      .payload_type      (2'b01),
+      .payload_type      (2'b00),
       .payload_cycles    (32'h0000000A),
       .payload_last_size (3'h0),
       //LFSR Initialization - ECHO GENERATOR
