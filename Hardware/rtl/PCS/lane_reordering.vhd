@@ -471,7 +471,7 @@ begin
   -- wen_1_int <= '0' when is_sync_1_int = '1' or val_lane_1 = '0' else '1';
   -- wen_2_int <= '0' when is_sync_2_int = '1' or val_lane_2 = '0' else '1';
   -- wen_3_int <= '0' when is_sync_3_int = '1' or val_lane_3 = '0' else '1';
--- teste tanau1
+-- teste tanau..1
   wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' or val_lane_0 = '0' else '1';
   wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' or val_lane_1 = '0' else '1';
   wen_2_int <= '0' when barreira_skew.is_sync_2 = '1' or val_lane_2 = '0' else '1';
