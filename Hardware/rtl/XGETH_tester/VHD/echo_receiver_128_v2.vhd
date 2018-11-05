@@ -206,9 +206,16 @@ begin
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-    received_packet <= received_packet_reg;
 
+    mac_source_rx   <= reg_mac_source;
+    mac_destination <= reg_mac_destination;
+    ip_source       <= reg_ip_source;
+    ip_destination  <= reg_ip_destination;
+    --time_stamp_out  :
+  --  end_latency     :
+    received_packet <= received_packet_reg;
     IDLE_count <= IDLE_count_reg;
+    --end_latency <= '1' when ((received_packet_wire = '1') and (is_ip_packet = '1') and (is_udp_packet = '1') and (reg_time_stamp(0) = '1')) else '0';
 
     pkt_rx_ren <= '0' when current_s = S_IDLE else '1';
 
