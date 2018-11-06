@@ -784,7 +784,7 @@ module wrapper_macpcs_rx(
       .time_stamp_flag   (1'h0),
       .pkt_tx_full       (pkt_tx_full),
       .payload_type      (2'b00),
-      .payload_cycles    (32'h0000000A),
+      .payload_cycles    (32'h0000002A),
       .payload_last_size (3'h0),
       //LFSR Initialization - ECHO GENERATOR
       .lfsr_seed          (256'h0000000000000000000000000000000000000000000000000000000C00000003),

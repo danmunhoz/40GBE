@@ -164,7 +164,7 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
 
 begin
 
-    pkt_rx_data_N <= invert_bytes_127(pkt_rx_data);
+
 
     ip_pkt_type <= '1' when reg_ethernet_type = x"0800" else '0';
 
@@ -215,31 +215,14 @@ begin
   --  end_latency     :
     received_packet <= received_packet_reg;
     IDLE_count <= IDLE_count_reg;
-    --end_latency <= '1' when ((received_packet_wire = '1') and (is_ip_packet = '1') and (is_udp_packet = '1') and (reg_time_stamp(0) = '1')) else '0';
+    --end_latency <= '1' when ((received_packet_wire = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (reg_time_stamp(0) = '1')) else '0';
 
     pkt_rx_ren <= '0' when current_s = S_IDLE else '1';
 
-    reg_mac_source <= pkt_rx_data_N (127 downto 80) when current_s = S_ETHERNET else
-                      (others => '0') when current_s = S_IDLE;
-    reg_mac_destination <= pkt_rx_data_N (79 downto 32) when current_s = S_ETHERNET else
-                      (others => '0') when current_s = S_IDLE;
-    reg_ethernet_type <= pkt_rx_data_N (31 downto 16) when current_s = S_ETHERNET else
-                      (others => '0') when current_s = S_IDLE;
-    reg_ip_source <= pkt_rx_data_N (47 downto 16) when current_s = S_IP else
-                      (others => '0') when current_s = S_IDLE;
-    reg_ip_destination <= ip_high & ip_low when current_s = S_REST_IP else
-                      (others => '0') when current_s = S_IDLE;
-    ip_high <= pkt_rx_data_N (15 downto 0) when current_s = S_IP else
-                      (others => '0') when current_s = S_IDLE;
-    ip_low <= pkt_rx_data_N (127 downto 112) when current_s = S_REST_IP else
-                      (others => '0') when current_s = S_IDLE;
-    reg_ip_protocol <= pkt_rx_data_N (71 downto 64) when current_s = S_IP else
-                      (others => '0') when current_s = S_IDLE;
-    reg_ip_message_length <= pkt_rx_data_N (127 downto 112) when current_s = S_IP else
-                      (others => '0') when current_s = S_IDLE;
+
     const_test_begin <= '1' when current_s = S_PAYLOAD and (payload_type = "10" or payload_type = "11") else '0';
     lfsr_start <= '1' when current_s = S_PAYLOAD and payload_type = "01"  else '0';
-
+pkt_rx_data_N <= invert_bytes_127(pkt_rx_data);
     package_updater : process(reset, clock)
     begin
       if reset = '0' then
@@ -247,17 +230,33 @@ begin
         id_pkt_tester <= (others => '0');
         lfsr_fsm_begin <= '0';
         received_packet_reg <= '0';
+        reg_mac_source <= (others => '0');
+        reg_mac_destination <=(others => '0');
+        reg_ethernet_type <= (others => '0');
+        reg_ip_protocol <= (others => '0');
+        reg_ip_message_length <= (others => '0');
+        reg_ip_source <= (others => '0');
+        ip_high <= (others => '0');
+        reg_ip_destination <= (others => '0');
+
       elsif rising_edge(clock) then
+
         case current_s is
           when S_IDLE =>
             if pkt_rx_avail = '1' then
               IDLE_count_reg <= IDLE_count_reg + '1';
               lfsr_fsm_begin <= '0';
-              lfsr_start <= '0';
             end if;
           when S_ETHERNET =>
-            null;
+            reg_mac_source <= pkt_rx_data_N (127 downto 80);
+            reg_mac_destination <= pkt_rx_data_N (79 downto 32);
+            reg_ethernet_type <= pkt_rx_data_N (31 downto 16);
           when S_IP =>
+            reg_ip_protocol <= pkt_rx_data_N (71 downto 64);
+            reg_ip_message_length <= pkt_rx_data_N (127 downto 112);
+            reg_ip_source <= pkt_rx_data_N (47 downto 16);
+            ip_high <= pkt_rx_data_N (15 downto 0);
+
             if mac_source = reg_mac_destination then
               received_packet_reg <= '1';
             else
@@ -265,16 +264,14 @@ begin
             end if;
             null;
           when S_REST_IP =>
-            null;
+            reg_ip_destination <= ip_high & pkt_rx_data_N (127 downto 112);
           when S_START_PAYLOAD =>
             if payload_type = "00" then
             --  id_pkt_tester <= pkt_rx_data_N;
             elsif payload_type = "01" then
  		           --lfsr_fsm_begin <= '1';
             elsif payload_type = "10" then -- all 1s
-              pkt_zeros <= pkt_rx_data_N;
             else -- all 0s
-              pkt_ones <= pkt_rx_data_N;
             end if;
           when S_PAYLOAD =>
             if payload_type = "00" then
@@ -399,8 +396,11 @@ begin
                 lfsr_test_begin <= '1';
                 lfsr_state <= S_RUN;
                 lfsr_counter <= 0;
-                lfsr_resync_RANDOM <= RANDOM;
               elsif lfsr_counter = 6 then
+                lfsr_test_begin <= '1';
+                lfsr_resync_RANDOM <= RANDOM;
+                lfsr_counter <= lfsr_counter +1;
+              elsif lfsr_counter = 5 then
                 lfsr_test_begin <= '0';
                 lfsr_counter <= lfsr_counter +1;
               else
@@ -414,15 +414,17 @@ begin
               lfsr_start_delay <= '0';
               lfsr_state <= S_IDLE;
            elsif lfsr_counter = 7 then
-              lfsr_resync_RANDOM <= RANDOM;
               lfsr_counter <= 0;
-              lfsr_resync_ON <= '0';
             elsif lfsr_counter = 6 then
+              lfsr_resync_RANDOM <= RANDOM;
+              lfsr_resync_ON <= '0';
+              lfsr_counter <= lfsr_counter +1;
+            elsif lfsr_counter = 5 then
               lfsr_resync_ON <= '1';
               lfsr_counter <= lfsr_counter +1;
             elsif lfsr_counter = 3 then
               lfsr_counter <= lfsr_counter +1;
-              lfsr_resync_SIGNAL <= Delay_B0;
+              lfsr_resync_SIGNAL <= Delay_B1;
             else
               lfsr_counter <= lfsr_counter +1;
             end if;
@@ -457,7 +459,7 @@ begin
 
     bert_test_begin <= (lfsr_test_begin or const_test_begin);
 
-    bert_count_flip <= count_ones(bert_xor);
+    bert_count_flip <= count_ones(bert_xor) when bert_test_begin = '1' else (others => '0');
 
     count_error <= bert_n_flipped_b;
 

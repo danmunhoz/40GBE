@@ -92,24 +92,24 @@ architecture arch_echo_generator of echo_generator_256 is
   signal SEED        : std_logic_vector(255 downto 0);
   signal RANDOM : std_logic_vector(255 downto 0);
   signal start_lfsr  : std_logic;
+  signal preset_lfsr : std_logic;
+  signal count :  integer range 0 to 15;
 
 
   signal pkt_tx_data_N_H  : std_logic_vector(127 downto 0);
   signal pkt_tx_data_N_L  : std_logic_vector(127 downto 0);
   signal pkt_tx_data_N  : std_logic_vector(255 downto 0);
   signal pkt_tx_data_buffer : std_logic_vector(255 downto 0);
+  signal pkt_tx_mod_reg : std_logic_vector(4 downto 0);
+  signal pkt_tx_eop_reg : std_logic;
+  signal last_pkt : std_logic;
 
-  signal preset_lfsr : std_logic;
-  signal count :  integer range 0 to 15;
 
-  -------------------------------------------------------------------------------
-  -- LEGACY SIGNALS
-  -------------------------------------------------------------------------------
+
   -------------------------------------------------------------------------------
   -- Traffic control
   -------------------------------------------------------------------------------
-  signal time_stamp        : std_logic_vector(46 downto 0); --
-  signal time_stamp_value  : std_logic_vector(63 downto 0); --
+  signal time_stamp        : std_logic_vector(127 downto 0); --
   signal it_header         : std_logic_vector(2 downto 0); -- iterator used in header
   signal it_payload        : std_logic_vector(31 downto 0); -- iterator used in payload
 
@@ -125,35 +125,23 @@ architecture arch_echo_generator of echo_generator_256 is
   -------------------------------------------------------------------------------
   signal udp_message_length : std_logic_vector(15 downto 0);  -- UDP packet length
 
-  -------------------------------------------------------------------------------
-  -- END OF LEGACY SIGNALS
-  -------------------------------------------------------------------------------
-  -------------------------------------------------------------------------------
-  -- debug signals TO BE DELETED
-  -------------------------------------------------------------------------------
-  signal TESTE_PKT        : std_logic_vector(63 downto 0) := x"0000000000000000";
 
-  signal pkt_tx_mod_int          : std_logic_vector(4 downto 0);
-  signal pkt_tx_eop_int : std_logic;
 
-function invert_bytes(bytes : std_logic_vector)
-                 return std_logic_vector
-  is
-    variable bytes_N : std_logic_vector(255 downto 0) := (others => '0');
-    variable i_N : integer range 0 to 255;
-    begin
-      for i in 1 to 32 loop
-        bytes_N(((i*8)-1) downto ((i-1)*8)) := bytes((255-(8*(i-1))) downto (255-((8*(i-1))+7)));
-    end loop;
-    return bytes_N;
-end function invert_bytes;
---TBD
-
+  function invert_bytes(bytes : std_logic_vector)
+                   return std_logic_vector
+    is
+      variable bytes_N : std_logic_vector(255 downto 0) := (others => '0');
+      variable i_N : integer range 0 to 255;
+      begin
+        for i in 1 to 32 loop
+          bytes_N(((i*8)-1) downto ((i-1)*8)) := bytes((255-(8*(i-1))) downto (255-((8*(i-1))+7)));
+      end loop;
+      return bytes_N;
+  end function invert_bytes;
 BEGIN
 
 
-pkt_tx_mod <= pkt_tx_mod_int when pkt_tx_eop_int = '0' else (others=>'0');
-pkt_tx_eop <= pkt_tx_eop_int;
+
 
 pkt_tx_data <= pkt_tx_data_N;
 pkt_tx_data_N <= invert_bytes(pkt_tx_data_buffer);
@@ -165,7 +153,7 @@ HEADER <=   MAC & IP(191 downto 64) when current_s = S_HEADER_H else
             EOH_SOF & ALL_ZERO(127 downto 0);
 PAYLOAD <=  ID_COUNTER_L & ID_COUNTER_H when payload_type = "00" else
             SEED when payload_type = "01" else
-            ALL_ZERO when payload_type = "10" else
+            ALL_ONE when payload_type = "10" else
             ALL_ONE  when payload_type = "11";
 
 MAC      <= mac_destination & mac_source & x"08004500";
@@ -173,19 +161,20 @@ IP       <= ip_message_length & x"000000000A11" & ip_checksum &
             ip_source & ip_destination & x"C020C021" & udp_message_length;
 EOH_SOF  <= IP(63 downto 0) & UPD_INFO & ALL_ZERO(47 downto 0);
 
+
 pkt_tx_val <= '0' when current_s = S_IDLE
               else '1';
 
-pkt_tx_eop_int <= '1' when current_s = S_IDLE else
-              '0' when it_payload >= payload_cycles;
-
-
+last_pkt <= '1' when it_payload = payload_cycles else '0';
+pkt_tx_eop_reg <= '0' when last_pkt = '1' else '1';
+pkt_tx_mod <= pkt_tx_mod_reg when pkt_tx_eop_reg = '0' else (others=>'0');
+pkt_tx_eop <= pkt_tx_eop_reg;
 -------------------------------------------------------------------------------
--- LEGACY
+-- RFC2544 FEEDBACK
 -------------------------------------------------------------------------------
 
 -- Timestamp value to be sent in the packet payload
-  time_stamp_value <= x"1111" & timestamp_base(46 downto 0) & "1";
+  time_stamp <= ALL_ZERO(79 downto 0) & timestamp_base(46 downto 0) & time_stamp_flag;
   ip_message_length <= packet_length - 18;
   udp_message_length <= ip_message_length - 20;     -- Packet length minus 20 bytes of header (MACs and type)
       --Checksum calculation
@@ -202,7 +191,7 @@ pkt_tx_eop_int <= '1' when current_s = S_IDLE else
   -- FSM NEXT_STATE CONTROL
   -------------------------------------------------------------------------------
 
-  NEXT_CTR : process (current_s, reset, clock)
+  NEXT_CTRL : process (current_s, reset, clock)
   begin
     if reset='0' then
       next_s <= S_IDLE;
@@ -224,7 +213,7 @@ pkt_tx_eop_int <= '1' when current_s = S_IDLE else
   -- FSM CURRENT_STATE SIGNALS CONTROL
   -------------------------------------------------------------------------------
 
-    STATE_CTR: process (reset, clock)
+    STATE_CTRL : process (reset, clock)
     begin
       if(reset = '0') then
         current_s <= S_IDLE;
@@ -233,7 +222,7 @@ pkt_tx_eop_int <= '1' when current_s = S_IDLE else
         ID_COUNTER_H <= ALL_ZERO(126 downto 0) & '1';
         it_payload <= (OTHERS => '0');
         start_lfsr <= '0';
-        pkt_tx_mod_int <= "00000";
+        pkt_tx_mod_reg <= "00000";
       elsif (clock'event and clock = '1') then
         current_s <= next_s;
         case current_s is
@@ -247,6 +236,7 @@ pkt_tx_eop_int <= '1' when current_s = S_IDLE else
             end if;
           when S_HEADER_L =>
             SEED <=  RANDOM;
+            ID_COUNTER_L <= time_stamp;
           when S_PAYLOAD =>
             start_lfsr <= '1';
             SEED <=  RANDOM;
@@ -255,7 +245,7 @@ pkt_tx_eop_int <= '1' when current_s = S_IDLE else
             it_payload <= it_payload + 2;
             if(it_payload >= payload_cycles-1) then
               start_lfsr <= '0';
-              pkt_tx_mod_int <= "11111";
+              pkt_tx_mod_reg <= "11111";
               pkt_tx_sop <= "00";
             end if;
         end case;
@@ -266,7 +256,7 @@ pkt_tx_eop_int <= '1' when current_s = S_IDLE else
     -- LFSR
     -------------------------------------------------------------------------------
 
-    PRESET_LFSR_CTR: process (clock, reset)
+    PRESET_LFSR_CTRL : process (clock, reset)
     begin
       if reset = '0' then
          preset_lfsr <= '0';
