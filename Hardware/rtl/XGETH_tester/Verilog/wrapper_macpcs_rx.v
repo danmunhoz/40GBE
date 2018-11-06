@@ -679,7 +679,7 @@ module wrapper_macpcs_rx(
               .verify_system_rec  (1'b1),
               .reset_test         (1'b1),
               .pkt_sequence_in    (32'h0000),
-              .payload_type       (2'b00),
+              .payload_type       (2'b01),
 
             //LFSR Initialization - ECHO GENERATOR
               .lfsr_seed          (128'h00000000000000000000000C00000003),
@@ -780,11 +780,11 @@ module wrapper_macpcs_rx(
       .ip_source         (32'h0ABCDE01),
       .ip_destination    (32'h0ABCDE02),
       .packet_length     (16'h05EE),
-      .timestamp_base    (48'h0),
+      .timestamp_base    (48'h1),
       .time_stamp_flag   (1'h0),
       .pkt_tx_full       (pkt_tx_full),
-      .payload_type      (2'b00),
-      .payload_cycles    (32'h0000002A),
+      .payload_type      (2'b01),
+      .payload_cycles    (32'h0000002A), //2A MIN VALUE
       .payload_last_size (3'h0),
       //LFSR Initialization - ECHO GENERATOR
       .lfsr_seed          (256'h0000000000000000000000000000000000000000000000000000000C00000003),

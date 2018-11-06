@@ -84,8 +84,10 @@ architecture arch_echo_generator of echo_generator_256 is
   signal IDLE_VALUE       : std_logic_vector(255 downto 0) := x"0707070707070707070707070707070707070707070707070707070707070707";
 
   signal UPD_INFO   : std_logic_vector(15 downto 0) := x"0000";
-  signal ALL_ONE    : std_logic_vector(255 downto 0) := (others => '1');
-  signal ALL_ZERO   : std_logic_vector(255 downto 0) := (others => '0');
+  signal ALL_ONE    : std_logic_vector(127 downto 0) := (others => '1');
+  signal ALL_ZERO   : std_logic_vector(127 downto 0) := (others => '0');
+  signal THROUGHPUT   : std_logic_vector(255 downto 0) := (others => '0');
+  signal PKT_COUNTER : std_logic_vector(127 downto 0);
   signal ID_COUNTER_H : std_logic_vector(127 downto 0); -- counter for ID
   signal ID_COUNTER_L : std_logic_vector(127 downto 0);
 
@@ -109,7 +111,7 @@ architecture arch_echo_generator of echo_generator_256 is
   -------------------------------------------------------------------------------
   -- Traffic control
   -------------------------------------------------------------------------------
-  signal time_stamp        : std_logic_vector(127 downto 0); --
+  signal time_stamp        : std_logic_vector(47 downto 0); --
   signal it_header         : std_logic_vector(2 downto 0); -- iterator used in header
   signal it_payload        : std_logic_vector(31 downto 0); -- iterator used in payload
 
@@ -150,16 +152,16 @@ pkt_tx_data_buffer <= PAYLOAD when current_s = S_PAYLOAD else
                       HEADER;
 
 HEADER <=   MAC & IP(191 downto 64) when current_s = S_HEADER_H else
-            EOH_SOF & ALL_ZERO(127 downto 0);
+            EOH_SOF & PKT_COUNTER;
 PAYLOAD <=  ID_COUNTER_L & ID_COUNTER_H when payload_type = "00" else
             SEED when payload_type = "01" else
-            ALL_ONE when payload_type = "10" else
-            ALL_ONE  when payload_type = "11";
+            ALL_ZERO & ALL_ZERO when payload_type = "10" else
+            ALL_ONE & ALL_ONE  when payload_type = "11";
 
 MAC      <= mac_destination & mac_source & x"08004500";
 IP       <= ip_message_length & x"000000000A11" & ip_checksum &
             ip_source & ip_destination & x"C020C021" & udp_message_length;
-EOH_SOF  <= IP(63 downto 0) & UPD_INFO & ALL_ZERO(47 downto 0);
+EOH_SOF  <= IP(63 downto 0) & UPD_INFO & time_stamp;
 
 
 pkt_tx_val <= '0' when current_s = S_IDLE
@@ -174,7 +176,7 @@ pkt_tx_eop <= pkt_tx_eop_reg;
 -------------------------------------------------------------------------------
 
 -- Timestamp value to be sent in the packet payload
-  time_stamp <= ALL_ZERO(79 downto 0) & timestamp_base(46 downto 0) & time_stamp_flag;
+  time_stamp <= timestamp_base(46 downto 0) & time_stamp_flag;
   ip_message_length <= packet_length - 18;
   udp_message_length <= ip_message_length - 20;     -- Packet length minus 20 bytes of header (MACs and type)
       --Checksum calculation
@@ -213,6 +215,8 @@ pkt_tx_eop <= pkt_tx_eop_reg;
   -- FSM CURRENT_STATE SIGNALS CONTROL
   -------------------------------------------------------------------------------
 
+
+
     STATE_CTRL : process (reset, clock)
     begin
       if(reset = '0') then
@@ -223,6 +227,7 @@ pkt_tx_eop <= pkt_tx_eop_reg;
         it_payload <= (OTHERS => '0');
         start_lfsr <= '0';
         pkt_tx_mod_reg <= "00000";
+        PKT_COUNTER <= (OTHERS => '0');
       elsif (clock'event and clock = '1') then
         current_s <= next_s;
         case current_s is
@@ -236,14 +241,16 @@ pkt_tx_eop <= pkt_tx_eop_reg;
             end if;
           when S_HEADER_L =>
             SEED <=  RANDOM;
-            ID_COUNTER_L <= time_stamp;
+
           when S_PAYLOAD =>
             start_lfsr <= '1';
             SEED <=  RANDOM;
             ID_COUNTER_L <= ID_COUNTER_L + 2;
             ID_COUNTER_H <= ID_COUNTER_H + 2;
             it_payload <= it_payload + 2;
-            if(it_payload >= payload_cycles-1) then
+            if(it_payload = 0) Then
+              PKT_COUNTER <= PKT_COUNTER + 1;
+            elsif(it_payload >= payload_cycles-1) then
               start_lfsr <= '0';
               pkt_tx_mod_reg <= "11111";
               pkt_tx_sop <= "00";

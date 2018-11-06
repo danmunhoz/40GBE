@@ -165,7 +165,7 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
 begin
 
 
-
+    pkt_rx_data_N <= invert_bytes_127(pkt_rx_data);
     ip_pkt_type <= '1' when reg_ethernet_type = x"0800" else '0';
 
     udp_pkt_type <= '1' when reg_ip_protocol = x"11" else '0';
@@ -222,7 +222,7 @@ begin
 
     const_test_begin <= '1' when current_s = S_PAYLOAD and (payload_type = "10" or payload_type = "11") else '0';
     lfsr_start <= '1' when current_s = S_PAYLOAD and payload_type = "01"  else '0';
-pkt_rx_data_N <= invert_bytes_127(pkt_rx_data);
+
     package_updater : process(reset, clock)
     begin
       if reset = '0' then
@@ -238,9 +238,7 @@ pkt_rx_data_N <= invert_bytes_127(pkt_rx_data);
         reg_ip_source <= (others => '0');
         ip_high <= (others => '0');
         reg_ip_destination <= (others => '0');
-
       elsif rising_edge(clock) then
-
         case current_s is
           when S_IDLE =>
             if pkt_rx_avail = '1' then
@@ -267,18 +265,13 @@ pkt_rx_data_N <= invert_bytes_127(pkt_rx_data);
             reg_ip_destination <= ip_high & pkt_rx_data_N (127 downto 112);
           when S_START_PAYLOAD =>
             if payload_type = "00" then
-            --  id_pkt_tester <= pkt_rx_data_N;
-            elsif payload_type = "01" then
- 		           --lfsr_fsm_begin <= '1';
-            elsif payload_type = "10" then -- all 1s
-            else -- all 0s
+              id_pkt_tester <= pkt_rx_data_N;
             end if;
           when S_PAYLOAD =>
             if payload_type = "00" then
-              id_pkt_tester <= pkt_rx_data_N;
+
             elsif payload_type = "01" then
               lfsr_fsm_begin <= '1';
-              --null;
             elsif payload_type = "10" then
               null;
             else
