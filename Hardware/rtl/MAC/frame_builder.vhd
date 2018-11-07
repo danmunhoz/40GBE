@@ -486,7 +486,9 @@ architecture behav_frame_builder of frame_builder is
       end if;
     end process;
 
-    frame_output_decoder: process(ps_frame, eop_reg_in, sop_reg_in, val_reg_in, data_0, data_1, data_2, data_3, almost_e, wait_cnt)
+    frame_output_decoder: process(ps_frame, eop_reg_in, sop_reg_in, val_reg_in,
+                                  data_0, data_1, data_2, data_3, almost_e,
+                                  data_0_o, data_1_o, data_2_o, data_3_o, wait_cnt)
     begin
       enable_wait_cnt <= '0';
       frame_int <= (others=>'0');
