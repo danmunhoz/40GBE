@@ -295,7 +295,7 @@ begin
         id_sequence_counter <= (others => '0');
         pkt_sequence_error_flag_aux <= '0';
       elsif rising_edge(clock) then
-        if current_s = S_PAYLOAD and payload_type = "00" and verify_system_rec = '1' then
+        if current_s = S_START_PAYLOAD and payload_type = "00" and verify_system_rec = '1' then
            if (id_pkt_tester = (pkt_rx_data_N - '1')) then
              pkt_sequence_error_flag_aux <= '0';
              id_sequence_counter <= id_sequence_counter + '1';
@@ -321,7 +321,7 @@ begin
         not_lost_pkt_test <= '0';
         lost_counter <= (others => '0');
       elsif rising_edge(clock) then
-        if current_s = S_PAYLOAD and payload_type = "00" and reset_test = '1' then
+        if current_s = S_START_PAYLOAD and payload_type = "00" and reset_test = '1' then
           if (id_pkt_tester = (pkt_rx_data_N - '1')) then
             if lost_pkt_flag = '1' then
               lost_counter <= lost_counter + '1';
