@@ -59,10 +59,8 @@ entity echo_generator_256 is
     pkt_tx_sop          : out std_logic_vector(1 downto 0);                     -- Start of packet flag (sent along with the first frame)
     pkt_tx_eop          : out std_logic;                     -- End of packet flag (sent along with the last frame)
     pkt_tx_mod          : out std_logic_vector(4 downto 0);   -- Module (frame size, only read when eop='1')
-    pkt_lost_counter    : out std_logic_vector(31 downto 0);
     payload_type        : in std_logic_vector(1 downto 0);
-    payload_cycles      : in std_logic_vector(31 downto 0);
-    payload_last_size   : in std_logic_vector(2 downto 0)
+    payload_cycles      : in std_logic_vector(31 downto 0)
   );
 end echo_generator_256;
 
@@ -98,8 +96,6 @@ architecture arch_echo_generator of echo_generator_256 is
   signal count :  integer range 0 to 15;
 
 
-  signal pkt_tx_data_N_H  : std_logic_vector(127 downto 0);
-  signal pkt_tx_data_N_L  : std_logic_vector(127 downto 0);
   signal pkt_tx_data_N  : std_logic_vector(255 downto 0);
   signal pkt_tx_data_buffer : std_logic_vector(255 downto 0);
   signal pkt_tx_mod_reg : std_logic_vector(4 downto 0);
@@ -112,7 +108,6 @@ architecture arch_echo_generator of echo_generator_256 is
   -- Traffic control
   -------------------------------------------------------------------------------
   signal time_stamp        : std_logic_vector(47 downto 0); --
-  signal it_header         : std_logic_vector(2 downto 0); -- iterator used in header
   signal it_payload        : std_logic_vector(31 downto 0); -- iterator used in payload
 
   -------------------------------------------------------------------------------
@@ -228,6 +223,7 @@ pkt_tx_eop <= pkt_tx_eop_reg;
         start_lfsr <= '0';
         pkt_tx_mod_reg <= "00000";
         PKT_COUNTER <= (OTHERS => '0');
+        SEED <= (OTHERS => '0');
       elsif (clock'event and clock = '1') then
         current_s <= next_s;
         case current_s is

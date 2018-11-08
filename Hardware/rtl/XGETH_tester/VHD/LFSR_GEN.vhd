@@ -87,7 +87,7 @@ begin
 
 
   start_run <= start or preset or secure_send;
-  data_out <= linear_feedback(3,63);
+  data_out <= (others => '0') when reset_N = '0' else linear_feedback(3,63);
 
   lfsr0_0 : entity work.lsfr_generic_reg_gen generic map (DATA_SIZE=> DATA_SIZE) port map (rst_n => reset_N, parallel_reg => reg_i, random => linear_feedback(0,0), poly => polynomial);
   lfsr1_0 : entity work.lsfr_generic_reg_gen generic map (DATA_SIZE=> DATA_SIZE) port map (rst_n => reset_N, parallel_reg => Delay_B0, random => linear_feedback(1,0), poly => polynomial);

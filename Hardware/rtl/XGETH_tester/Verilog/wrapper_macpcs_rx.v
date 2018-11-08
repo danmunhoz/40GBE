@@ -679,7 +679,7 @@ module wrapper_macpcs_rx(
               .verify_system_rec  (1'b1),
               .reset_test         (1'b1),
               .pkt_sequence_in    (32'h0000),
-              .payload_type       (2'b01),
+              .payload_type       (2'b00),
 
             //LFSR Initialization - ECHO GENERATOR
               .lfsr_seed          (128'h00000000000000000000000C00000003),
@@ -783,9 +783,9 @@ module wrapper_macpcs_rx(
       .timestamp_base    (48'h1),
       .time_stamp_flag   (1'h0),
       .pkt_tx_full       (pkt_tx_full),
-      .payload_type      (2'b01),
+      .payload_type      (2'b00),
       .payload_cycles    (32'h0000002A), //2A MIN VALUE
-      .payload_last_size (3'h0),
+
       //LFSR Initialization - ECHO GENERATOR
       .lfsr_seed          (256'h0000000000000000000000000000000000000000000000000000000C00000003),
       .lfsr_polynomial    (2'b10),
@@ -796,8 +796,8 @@ module wrapper_macpcs_rx(
       .pkt_tx_sop     (cj_pkt_tx_sop),
       .pkt_tx_eop     (cj_pkt_tx_eop),
       .pkt_tx_mod     (cj_pkt_tx_mod),
-      .pkt_tx_val     (cj_pkt_tx_val),
-      .pkt_lost_counter (cj_pkt_lost_counter)
+      .pkt_tx_val     (cj_pkt_tx_val)
+
 
     );
     // END ECHO GEN 256 INST

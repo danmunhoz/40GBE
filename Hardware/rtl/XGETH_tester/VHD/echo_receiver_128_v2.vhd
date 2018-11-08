@@ -108,6 +108,8 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
 
     --------------------------------------------------------------------------------
     --LFSR AND BERT SIGNALS
+    subtype byte is integer range 0 to 7;
+
     signal RANDOM : std_logic_vector(127 downto 0);
     signal lfsr_bert : std_logic_vector(127 downto 0);
     signal start : std_logic;
@@ -119,7 +121,7 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     signal delay_B0, delay_B1, delay_B2: std_logic_vector (127 downto 0);
     signal lfsr_resync_SIGNAL : std_logic_vector (127 downto 0);
     signal lfsr_resync_RANDOM : std_logic_vector (127 downto 0);
-    signal lfsr_counter : integer range 0 to 15;
+    signal lfsr_counter : byte;
 
     signal const_test_begin : std_logic;
 
