@@ -96,7 +96,7 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     signal id_checker_reg : std_logic_vector(127 downto 0) := (OTHERS => '0');
 
     signal lost_pkt_flag : std_logic;
-    signal not_lost_pkt_test : std_logic;
+    signal first_pkt_test : std_logic := '1';
     signal lost_counter : std_logic_vector(31 downto 0) := (OTHERS => '0');
     signal lost_pkt_tester : std_logic_vector(127 downto 0) := (OTHERS => '0');
 
@@ -104,6 +104,11 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     signal IDLE_count_reg : std_logic_vector(127 downto 0) := (OTHERS => '0');
     signal pkt_zeros      : std_logic_vector(127 downto 0) := (OTHERS => '0');
     signal pkt_ones       : std_logic_vector(127 downto 0) := (OTHERS => '0');
+
+    --------------------------------------------------------------------------------
+    --time_stamp
+    signal reg_time_stamp : std_logic_vector(47 downto 0) := (OTHERS => '0');
+    signal time_stamp_recv: std_logic_vector(46 downto 0) := (OTHERS => '0');
 
 
     --------------------------------------------------------------------------------
@@ -213,11 +218,19 @@ begin
     mac_destination <= reg_mac_destination;
     ip_source       <= reg_ip_source;
     ip_destination  <= reg_ip_destination;
-    --time_stamp_out  :
-  --  end_latency     :
     received_packet <= received_packet_reg;
     IDLE_count <= IDLE_count_reg;
-    --end_latency <= '1' when ((received_packet_wire = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (reg_time_stamp(0) = '1')) else '0';
+
+
+    -------------------------------------
+    ---time_stamp
+
+    time_stamp_recv <= timestamp_base (46 downto 0);
+    time_stamp_out <= ('0' & (time_stamp_recv(46 downto 0) - reg_time_stamp(47 downto 1))) when (received_packet_reg = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (reg_time_stamp(0) = '1')
+                  else (others=>'0');
+    end_latency <= '1' when ((received_packet_reg = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (reg_time_stamp(0) = '1'))
+                  else '0';
+    -------------------------------------
 
     pkt_rx_ren <= '0' when current_s = S_IDLE else '1';
 
@@ -240,6 +253,7 @@ begin
         reg_ip_source <= (others => '0');
         ip_high <= (others => '0');
         reg_ip_destination <= (others => '0');
+        reg_time_stamp <= (others => '0');
       elsif rising_edge(clock) then
         case current_s is
           when S_IDLE =>
@@ -265,6 +279,7 @@ begin
             null;
           when S_REST_IP =>
             reg_ip_destination <= ip_high & pkt_rx_data_N (127 downto 112);
+            reg_time_stamp <= pkt_rx_data_N(47 downto 0);
           when S_START_PAYLOAD =>
             if payload_type = "00" then
               id_pkt_tester <= pkt_rx_data_N;
@@ -320,7 +335,7 @@ begin
       if reset = '0' then
         lost_pkt_flag <= '0';
         lost_pkt_tester <= (others => '0');
-        not_lost_pkt_test <= '0';
+        first_pkt_test <= '1';
         lost_counter <= (others => '0');
       elsif rising_edge(clock) then
         if current_s = S_START_PAYLOAD and payload_type = "00" and reset_test = '1' then
@@ -328,12 +343,15 @@ begin
             if lost_pkt_flag = '1' then
               lost_counter <= lost_counter + '1';
             end if;
-            not_lost_pkt_test <= '1';
           else
-            lost_pkt_tester <= lost_pkt_tester + pkt_rx_data_N - id_pkt_tester - '1';
-            lost_counter <= (others => '0');
-            lost_pkt_flag <= '1';
-            not_lost_pkt_test <= '0';
+            if first_pkt_test = '1' then -- test if its the first pkt after avail is up
+              lost_pkt_flag <= '0';
+              first_pkt_test <= '0';
+            else
+              lost_pkt_flag <= '1';
+              lost_pkt_tester <= lost_pkt_tester + pkt_rx_data_N - id_pkt_tester - '1';
+              lost_counter <= (others => '0');
+            end if;
           end if;
         end if;
       end if;
