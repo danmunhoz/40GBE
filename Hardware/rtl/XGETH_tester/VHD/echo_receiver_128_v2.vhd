@@ -64,7 +64,7 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     -------------------------------------------------------------------------------
     -- State
     -------------------------------------------------------------------------------
-    type   fsm_state_type is (S_IDLE, S_ETHERNET,S_IP, S_REST_IP , S_PAYLOAD, S_START_PAYLOAD);
+    type   fsm_state_type is (S_IDLE, S_ETHERNET,S_IP, S_REST_IP , S_PAYLOAD_START, S_PAYLOAD, S_PAYLOAD_END);
     type   lfsr_state_type is (S_IDLE, S_SETUP_PIPELINE, S_SETUP_DELAY, S_RUN);
     type   recovery_state_type is (S_WAIT_START, S_WAIT_STOP, S_RECOVERY);
 
@@ -72,9 +72,11 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     signal lfsr_state : lfsr_state_type;
     signal recovery_state : recovery_state_type;
 
-    signal pkt_rx_data_N : std_logic_vector(127 downto 0);
-    signal pkt_rx_data_NC : std_logic_vector(127 downto 0);
-    signal pkt_sequence_error_flag_aux : std_logic;
+    signal pkt_rx_data_buffer            : std_logic_vector(127 downto 0);
+    signal pkt_rx_data_nbits     : std_logic_vector(127 downto 0);
+    signal pkt_rx_data_N                 : std_logic_vector(127 downto 0);
+
+    signal pkt_sequence_error_flag_aux   : std_logic;
 
 
     --------------------------------------------------------------------------------
@@ -96,7 +98,7 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     signal id_checker_reg : std_logic_vector(127 downto 0) := (OTHERS => '0');
 
     signal lost_pkt_flag : std_logic;
-    signal first_pkt_test : std_logic := '1';
+    signal not_lost_pkt_test : std_logic;
     signal lost_counter : std_logic_vector(31 downto 0) := (OTHERS => '0');
     signal lost_pkt_tester : std_logic_vector(127 downto 0) := (OTHERS => '0');
 
@@ -104,11 +106,6 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     signal IDLE_count_reg : std_logic_vector(127 downto 0) := (OTHERS => '0');
     signal pkt_zeros      : std_logic_vector(127 downto 0) := (OTHERS => '0');
     signal pkt_ones       : std_logic_vector(127 downto 0) := (OTHERS => '0');
-
-    --------------------------------------------------------------------------------
-    --time_stamp
-    signal reg_time_stamp : std_logic_vector(47 downto 0) := (OTHERS => '0');
-    signal time_stamp_recv: std_logic_vector(46 downto 0) := (OTHERS => '0');
 
 
     --------------------------------------------------------------------------------
@@ -169,12 +166,12 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
       return temp;
     end function count_ones;
 
-begin
+BEGIN
 
 
-    pkt_rx_data_N <= invert_bytes_127(pkt_rx_data);
+    pkt_rx_data_N <= invert_bytes_127(pkt_rx_data_buffer);
+
     ip_pkt_type <= '1' when reg_ethernet_type = x"0800" else '0';
-
     udp_pkt_type <= '1' when reg_ip_protocol = x"11" else '0';
 
 
@@ -191,22 +188,28 @@ begin
             when S_IDLE => if pkt_rx_avail = '1' and pkt_rx_sop = '1' then next_s <= S_ETHERNET; end if;
             when S_ETHERNET => next_s <= S_IP;
             when S_IP => next_s <= S_REST_IP;
-            when S_REST_IP => next_s <= S_START_PAYLOAD;
-            when S_START_PAYLOAD => next_s <= S_PAYLOAD;
-            when S_PAYLOAD => if pkt_rx_eop = '1' then next_s <= S_IDLE; end if;
+            when S_REST_IP => next_s <= S_PAYLOAD_START;
+            when S_PAYLOAD_START => next_s <= S_PAYLOAD;
+            when S_PAYLOAD =>
+              if pkt_rx_eop = '1' then
+                  next_s <= S_PAYLOAD_END;
+              end if;
+          when S_PAYLOAD_END => next_s <= S_IDLE;
         end case;
       end if;
     end process;
 
-    current_updater : process(reset, clock, pkt_rx_avail, pkt_rx_sop, pkt_rx_eop)
+    current_updater : process(reset, clock)
     begin
       if reset = '0' then
           current_s <= S_IDLE;
-      elsif pkt_rx_sop = '1' and next_s /= S_IP and pkt_rx_avail = '1' then
-          current_s <= S_ETHERNET;
-      elsif pkt_rx_eop = '1' and pkt_rx_avail = '1' then
-            current_s <= S_IDLE;
+          pkt_rx_data_buffer <= (others => '0');
       elsif rising_edge(clock)  then
+        if pkt_rx_eop = '1' then
+          pkt_rx_data_buffer <= pkt_rx_data_nbits;
+        else
+          pkt_rx_data_buffer <= pkt_rx_data;
+        end if;
           current_s <= next_s;
       end if;
     end process;
@@ -218,24 +221,16 @@ begin
     mac_destination <= reg_mac_destination;
     ip_source       <= reg_ip_source;
     ip_destination  <= reg_ip_destination;
-    received_packet <= received_packet_reg;
+
+
+    received_packet <= '1' when mac_source = reg_mac_destination else '0';
     IDLE_count <= IDLE_count_reg;
-
-
-    -------------------------------------
-    ---time_stamp
-
-    time_stamp_recv <= timestamp_base (46 downto 0);
-    time_stamp_out <= ('0' & (time_stamp_recv(46 downto 0) - reg_time_stamp(47 downto 1))) when (received_packet_reg = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (reg_time_stamp(0) = '1')
-                  else (others=>'0');
-    end_latency <= '1' when ((received_packet_reg = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (reg_time_stamp(0) = '1'))
-                  else '0';
-    -------------------------------------
+    --end_latency <= '1' when ((received_packet_wire = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (reg_time_stamp(0) = '1')) else '0';
 
     pkt_rx_ren <= '0' when current_s = S_IDLE else '1';
 
 
-    const_test_begin <= '1' when current_s = S_PAYLOAD and (payload_type = "10" or payload_type = "11") else '0';
+
     lfsr_start <= '1' when current_s = S_PAYLOAD and payload_type = "01"  else '0';
 
     package_updater : process(reset, clock)
@@ -253,13 +248,12 @@ begin
         reg_ip_source <= (others => '0');
         ip_high <= (others => '0');
         reg_ip_destination <= (others => '0');
-        reg_time_stamp <= (others => '0');
       elsif rising_edge(clock) then
         case current_s is
           when S_IDLE =>
+            lfsr_fsm_begin <= '0';
             if pkt_rx_avail = '1' then
               IDLE_count_reg <= IDLE_count_reg + '1';
-              lfsr_fsm_begin <= '0';
             end if;
           when S_ETHERNET =>
             reg_mac_source <= pkt_rx_data_N (127 downto 80);
@@ -270,35 +264,47 @@ begin
             reg_ip_message_length <= pkt_rx_data_N (127 downto 112);
             reg_ip_source <= pkt_rx_data_N (47 downto 16);
             ip_high <= pkt_rx_data_N (15 downto 0);
-
-            if mac_source = reg_mac_destination then
-              received_packet_reg <= '1';
-            else
-              received_packet_reg <= '0';
-            end if;
-            null;
           when S_REST_IP =>
             reg_ip_destination <= ip_high & pkt_rx_data_N (127 downto 112);
-            reg_time_stamp <= pkt_rx_data_N(47 downto 0);
-          when S_START_PAYLOAD =>
+          when S_PAYLOAD_START =>
             if payload_type = "00" then
               id_pkt_tester <= pkt_rx_data_N;
+            elsif payload_type = "10" or payload_type = "11" then
+              const_test_begin <= '1';
             end if;
           when S_PAYLOAD =>
-            if payload_type = "00" then
-
-            elsif payload_type = "01" then
+            if payload_type = "01" then
               lfsr_fsm_begin <= '1';
-            elsif payload_type = "10" then
-              null;
-            else
-              null;
             end if;
-
-          when others => null;
+          when S_PAYLOAD_END =>
+            lfsr_fsm_begin <= '0';
+            if payload_type = "10" or payload_type = "11" then
+              const_test_begin <= '0';
+            end if;
         end case;
       end if;
     end process;
+
+    -------------------------------------------------------------------------------
+    -- PKT N BIT CTRL
+    -------------------------------------------------------------------------------
+
+    pkt_rx_data_nbits <= pkt_rx_data_buffer(119 downto 0) & pkt_rx_data(7 downto 0)      when pkt_rx_mod  = "0000" else
+                         pkt_rx_data_buffer(111 downto 0) & pkt_rx_data(15 downto 0)     when pkt_rx_mod  = "0001" else
+                         pkt_rx_data_buffer(103 downto 0) & pkt_rx_data(23 downto 0)     when pkt_rx_mod  = "0010" else
+                         pkt_rx_data_buffer(95 downto 0) & pkt_rx_data(31 downto 0)      when pkt_rx_mod  = "0011" else
+                         pkt_rx_data_buffer(87 downto 0) & pkt_rx_data(39 downto 0)      when pkt_rx_mod  = "0100" else
+                         pkt_rx_data_buffer(79 downto 0) & pkt_rx_data(47 downto 0)      when pkt_rx_mod  = "0101" else
+                         pkt_rx_data_buffer(71 downto 0) & pkt_rx_data(55 downto 0)      when pkt_rx_mod  = "0110" else
+                         pkt_rx_data_buffer(63 downto 0) & pkt_rx_data(63 downto 0)      when pkt_rx_mod  = "0111" else
+                         pkt_rx_data_buffer(55 downto 0) & pkt_rx_data(71 downto 0)      when pkt_rx_mod  = "1000" else
+                         pkt_rx_data_buffer(47 downto 0) & pkt_rx_data(79 downto 0)      when pkt_rx_mod  = "1001" else
+                         pkt_rx_data_buffer(39 downto 0) & pkt_rx_data(87 downto 0)      when pkt_rx_mod  = "1010" else
+                         pkt_rx_data_buffer(31 downto 0) & pkt_rx_data(95 downto 0)      when pkt_rx_mod  = "1011" else
+                         pkt_rx_data_buffer(23 downto 0) & pkt_rx_data(103 downto 0)     when pkt_rx_mod  = "1100" else
+                         pkt_rx_data_buffer(15 downto 0) & pkt_rx_data(111 downto 0)     when pkt_rx_mod  = "1101" else
+                         pkt_rx_data_buffer(7 downto 0) & pkt_rx_data(119 downto 0)      when pkt_rx_mod  = "1110" else
+                         pkt_rx_data;
 
     --------------------------------------------------------------------------------
     -- ID CHECKER
@@ -312,7 +318,7 @@ begin
         id_sequence_counter <= (others => '0');
         pkt_sequence_error_flag_aux <= '0';
       elsif rising_edge(clock) then
-        if current_s = S_START_PAYLOAD and payload_type = "00" and verify_system_rec = '1' then
+        if current_s = S_PAYLOAD_START and payload_type = "00" and verify_system_rec = '1' then
            if (id_pkt_tester = (pkt_rx_data_N - '1')) then
              pkt_sequence_error_flag_aux <= '0';
              id_sequence_counter <= id_sequence_counter + '1';
@@ -335,23 +341,20 @@ begin
       if reset = '0' then
         lost_pkt_flag <= '0';
         lost_pkt_tester <= (others => '0');
-        first_pkt_test <= '1';
+        not_lost_pkt_test <= '0';
         lost_counter <= (others => '0');
       elsif rising_edge(clock) then
-        if current_s = S_START_PAYLOAD and payload_type = "00" and reset_test = '1' then
+        if current_s = S_PAYLOAD_START and payload_type = "00" and reset_test = '1' then
           if (id_pkt_tester = (pkt_rx_data_N - '1')) then
             if lost_pkt_flag = '1' then
               lost_counter <= lost_counter + '1';
             end if;
+            not_lost_pkt_test <= '1';
           else
-            if first_pkt_test = '1' then -- test if its the first pkt after avail is up
-              lost_pkt_flag <= '0';
-              first_pkt_test <= '0';
-            else
-              lost_pkt_flag <= '1';
-              lost_pkt_tester <= lost_pkt_tester + pkt_rx_data_N - id_pkt_tester - '1';
-              lost_counter <= (others => '0');
-            end if;
+            lost_pkt_tester <= lost_pkt_tester + pkt_rx_data_N - id_pkt_tester - '1';
+            lost_counter <= (others => '0');
+            lost_pkt_flag <= '1';
+            not_lost_pkt_test <= '0';
           end if;
         end if;
       end if;

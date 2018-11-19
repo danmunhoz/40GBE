@@ -74,17 +74,18 @@ architecture arch_echo_generator of echo_generator_256 is
   type state_type is (S_IDLE, S_HEADER_H, S_HEADER_L, S_PAYLOAD);
   signal current_s, next_s: state_type;
 
-  signal MAC        : std_logic_vector(127 downto 0);
-  signal IP         : std_logic_vector(191 downto 0);
-  signal EOH_SOF    : std_logic_vector(127 downto 0); --END OF HEADER - START OF FRAME
-  signal HEADER     : std_logic_vector(255 downto 0);
-  signal PAYLOAD    : std_logic_vector(255 downto 0);
-  signal IDLE_VALUE       : std_logic_vector(255 downto 0) := x"0707070707070707070707070707070707070707070707070707070707070707";
+  signal MAC          : std_logic_vector(127 downto 0);
+  signal IP           : std_logic_vector(191 downto 0);
+  signal EOH_SOF      : std_logic_vector(127 downto 0); --END OF HEADER - START OF FRAME
+  signal HEADER       : std_logic_vector(255 downto 0);
+  signal PAYLOAD      : std_logic_vector(255 downto 0);
+  signal PAYLOAD_PKT  : std_logic_vector(255 downto 0);
+  signal PAYLOAD_LAST : std_logic_vector(255 downto 0);
+  signal IDLE_VALUE   : std_logic_vector(127 downto 0) := x"07070707070707070707070707070707";
 
   signal UPD_INFO   : std_logic_vector(15 downto 0) := x"0000";
   signal ALL_ONE    : std_logic_vector(127 downto 0) := (others => '1');
   signal ALL_ZERO   : std_logic_vector(127 downto 0) := (others => '0');
-  signal THROUGHPUT   : std_logic_vector(255 downto 0) := (others => '0');
   signal PKT_COUNTER : std_logic_vector(127 downto 0);
   signal ID_COUNTER_H : std_logic_vector(127 downto 0); -- counter for ID
   signal ID_COUNTER_L : std_logic_vector(127 downto 0);
@@ -102,13 +103,12 @@ architecture arch_echo_generator of echo_generator_256 is
   signal pkt_tx_eop_reg : std_logic;
   signal last_pkt : std_logic;
 
-
-
   -------------------------------------------------------------------------------
   -- Traffic control
   -------------------------------------------------------------------------------
   signal time_stamp        : std_logic_vector(47 downto 0); --
   signal it_payload        : std_logic_vector(31 downto 0); -- iterator used in payload
+  signal it_mod        : std_logic_vector(4 downto 0);
 
   -------------------------------------------------------------------------------
   -- IP
@@ -143,15 +143,19 @@ BEGIN
 pkt_tx_data <= pkt_tx_data_N;
 pkt_tx_data_N <= invert_bytes(pkt_tx_data_buffer);
 pkt_tx_data_buffer <= PAYLOAD when current_s = S_PAYLOAD else
-                      IDLE_VALUE when current_s = S_IDLE else
+                      IDLE_VALUE & IDLE_VALUE when current_s = S_IDLE else
                       HEADER;
 
 HEADER <=   MAC & IP(191 downto 64) when current_s = S_HEADER_H else
             EOH_SOF & PKT_COUNTER;
-PAYLOAD <=  ID_COUNTER_L & ID_COUNTER_H when payload_type = "00" else
-            SEED when payload_type = "01" else
-            ALL_ZERO & ALL_ZERO when payload_type = "10" else
-            ALL_ONE & ALL_ONE  when payload_type = "11";
+
+PAYLOAD <= PAYLOAD_LAST when last_pkt = '1' else
+           PAYLOAD_PKT;
+
+PAYLOAD_PKT <=  ID_COUNTER_L & ID_COUNTER_H when payload_type = "00" else
+                SEED when payload_type = "01" else
+                ALL_ZERO & ALL_ZERO when payload_type = "10" else
+                ALL_ONE & ALL_ONE   when payload_type = "11";
 
 MAC      <= mac_destination & mac_source & x"08004500";
 IP       <= ip_message_length & x"000000000A11" & ip_checksum &
@@ -224,6 +228,7 @@ pkt_tx_eop <= pkt_tx_eop_reg;
         pkt_tx_mod_reg <= "00000";
         PKT_COUNTER <= (OTHERS => '0');
         SEED <= (OTHERS => '0');
+        it_mod <= "11111";
       elsif (clock'event and clock = '1') then
         current_s <= next_s;
         case current_s is
@@ -237,7 +242,6 @@ pkt_tx_eop <= pkt_tx_eop_reg;
             end if;
           when S_HEADER_L =>
             SEED <=  RANDOM;
-
           when S_PAYLOAD =>
             start_lfsr <= '1';
             SEED <=  RANDOM;
@@ -248,7 +252,14 @@ pkt_tx_eop <= pkt_tx_eop_reg;
               PKT_COUNTER <= PKT_COUNTER + 1;
             elsif(it_payload >= payload_cycles-1) then
               start_lfsr <= '0';
-              pkt_tx_mod_reg <= "11111";
+              pkt_tx_mod_reg <= it_mod;
+              if(it_mod = "01010" ) then
+                it_mod <= "01111";
+              elsif(it_mod = "10010" ) then
+                it_mod <= "11111";
+              else
+                it_mod <= it_mod + 1;
+              end if;
               pkt_tx_sop <= "00";
             end if;
         end case;
@@ -256,8 +267,47 @@ pkt_tx_eop <= pkt_tx_eop_reg;
     end process;
 
     -------------------------------------------------------------------------------
+    -- PKT N BIT CTRL
+    -------------------------------------------------------------------------------
+
+    PAYLOAD_LAST <= PAYLOAD_PKT(7 downto 0) & IDLE_VALUE & IDLE_VALUE(119 downto 0)    when pkt_tx_mod_reg  = "00000" else
+                    PAYLOAD_PKT(15 downto 0) & IDLE_VALUE & IDLE_VALUE(111 downto 0)   when pkt_tx_mod_reg  = "00001" else
+                    PAYLOAD_PKT(23 downto 0) & IDLE_VALUE & IDLE_VALUE(103 downto 0)   when pkt_tx_mod_reg  = "00010" else
+                    PAYLOAD_PKT(31 downto 0) & IDLE_VALUE & IDLE_VALUE(95 downto 0)    when pkt_tx_mod_reg  = "00011" else
+                    PAYLOAD_PKT(39 downto 0) & IDLE_VALUE & IDLE_VALUE(87 downto 0)    when pkt_tx_mod_reg  = "00100" else
+                    PAYLOAD_PKT(47 downto 0) & IDLE_VALUE & IDLE_VALUE(79 downto 0)    when pkt_tx_mod_reg  = "00101" else
+                    PAYLOAD_PKT(55 downto 0) & IDLE_VALUE & IDLE_VALUE(71 downto 0)    when pkt_tx_mod_reg  = "00110" else
+                    PAYLOAD_PKT(63 downto 0) & IDLE_VALUE & IDLE_VALUE(63 downto 0)    when pkt_tx_mod_reg  = "00111" else
+                    PAYLOAD_PKT(71 downto 0) & IDLE_VALUE & IDLE_VALUE(55 downto 0)    when pkt_tx_mod_reg  = "01000" else
+                    PAYLOAD_PKT(79 downto 0) & IDLE_VALUE & IDLE_VALUE(47 downto 0)    when pkt_tx_mod_reg  = "01001" else
+                    PAYLOAD_PKT(87 downto 0) & IDLE_VALUE & IDLE_VALUE(39 downto 0)    when pkt_tx_mod_reg  = "01010" else
+                    PAYLOAD_PKT(95 downto 0) & IDLE_VALUE & IDLE_VALUE(31 downto 0)    when pkt_tx_mod_reg  = "01011" else
+                    PAYLOAD_PKT(103 downto 0) & IDLE_VALUE & IDLE_VALUE(23 downto 0)   when pkt_tx_mod_reg  = "01100" else
+                    PAYLOAD_PKT(111 downto 0) & IDLE_VALUE & IDLE_VALUE(15 downto 0)   when pkt_tx_mod_reg  = "01101" else
+                    PAYLOAD_PKT(119 downto 0) & IDLE_VALUE & IDLE_VALUE(7 downto 0)    when pkt_tx_mod_reg  = "01110" else
+                    PAYLOAD_PKT(127 downto 0) & IDLE_VALUE                             when pkt_tx_mod_reg  = "01111" else
+                    PAYLOAD_PKT(135 downto 0) & IDLE_VALUE(119 downto 0)               when pkt_tx_mod_reg  = "10000" else
+                    PAYLOAD_PKT(143 downto 0) & IDLE_VALUE(111 downto 0)               when pkt_tx_mod_reg  = "10001" else
+                    PAYLOAD_PKT(151 downto 0) & IDLE_VALUE(103 downto 0)               when pkt_tx_mod_reg  = "10010" else
+                    PAYLOAD_PKT(159 downto 0) & IDLE_VALUE(95 downto 0)                when pkt_tx_mod_reg  = "10011" else
+                    PAYLOAD_PKT(167 downto 0) & IDLE_VALUE(87 downto 0)                when pkt_tx_mod_reg  = "10100" else
+                    PAYLOAD_PKT(175 downto 0) & IDLE_VALUE(79 downto 0)                when pkt_tx_mod_reg  = "10101" else
+                    PAYLOAD_PKT(183 downto 0) & IDLE_VALUE(71 downto 0)                when pkt_tx_mod_reg  = "10110" else
+                    PAYLOAD_PKT(191 downto 0) & IDLE_VALUE(63 downto 0)                when pkt_tx_mod_reg  = "10111" else
+                    PAYLOAD_PKT(199 downto 0) & IDLE_VALUE(55 downto 0)                when pkt_tx_mod_reg  = "11000" else
+                    PAYLOAD_PKT(207 downto 0) & IDLE_VALUE(47 downto 0)                when pkt_tx_mod_reg  = "11001" else
+                    PAYLOAD_PKT(215 downto 0) & IDLE_VALUE(39 downto 0)                when pkt_tx_mod_reg  = "11010" else
+                    PAYLOAD_PKT(223 downto 0) & IDLE_VALUE(31 downto 0)                when pkt_tx_mod_reg  = "11011" else
+                    PAYLOAD_PKT(231 downto 0) & IDLE_VALUE(23 downto 0)                when pkt_tx_mod_reg  = "11100" else
+                    PAYLOAD_PKT(239 downto 0) & IDLE_VALUE(15 downto 0)                when pkt_tx_mod_reg  = "11101" else
+                    PAYLOAD_PKT(247 downto 0) & IDLE_VALUE(7 downto 0)                 when pkt_tx_mod_reg  = "11110" else
+                    PAYLOAD_PKT;
+
+    -------------------------------------------------------------------------------
     -- LFSR
     -------------------------------------------------------------------------------
+
+
 
     PRESET_LFSR_CTRL : process (clock, reset)
     begin
