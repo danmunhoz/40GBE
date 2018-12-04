@@ -5,8 +5,6 @@ use IEEE.std_logic_arith.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
 use ieee.numeric_std.all;
--- MUDAR BARRAMENTO 256b
--- MUDAR CLOCK 312.5 Mhz
 entity echo_receiver_128_v2 is
   port
     (
@@ -89,6 +87,7 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     signal ip_low, ip_high                     : std_logic_vector(15 downto 0);
     signal ip_pkt_type                         : std_logic;
     signal udp_pkt_type                        : std_logic;
+    signal time_stamp_reg                      : std_logic_vector(47 downto 0);
     signal received_packet_reg                 : std_logic;
     --------------------------------------------------------------------------------
     --ID TESTS
@@ -101,6 +100,8 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     signal not_lost_pkt_test : std_logic;
     signal lost_counter : std_logic_vector(31 downto 0) := (OTHERS => '0');
     signal lost_pkt_tester : std_logic_vector(127 downto 0) := (OTHERS => '0');
+
+
 
     ------------------------------------------------------------------------------
     signal IDLE_count_reg : std_logic_vector(127 downto 0) := (OTHERS => '0');
@@ -225,7 +226,15 @@ BEGIN
 
     received_packet <= '1' when mac_source = reg_mac_destination else '0';
     IDLE_count <= IDLE_count_reg;
-    --end_latency <= '1' when ((received_packet_wire = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (reg_time_stamp(0) = '1')) else '0';
+
+
+
+    end_latency <= '1' when ((received_packet = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (time_stamp_reg(0) = '1')) else '0';
+    time_stamp_recv <= timestamp_base (46 downto 0);
+    time_stamp_out <= ('0' & (time_stamp_recv(46 downto 0) - time_stamp_reg(47 downto 1)))
+                      when (received_packet = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (time_stamp_reg(0) = '1')
+                  else (others=>'0');
+
 
     pkt_rx_ren <= '0' when current_s = S_IDLE else '1';
 
@@ -265,6 +274,7 @@ BEGIN
             reg_ip_source <= pkt_rx_data_N (47 downto 16);
             ip_high <= pkt_rx_data_N (15 downto 0);
           when S_REST_IP =>
+            time_stamp_reg <= pkt_rx_data_N(47 downto 0);
             reg_ip_destination <= ip_high & pkt_rx_data_N (127 downto 112);
           when S_PAYLOAD_START =>
             if payload_type = "00" then

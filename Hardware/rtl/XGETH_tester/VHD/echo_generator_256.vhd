@@ -5,26 +5,8 @@
 --++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 library IEEE;
 use IEEE.std_logic_1164.all;
---use IEEE.std_logic_arith.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
-
-
--- TODO
--- MOD 5 bits indica termino do pacote em determinada posicao.
--- EOP 6 bits MOD dentro do EOP nos ultimos 5 bits, EOP atual sera o 6 bit(mais significativo).
--- SOP 2 bits, avisar se pacote comeca no meio ou no inicio.
--- ENCODINGS
---  SOP:
---    00 - Invalid value
---    01 - Invalid value
---    10 - Packet starting at byte 0
---    11 - Packet starting at byte 16
---
---  EOP:
---    100000 - No eop at this cycle
---    0xxxxx - Packet ending at byte xxxxx
---
 
 -----------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------
