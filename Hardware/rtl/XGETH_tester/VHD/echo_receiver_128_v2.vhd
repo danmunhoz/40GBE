@@ -87,8 +87,10 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     signal ip_low, ip_high                     : std_logic_vector(15 downto 0);
     signal ip_pkt_type                         : std_logic;
     signal udp_pkt_type                        : std_logic;
-    signal time_stamp_reg                      : std_logic_vector(47 downto 0);
-    signal received_packet_reg                 : std_logic;
+    signal time_stamp_generator                : std_logic_vector(47 downto 0);
+    signal time_stamp_receiver                 : std_logic_vector(46 downto 0);
+    signal time_stamp_ready                    : std_logic;
+    signal received_packet_wire                : std_logic;
     --------------------------------------------------------------------------------
     --ID TESTS
 
@@ -218,28 +220,22 @@ BEGIN
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
+    IDLE_count <= IDLE_count_reg;
+
     mac_source_rx   <= reg_mac_source;
     mac_destination <= reg_mac_destination;
     ip_source       <= reg_ip_source;
     ip_destination  <= reg_ip_destination;
 
+    received_packet_wire <= '1' when mac_source = reg_mac_destination else '0';
+    received_packet <= received_packet_wire;
 
-    received_packet <= '1' when mac_source = reg_mac_destination else '0';
-    IDLE_count <= IDLE_count_reg;
-
-
-
-    end_latency <= '1' when ((received_packet = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (time_stamp_reg(0) = '1')) else '0';
-    time_stamp_recv <= timestamp_base (46 downto 0);
-    time_stamp_out <= ('0' & (time_stamp_recv(46 downto 0) - time_stamp_reg(47 downto 1)))
-                      when (received_packet = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (time_stamp_reg(0) = '1')
-                  else (others=>'0');
-
+    end_latency <= '1' when ((received_packet_wire = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (time_stamp_generator(0) = '1')) else '0';
+    time_stamp_receiver <= timestamp_base (46 downto 0);
+    time_stamp_ready <= '1' when (received_packet_wire and ip_pkt_type and udp_pkt_type and time_stamp_generator(0)) = '1'  else '0';
+    time_stamp_out <= '0' & (time_stamp_receiver - time_stamp_generator(47 downto 1)) when time_stamp_ready = '1' else (others=>'0');
 
     pkt_rx_ren <= '0' when current_s = S_IDLE else '1';
-
-
-
     lfsr_start <= '1' when current_s = S_PAYLOAD and payload_type = "01"  else '0';
 
     package_updater : process(reset, clock)
@@ -248,7 +244,6 @@ BEGIN
         IDLE_count_reg <= (others => '0');
         id_pkt_tester <= (others => '0');
         lfsr_fsm_begin <= '0';
-        received_packet_reg <= '0';
         reg_mac_source <= (others => '0');
         reg_mac_destination <=(others => '0');
         reg_ethernet_type <= (others => '0');
@@ -274,7 +269,7 @@ BEGIN
             reg_ip_source <= pkt_rx_data_N (47 downto 16);
             ip_high <= pkt_rx_data_N (15 downto 0);
           when S_REST_IP =>
-            time_stamp_reg <= pkt_rx_data_N(47 downto 0);
+            time_stamp_generator <= pkt_rx_data_N(47 downto 0);
             reg_ip_destination <= ip_high & pkt_rx_data_N (127 downto 112);
           when S_PAYLOAD_START =>
             if payload_type = "00" then
