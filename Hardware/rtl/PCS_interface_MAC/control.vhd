@@ -64,6 +64,8 @@ architecture behav_control of control is
   signal eop_location_calc_reg      : std_logic_vector(5 downto 0);
   signal eop_location_calc_reg_reg  : std_logic_vector(5 downto 0);
   signal eop_location_calc_reg_reg_reg  : std_logic_vector(5 downto 0);
+  signal eop_location_tana          : std_logic_vector(5 downto 0);
+  signal nc   :std_logic;
 begin
 
   -- Making things clear:
@@ -225,12 +227,16 @@ begin
     end if;
   end process;
 
-  ctrl_delay <= ctrl_delay_reg_reg_reg;
+  -- original
+  -- ctrl_delay <= ctrl_delay_reg_reg_reg;
+
+  ctrl_delay <= ctrl_delay_reg_reg when ctrl_delay_int = "00" and is_sop_reg_reg = '1' and shift_out_int = "110" and ctrl_delay_reg_reg_reg ="10"else
+                ctrl_delay_reg_reg_reg;
 
   reg_shift_ctrl: process (sop_location, eop_location)
   begin
     -- SOP
-    if sop_location /= "1000" and eop_location = "00100000" then
+    if sop_location /= "1000" and eop_location = "00100000" then -- quando não tem um eop junto no barramento
       case sop_location is
         when "0000" => shift_calc <= "010";
         when "0001" => shift_calc <= "011";
@@ -363,15 +369,63 @@ begin
   end if;
 end process;
 
--- Some cases eop needs to be outputed one cycle earlier
--- Frame ending with shift of 100/110/010 and next shift is different
-eop_location_out <= eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_int = "010" else
-                    eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") else
-                    eop_location_calc_reg when (shift_eop = "010" or shift_eop_reg = "010") and ctrl_delay_reg = "10" else
-                    eop_location_calc_reg_reg when ctrl_delay_reg /= "11" else
-                    eop_location_calc_reg_reg_reg;
+  ---                    -- Some cases eop needs to be outputed one cycle earlier
+  ---                    -- Frame ending with shift of 100/110/010 and next shift is different
+  ---                    eop_location_out <= -- eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_int = "010" else
+  ---                                        eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and eop_location_calc_reg /= "000000" and eop_location_calc_reg_reg /= "000000"
+  ---                                                                                                                and eop_location_calc_reg /= "000001" and eop_location_calc_reg_reg /= "000001"
+  ---                                                                                                                and eop_location_calc_reg /= "000010" and eop_location_calc_reg_reg /= "000010"
+  ---                                                                                                                and eop_location_calc_reg /= "000011" and eop_location_calc_reg_reg /= "000011"
+  ---                                                                                                                and eop_location_calc_reg /= "000100" and eop_location_calc_reg_reg /= "000100"
+  ---                                                                                                                and eop_location_calc_reg /= "000101" and eop_location_calc_reg_reg /= "000101"
+  ---                                                                                                                and eop_location_calc_reg /= "000110" and eop_location_calc_reg_reg /= "000110" else
+  ---                                        -- eop_location_calc_reg when (shift_eop = "110" or shift_eop_reg = "110") and shift_out_int /= "110" else
+  ---                                        eop_location_calc_reg when (shift_eop = "010" or shift_eop_reg = "010") and ctrl_delay_reg = "10" else
+  ---
+  ---                                        eop_location_calc_reg_reg when ctrl_delay_reg /= "11" else
+  ---                                        eop_location_calc_reg_reg_reg;
+  ---
+  ---                    -- eop_location_out <= eop_location_calc_reg_reg;
 
--- eop_location_out <= eop_location_calc_reg_reg;
+  -- Processo de sincronia do eop no barramento para ser escrito nas BRAM
+  process (clk, rst_n)
+  begin
+    if rst_n = '0' then
+        eop_location_tana <= "100000";
+        nc <= '0';
+
+    elsif (clk'event and clk = '1') then
+
+      if (nc = '1') then
+        eop_location_tana <=  eop_location_calc_reg;
+        eop_location_out <=  eop_location_calc_reg;
+        nc <= '0';
+
+      else
+        if (shift_out_reg = "000") and ctrl_delay_reg_reg = "10" then
+          eop_location_tana <=  eop_location_calc_reg;
+          eop_location_out <=  eop_location_calc_reg;
+
+        elsif (shift_out_reg = "010" and eop_location < 8) then
+          eop_location_tana <=  eop_location_calc;
+          eop_location_out <=  eop_location_calc;
+        elsif (shift_out_reg = "010" and eop_location > 7 and eop_location < 32) then
+          nc <= '1';  eop_location_tana <= "100000"; eop_location_out <= "100000";
+
+        elsif shift_out_reg = "110" and eop_location < 24 then
+          eop_location_tana <=  eop_location_calc;
+          eop_location_out <=  eop_location_calc;
+        elsif shift_out_reg = "110" and eop_location > 23 and eop_location < 32 then
+          nc <= '1';  eop_location_tana <= "100000"; eop_location_out <= "100000";
+
+        else
+          eop_location_tana <= "100000";
+          eop_location_out <= "100000";
+        end if;
+
+      end if;
+    end if;
+  end process;
 
   -- Process to control fifo write enable
   wen_fifo_proc: process (clk, rst_n)

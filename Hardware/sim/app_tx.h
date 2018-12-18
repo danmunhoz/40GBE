@@ -13,7 +13,7 @@ struct line {
   std::string ctrl;
 };
 
-#define MAX_PL_CYCLES 16
+#define MAX_PL_CYCLES 16 + 1
 #define MAX_IPG_CYCLES MAX_PL_CYCLES + 1  // MAX_IPG_CYCLES sempre > (MAX_PL_CYCLES+1)
 
 SC_MODULE(app_tx) {
@@ -74,7 +74,8 @@ SC_MODULE(app_tx) {
 
           shift = !shift;
 
-        } else if (counter > 2 && counter < MAX_PL_CYCLES) {
+        // } else if (counter > 2 && counter < MAX_PL_CYCLES) {
+        } else if (counter > 2 && counter < (MAX_PL_CYCLES - 1)) {
           // PAYLOAD
           sop = "00";
           eop = SC_LOGIC_1;
@@ -87,7 +88,8 @@ SC_MODULE(app_tx) {
             data = ((sc_lv<64 >)(counter+1),(sc_lv<64 >)(counter+1),(sc_lv<64 >)(counter+1),(sc_lv<64 >)(counter+1));
           }
 
-        } else if (counter == MAX_PL_CYCLES) {
+        // } else if (counter == MAX_PL_CYCLES ) {
+        } else if (counter == (MAX_PL_CYCLES -1)) {
           // EOP
           sop = "00";
           eop = SC_LOGIC_0;
@@ -98,6 +100,19 @@ SC_MODULE(app_tx) {
           data = ((sc_lv<256 >)(-1));
           end++;
           counter_pkt = counter_pkt +1;
+
+          // if (MAX_IPG_CYCLES == (MAX_PL_CYCLES+1))
+          //   counter = 1;
+
+
+        } else if (counter == MAX_PL_CYCLES) {
+          // 1 ciclo de espera
+          sop = "00";
+          eop = SC_LOGIC_1;
+          val = SC_LOGIC_0;
+          mod = "00000";
+          data = (sc_lv<256 >)0;
+          // counter_pkt = counter_pkt +1;
 
           if (MAX_IPG_CYCLES == (MAX_PL_CYCLES+1))
             counter = 1;

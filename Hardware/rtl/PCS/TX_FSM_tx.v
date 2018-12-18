@@ -170,7 +170,7 @@ module  TX_FSM_tx (clk156 , rstb, T_TYPE, coded_vec, txdata, bypass_66encoder,
             else if (terminate_in == 1'b1)
               Next_state = `RX_INIT;
             else
-              if (TYPE == `D || TYPE == `S || start_in)
+              if (TYPE == `D || TYPE == `C || TYPE == `S || start_in)
                   Next_state = `TX_D;
               else if (TYPE == `T)
   	            Next_state = `TX_T;

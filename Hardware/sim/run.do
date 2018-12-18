@@ -123,6 +123,7 @@ vcom -novopt ../rtl/CRC_RX/CRC32_D248.vhd
 vcom -novopt ../rtl/CRC_RX/CRC32_D256.vhd
 
 vcom -novopt ../rtl/CRC_RX/crc_rx.vhd
+vcom -novopt ../rtl/CRC_RX/crc_rx_sfifo.vhd
 
 vcom -novopt ../rtl/MAC/data_frame_fifo.vhd
 vcom -novopt ../rtl/MAC/frame_builder.vhd

@@ -157,14 +157,14 @@ architecture behav_mac_tx_path of mac_tx_path is
       full     => full_fifo_1,
 
       ren_out  => ren_fifo_1,
-      mii_data_0 => mii_data_0,
-      mii_ctrl_0 => mii_ctrl_0,
-      mii_data_1 => mii_data_1,
-      mii_ctrl_1 => mii_ctrl_1,
-      mii_data_2 => mii_data_2,
-      mii_ctrl_2 => mii_ctrl_2,
-      mii_data_3 => mii_data_3,
-      mii_ctrl_3 => mii_ctrl_3
+      mii_data_0_out => mii_data_0,
+      mii_ctrl_0_out => mii_ctrl_0,
+      mii_data_1_out => mii_data_1,
+      mii_ctrl_1_out => mii_ctrl_1,
+      mii_data_2_out => mii_data_2,
+      mii_ctrl_2_out => mii_ctrl_2,
+      mii_data_3_out => mii_data_3,
+      mii_ctrl_3_out => mii_ctrl_3
     );
 
 end behav_mac_tx_path;

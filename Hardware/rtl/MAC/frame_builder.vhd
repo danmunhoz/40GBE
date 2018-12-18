@@ -11,6 +11,7 @@ package PKG_CODES is
   constant CODE_IDLE      : std_logic_vector(7 downto 0) := x"07";
   constant LANE_ERROR     : std_logic_vector(63 downto 0) := CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR & CODE_ERROR;
   constant PREAMBLE       : std_logic_vector(63 downto 0) := SFD & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & START;
+  -- constant PREAMBLE       : std_logic_vector(63 downto 0) := START & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & PREAM_8 & SFD;
   constant LANE_IDLE      : std_logic_vector(63 downto 0) := CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE & CODE_IDLE;
 end PKG_CODES;
 
@@ -110,6 +111,8 @@ architecture behav_frame_builder of frame_builder is
     signal data_2_o : std_logic_vector(63 downto 0);
     signal data_3_o : std_logic_vector(63 downto 0);
 
+    signal data_3_oo : std_logic_vector(63 downto 0);
+
     signal data_fifo_out : std_logic_vector(255 downto 0);
     signal eop_fifo_out : std_logic_vector(5 downto 0);
     signal sop_fifo_out : std_logic_vector(1 downto 0);
@@ -158,6 +161,9 @@ architecture behav_frame_builder of frame_builder is
     signal crc_final : std_logic_vector(31 downto 0);
     signal crc_reg : std_logic_vector(31 downto 0);
 
+    signal flag_wait_fifo     : std_logic;
+    signal flag_wait_fifo_d   : std_logic;
+
   begin
 
     data_mux <= data_in when ren_int = '1' else DATA_NVAL;
@@ -172,21 +178,23 @@ architecture behav_frame_builder of frame_builder is
     sop_out <= sop_int;
     val_out <= val_int;
 
-    crc_final <= not(reverse(crc_reg));
+    -- crc_final <= not(reverse(crc_reg));
+    crc_final <= crc_reg;
 
     -- Converte endianismo para pcs
-    data_in_int <= data_mux(199 downto 192) & data_mux(207 downto 200) & data_mux(215 downto 208) & data_mux(223 downto 216) &
-                   data_mux(231 downto 224) & data_mux(239 downto 232) & data_mux(247 downto 240) & data_mux(255 downto 248) &
+    -- data_in_int <= data_mux(199 downto 192) & data_mux(207 downto 200) & data_mux(215 downto 208) & data_mux(223 downto 216) &
+    --                data_mux(231 downto 224) & data_mux(239 downto 232) & data_mux(247 downto 240) & data_mux(255 downto 248) &
 
-                   data_mux(135 downto 128) & data_mux(143 downto 136) & data_mux(151 downto 144) & data_mux(159 downto 152) &
-                   data_mux(167 downto 160) & data_mux(175 downto 168) & data_mux(183 downto 176) & data_mux(191 downto 184) &
+    --                data_mux(135 downto 128) & data_mux(143 downto 136) & data_mux(151 downto 144) & data_mux(159 downto 152) &
+    --                data_mux(167 downto 160) & data_mux(175 downto 168) & data_mux(183 downto 176) & data_mux(191 downto 184) &
 
-                   data_mux( 71 downto  64) & data_mux( 79 downto  72) & data_mux( 87 downto  80) & data_mux( 95 downto  88) &
-                   data_mux(103 downto  96) & data_mux(111 downto 104) & data_mux(119 downto 112) & data_mux(127 downto 120) &
+    --                data_mux( 71 downto  64) & data_mux( 79 downto  72) & data_mux( 87 downto  80) & data_mux( 95 downto  88) &
+    --                data_mux(103 downto  96) & data_mux(111 downto 104) & data_mux(119 downto 112) & data_mux(127 downto 120) &
 
-                   data_mux( 7 downto  0) & data_mux(15 downto  8) & data_mux(23 downto 16) & data_mux(31 downto 24) &
-                   data_mux(39 downto 32) & data_mux(47 downto 40) & data_mux(55 downto 48) & data_mux(63 downto 56);
+    --                data_mux( 7 downto  0) & data_mux(15 downto  8) & data_mux(23 downto 16) & data_mux(31 downto 24) &
+    --                data_mux(39 downto 32) & data_mux(47 downto 40) & data_mux(55 downto 48) & data_mux(63 downto 56);
 
+    data_in_int <=  data_mux;
 
     input_regs: process(clk, rst)
     begin
@@ -197,6 +205,7 @@ architecture behav_frame_builder of frame_builder is
         data_2 <= (others=>'0');
         data_3 <= (others=>'0');
         data_3_o <= (others=>'0');
+        data_3_oo <= (others=>'0');
         data_2_o <= (others=>'0');
         data_1_o <= (others=>'0');
         data_0_o <= (others=>'0');
@@ -213,6 +222,7 @@ architecture behav_frame_builder of frame_builder is
         frame_int_next_o <= (others=>'0');
         ren_int_reg <= '0';
         deficit_reg <= '0';
+        flag_wait_fifo_d <= '0';
 
       elsif clk'event and clk = '1' then
 
@@ -230,16 +240,23 @@ architecture behav_frame_builder of frame_builder is
         data_1_o <= data_1;
         data_2_o <= data_2;
         data_3_o <= data_3;
+        data_3_oo <= data_3_o;
         ren_int_reg <= ren_int;
         deficit_reg <= deficit;
+
+        if sop_reg_reg_in /= "00" then
+          flag_wait_fifo_d <= flag_wait_fifo;
+        end if;
 
         if ren_int = '1' then
           data_in_reg <= data_mux;
         end if;
 
-        if (ps_frame = S_WAIT_FIFO) then
-          data_3_o <= data_3_o;
-        end if;
+        -- if (ps_frame = S_WAIT_FIFO) then
+          -- data_3_o <= data_3_o;
+        -- else
+          -- data_3_o <= data_3;
+        -- end if;
 
         use_frame_next_reg <= use_frame_next;
         if (eop_reg_reg_in > 19) then
@@ -417,6 +434,11 @@ architecture behav_frame_builder of frame_builder is
             else
               ren_int <= '1';
             end if;
+            if sop_mux = "10" then
+              crc_reg <= nextCRC32_D256(reverse(data_mux), x"FFFFFFFF");
+            elsif sop_mux = "11" then
+              crc_reg <= nextCRC32_D128(reverse(data_mux(255 downto 128)), x"FFFFFFFF");
+            end if;
 
           when S_EOP_N =>
             ren_int <= '0';
@@ -436,7 +458,8 @@ architecture behav_frame_builder of frame_builder is
             -- Wiat until there is no risk in start reading
             ns_crc <= S_D256;
           elsif (sop_mux = "11" and almost_e = '0') then
-            ns_crc <= S_D128;
+            -- ns_crc <= S_D128;
+            ns_crc <= S_D256;
           else
             ns_crc <= S_IDLE;
           end if;
@@ -459,7 +482,8 @@ architecture behav_frame_builder of frame_builder is
           elsif (sop_mux = "10") then
             ns_crc <= S_D256;
           elsif (sop_mux = "11") then
-            ns_crc <= S_D128;
+            -- ns_crc <= S_D128;
+            ns_crc <= S_D256;
           else
             ns_crc <= S_IDLE;
           end if;
@@ -488,7 +512,8 @@ architecture behav_frame_builder of frame_builder is
 
     frame_output_decoder: process(ps_frame, eop_reg_in, sop_reg_in, val_reg_in,
                                   data_0, data_1, data_2, data_3, almost_e,
-                                  data_0_o, data_1_o, data_2_o, data_3_o, wait_cnt)
+                                  data_0_o, data_1_o, data_2_o, data_3_o, wait_cnt,
+                                  sop_reg_reg_in)
     begin
       enable_wait_cnt <= '0';
       frame_int <= (others=>'0');
@@ -501,6 +526,7 @@ architecture behav_frame_builder of frame_builder is
       use_frame_next <= '0';
       one_deficit <= '0';
       deficit <= '0';
+      flag_wait_fifo <= '0';
 
 
       case ps_frame is
@@ -536,7 +562,12 @@ architecture behav_frame_builder of frame_builder is
           ren_hold <= '1';
           wen_hold <= '1';
           sop_int <= "00";
-          frame_int <= data_2 & data_1 & data_0 & data_3_o;
+          if flag_wait_fifo_d = '1' then
+            -- frame_int <= data_2_o & data_1_o & data_0_o & data_3_o;
+            frame_int <= data_2_o & data_1_o & data_0_o & data_3_oo;
+          else
+            frame_int <= data_2 & data_1 & data_0 & data_3_o;
+          end if;
 
         when S_EOP =>
           sop_int <= "00";
@@ -703,7 +734,14 @@ architecture behav_frame_builder of frame_builder is
             sop_int <= "00";
           end if;
 
-        when S_WAIT_NOT_EMPTY => null;
+          if sop_reg_reg_in = "10" then
+            flag_wait_fifo <= '1';
+          end if;
+
+        when S_WAIT_NOT_EMPTY =>
+          if sop_reg_reg_in = "10" then
+            flag_wait_fifo <= '1';
+          end if;
 
         when S_WAIT_FIFO =>
           frame_int <= data_2_o & data_1_o & data_0_o & PREAMBLE;
@@ -723,8 +761,9 @@ architecture behav_frame_builder of frame_builder is
       end case;
     end process;
 
-    frame_ns_decoder: process(ps_frame, eop_reg_in, sop_reg_in, data_0, data_1,
-                              data_2, data_3, wait_cnt, almost_e, deficit_reg)
+    frame_ns_decoder: process(ps_frame, eop_reg_in, eop_reg_reg_in, sop_reg_in,
+                              data_0, data_1, data_2, data_3, wait_cnt,
+                              almost_e, deficit_reg, flag_wait_fifo_d)
     begin
       case ps_frame is
         when S_IDLE =>
@@ -737,10 +776,18 @@ architecture behav_frame_builder of frame_builder is
           ns_frame <= S_READ_FIFO;
 
         when S_READ_FIFO =>
-          if (eop_reg_in = "100000") then
-            ns_frame <= S_READ_FIFO;
+          if flag_wait_fifo_d = '1' then
+            if (eop_reg_reg_in = "100000") then
+              ns_frame <= S_READ_FIFO;
+            else
+              ns_frame <= S_EOP;
+            end if;
           else
-            ns_frame <= S_EOP;
+            if (eop_reg_in = "100000") then
+              ns_frame <= S_READ_FIFO;
+            else
+              ns_frame <= S_EOP;
+            end if;
           end if;
 
         when S_EOP =>
