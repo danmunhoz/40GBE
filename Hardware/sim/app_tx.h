@@ -13,8 +13,9 @@ struct line {
   std::string ctrl;
 };
 
-#define MAX_PL_CYCLES 16 + 1
-#define MAX_IPG_CYCLES MAX_PL_CYCLES + 1  // MAX_IPG_CYCLES sempre > (MAX_PL_CYCLES+1)
+#define MAX_PL_CYCLES  17
+#define MAX_IPG_CYCLES 5
+// #define IPG_CYCLES 3  // IPG_CYCLES sempre > (MAX_PL_CYCLES+1)
 
 SC_MODULE(app_tx) {
 
@@ -29,6 +30,8 @@ SC_MODULE(app_tx) {
 
   int counter;
   int counter_pkt;
+
+  int IPG_CYCLES;
 
   bool shift;
 
@@ -75,7 +78,7 @@ SC_MODULE(app_tx) {
           shift = !shift;
 
         // } else if (counter > 2 && counter < MAX_PL_CYCLES) {
-        } else if (counter > 2 && counter < (MAX_PL_CYCLES - 1)) {
+        } else if (counter > 2 && counter <= (MAX_PL_CYCLES - 1)) {
           // PAYLOAD
           sop = "00";
           eop = SC_LOGIC_1;
@@ -88,47 +91,48 @@ SC_MODULE(app_tx) {
             data = ((sc_lv<64 >)(counter+1),(sc_lv<64 >)(counter+1),(sc_lv<64 >)(counter+1),(sc_lv<64 >)(counter+1));
           }
 
-        // } else if (counter == MAX_PL_CYCLES ) {
-        } else if (counter == (MAX_PL_CYCLES -1)) {
-          // EOP
+        // EOP
+        } else if (counter == (MAX_PL_CYCLES )) {
           sop = "00";
           eop = SC_LOGIC_0;
           val = SC_LOGIC_1;
-          // mod = "01011";
-          // data = ((sc_lv<64 >)0, (sc_lv<64 >)0, (sc_lv<64 >)12237514, (sc_lv<64 >)(counter+1));
           mod = sc_lv<5 >(end);
           data = ((sc_lv<256 >)(-1));
           end++;
           counter_pkt = counter_pkt +1;
 
-          // if (MAX_IPG_CYCLES == (MAX_PL_CYCLES+1))
-          //   counter = 1;
 
 
-        } else if (counter == MAX_PL_CYCLES) {
-          // 1 ciclo de espera
+        // // 1 ciclo de espera
+        // } else if (counter == MAX_PL_CYCLES) {
+        //   sop = "00";
+        //   eop = SC_LOGIC_1;
+        //   val = SC_LOGIC_0;
+        //   mod = "00000";
+        //   data = (sc_lv<256 >)0;
+        //   // counter_pkt = counter_pkt +1;
+        //   if (IPG_CYCLES == (MAX_PL_CYCLES+1))
+        //     counter = 1;
+
+        // IDLE
+      } else if (counter >= MAX_PL_CYCLES && counter <= (MAX_PL_CYCLES + IPG_CYCLES)) {
           sop = "00";
           eop = SC_LOGIC_1;
           val = SC_LOGIC_0;
           mod = "00000";
           data = (sc_lv<256 >)0;
-          // counter_pkt = counter_pkt +1;
 
-          if (MAX_IPG_CYCLES == (MAX_PL_CYCLES+1))
+          if (counter == (MAX_PL_CYCLES + IPG_CYCLES)) {
+            // reset counter
             counter = 1;
+            if (counter_pkt % 2 == 0) {
+              if (IPG_CYCLES == MAX_IPG_CYCLES)
+                IPG_CYCLES = 1;
+              else
+                IPG_CYCLES = IPG_CYCLES + 1;
+            }
+          }
 
-        } else if (counter > MAX_PL_CYCLES && counter < MAX_IPG_CYCLES) {
-          // IDLE
-          sop = "00";
-          eop = SC_LOGIC_1;
-          val = SC_LOGIC_0;
-          mod = "00000";
-          data = (sc_lv<256 >)0;
-
-        } else if (counter == MAX_IPG_CYCLES) {
-          // reset counter
-          data = (sc_lv<256 >)0;
-          counter = 1;
         }
 
     } else {
@@ -144,6 +148,8 @@ SC_MODULE(app_tx) {
 
 
   SC_CTOR(app_tx) {
+
+    IPG_CYCLES = 1;
 
     in_file.open("dump_app.txt");
     if (in_file.is_open()){

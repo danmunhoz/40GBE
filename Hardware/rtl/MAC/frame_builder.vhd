@@ -142,12 +142,13 @@ architecture behav_frame_builder of frame_builder is
     signal ren_int         : std_logic;
     signal ren_int_reg     : std_logic;
 
-    signal ren_hold  : std_logic;
-    signal wen_hold  : std_logic;
-    signal full_hold : std_logic;
-    signal empty_hold : std_logic;
+    signal ren_hold      : std_logic;
+    signal wen_hold      : std_logic;
+    signal full_hold     : std_logic;
+    signal empty_hold    : std_logic;
     signal almost_e_hold : std_logic;
     signal almost_f_hold : std_logic;
+    signal almost_e_d    : std_logic;
 
     signal enable_wait_cnt : std_logic;
     signal wait_cnt : std_logic_vector(2 downto 0);
@@ -179,7 +180,7 @@ architecture behav_frame_builder of frame_builder is
     val_out <= val_int;
 
     -- crc_final <= not(reverse(crc_reg));
-    crc_final <= crc_reg;
+    -- crc_final <= crc_reg;
 
     -- Converte endianismo para pcs
     -- data_in_int <= data_mux(199 downto 192) & data_mux(207 downto 200) & data_mux(215 downto 208) & data_mux(223 downto 216) &
@@ -223,6 +224,8 @@ architecture behav_frame_builder of frame_builder is
         ren_int_reg <= '0';
         deficit_reg <= '0';
         flag_wait_fifo_d <= '0';
+        almost_e_d <= '0';
+        crc_final <= (others=>'0');
 
       elsif clk'event and clk = '1' then
 
@@ -243,6 +246,8 @@ architecture behav_frame_builder of frame_builder is
         data_3_oo <= data_3_o;
         ren_int_reg <= ren_int;
         deficit_reg <= deficit;
+        almost_e_d <= almost_e;
+        crc_final <= crc_reg;
 
         if sop_reg_reg_in /= "00" then
           flag_wait_fifo_d <= flag_wait_fifo;
@@ -318,11 +323,13 @@ architecture behav_frame_builder of frame_builder is
 
         case ps_crc is
           when S_IDLE =>
-            if (almost_e = '1') then
-              ren_int <= '0';
-            else
-              ren_int <= '1';
-            end if;
+            -- if (almost_e = '1') then
+            -- -- if (almost_e = '1' and val_in = '0') then
+            --   ren_int <= '0';
+            -- else
+            --   ren_int <= '1';
+            -- end if;
+            ren_int <= '1';
 
             -- Para nao perder um ciclo
             if (sop_mux = "10") then
@@ -430,6 +437,7 @@ architecture behav_frame_builder of frame_builder is
               ren_int <= '0';
             end if;
             if (almost_e = '1') then
+            -- if (almost_e = '1' and val_in = '0' ) then
               ren_int <= '0';
             else
               ren_int <= '1';
@@ -454,10 +462,12 @@ architecture behav_frame_builder of frame_builder is
 
       case ps_crc is
         when S_IDLE =>
-          if (sop_mux = "10" and almost_e = '0') then
+          -- if (sop_mux = "10" and almost_e = '0') then
+          if (sop_mux = "10" ) then
             -- Wiat until there is no risk in start reading
             ns_crc <= S_D256;
-          elsif (sop_mux = "11" and almost_e = '0') then
+          -- elsif (sop_mux = "11" and almost_e = '0') then
+          elsif (sop_mux = "11") then
             -- ns_crc <= S_D128;
             ns_crc <= S_D256;
           else
@@ -511,8 +521,9 @@ architecture behav_frame_builder of frame_builder is
     end process;
 
     frame_output_decoder: process(ps_frame, eop_reg_in, sop_reg_in, val_reg_in,
-                                  data_0, data_1, data_2, data_3, almost_e,
+                                  data_0, data_1, data_2, data_3, almost_e, sop_reg_in,
                                   data_0_o, data_1_o, data_2_o, data_3_o, wait_cnt,
+                                  eop_reg_reg_in, flag_wait_fifo_d, crc_final,
                                   sop_reg_reg_in)
     begin
       enable_wait_cnt <= '0';
@@ -727,6 +738,7 @@ architecture behav_frame_builder of frame_builder is
           val_int <= '1';
           eop_int <=  '0' & eop_int_reg(4 downto 0);
           if sop_reg_reg_in = "11" then
+          -- if sop_reg_in = "11" then
             frame_int_next <= data_2 & PREAMBLE & frame_int_next_o(127 downto 0);
             sop_int <= "11";
           else
@@ -734,7 +746,7 @@ architecture behav_frame_builder of frame_builder is
             sop_int <= "00";
           end if;
 
-          if sop_reg_reg_in = "10" then
+          if sop_reg_in = "10" then
             flag_wait_fifo <= '1';
           end if;
 
@@ -762,8 +774,8 @@ architecture behav_frame_builder of frame_builder is
     end process;
 
     frame_ns_decoder: process(ps_frame, eop_reg_in, eop_reg_reg_in, sop_reg_in,
-                              data_0, data_1, data_2, data_3, wait_cnt,
-                              almost_e, deficit_reg, flag_wait_fifo_d)
+                              data_0, data_1, data_2, data_3, wait_cnt, sop_reg_in,
+                              almost_e_d, deficit_reg, flag_wait_fifo_d)
     begin
       case ps_frame is
         when S_IDLE =>
@@ -793,7 +805,8 @@ architecture behav_frame_builder of frame_builder is
         when S_EOP =>
           if eop_reg_reg_in(4 downto 0) >= "10100" then
             ns_frame <= S_EOP_N;
-          elsif almost_e = '1' then
+          -- elsif almost_e = '1' then
+          elsif almost_e_d = '1' then
             ns_frame <= S_WAIT_NOT_EMPTY;
           elsif sop_reg_in(1) = '1' then
             ns_frame <= S_PREAM;
@@ -802,9 +815,13 @@ architecture behav_frame_builder of frame_builder is
           end if;
 
         when S_EOP_N =>
-          if almost_e = '1' then
+          -- if almost_e = '1' then
+          if almost_e_d = '1' then
             ns_frame <= S_WAIT_NOT_EMPTY;
+          elsif sop_reg_in(1) = '1' then   -- aproveita o ciclo: 64b_data + Preambulo
+            ns_frame <= S_PREAM;
           elsif sop_reg_reg_in = "11" then   -- aproveita o ciclo: 64b_data + Preambulo
+          -- elsif sop_reg_in = "11" then   -- aproveita o ciclo: 64b_data + Preambulo
             ns_frame <= S_READ_FIFO;
           elsif sop_reg_reg_in = "10" then  -- segura um ciclo para manter alinhamento
             ns_frame <= S_WAIT_FIFO;
@@ -819,7 +836,8 @@ architecture behav_frame_builder of frame_builder is
           ns_frame <= S_IDLE;
 
         when S_WAIT_NOT_EMPTY =>
-          if almost_e = '1' then
+          -- if almost_e = '1' then
+          if almost_e_d = '1' then
             ns_frame <= S_WAIT_NOT_EMPTY;
           elsif deficit_reg = '1' then
             if sop_reg_reg_in = "11" then   -- aproveita o ciclo: 64b_data + Preambulo

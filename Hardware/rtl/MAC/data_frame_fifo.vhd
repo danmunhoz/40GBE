@@ -156,7 +156,7 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     generic map (
       DEVICE => "7SERIES",
       ALMOST_FULL_OFFSET => X"0010",
-      ALMOST_EMPTY_OFFSET => X"0010",
+      ALMOST_EMPTY_OFFSET => X"0020",
       DATA_WIDTH => 64,
       FIFO_SIZE => "36Kb")
     port map (
@@ -180,7 +180,7 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     generic map (
       DEVICE => "7SERIES",
       ALMOST_FULL_OFFSET => X"0010",
-      ALMOST_EMPTY_OFFSET => X"0010",
+      ALMOST_EMPTY_OFFSET => X"0020",
       DATA_WIDTH => 66,
       FIFO_SIZE => "36Kb")
     port map (
@@ -204,7 +204,7 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     generic map (
       DEVICE => "7SERIES",
       ALMOST_FULL_OFFSET => X"0010",
-      ALMOST_EMPTY_OFFSET => X"0010",
+      ALMOST_EMPTY_OFFSET => X"0020",
       DATA_WIDTH => 64,
       FIFO_SIZE => "36Kb")
     port map (
@@ -228,7 +228,7 @@ architecture behav_data_frame_fifo of data_frame_fifo is
     generic map (
       DEVICE => "7SERIES",
       ALMOST_FULL_OFFSET => X"0010",
-      ALMOST_EMPTY_OFFSET => X"0010",
+      ALMOST_EMPTY_OFFSET => X"0020",
       DATA_WIDTH => 71,
       FIFO_SIZE => "36Kb")
     port map (

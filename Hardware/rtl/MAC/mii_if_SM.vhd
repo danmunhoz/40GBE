@@ -37,7 +37,9 @@ architecture behav_mii_if of mii_if is
   signal ps_mii : mii_fsm_states;
   signal ns_mii : mii_fsm_states;
 
+  signal reading   : std_logic;
   signal ren_int   : std_logic;
+  signal ren_int_o : std_logic;
   signal shift     : std_logic_vector(1 downto 0);
   signal fifo_wait : std_logic;
 
@@ -105,19 +107,21 @@ architecture behav_mii_if of mii_if is
   ctrl_fifo1: process(clk,rst)
   begin
     if rst = '0' then
-      ren_int <= '0';
+      reading <= '0';
 
     elsif clk'event and clk = '1' then
       if almost_e = '0' then
-        ren_int <= '1';
+        reading <= '1';
       else
         if eop_in(5) = '0' then
-          ren_int <= '0';
+          reading <= '0';
         end if;
       end if;
     end if;
   end process;
-  ren_out <=  '0' when (almost_e = '1' and eop_in(5) = '0')  or fifo_wait = '1'
+
+  ren_out <= ren_int;
+  ren_int <=  '0' when (almost_e = '1' and eop_in(5) = '0')  or fifo_wait = '1'
               else '1';
 
 
@@ -132,28 +136,28 @@ architecture behav_mii_if of mii_if is
   end process;
 
 
-  SM_MII: process (ps_mii, ren_int, val_in, sop_in, eop_in)
+  SM_MII: process (ps_mii, reading, val_in, sop_in, eop_in, almost_e)
   begin
     fifo_wait <= '0';
     case ps_mii is
 
       when S_IDLE =>
-        if ren_int = '1' and val_in = '0' then
+        if reading = '1' and val_in = '0' then
           ns_mii <= S_IDLE;
-        elsif ren_int = '1' and val_in = '1' and sop_in(1) = '1' then
+        elsif reading = '1' and val_in = '1' and sop_in(1) = '1' then
           ns_mii <= S_TX;
         else
           --ns_mii <= S_ERROR;
         end if;
 
       when S_TX =>
-        if ren_int = '1' and val_in = '1' and sop_in(1) = '0' and
+        if reading = '1' and val_in = '1' and sop_in(1) = '0' and
            eop_in = "100000" then
           ns_mii <= S_TX;
-        elsif ren_int = '1' and val_in = '1' and eop_in /= "100000" and sop_in(1) = '0' then
+        elsif reading = '1' and val_in = '1' and eop_in /= "100000" and sop_in(1) = '0' then
           ns_mii <= S_EOP;
 
-        elsif ren_int = '1' and val_in = '1' and eop_in /= "100000" and sop_in(1) = '1'then
+        elsif reading = '1' and val_in = '1' and eop_in /= "100000" and sop_in(1) = '1'then
           ns_mii <= S_EOP;
           fifo_wait <= '1';
 
@@ -172,16 +176,16 @@ architecture behav_mii_if of mii_if is
         elsif sop_in(1) = '1' and eop_in_o < "001111" and sop_in_o(1) = '1'then
           ns_mii <= S_WAIT_1C;
 
-        elsif ren_int = '1' and val_in = '1' and sop_in = "11" and eop_in < "000100" then -- Garante IPG com SOP e EOP < 3° byte
+        elsif reading = '1' and val_in = '1' and sop_in = "11" and eop_in < "000100" then -- Garante IPG com SOP e EOP < 3° byte
           ns_mii <= S_IDLE;
         -- elsif sop_in(1) = '0' and eop_in > "010011" then -- EOP > 19ºbyte
         elsif sop_in(1) = '0' and eop_in > "010010" then -- EOP > 18ºbyte
           ns_mii <= S_IPG;
-        -- elsif ren_int = '1' and val_in = '1' and sop_in = "11" and eop_in >= "000100" and shift = "00" then -- Ajusta IPG
-        elsif ren_int = '1' and val_in = '1' and sop_in = "11" and eop_in >= "000011" and shift = "00" then -- Ajusta IPG
+        -- elsif reading = '1' and val_in = '1' and sop_in = "11" and eop_in >= "000100" and shift = "00" then -- Ajusta IPG
+        elsif reading = '1' and val_in = '1' and sop_in = "11" and eop_in >= "000011" and shift = "00" then -- Ajusta IPG
           ns_mii <= S_SET_IPG;
-        -- elsif ren_int = '1' and val_in = '1' and eop_in >= "000100" and shift = "01" then -- Pausa 1C e reoderna transmição
-        elsif ren_int = '1' and val_in = '1' and eop_in >= "000011" and shift = "01" then -- Pausa 1C e reoderna transmição
+        -- elsif reading = '1' and val_in = '1' and eop_in >= "000100" and shift = "01" then -- Pausa 1C e reoderna transmição
+        elsif reading = '1' and val_in = '1' and eop_in >= "000011" and shift = "01" then -- Pausa 1C e reoderna transmição
           ns_mii <= S_WAIT_1C;
           fifo_wait <= '1';
         else
@@ -194,7 +198,12 @@ architecture behav_mii_if of mii_if is
 
       when S_IPG =>
         -- fifo_wait <= '1';
-        if sop_in_o(1) = '0' then
+
+        if almost_e = '1' then
+          ns_mii <= S_IPG;
+          fifo_wait <= '1';
+        -- if sop_in_o(1) = '0' then
+        elsif sop_in_o(1) = '0' then
           ns_mii <= S_IDLE;
         else
           ns_mii <= S_TX;
@@ -218,7 +227,7 @@ architecture behav_mii_if of mii_if is
   end process;
 
 
-  OUTPUTS_MII: process (ps_mii, ren_int, val_in, sop_in, eop_in, clk)
+  OUTPUTS_MII: process (ps_mii, reading, val_in, sop_in, eop_in, clk)
   begin
     if clk'event and clk = '1' then
 
@@ -341,20 +350,45 @@ architecture behav_mii_if of mii_if is
             end if;
 
           when "01" =>
-            mii_data_0 <= data_2_o_o;
-            mii_data_1 <= data_3_o_o;
-            mii_data_2 <= data_0_o;
-            mii_data_3 <= data_1_o;
-            mii_ctrl_0 <= x"00";
-            mii_ctrl_1 <= x"00";
-            mii_ctrl_2 <= x"00";
-            mii_ctrl_3 <= x"00";
-            -- if sop_in_o = "10" then
+            if sop_in_o = "10" then
+              mii_data_0 <= LANE_IDLE;
+              mii_data_1 <= LANE_IDLE;
+              mii_data_2 <= data_0_o;
+              mii_data_3 <= data_1_o;
+              mii_ctrl_0 <= x"ff";
+              mii_ctrl_1 <= x"ff";
+              mii_ctrl_2 <= x"01";
+              mii_ctrl_3 <= x"00";
+
+            --elsif sop_in_o = "11" then
+              -- mii_data_0 <= LANE_IDLE;
+              -- mii_data_1 <= LANE_IDLE;
+              -- mii_data_2 <= data_0_o;
+              -- mii_data_3 <= data_1_o;
+              -- mii_ctrl_0 <= x"ff";
+              -- mii_ctrl_1 <= x"ff";
               -- mii_ctrl_2 <= x"01";
-            -- else
-              -- mii_ctrl_2 <= x"00";
-            -- end if;
-            ---------------------------
+              -- mii_ctrl_3 <= x"00";
+            else
+              mii_data_0 <= data_2_o_o;
+              mii_data_1 <= data_3_o_o;
+              mii_data_2 <= data_0_o;
+              mii_data_3 <= data_1_o;
+              mii_ctrl_0 <= x"00";
+              mii_ctrl_1 <= x"00";
+              mii_ctrl_2 <= x"00";
+              mii_ctrl_3 <= x"00";
+            end if;
+
+            -- mii_data_0 <= data_2_o_o;
+            -- mii_data_1 <= data_3_o_o;
+            -- mii_data_2 <= data_0_o;
+            -- mii_data_3 <= data_1_o;
+            -- mii_ctrl_0 <= x"00";
+            -- mii_ctrl_1 <= x"00";
+            -- mii_ctrl_2 <= x"00";
+            -- mii_ctrl_3 <= x"00";
+
             inv_ctrl_0  <= x"00";
             inv_ctrl_1  <= x"00";
             inv_ctrl_2  <= x"00";
@@ -969,14 +1003,22 @@ architecture behav_mii_if of mii_if is
 
       when S_SET_IPG =>
         shift <= "01";
-        mii_data_0 <= data_2_o_o;
-        mii_data_1 <= data_3_o_o;
-        mii_data_2 <= data_0_o;
-        mii_data_3 <= data_1_o;
-        mii_ctrl_0 <= x"01";
-        mii_ctrl_1 <= x"00";
-        mii_ctrl_2 <= x"00";
-        mii_ctrl_3 <= x"00";
+        -- mii_data_0 <= data_2_o_o;
+        -- mii_data_1 <= data_3_o_o;
+        -- mii_data_2 <= data_0_o;
+        -- mii_data_3 <= data_1_o;
+        -- mii_ctrl_0 <= x"01";
+        -- mii_ctrl_1 <= x"00";
+        -- mii_ctrl_2 <= x"00";
+        -- mii_ctrl_3 <= x"00";
+        mii_data_0 <= LANE_IDLE;
+        mii_data_1 <= LANE_IDLE;
+        mii_data_2 <= LANE_IDLE;
+        mii_data_3 <= LANE_IDLE;
+        mii_ctrl_0 <= x"ff";
+        mii_ctrl_1 <= x"ff";
+        mii_ctrl_2 <= x"ff";
+        mii_ctrl_3 <= x"ff";
 
       when S_WAIT_1C =>
         shift <= "00";
@@ -1085,20 +1127,24 @@ architecture behav_mii_if of mii_if is
       data_1_o_o <= (others =>'0');
       data_2_o_o <= (others =>'0');
       data_3_o_o <= (others =>'0');
+      ren_int_o <= '0';
 
     elsif clk'event and clk = '1' then
-      eop_in_o <= eop_in;
-      eop_in_o_o <= eop_in_o;
-      sop_in_o <= sop_in;
-      data_0_o <= data_in(63 downto 0);
-      data_1_o <= data_in(127 downto 64);
-      data_2_o <= data_in(191 downto 128);
-      data_3_o <= data_in(255 downto 192);
-      data_0_o_o <= data_0_o;
-      data_1_o_o <= data_1_o;
-      data_2_o_o <= data_2_o;
-      data_3_o_o <= data_3_o;
-    else
+
+      ren_int_o <= ren_int;
+      if ren_int_o = '1' then
+        eop_in_o <= eop_in;
+        eop_in_o_o <= eop_in_o;
+        sop_in_o <= sop_in;
+        data_0_o <= data_in(63 downto 0);
+        data_1_o <= data_in(127 downto 64);
+        data_2_o <= data_in(191 downto 128);
+        data_3_o <= data_in(255 downto 192);
+        data_0_o_o <= data_0_o;
+        data_1_o_o <= data_1_o;
+        data_2_o_o <= data_2_o;
+        data_3_o_o <= data_3_o;
+      end if;
     end if;
   end process;
 
