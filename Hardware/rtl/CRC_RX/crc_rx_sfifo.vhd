@@ -52,6 +52,8 @@ library ieee;
     signal crc_final      : std_logic_vector(31 downto 0);
     signal crc_reg        : std_logic_vector(31 downto 0);
     signal crc_received   : std_logic_vector(31 downto 0);
+    signal crc_done       : std_logic;
+    signal crc_ok_int     : std_logic;
 
     signal sop_d1  : std_logic;
     signal eop_d1  : std_logic_vector(  4 downto 0);
@@ -65,6 +67,17 @@ library ieee;
 
 
   begin
+    crc_ok <= crc_ok_int;
+    crc_ok_int <= '1' when crc_received = crc_reg and crc_done = '1' else '0';
+
+    DEBUG: process(clk_312)
+    begin
+      if clk_312'event and clk_312 = '1' then
+        if crc_ok_int = '0' and crc_done = '1' then
+          report "CRC_FALHOU @ "&time'image(now);
+        end if;
+      end if;
+    end process;
 
     aux_regs: process(clk_312, rst_n)
     begin
@@ -143,8 +156,10 @@ library ieee;
       if rst_n = '0' then
         crc_reg <= (others=>'1');
         crc_received <= (others=>'0');
+        crc_done <= '0';
 
       elsif clk_312'event and clk_312 = '1' then
+        crc_done <= '0';
 
         case ps_crc is
 
@@ -156,6 +171,7 @@ library ieee;
           when D128 =>
             -- crc_reg <= nextCRC32_D128(reverse(data_d2), crc_reg);
             if (eop_d1(4) = '1' and eop_d1(3 downto 0) < x"5") then
+              crc_done <= '1';
               case eop_d1(3 downto 0) is
                 when x"0" =>  crc_reg <= nextCRC32_D96(reverse(data_d2(  95 downto 0)), crc_reg);
                               crc_received <= data_d2(127 downto 96); -- certo
@@ -188,6 +204,7 @@ library ieee;
 
 
           when EOP =>
+              crc_done <= '1';
               case eop_d2(3 downto 0) is
                 -- when x"0" => null;  -- valor para calc do crc no ciclo anterior, estes valores no CRc correspondem ao CRc de comparação e FD
                 -- when x"1" => null;  -- valor para calc do crc no ciclo anterior, estes valores no CRc correspondem ao CRc de comparação e FD
