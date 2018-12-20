@@ -559,7 +559,23 @@ module wrapper_macpcs_rx(
     // MAC POR ENQUANTO "QUEBRADO" DENTRO DO WRAPPER: CORE_INTERFACE, CRC CHECKER, FAULTS, ETC...
     // TODO: CRIAR UM MODULO PARA ORGANIZAR TUDO
 
-    (* dont_touch = "true" *) crc_rx INST_crc_rx
+    // (* dont_touch = "true" *) crc_rx INST_crc_rx
+    // (
+    //   .clk_312  (clk_312),
+    //   .rst_n    (reset_rx_n),
+    //   .mac_data (mac_data),
+    //   .mac_sop  (mac_sop),
+    //   .mac_eop  (mac_eop),
+    //   //.almost_full (),
+    //   .app_data (app_data),
+    //   .app_sop  (app_sop),
+    //   .app_val  (app_val),
+    //   .app_eop  (app_eop),
+    //   .crc_ok   (crc_ok)
+    // );
+
+
+    (* dont_touch = "true" *) crc_rx_sfifo INST_crc_rx_sfifo
     (
       .clk_312  (clk_312),
       .rst_n    (reset_rx_n),
@@ -572,22 +588,6 @@ module wrapper_macpcs_rx(
       .app_val  (app_val),
       .app_eop  (app_eop),
       .crc_ok   (crc_ok)
-    );
-
-
-    (* dont_touch = "true" *) crc_rx_sfifo INST_crc_rx_sfifo
-    (
-      .clk_312  (clk_312),
-      .rst_n    (reset_rx_n),
-      .mac_data (mac_data),
-      .mac_sop  (mac_sop),
-      .mac_eop  (mac_eop),
-      //.almost_full (),
-      .app_data (),
-      .app_sop  (),
-      .app_val  (),
-      .app_eop  (),
-      .crc_ok   ()
     );
 
     (* dont_touch = "true" *) core_interface INST_core_interface
