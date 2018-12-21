@@ -167,10 +167,8 @@ vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 work.Top -t 1ps
 
 do wave.do
-
-run 20 us
-#run 50 us
-#run 200 us
+transcript file transcript#
+#run 5 us
 
 exec cp lane0.txt lane0_rx.txt
 exec cp lane1.txt lane1_rx.txt
@@ -184,5 +182,5 @@ exec cp lane3_tx40.txt lane3_rx40.txt
 
 exec cp dump_mii_tx.txt dump_app.txt
 
-do list.do
+#do list.do
 #exit

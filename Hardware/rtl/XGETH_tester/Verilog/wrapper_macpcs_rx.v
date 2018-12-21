@@ -583,10 +583,10 @@ module wrapper_macpcs_rx(
       .mac_sop  (mac_sop),
       .mac_eop  (mac_eop),
       //.almost_full (),
-      .app_data (app_data),
-      .app_sop  (app_sop),
-      .app_val  (app_val),
-      .app_eop  (app_eop),
+      .app_data (),
+      .app_sop  (),
+      .app_val  (),
+      .app_eop  (),
       .crc_ok   (crc_ok)
     );
 

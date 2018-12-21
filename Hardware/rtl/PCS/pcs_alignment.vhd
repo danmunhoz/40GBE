@@ -201,6 +201,12 @@ architecture behav_pcs_alignment of pcs_alignment is
             lane_2_valid_out <= '0';
             lane_3_valid_out <= '0';
 
+          elsif (tx_sequence_cnt = x"00" and count = ("00" & x"002")) then
+            lane_0_valid_out <= '0';
+            lane_1_valid_out <= '0';
+            lane_2_valid_out <= '0';
+            lane_3_valid_out <= '0';
+
           elsif (scr_en_o = '0' and scr_en = '0' and scr_en_in = '0') then
             lane_0_valid_out <= '0';
             lane_1_valid_out <= '0';

@@ -32,6 +32,7 @@ SC_MODULE(Top) {
   sc_signal<sc_logic> reset;
   sc_signal<sc_logic> reset_mii_tx;
   sc_signal<sc_logic> reset_mii_rx;
+  sc_signal<sc_logic> ZERO;
 
   // TX
   sc_signal<sc_lv<8> >  dump_xgmii_txc;
@@ -298,8 +299,10 @@ SC_MODULE(Top) {
     dump_mii_rx_inst_3->mii_c(dump_xgmii_rxc_3);
     dump_mii_rx_inst_3->mii_d(dump_xgmii_rxd_3);
 
+    ZERO = SC_LOGIC_0;
     fiber_inst->clock_in(iclock161);
-    fiber_inst->reset_in(reset);
+    // fiber_inst->reset_in(reset);
+    fiber_inst->reset_in(ZERO);
     fiber_inst->block_out_0(block_out_0);
     fiber_inst->header_out_0(header_out_0);
     fiber_inst->valid_out_0(valid_out_0);
