@@ -241,7 +241,8 @@ SC_MODULE(Top) {
 
     // output dumped to file for comparison
     dump_output_inst->clock_in(iclock312);
-    dump_output_inst->reset_n(reset);
+    // dump_output_inst->reset_n(reset);
+    dump_output_inst->reset_n(ZERO);
     dump_output_inst->mac_data(mac_data);
     dump_output_inst->mac_sop(mac_sop);
     dump_output_inst->mac_eop(mac_eop);
@@ -250,7 +251,8 @@ SC_MODULE(Top) {
     scoreboard_inst->clock_in156(iclock156);
 
     pkt_buffer_inst->clock_in161(iclock161);
-    pkt_buffer_inst->reset_n(reset);
+    // pkt_buffer_inst->reset_n(reset);
+    pkt_buffer_inst->reset_n(ZERO);
     pkt_buffer_inst->header_in(header_from_xgt4);
     pkt_buffer_inst->block_in(block_from_xgt4);
     pkt_buffer_inst->data_valid_in(rx_data_valid_in); //Passar para o data_valid do TX
@@ -275,27 +277,32 @@ SC_MODULE(Top) {
     pkt_buffer_tx40_inst->data_valid_in_3(tx_valid_out_3);
 
     dump_mii_tx_inst->clock_in(iclock156);
-    dump_mii_tx_inst->reset_n(reset);
+    // dump_mii_tx_inst->reset_n(reset);
+    dump_mii_tx_inst->reset_n(ZERO);
     dump_mii_tx_inst->mii_c(dump_xgmii_txc);
     dump_mii_tx_inst->mii_d(dump_xgmii_txd);
 
     dump_mii_rx_inst_0->clock_in(iclock156);
-    dump_mii_rx_inst_0->reset_n(reset);
+    // dump_mii_rx_inst_0->reset_n(reset);
+    dump_mii_rx_inst_0->reset_n(ZERO);
     dump_mii_rx_inst_0->mii_c(dump_xgmii_rxc_0);
     dump_mii_rx_inst_0->mii_d(dump_xgmii_rxd_0);
 
     dump_mii_rx_inst_1->clock_in(iclock156);
-    dump_mii_rx_inst_1->reset_n(reset);
+    // dump_mii_rx_inst_1->reset_n(reset);
+    dump_mii_rx_inst_1->reset_n(ZERO);
     dump_mii_rx_inst_1->mii_c(dump_xgmii_rxc_1);
     dump_mii_rx_inst_1->mii_d(dump_xgmii_rxd_1);
 
     dump_mii_rx_inst_2->clock_in(iclock156);
-    dump_mii_rx_inst_2->reset_n(reset);
+    // dump_mii_rx_inst_2->reset_n(reset);
+    dump_mii_rx_inst_2->reset_n(ZERO);
     dump_mii_rx_inst_2->mii_c(dump_xgmii_rxc_2);
     dump_mii_rx_inst_2->mii_d(dump_xgmii_rxd_2);
 
     dump_mii_rx_inst_3->clock_in(iclock156);
-    dump_mii_rx_inst_3->reset_n(reset);
+    // dump_mii_rx_inst_3->reset_n(reset);
+    dump_mii_rx_inst_3->reset_n(ZERO);
     dump_mii_rx_inst_3->mii_c(dump_xgmii_rxc_3);
     dump_mii_rx_inst_3->mii_d(dump_xgmii_rxd_3);
 
