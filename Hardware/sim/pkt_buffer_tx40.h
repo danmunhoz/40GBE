@@ -218,7 +218,8 @@ SC_MODULE(pkt_buffer_tx40) {
     header_in_old_3 = header_in_3;
 
     // if ( data_valid_in_0 == SC_LOGIC_1 ) {
-    if ( 1 ) {
+    // if ( 1 ) {
+    if ( 0 ) {
 
     // Formato da linha:
     // HEADER-DATA_BITS=VALID_BIT

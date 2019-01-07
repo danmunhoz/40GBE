@@ -155,7 +155,8 @@ SC_MODULE(pkt_buffer) {
     block_in_old = block_in;
     header_in_old = header_in;
 
-   if ( block_in_old_o != block_in_lv && data_valid_in == SC_LOGIC_1) {
+   // if ( block_in_old_o != block_in_lv && data_valid_in == SC_LOGIC_1) {
+   if ( 0 ) {
     // Sem repeticao. Funcionamento normal...
     // cout << "PCS TX BLOCO OK!!!!!!  -> " << block_in_lv << " != " << block_in_old << endl;
 
