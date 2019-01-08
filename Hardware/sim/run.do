@@ -140,9 +140,10 @@ vcom -novopt ../rtl/XGETH_tester/VHD/txsequence_counter.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/LFSR_GEN.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/LFSR_REC.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/loopback.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator_256.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/echo_receiver_128.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/echo_receiver_128_v2.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/pkt_creation_mngr.vhd
 
 vcom -novopt tx_xgt4.vhd
 vcom -novopt rx_xgt4.vhd
