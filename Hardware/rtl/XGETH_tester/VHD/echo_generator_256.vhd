@@ -120,38 +120,36 @@ architecture arch_echo_generator of echo_generator_256 is
 BEGIN
 
 
+  pkt_tx_data <= pkt_tx_data_N;
+  pkt_tx_data_N <= invert_bytes(pkt_tx_data_buffer);
+  pkt_tx_data_buffer <= PAYLOAD when current_s = S_PAYLOAD else
+                        IDLE_VALUE & IDLE_VALUE when current_s = S_IDLE else
+                        HEADER;
+
+  HEADER <=   MAC & IP(191 downto 64) when current_s = S_HEADER_H else
+              EOH_SOF & PKT_COUNTER;
+
+  PAYLOAD <= PAYLOAD_LAST when last_pkt = '1' else
+             PAYLOAD_PKT;
+
+  PAYLOAD_PKT <=  ID_COUNTER_L & ID_COUNTER_H when payload_type = "00" else
+                  SEED when payload_type = "01" else
+                  ALL_ZERO & ALL_ZERO when payload_type = "10" else
+                  ALL_ONE & ALL_ONE   when payload_type = "11";
+
+  MAC      <= mac_destination & mac_source & x"08004500";
+  IP       <= ip_message_length & x"000000000A11" & ip_checksum &
+              ip_source & ip_destination & x"C020C021" & udp_message_length;
+  EOH_SOF  <= IP(63 downto 0) & UPD_INFO & time_stamp;
 
 
-pkt_tx_data <= pkt_tx_data_N;
-pkt_tx_data_N <= invert_bytes(pkt_tx_data_buffer);
-pkt_tx_data_buffer <= PAYLOAD when current_s = S_PAYLOAD else
-                      IDLE_VALUE & IDLE_VALUE when current_s = S_IDLE else
-                      HEADER;
+  pkt_tx_val <= '0' when current_s = S_IDLE
+                else '1';
 
-HEADER <=   MAC & IP(191 downto 64) when current_s = S_HEADER_H else
-            EOH_SOF & PKT_COUNTER;
-
-PAYLOAD <= PAYLOAD_LAST when last_pkt = '1' else
-           PAYLOAD_PKT;
-
-PAYLOAD_PKT <=  ID_COUNTER_L & ID_COUNTER_H when payload_type = "00" else
-                SEED when payload_type = "01" else
-                ALL_ZERO & ALL_ZERO when payload_type = "10" else
-                ALL_ONE & ALL_ONE   when payload_type = "11";
-
-MAC      <= mac_destination & mac_source & x"08004500";
-IP       <= ip_message_length & x"000000000A11" & ip_checksum &
-            ip_source & ip_destination & x"C020C021" & udp_message_length;
-EOH_SOF  <= IP(63 downto 0) & UPD_INFO & time_stamp;
-
-
-pkt_tx_val <= '0' when current_s = S_IDLE
-              else '1';
-
-last_pkt <= '1' when it_payload = payload_cycles else '0';
-pkt_tx_eop_reg <= '0' when last_pkt = '1' else '1';
-pkt_tx_mod <= pkt_tx_mod_reg when pkt_tx_eop_reg = '0' else (others=>'0');
-pkt_tx_eop <= pkt_tx_eop_reg;
+  last_pkt <= '1' when it_payload = payload_cycles else '0';
+  pkt_tx_eop_reg <= '0' when last_pkt = '1' else '1';
+  pkt_tx_mod <= pkt_tx_mod_reg when pkt_tx_eop_reg = '0' else (others=>'0');
+  pkt_tx_eop <= pkt_tx_eop_reg;
 -------------------------------------------------------------------------------
 -- RFC2544 FEEDBACK
 -------------------------------------------------------------------------------
@@ -249,7 +247,7 @@ pkt_tx_eop <= pkt_tx_eop_reg;
     end process;
 
     -------------------------------------------------------------------------------
-    -- PKT N BIT CTRL
+    -- PKT N BIT CTRL --TBD
     -------------------------------------------------------------------------------
 
     PAYLOAD_LAST <= PAYLOAD_PKT(7 downto 0) & IDLE_VALUE & IDLE_VALUE(119 downto 0)    when pkt_tx_mod_reg  = "00000" else

@@ -109,10 +109,6 @@ architecture xgeth_tester of xgeth_tester is
     signal pkt_rx_data : std_logic_vector(63 downto 0);
     signal pkt_rx_mod : std_logic_vector(2 downto 0);
 
-    -- arp generator
---    signal pkt_tx_data_arp : std_logic_vector(63 downto 0);
---    signal pkt_tx_val_arp, pkt_tx_sop_arp, pkt_tx_eop_arp, pkt_tx_full_arp : std_logic;
---    signal pkt_tx_mod_arp : std_logic_vector(2 downto 0);
 
     -- Timestamp base reference
     signal timestamp_base   : std_logic_vector(47 downto 0);
@@ -292,11 +288,6 @@ begin
         seed_A              => seed_A,
         seed_B              => seed_B,
 
-        -- rx_header_valid_in  => rx_header_valid_in,
-        -- rx_header_in        => rx_header_in,
-        -- rx_data_valid_in    => rx_data_valid_in,
-        -- rx_data_in          => rx_data_in,
-
         rx_lane_0_header_valid_in  => rx_header_valid_in,
         rx_lane_0_header_in        => rx_header_in,
         rx_lane_0_data_in          => rx_data_in,
@@ -363,64 +354,6 @@ begin
         wb_ack_o            => open,
         wb_dat_o            => open,
         wb_int_o            => open
-    );
-
-    inst_interface_upc : entity work.interface_upc_xgeth port map(
-        clk_156                   => clk_156,
-        clk_250                 => clk_250,
-        reset                   => async_reset_n,
-
-        xgeth_waddr             => xgeth_waddr,
-        xgeth_raddr             => xgeth_raddr,
-        xgeth_wdata             => xgeth_wdata,
-        xgeth_wen               => xgeth_wen,
-
-        xgeth_rdata             => xgeth_rdata,
-
-        RFC_end                 => RFC_end,
-        PKT_rx                  => PKT_rx,
-        latency                 => latency,
-        packets_lost			=> packets_lost,
-        pkt_lost_counter    	=> pkt_lost_counter,
-        RFC_ack                 => RFC_ack,
-        reset_test				=> reset_test,
-
-        initialize              => initialize,
-
-        lfsr_seed               => lfsr_seed,
-        lfsr_polynomial         => lfsr_polynomial,
-        valid_seed              => valid_seed,
-
-        PKT_type                => PKT_type,
-        RFC_type                => RFC_type,
-        IDLE_number             => IDLE_number,
-        PKT_length              => PKT_length,
-        PKT_number              => PKT_number,
-        TIMEOUT_number          => TIMEOUT_number,
-        PKT_sequence_in         => PKT_sequence_in,
-        mac_source              => mac_source,
-        mac_destination         => mac_destination,
-        ip_source               => ip_source,
-        ip_destination          => ip_destination,
-        soft_reset              => soft_reset,
-        RFC_running             => RFC_running,
-        timestamp_flag          => time_stamp_flag,
-        check_reduce_frame_rate => check_reduce_frame_rate,
-        TX_count                => TX_count,
-        linkstatus              => linkstatus_reg,
-        eth_rx_los              => eth_rx_los,
-        IDLE_count_receiver_out => IDLE_count_receiver_out,
-        mac_source_rx           => mac_source_rx,
-        mac_destination_rx      => mac_destination_rx,
-        ip_source_rx            => ip_source_rx,
-        ip_destination_rx       => ip_destination_rx,
-        cont_error              => cont_error,
-        payload_type            => payload_type,
-        payload_cycles          => payload_cycles,
-        payload_last_size       => payload_last_size,
-        --last_id					=> last_id,
-        --current_id          	=> current_id,
-        loopback_filter         => loopback_filter
     );
 
     echo_gen_inst : entity work.echo_generator port map (
@@ -495,114 +428,8 @@ begin
         pkt_sequence_error_flag  => pkt_sequence_error_flag,
         pkt_sequence_error  => pkt_sequence_error,
         cont_error          => cont_error,
-		--last_id				=> last_id,
-        --current_id          => current_id,
         payload_type        => payload_type
     );
 
-    trafic_gen_inst : entity work.rfc2544 port map (
-        -- STANDARD INPUTSapp_eop[4]
-        clock               => clk_156,
-        reset               => reset,
-        initialize          => initialize,
-
-        RFC_type            => RFC_type,
-
-        IDLE_number         => IDLE_number,
-        TIMEOUT_number      => TIMEOUT_number,
-        PKT_number          => PKT_number,
-
-        -- FROM Receiver
-        PKT_timestamp       => time_stamplinkstatus_reg_out,
-        PKT_timestamp_val   => end_latency,
-        PKT_sequence_error_flag  => pkt_sequence_error_flag,
-        PKT_sequence_error  => pkt_sequence_error,
-        RESET_done			=> RESET_done,
-
-
-        -- TO echo generator and receiver
-        timestamp_base      => timestamp_base,
-
-        -- FROM MAC
-        PKT_TX_EOP          => PKT_TX_EOP,
-        PKT_RX_EOP          => PKT_RX_EOP,
-
-        IDLE_count_receiver => IDLE_count_receiver,
-        latency             => latency,
-        verify_system_rec   => verify_system_rec,
-        PKT_rx              => PKT_rx,
-        PKT_gen             => pkt_gen,
-        --PKT_timestamp_flag  => time_stamp_flag,
-        RFC_end             => RFC_end,
-        RFC_ack             => RFC_ack,
-        RFC_running         => RFC_running,
-        check_reduce_frame_rate => check_reduce_frame_rate,
-        TX_count            => TX_count,
-        echo_received_packet => echo_received_packet,
-        IDLE_count_receiver_out => IDLE_count_receiver_out,
-
-        payload_last_size   => payload_last_size
-    );
-
-    loopback_inst : entity work.loopback port map (
-        -- STANDARD INPUTS
-        clock               => clk_156,
-        reset               => reset,linkstatus_reg
-
-        mac_source          => mac_source,
-
-        pkt_rx_avail        => pkt_rx_avail,
-        pkt_rx_eop          => pkt_rx_eop,
-        pkt_rx_sop          => pkt_rx_sop,
-        pkt_rx_val          => pkt_rx_val,
-        pkt_rx_err          => pkt_rx_err,
-        pkt_rx_data         => pkt_rx_data,
-        pkt_rx_mod          => pkt_rx_mod,
-
-        pkt_loopback_ren    => pkt_loopback_ren,
-        lb_pkt_tx_eop       => lb_pkt_tx_eop,
-        lb_pkt_tx_sop       => lb_pkt_tx_sop,
-        lb_pkt_tx_val       => lb_pkt_tx_val,
-        lb_pkt_tx_data      => lb_pkt_tx_data,
-        lb_pkt_tx_mod       => lb_pkt_tx_mod,
-
-        lb_mac_destination  => lb_mac_destination,
-        lb_mac_source       => lb_mac_source,
-        lb_ip_destination   => lb_ip_destination,
-        lb_ip_source        => lb_ip_source,
-
-        mac_filter          => loopback_filter
-    );
-
-    on_frame_sent <= RFC_running;
-    on_frame_received <= pkt_rx_avail;
-    reset <= async_reset_n and soft_reset;
-    linkstatus <= linkstatus_reg;
-
-    mac_source_rx       <= lb_mac_source when PKT_type = "10" else mac_source_rx_echo;
-    mac_destination_rx  <= lb_mac_destination when PKT_type = "10" else mac_destination_rx_echo;
-    ip_source_rx        <= lb_ip_source when PKT_type = "10" else ip_source_rx_echo;
-    ip_destination_rx   <= lb_ip_destination when PKT_type = "10" else ip_destination_rx_echo;
-        ---------------------------------------------------------
-        -- MUX to select ECHO or LOOPBACK  -> MAC bus
-        ---------------------------------------------------------
-
-    pkt_tx_data   <= lb_pkt_tx_data when PKT_type = "10" else
-                 pkt_tx_data_echo;
-
-    pkt_tx_val    <= lb_pkt_tx_val when PKT_type = "10" else
-                pkt_tx_val_echo;
-
-    pkt_tx_sop    <= lb_pkt_tx_sop when PKT_type = "10" else
-                pkt_tx_sop_echo;
-
-    pkt_tx_eop    <= lb_pkt_tx_eop when PKT_type = "10" else
-                pkt_tx_eop_echo;
-
-    pkt_tx_mod    <= lb_pkt_tx_mod when PKT_type = "10" elseecho_generator_256
-                pkt_tx_mod_echo;
-
-    pkt_rx_ren    <= pkt_loopback_ren when PKT_type = "10" else
-                pkt_rx_ren_echo;
 
 end xgeth_tester;

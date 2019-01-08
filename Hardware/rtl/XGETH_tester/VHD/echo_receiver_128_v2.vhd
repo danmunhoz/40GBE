@@ -1,3 +1,94 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+entity full_adder is
+           port (
+            data_in:	        in std_logic_vector(2 downto 0);
+            data_out:        out std_logic_vector(1 downto 0)
+         );
+end full_adder;
+
+
+architecture arch_full_adder of full_adder is
+	signal intermidiate : std_logic_vector(1 downto 0);
+
+  begin
+	intermidiate(0) <= data_in(0) xor (data_in(1) xor data_in(2));
+	intermidiate(1) <= (data_in(2) and data_in(1)) or (data_in(0) and data_in(1))  or (data_in(0) and data_in(2));
+	data_out <= intermidiate;
+
+end arch_full_adder;
+
+---#############################################
+
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.std_logic_unsigned.all;
+use IEEE.numeric_std.all;
+
+entity unary_count_ones is
+	port (
+			data_out : OUT std_logic_vector(7 downto 0);
+			data_in : IN std_logic_vector(127 downto 0));
+end unary_count_ones;
+
+architecture Behavioral of unary_count_ones is
+
+		  type array_2b is array (0 to 42) of std_logic_vector (1 downto 0);
+        signal bin2_array : array_2b;
+
+        type array_3bin is array (0 to 21) of std_logic_vector (2 downto 0);
+        signal bin3_array : array_3bin;
+
+        type array_4bin is array (0 to 10) of std_logic_vector (3 downto 0);
+        signal bin4_array : array_4bin;
+
+        type array_5bin is array (0 to 5) of std_logic_vector (4 downto 0);
+        signal bin5_array : array_5bin;
+
+        type array_6bin is array (0 to 2) of std_logic_vector (5 downto 0);
+        signal bin6_array : array_6bin;
+
+        type array_7bin is array (0 to 1) of std_logic_vector (6 downto 0);
+        signal bin7_array : array_7bin;
+
+        signal temp : std_logic_vector(128 downto 0) := (others => '0');
+
+begin
+	 temp <= data_in & '0';
+
+			full_a0 : entity work.full_adder port map (data_in => temp(2 downto 0), data_out => bin2_array(0));
+      un2bin : for i in 1 to 42 generate
+          full_adr : entity work.full_adder port map (data_in => temp((i*3)+2 downto i*3), data_out => bin2_array(i));
+      end generate un2bin;
+
+         bin3_array(0) <= ('0' & bin2_array(0)) + "000";
+  bin3:  for j in 1 to 21 generate
+           bin3_array(j) <= ('0' & bin2_array((j*2))) + ('0' & bin2_array((j*2)-1));
+         end generate bin3;
+
+  bin4:  for k in 0 to 10 generate
+           bin4_array(k) <= ('0' & bin3_array((k*2)+1)) + ('0' & bin3_array((k*2)));
+         end generate bin4;
+
+ 		  bin5_array(5) <=  ('0' & bin4_array(10)) + "00000";
+ bin5:   for l in 0 to 4 generate
+           bin5_array(l) <= ('0' & bin4_array((l*2)+1)) + ('0' & bin4_array((l*2)));
+         end generate bin5;
+
+ bin6:   for m in 0 to 2 generate
+           bin6_array(m) <= ('0' & bin5_array((m*2)+1)) + ('0' & bin5_array((m*2)));
+         end generate bin6;
+
+         bin7_array(1) <=  ('0' & bin6_array(2)) + "0000000";
+         bin7_array(0) <=  ('0' & bin6_array(1)) + ('0' & bin6_array(0));
+
+         data_out <= ('0' & bin7_array(0)) + ('0' & bin7_array(1));
+
+ end Behavioral;
+
+
+
 
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -5,10 +96,11 @@ use IEEE.std_logic_arith.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
 use ieee.numeric_std.all;
+
 entity echo_receiver_128_v2 is
   port
     (
-        clock : in std_logic;             -- Clock 156.25 MHz ---> mudar 312.5 Mhz
+        clk_312 : in std_logic;             -- Clock 156.25 MHz ---> mudar 312.5 Mhz
         reset : in std_logic;             -- Reset (Active High)
 
         --LFSR Initialization
@@ -53,7 +145,7 @@ entity echo_receiver_128_v2 is
     );
 end echo_receiver_128_v2;
 
-architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
+architecture arch_echo_receiver_128_unary of echo_receiver_128_v2 is
     -------------------------------------------------------------------------------
     -- Debug
     -------------------------------------------------------------------------------
@@ -123,6 +215,7 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     signal lfsr_resync_ON : std_logic;
     signal lfsr_fsm_begin : std_logic;
     signal lfsr_test_begin : std_logic;
+    signal lfsr_load_seed : std_logic;
     signal delay_B0, delay_B1, delay_B2: std_logic_vector (127 downto 0);
     signal lfsr_resync_SIGNAL : std_logic_vector (127 downto 0);
     signal lfsr_resync_RANDOM : std_logic_vector (127 downto 0);
@@ -134,7 +227,7 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
     signal bert_xor : std_logic_vector (127 downto 0);
     signal bert_cycle_wrong : std_logic_vector (127 downto 0);
     signal bert_n_flipped_b : std_logic_vector (127 downto 0);
-    signal bert_count_flip : std_logic_vector (127 downto 0);
+    signal bert_count_flip : std_logic_vector (7 downto 0);
     signal bert_test_begin : std_logic;
 
     signal ALL_ONE : std_logic_vector(127 downto 0) := (OTHERS => '1');
@@ -159,15 +252,6 @@ architecture arch_echo_receiver_128_v2 of echo_receiver_128_v2 is
         return bytes_N;
     end function invert_bytes_127;
 
-    function count_ones(s : std_logic_vector) return std_logic_vector is
-        variable temp : std_logic_vector(127 downto 0) := (others => '0');
-    begin
-      for i in s'range loop
-        if s(i) = '1' then temp := temp + '1';
-        end if;
-      end loop;
-      return temp;
-    end function count_ones;
 
 BEGIN
 
@@ -182,36 +266,38 @@ BEGIN
   -- Combinational Logic
   -------------------------------------------------------------------------------
   -- Updates the current state
-    next_updater : process(current_s, reset, clock, pkt_rx_avail, pkt_rx_sop, pkt_rx_eop)
+    next_updater : process(current_s, pkt_rx_avail, pkt_rx_sop, pkt_rx_eop)
     begin
-      if reset = '0' then
-        next_s <= S_IDLE;
-      else
-        case current_s is
-            when S_IDLE => if pkt_rx_avail = '1' and pkt_rx_sop = '1' then next_s <= S_ETHERNET; end if;
-            when S_ETHERNET => next_s <= S_IP;
-            when S_IP => next_s <= S_REST_IP;
-            when S_REST_IP => next_s <= S_PAYLOAD_START;
-            when S_PAYLOAD_START => next_s <= S_PAYLOAD;
-            when S_PAYLOAD =>
-              if pkt_rx_eop = '1' then
-                  next_s <= S_PAYLOAD_END;
-              end if;
-          when S_PAYLOAD_END => next_s <= S_IDLE;
-        end case;
-      end if;
+	next_s <= S_IDLE;
+	case current_s is
+	    when S_IDLE =>
+		if pkt_rx_avail = '1' and pkt_rx_sop = '1' then
+			next_s <= S_ETHERNET;
+		end if;
+	    when S_ETHERNET => next_s <= S_IP;
+	    when S_IP => next_s <= S_REST_IP;
+	    when S_REST_IP => next_s <= S_PAYLOAD_START;
+	    when S_PAYLOAD_START => next_s <= S_PAYLOAD;
+	    when S_PAYLOAD =>
+	      if pkt_rx_eop = '1' then
+		  next_s <= S_PAYLOAD_END;
+	      else
+		  next_s <= S_PAYLOAD;
+	      end if;
+	  when S_PAYLOAD_END => next_s <= S_IDLE;
+	end case;
     end process;
 
-    current_updater : process(reset, clock)
+    current_updater : process(reset, clk_312)
     begin
       if reset = '0' then
           current_s <= S_IDLE;
           pkt_rx_data_buffer <= (others => '0');
-      elsif rising_edge(clock)  then
+      elsif rising_edge(clk_312)  then
         if pkt_rx_eop = '1' then
           pkt_rx_data_buffer <= pkt_rx_data_nbits;
         else
-          pkt_rx_data_buffer <= pkt_rx_data;
+
         end if;
           current_s <= next_s;
       end if;
@@ -230,17 +316,19 @@ BEGIN
     received_packet_wire <= '1' when mac_source = reg_mac_destination else '0';
     received_packet <= received_packet_wire;
 
-    end_latency <= '1' when ((received_packet_wire = '1') and (ip_pkt_type = '1') and (udp_pkt_type = '1') and (time_stamp_generator(0) = '1')) else '0';
-    time_stamp_receiver <= timestamp_base (46 downto 0);
     time_stamp_ready <= '1' when (received_packet_wire and ip_pkt_type and udp_pkt_type and time_stamp_generator(0)) = '1'  else '0';
+    time_stamp_receiver <= timestamp_base (46 downto 0);
     time_stamp_out <= '0' & (time_stamp_receiver - time_stamp_generator(47 downto 1)) when time_stamp_ready = '1' else (others=>'0');
+    end_latency <= '1' when time_stamp_ready = '1' else '0';
+
 
     pkt_rx_ren <= '0' when current_s = S_IDLE else '1';
     lfsr_start <= '1' when current_s = S_PAYLOAD and payload_type = "01"  else '0';
 
-    package_updater : process(reset, clock)
+    package_updater : process(reset, clk_312)
     begin
       if reset = '0' then
+	lfsr_load_seed <= '1';
         IDLE_count_reg <= (others => '0');
         id_pkt_tester <= (others => '0');
         lfsr_fsm_begin <= '0';
@@ -252,9 +340,10 @@ BEGIN
         reg_ip_source <= (others => '0');
         ip_high <= (others => '0');
         reg_ip_destination <= (others => '0');
-      elsif rising_edge(clock) then
+      elsif rising_edge(clk_312) then
         case current_s is
           when S_IDLE =>
+	    lfsr_load_seed <= '0';
             lfsr_fsm_begin <= '0';
             if pkt_rx_avail = '1' then
               IDLE_count_reg <= IDLE_count_reg + '1';
@@ -317,12 +406,12 @@ BEGIN
     pkt_sequence_error <= '1' when (id_sequence_counter < pkt_sequence_in) else '0';
     pkt_sequence_error_flag <= pkt_sequence_error_flag_aux;
 
-    id_checker : process(reset, clock)
+    id_checker : process(reset, clk_312)
     begin
       if reset = '0' then
         id_sequence_counter <= (others => '0');
         pkt_sequence_error_flag_aux <= '0';
-      elsif rising_edge(clock) then
+      elsif rising_edge(clk_312) then
         if current_s = S_PAYLOAD_START and payload_type = "00" and verify_system_rec = '1' then
            if (id_pkt_tester = (pkt_rx_data_N - '1')) then
              pkt_sequence_error_flag_aux <= '0';
@@ -341,14 +430,14 @@ BEGIN
     packets_lost <= lost_pkt_tester;
     RESET_done   <= '1' when lost_counter >= 1000 else '0';
 
-    reset_id_diff_test : process(reset, clock)
+    reset_id_diff_test : process(reset, clk_312)
     begin
       if reset = '0' then
         lost_pkt_flag <= '0';
         lost_pkt_tester <= (others => '0');
         not_lost_pkt_test <= '0';
         lost_counter <= (others => '0');
-      elsif rising_edge(clock) then
+      elsif rising_edge(clk_312) then
         if current_s = S_PAYLOAD_START and payload_type = "00" and reset_test = '1' then
           if (id_pkt_tester = (pkt_rx_data_N - '1')) then
             if lost_pkt_flag = '1' then
@@ -369,7 +458,7 @@ BEGIN
     -- BERT TEST AND LFSR
     -------------------------------------------------------------------------------
 
-    pipelined_lfsr_inputs : process(reset, clock)
+    pipelined_lfsr_inputs : process(reset, clk_312)
     begin
       if reset = '0' then
           lfsr_start_delay <= '0';
@@ -381,7 +470,7 @@ BEGIN
           lfsr_resync_SIGNAL <= (others => '0');
           lfsr_counter <= 0;
           lfsr_resync_ON <= '0';
-      elsif rising_edge(clock) then
+      elsif rising_edge(clk_312) then
         case lfsr_state is
           when S_IDLE =>
             lfsr_test_begin <= '0';
@@ -461,8 +550,9 @@ BEGIN
     generic map (DATA_SIZE => 128,
                  PPL_SIZE => 4)
     port map(
-      clock => clock,
+      clock => clk_312,
       reset_N => reset,
+      load_seed => lfsr_load_seed,
       seed => lfsr_seed,
       polynomial => lfsr_polynomial,
       data_in => pkt_rx_data_N,
@@ -480,22 +570,19 @@ BEGIN
 
     bert_test_begin <= (lfsr_test_begin or const_test_begin);
 
-    bert_count_flip <= count_ones(bert_xor) when bert_test_begin = '1' else (others => '0');
-
     count_error <= bert_n_flipped_b;
 
 
-    BERT: process (clock, reset)
+   Unary_c_ones: entity work.unary_count_ones port map(data_out => bert_count_flip, data_in=> bert_xor);
+
+    BERT: process (clk_312, reset)
     begin
       if(reset = '0') then
         bert_n_flipped_b <= (others=>'0');
         bert_cycle_wrong <= (others=>'0');
-      elsif rising_edge(clock) then
-        if recovery_ON = '1' then
-          bert_n_flipped_b <= recovery_n_flipped_b;
-          bert_cycle_wrong <= recovery_cycle_wrong;
-        elsif bert_test_begin = '1' then
-            bert_n_flipped_b <= bert_n_flipped_b + bert_count_flip;
+      elsif rising_edge(clk_312) then
+        if bert_test_begin = '1' then
+            bert_n_flipped_b <= bert_n_flipped_b + (ALL_ZERO(119 downto 0) & bert_count_flip);
             if (bert_count_flip /= 0 ) then
                 bert_cycle_wrong <= bert_cycle_wrong + 1;
             end if;
@@ -504,42 +591,4 @@ BEGIN
     end process;
 
 
-
-    -------------------------------------------------------------------------------
-    -- ERROR CORRECTION
-    -------------------------------------------------------------------------------
-
-    recovery_start_pkt <= pkt_rx_sop and pkt_rx_avail;
-    recovery_stop_pkt <= pkt_rx_eop and pkt_rx_avail;
-
-
-    ERROR_RECOVERY: process (clock, reset)
-    begin
-      if(reset = '0') then
-        recovery_state <= S_WAIT_START;
-        recovery_n_flipped_b <= (others => '0');
-        recovery_cycle_wrong <= (others => '0');
-      elsif rising_edge(clock) then
-        case recovery_state is
-          when S_WAIT_START =>
-            if recovery_start_pkt = '1' then
-              recovery_state <= S_WAIT_STOP;
-              recovery_n_flipped_b <= bert_n_flipped_b;
-              recovery_cycle_wrong <= bert_cycle_wrong;
-            end if;
-          when S_WAIT_STOP =>
-            if recovery_stop_pkt = '1' then
-              recovery_state <= S_WAIT_START;
-            elsif recovery_start_pkt = '1' then
-              recovery_state <= S_RECOVERY;
-              recovery_ON <= '1';
-            end if;
-          when S_RECOVERY =>
-            recovery_ON <= '0';
-            recovery_state <= S_WAIT_STOP;
-        end case;
-      end if;
-    end process;
-
-
-end arch_echo_receiver_128_v2;
+end arch_echo_receiver_128_unary;

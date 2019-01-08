@@ -612,50 +612,6 @@ module wrapper_macpcs_rx(
            // ECHO receiver
            // Review pkt_rx_avail
 
-       (* dont_touch = "true" *) echo_receiver_128 INST_echo_receiver_128
-        (
-         //IMPUT
-         .clock              (clk_312),
-         .reset              (reset_rx_n),
-         //Packet Info
-         .mac_source         (48'h00AA11BB22CC),
-         .timestamp_base     (48'h000000000000), // from RFC2544
-         //RX mac interface
-         .pkt_rx_avail       (!app_avail),
-         .pkt_rx_data        (app_data),
-         .pkt_rx_eop         (app_eop[4]),
-         .pkt_rx_err         (crc_ok),
-         .pkt_rx_mod         (app_eop[3:0]),
-         .pkt_rx_sop         (app_sop),
-         .pkt_rx_val         (app_val),
-         .verify_system_rec  (1'b1),
-         .reset_test         (1'b1),
-         .pkt_sequence_in    (16'h00),
-         .payload_type       (3'b000),
-
-       //LFSR Initialization - ECHO GENERATOR
-         .lfsr_seed          (128'h00000000000000000000000C00000003),
-         .lfsr_polynomial    (2'b10),
-         .valid_seed         (1'b1),
-         //OUTPUT
-         //Packet Info
-         .mac_source_rx         (mac_source_rx),
-         .mac_destination       (mac_destination),
-         .ip_source             (ip_source),
-         .ip_destination        (ip_destination),
-         .time_stamp_out        (time_stamp_out),
-         .received_packet       (received_packet),
-         .end_latency           (end_latency),
-         .packets_lost          (packets_lost),
-         .RESET_done            (RESET_done),
-       //RX mac interface
-         .pkt_rx_ren                (pkt_rx_ren),
-         .IDLE_count                (IDLE_count),
-         .pkt_sequence_error_flag   (pkt_sequence_error_flag),
-         .pkt_sequence_error        (pkt_sequence_error),
-         .cont_error                (cont_error)
-     );
-
              //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
                 // ECHO receiver v2
                 // Review pkt_rx_avail
@@ -663,7 +619,7 @@ module wrapper_macpcs_rx(
             (* dont_touch = "true" *) echo_receiver_128_v2 INST_echo_receiver_128_v2
              (
               //IMPUT
-              .clock              (clk_312),
+              .clk_312              (clk_312),
               .reset              (reset_rx_n),
               //Packet Info
               .mac_source         (48'h00AA11BB22CC),
@@ -767,15 +723,35 @@ module wrapper_macpcs_rx(
 
 
 
-    (* dont_touch = "true" *) echo_generator_256 INST_echo_generator_256
+    (* dont_touch = "true" *) pkt_creation_mngr INST_pkt_generator
     (
-      //INPUT
-      .clock        (clk_156),
-      .reset          (async_reset_n),
+  //STANDART PORTS
+      .clk_156        (clk_156),
+      .clk_312        (clk_312),
+      .rst_n          (async_reset_n),
+
+    //FROM INTERFACE
+      .loop_select  (1'b1),
+      .mac_source        (48'h00AA11BB22CC),
+
+      //OUTPUT
+      .pkt_tx_data    (cj_pkt_tx_data),
+      .pkt_tx_sop     (cj_pkt_tx_sop),
+      .pkt_tx_eop     (cj_pkt_tx_eop),
+      .pkt_tx_mod     (cj_pkt_tx_mod),
+      .pkt_tx_val     (cj_pkt_tx_val),
+
+      //FROM REC
+      .rec_mac_source_rx  (mac_source_rx_2),
+      .rec_mac_destination_rx (mac_destination_2),
+      .rec_ip_source_rx (ip_source_2),
+      .rec_ip_destination_rx (ip_destination_2),
+
+      //GEN PORTS
       .start          (start_tx_begin),
 
       //MAC AND IP
-      .mac_source        (48'h00AA11BB22CC),
+
       .mac_destination   (48'hAA00BB11CC22),
       .ip_source         (32'h0ABCDE01),
       .ip_destination    (32'h0ABCDE02),
@@ -791,12 +767,16 @@ module wrapper_macpcs_rx(
       .lfsr_polynomial    (2'b10),
       .valid_seed         (1'b1),
 
-      //OUTPUT
-      .pkt_tx_data    (cj_pkt_tx_data),
-      .pkt_tx_sop     (cj_pkt_tx_sop),
-      .pkt_tx_eop     (cj_pkt_tx_eop),
-      .pkt_tx_mod     (cj_pkt_tx_mod),
-      .pkt_tx_val     (cj_pkt_tx_val)
+      //LOOPBACK PORTS
+      .pkt_rx_avail_in    (!app_avail),
+      .pkt_rx_eop_in     (app_eop[4]),
+      .pkt_rx_sop_in     (app_sop),
+      .pkt_rx_val_in     (app_val),
+      .pkt_rx_err_in     (crc_ok),
+      .pkt_rx_data_in    (app_data),
+      .pkt_rx_mod_in     (app_eop[3:0]),
+
+      .mac_filter      (2'b01)
 
 
     );
