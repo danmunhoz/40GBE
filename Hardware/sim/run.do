@@ -141,6 +141,7 @@ vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/LFSR_GEN.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/LFSR_REC.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/loopback.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/loopback_v2.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator_256.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/echo_receiver_128_v2.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/pkt_creation_mngr.vhd
@@ -171,8 +172,8 @@ vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 -L secureip -L xilinxcorelib work.glbl \
 work.Top -t 1ps
 
-#do wave.do
-do wave_matheus.do
+do wave.do
+#do wave_matheus.do
 
 run 50 us
 #run 200 us

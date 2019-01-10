@@ -127,7 +127,7 @@ entity pkt_creation_mngr is
     pkt_rx_data_in     : in  std_logic_vector(127 downto 0);
     pkt_rx_mod_in      : in  std_logic_vector(3 downto 0);
 
-    mac_filter      : in  std_logic_vector(1 downto 0);
+    mac_filter      : in  std_logic_vector(2 downto 0);
     -- 000 inverts mac source and mac target and receives just packets in broadcast or intended for its mac
     -- 001 does not invert mac source and mac target and receives just packets in broadcast or intended for its mac
     -- 010 inverts mac source and mac target and operates in promiscous mode
@@ -219,9 +219,9 @@ begin
   -- MUX to select ECHO GEN or LOOPBACK  -> MAC bus
   ---------------------------------------------------------
 
-  loopback_inst : entity work.loopback port map (
+  loopback_inst : entity work.loopback_v2 port map (
       -- STANDARD INPUTS
-      clock               => clk_156,
+      clk_156               => clk_156,
       reset               => rst_n,
       mac_source          => mac_source,
 

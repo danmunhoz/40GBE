@@ -21,8 +21,8 @@ entity loopback is
         pkt_rx_sop      : in  std_logic;
         pkt_rx_val      : in  std_logic;
         pkt_rx_err      : in  std_logic;
-        pkt_rx_data     : in  std_logic_vector(255 downto 0);
-        pkt_rx_mod      : in  std_logic_vector(3 downto 0);
+        pkt_rx_data     : in  std_logic_vector(63 downto 0);
+        pkt_rx_mod      : in  std_logic_vector(2 downto 0);
         mac_filter      : in  std_logic_vector(1 downto 0);
         -- 000 inverts mac source and mac target and receives just packets in broadcast or intended for its mac
         -- 001 does not invert mac source and mac target and receives just packets in broadcast or intended for its mac
@@ -33,7 +33,7 @@ entity loopback is
         lb_pkt_tx_eop   : out  std_logic;
         lb_pkt_tx_sop   : out  std_logic_vector (1 downto 0);
         lb_pkt_tx_val   : out  std_logic;
-        lb_pkt_tx_data  : out  std_logic_vector(255 downto 0);
+        lb_pkt_tx_data  : out  std_logic_vector(63 downto 0);
         lb_pkt_tx_mod   : out  std_logic_vector(4 downto 0);
 
         lb_mac_destination  : out std_logic_vector(47 downto 0);
@@ -47,9 +47,9 @@ architecture arch_loopback of loopback is
 
     type   state_type is (S_IDLE, S_HEADER, S_PAYLOAD, S_PAYLOAD_LAST);
     signal current_s : state_type;
-    signal lb_pkt_rx_data: std_logic_vector(255 downto 0);
+    signal lb_pkt_rx_data: std_logic_vector(63 downto 0);
     signal it_header: std_logic_vector(2 downto 0);
-    signal lb_pkt_rx_mod: std_logic_vector(2 downto 0);
+    signal lb_pkt_rx_mod: std_logic_vector(4 downto 0);
     signal lb_mac_source_wire: std_logic_vector(47 downto 0);
     signal lb_mac_destination_wire: std_logic_vector(47 downto 0);
     signal lb_ip_message_length: std_logic_vector(15 downto 0);
@@ -71,7 +71,7 @@ begin
         elsif rising_edge(clock) then
             lb_pkt_tx_sop <= "00";
             lb_pkt_tx_eop <= '0';
-            lb_pkt_tx_mod <= '0' & pkt_rx_mod;
+            lb_pkt_tx_mod <= pkt_rx_mod;
             lb_pkt_tx_val <= '0';
             lb_pkt_rx_data <= pkt_rx_data;
 

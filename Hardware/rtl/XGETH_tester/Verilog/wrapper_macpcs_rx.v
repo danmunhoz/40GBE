@@ -731,7 +731,7 @@ module wrapper_macpcs_rx(
       .rst_n          (async_reset_n),
 
     //FROM INTERFACE
-      .loop_select  (1'b1),
+      .loop_select  (1'b0),
       .mac_source        (48'h00AA11BB22CC),
 
       //OUTPUT
@@ -776,7 +776,7 @@ module wrapper_macpcs_rx(
       .pkt_rx_data_in    (app_data),
       .pkt_rx_mod_in     (app_eop[3:0]),
 
-      .mac_filter      (2'b01)
+      .mac_filter      (3'b011)
 
 
     );
