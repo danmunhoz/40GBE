@@ -70,11 +70,14 @@ module PCS_core_rx  (  /*AUTOARG*/
                     rx_old_header_in, rx_old_data_in,
                     terminate_in_rx, start_in_rx, terminate_in_tx, start_in_tx,
                     tx_old_scr_data_in, tx_old_scr_data_out, pcs_sync,
+                    // gap, setIPG,
+                    is_alig, fifo_in, val_in,
+
                     // Outputs
                     jtest_errc, ber_cnt, hi_ber, blk_lock, linkstatus, rx_fifo_spill,
                     tx_fifo_spill, rxlf, txlf, errd_blks, xgmii_rxc, xgmii_rxd, scram_en,
                     tx_data_out, tx_header_out, tx_sequence_out, rxgearboxslip_out,
-                    terminate_out_rx, start_out_rx, terminate_out_tx, start_out_tx,
+                    terminate_out_rx, start_out_rx, terminate_out_tx, start_out_tx, dscr_out,
                     // Para uso do Testbench
         						RDEN_FIFO_PCS40, start_fifo, start_fifo_rd
                     );
@@ -118,6 +121,9 @@ module PCS_core_rx  (  /*AUTOARG*/
 
     input 				pcs_sync;
 
+    input [65:0]  fifo_in;
+    input         val_in;
+
     input          terminate_in_rx;
     wire           terminate_in_rx;
     input          start_in_rx;
@@ -128,6 +134,9 @@ module PCS_core_rx  (  /*AUTOARG*/
     input          start_in_tx;
     wire           start_in_tx;
 
+    // input         gap;
+    // input         setIPG;
+    input         is_alig;
 
     //For Testbench use
 		input					start_fifo;
@@ -151,6 +160,8 @@ module PCS_core_rx  (  /*AUTOARG*/
     output        rxgearboxslip_out;
     output [6:0]  tx_sequence_out;
     output        scram_en;
+
+    output [65:0] dscr_out;
 
     output         terminate_out_rx;
     wire           terminate_out_rx;
@@ -234,6 +245,11 @@ rx_path_rx INST_rx_path(   // Input Ports
                         .rx_old_data_in     (rx_old_data_in),
                         .terminate_in       (terminate_in_rx),
                         .start_in           (start_in_rx),
+                        // .gap                (gap),
+                        // .setIPG             (setIPG),
+                        .is_alig            (is_alig),
+                        .fifo_in            (fifo_in),
+                        .val_in             (val_in),
 
                         // Output Ports
                         .xgmii_rxc          (xgmii_rxc[7:0]),
@@ -250,6 +266,7 @@ rx_path_rx INST_rx_path(   // Input Ports
                         .terminate_out      (terminate_out_rx),
                         .start_out          (start_out_rx),
                         .RDEN_FIFO_PCS40    (RDEN_FIFO_PCS40),
+                        .dscr_out           (dscr_out),
                         .start_fifo         (start_fifo)
                         );
 

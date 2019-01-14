@@ -38,7 +38,7 @@ end entity;
 
 architecture behav_pcs_alignment of pcs_alignment is
     --  Intervalo de blocos para ser inserido alinhamento
-    constant N_BLOCKS       : natural := 512 ;
+    constant N_BLOCKS       : natural := 511 ;
 
     constant sync_lane0_high  : std_logic_vector(23 downto 0):= x"907647";
     constant sync_lane1_high  : std_logic_vector(23 downto 0):= x"f0c4e6";

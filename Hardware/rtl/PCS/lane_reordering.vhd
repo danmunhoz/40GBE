@@ -108,6 +108,11 @@ entity lane_reorder is
     pcs_2_valid_out   : out std_logic;
     pcs_3_valid_out   : out std_logic;
 
+    pcs_0_alignment_out   : out std_logic;
+    pcs_1_alignment_out   : out std_logic;
+    pcs_2_alignment_out   : out std_logic;
+    pcs_3_alignment_out   : out std_logic;
+
     fifo_empty_0  : out std_logic;
     fifo_empty_1  : out std_logic;
     fifo_empty_2  : out std_logic;
@@ -199,10 +204,14 @@ architecture behav_lane_reorder of lane_reorder is
     end record;
 
     type out_regs is record
-      block_0   : std_logic_vector(66 downto 0);
-      block_1   : std_logic_vector(66 downto 0);
-      block_2   : std_logic_vector(66 downto 0);
-      block_3   : std_logic_vector(66 downto 0);
+    -- block_0   : std_logic_vector(66 downto 0);
+    -- block_1   : std_logic_vector(66 downto 0);
+    -- block_2   : std_logic_vector(66 downto 0);
+    -- block_3   : std_logic_vector(66 downto 0);
+      block_0   : std_logic_vector(67 downto 0);
+      block_1   : std_logic_vector(67 downto 0);
+      block_2   : std_logic_vector(67 downto 0);
+      block_3   : std_logic_vector(67 downto 0);
     end record;
 
     type fsm_state is (S_INIT, S_END, S_SYNC, S_TRANSMIT);
@@ -243,35 +252,47 @@ architecture behav_lane_reorder of lane_reorder is
     signal wen_2_int : std_logic;
     signal wen_3_int : std_logic;
 
-    signal shuffle_out_0 : std_logic_vector(66 downto 0);
-    signal shuffle_out_1 : std_logic_vector(66 downto 0);
-    signal shuffle_out_2 : std_logic_vector(66 downto 0);
-    signal shuffle_out_3 : std_logic_vector(66 downto 0);
+    -- signal shuffle_out_0 : std_logic_vector(66 downto 0);
+    -- signal shuffle_out_1 : std_logic_vector(66 downto 0);
+    -- signal shuffle_out_2 : std_logic_vector(66 downto 0);
+    -- signal shuffle_out_3 : std_logic_vector(66 downto 0);
+    signal shuffle_out_0 : std_logic_vector(67 downto 0);
+    signal shuffle_out_1 : std_logic_vector(67 downto 0);
+    signal shuffle_out_2 : std_logic_vector(67 downto 0);
+    signal shuffle_out_3 : std_logic_vector(67 downto 0);
 
     signal almost_f_0,almost_e_0,empty_0,full_0 : std_logic;
-    signal fifo_out_0 : std_logic_vector(66 downto 0);
-    signal fifo_in_0  : std_logic_vector(66 downto 0);
+    -- signal fifo_out_0 : std_logic_vector(66 downto 0);
+    -- signal fifo_in_0  : std_logic_vector(66 downto 0);
+    signal fifo_out_0 : std_logic_vector(67 downto 0);
+    signal fifo_in_0  : std_logic_vector(67 downto 0);
 
     signal RDCOUNT_0 : std_logic_vector(8 downto 0);
     signal WRCOUNT_0 : std_logic_vector(8 downto 0);
 
     signal almost_f_1,almost_e_1,empty_1,full_1 : std_logic;
-    signal fifo_out_1 : std_logic_vector(66 downto 0);
-    signal fifo_in_1  : std_logic_vector(66 downto 0);
+    -- signal fifo_out_1 : std_logic_vector(66 downto 0);
+    -- signal fifo_in_1  : std_logic_vector(66 downto 0);
+    signal fifo_out_1 : std_logic_vector(67 downto 0);
+    signal fifo_in_1  : std_logic_vector(67 downto 0);
 
     signal RDCOUNT_1 : std_logic_vector(8 downto 0);
     signal WRCOUNT_1 : std_logic_vector(8 downto 0);
 
     signal almost_f_2,almost_e_2,empty_2,full_2 : std_logic;
-    signal fifo_out_2 : std_logic_vector(66 downto 0);
-    signal fifo_in_2  : std_logic_vector(66 downto 0);
+    -- signal fifo_out_2 : std_logic_vector(66 downto 0);
+    -- signal fifo_in_2  : std_logic_vector(66 downto 0);
+    signal fifo_out_2 : std_logic_vector(67 downto 0);
+    signal fifo_in_2  : std_logic_vector(67 downto 0);
 
     signal RDCOUNT_2 : std_logic_vector(8 downto 0);
     signal WRCOUNT_2 : std_logic_vector(8 downto 0);
 
     signal almost_f_3,almost_e_3,empty_3,full_3 : std_logic;
-    signal fifo_out_3 : std_logic_vector(66 downto 0);
-    signal fifo_in_3  : std_logic_vector(66 downto 0);
+    -- signal fifo_out_3 : std_logic_vector(66 downto 0);
+    -- signal fifo_in_3  : std_logic_vector(66 downto 0);
+    signal fifo_out_3 : std_logic_vector(67 downto 0);
+    signal fifo_in_3  : std_logic_vector(67 downto 0);
 
     signal RDCOUNT_3 : std_logic_vector(8 downto 0);
     signal WRCOUNT_3 : std_logic_vector(8 downto 0);
@@ -471,10 +492,15 @@ begin
   -- wen_1_int <= '0' when is_sync_1_int = '1' or val_lane_1 = '0' else '1';
   -- wen_2_int <= '0' when is_sync_2_int = '1' or val_lane_2 = '0' else '1';
   -- wen_3_int <= '0' when is_sync_3_int = '1' or val_lane_3 = '0' else '1';
-  wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' or val_lane_0 = '0' else '1';
-  wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' or val_lane_1 = '0' else '1';
-  wen_2_int <= '0' when barreira_skew.is_sync_2 = '1' or val_lane_2 = '0' else '1';
-  wen_3_int <= '0' when barreira_skew.is_sync_3 = '1' or val_lane_3 = '0' else '1';
+
+  -- wen_0_int <= '0' when barreira_skew.is_sync_0 = '1' or val_lane_0 = '0' else '1';
+  -- wen_1_int <= '0' when barreira_skew.is_sync_1 = '1' or val_lane_1 = '0' else '1';
+  -- wen_2_int <= '0' when barreira_skew.is_sync_2 = '1' or val_lane_2 = '0' else '1';
+  -- wen_3_int <= '0' when barreira_skew.is_sync_3 = '1' or val_lane_3 = '0' else '1';
+  wen_0_int <= '0' when val_lane_0 = '0' else '1';
+  wen_1_int <= '0' when val_lane_1 = '0' else '1';
+  wen_2_int <= '0' when val_lane_2 = '0' else '1';
+  wen_3_int <= '0' when val_lane_3 = '0' else '1';
 
 
 
@@ -524,8 +550,11 @@ begin
   --              barreira_bip.valid_0 & barreira_bip.header_0 & barreira_bip.data_0;
   -- fifo_in_0 <= (others => '0') when barreira_bip.valid_0 = '0' else
   --              barreira_bip.valid_0 & barreira_bip.header_0 & barreira_bip.data_0;
-  fifo_in_0 <= (others => '0') when val_lane_0 = '0' else
-               barreira_bip.valid_0 & barreira_bip.header_0 & barreira_bip.data_0;
+  -- fifo_in_0 <=  (others => '0') when val_lane_0 = '0' else
+  --               '0' & barreira_bip.header_0 & barreira_bip.data_0 when barreira_bip.is_sync_0 = '1' else
+  --               barreira_bip.valid_0 & barreira_bip.header_0 & barreira_bip.data_0;
+  fifo_in_0 <=  (others => '0') when val_lane_0 = '0' else
+                barreira_bip.is_sync_0 & barreira_bip.valid_0 & barreira_bip.header_0 & barreira_bip.data_0;
 
   fifo_1 : entity work.reorder_fifo
   port map (
@@ -545,8 +574,14 @@ begin
   --               barreira_bip.valid_1 & barreira_bip.header_1 & barreira_bip.data_1;
   -- fifo_in_1 <= (others => '0') when barreira_bip.valid_1 = '0' else
   --              barreira_bip.valid_1 & barreira_bip.header_1 & barreira_bip.data_1;
-  fifo_in_1 <= (others => '0') when val_lane_1 = '0' else
-               barreira_bip.valid_1 & barreira_bip.header_1 & barreira_bip.data_1;
+
+  -- fifo_in_1 <= (others => '0') when val_lane_1 = '0' else
+  --              barreira_bip.valid_1 & barreira_bip.header_1 & barreira_bip.data_1;
+  -- fifo_in_1 <=  (others => '0') when val_lane_1 = '0' else
+  --               '0' & barreira_bip.header_1 & barreira_bip.data_1 when barreira_bip.is_sync_1 = '1' else
+  --               barreira_bip.valid_1 & barreira_bip.header_1 & barreira_bip.data_1;
+  fifo_in_1 <=  (others => '0') when val_lane_1 = '0' else
+                barreira_bip.is_sync_1 & barreira_bip.valid_1 & barreira_bip.header_1 & barreira_bip.data_1;
 
   fifo_2 : entity work.reorder_fifo
   port map (
@@ -565,8 +600,15 @@ begin
   --              barreira_bip.valid_2 & barreira_bip.header_2 & barreira_bip.data_2;
   -- fifo_in_2 <= (others => '0') when barreira_bip.valid_2 = '0' else
   --              barreira_bip.valid_2 & barreira_bip.header_2 & barreira_bip.data_2;
-  fifo_in_2 <= (others => '0') when val_lane_2 = '0' else
-               barreira_bip.valid_2 & barreira_bip.header_2 & barreira_bip.data_2;
+
+  -- fifo_in_2 <= (others => '0') when val_lane_2 = '0' else
+  --              barreira_bip.valid_2 & barreira_bip.header_2 & barreira_bip.data_2;
+  -- fifo_in_2 <=  (others => '0') when val_lane_2 = '0' else
+  --               '0' & barreira_bip.header_2 & barreira_bip.data_2 when barreira_bip.is_sync_2 = '1' else
+  --               barreira_bip.valid_2 & barreira_bip.header_2 & barreira_bip.data_2;
+  fifo_in_2 <=  (others => '0') when val_lane_2 = '0' else
+                barreira_bip.is_sync_2 & barreira_bip.valid_2 & barreira_bip.header_2 & barreira_bip.data_2;
+
 
   fifo_3 : entity work.reorder_fifo
   port map (
@@ -585,8 +627,16 @@ begin
   --              barreira_bip.valid_3 & barreira_bip.header_3 & barreira_bip.data_3;
   -- fifo_in_3 <= (others => '0') when barreira_bip.valid_3 = '0' else
   --              barreira_bip.valid_3 & barreira_bip.header_3 & barreira_bip.data_3;
-  fifo_in_3 <= (others => '0') when val_lane_3 = '0' else
-               barreira_bip.valid_3 & barreira_bip.header_3 & barreira_bip.data_3;
+
+  -- fifo_in_3 <= (others => '0') when val_lane_3 = '0' else
+  --              barreira_bip.valid_3 & barreira_bip.header_3 & barreira_bip.data_3;
+
+  --fifo_in_3 <=  (others => '0') when val_lane_3 = '0' else
+  --              '0' & barreira_bip.header_3 & barreira_bip.data_3 when barreira_bip.is_sync_3 = '1' else
+  --              barreira_bip.valid_3 & barreira_bip.header_3 & barreira_bip.data_3;
+
+  fifo_in_3 <=  (others => '0') when val_lane_3 = '0' else
+                barreira_bip.is_sync_3 & barreira_bip.valid_3 & barreira_bip.header_3 & barreira_bip.data_3;
 
  --==============================================================================
  -- fourth_stage - SHUFFLE NETWORK
@@ -610,16 +660,20 @@ begin
   reg_out_data_0:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_0(63 downto 0),  Q=>pcs_0_data_out);
   reg_out_header_0:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_0(65 downto 64), Q=>pcs_0_header_out);
   reg_out_valid_0:      entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_0(66),  Q=>pcs_0_valid_out);
+  reg_out_alignment_0:  entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_0(67),  Q=>pcs_0_alignment_out);
 
   reg_out_data_1:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_1(63 downto 0),  Q=>pcs_1_data_out);
   reg_out_header_1:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_1(65 downto 64), Q=>pcs_1_header_out);
   reg_out_valid_1:      entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_1(66),  Q=>pcs_1_valid_out);
+  reg_out_alignment_1:  entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_1(67),  Q=>pcs_1_alignment_out);
 
   reg_out_data_2:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_2(63 downto 0),  Q=>pcs_2_data_out);
   reg_out_header_2:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_2(65 downto 64), Q=>pcs_2_header_out);
   reg_out_valid_2:      entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_2(66),  Q=>pcs_2_valid_out);
+  reg_out_alignment_2:  entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_2(67),  Q=>pcs_2_alignment_out);
 
   reg_out_data_3:       entity work.regnbit generic map (size=>64) port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_3(63 downto 0),  Q=>pcs_3_data_out);
   reg_out_header_3:     entity work.regnbit generic map (size=>2)  port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_3(65 downto 64), Q=>pcs_3_header_out);
   reg_out_valid_3:      entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_3(66),  Q=>pcs_3_valid_out);
+  reg_out_alignment_3:  entity work.reg_bit port map (ck=>clock, rst=>reset, ce=>'1', D=>shuffle_out_3(67),  Q=>pcs_3_alignment_out);
 end behav_lane_reorder;

@@ -368,6 +368,11 @@ module wrapper_macpcs_rx(
     wire            pcs_2_scram_en;
     wire            pcs_3_scram_en;
 
+    wire [65:0]     pcs_0_dscr;
+    wire [65:0]     pcs_1_dscr;
+    wire [65:0]     pcs_2_dscr;
+    wire [65:0]     pcs_3_dscr;
+
     assign empty_fifo = fifo_interface_empty;
     assign full_fifo = fifo_interface_full;
 
@@ -379,6 +384,34 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire [63:0] pcs_2_data_out;
     (* syn_keep = "true"*) wire [1:0]  pcs_3_header_out;
     (* syn_keep = "true"*) wire [63:0] pcs_3_data_out;
+    (* syn_keep = "true"*) wire pcs_0_alignment;
+    (* syn_keep = "true"*) wire pcs_1_alignment;
+    (* syn_keep = "true"*) wire pcs_2_alignment;
+    (* syn_keep = "true"*) wire pcs_3_alignment;
+    (* syn_keep = "true"*) wire valid_0_out_wire;
+    (* syn_keep = "true"*) wire valid_1_out_wire;
+    (* syn_keep = "true"*) wire valid_2_out_wire;
+    (* syn_keep = "true"*) wire valid_3_out_wire;
+
+    (* syn_keep = "true"*) wire dscr_en_ipg;
+
+    (* syn_keep = "true"*) wire v0;
+    (* syn_keep = "true"*) wire v1;
+    (* syn_keep = "true"*) wire v2;
+    (* syn_keep = "true"*) wire v3;
+    (* syn_keep = "true"*) wire [1:0] hh0;
+    (* syn_keep = "true"*) wire [1:0] hh1;
+    (* syn_keep = "true"*) wire [1:0] hh2;
+    (* syn_keep = "true"*) wire [1:0] hh3;
+    (* syn_keep = "true"*) wire [63:0] d0;
+    (* syn_keep = "true"*) wire [63:0] d1;
+    (* syn_keep = "true"*) wire [63:0] d2;
+    (* syn_keep = "true"*) wire [63:0] d3;
+
+    (* syn_keep = "true"*) wire [65:0] dscr_0_out_wire;
+    (* syn_keep = "true"*) wire [65:0] dscr_1_out_wire;
+    (* syn_keep = "true"*) wire [65:0] dscr_2_out_wire;
+    (* syn_keep = "true"*) wire [65:0] dscr_3_out_wire;
 
     (* syn_keep = "true"*) wire [63:0] tx_old_encod_data_out_0;
     (* syn_keep = "true"*) wire [63:0] tx_old_encod_data_out_1;
@@ -418,6 +451,10 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire [7:0]  xgmii_rxc_lane_3;
     (* syn_keep = "true"*) wire [63:0] xgmii_rxd_lane_3;
 
+
+    (* syn_keep = "true"*) wire [1:0]  tana_pcs_0_header_out;
+    (* syn_keep = "true"*) wire [63:0] tana_pcs_0_data_out;
+
     wire [7:0]  xgmii_txc;
     wire [63:0] xgmii_txd;
 
@@ -448,10 +485,15 @@ module wrapper_macpcs_rx(
         old_header_0 <= 2'b01;
         old_data_0   <= 64'h0;
       end
-      else if (pcs_3_valid_out) begin
+      // else if (pcs_3_valid_out) begin
+      // else if (v3) begin
+      else if (v3 & dscr_en_ipg) begin
         // Nao atualiza registrador com valores invalidos
-        old_header_0 <= pcs_3_header_out[1:0];
-        old_data_0   <= pcs_3_data_out[63:0];
+        // tanauan
+        // old_header_0 <= pcs_3_header_out[1:0];
+        // old_data_0   <= pcs_3_data_out[63:0];
+        old_header_0 <= hh3[1:0];
+        old_data_0   <= d3[63:0];
       end
     end
 
@@ -462,6 +504,7 @@ module wrapper_macpcs_rx(
       end
       else begin
         if (pcs_0_scram_en == 1'b1)
+        // if (pcs_0_scram_en & dscr_en_ipg == 1'b1) // tanauan
           tx_old_encod_data_out_3_reg <= tx_old_encod_data_out_3;
       end
     end
@@ -536,18 +579,23 @@ module wrapper_macpcs_rx(
       .pcs_0_valid_out  (pcs_0_valid_out),
       .pcs_0_header_out (pcs_0_header_out[1:0]),
       .pcs_0_data_out   (pcs_0_data_out[63:0]),
+      .pcs_0_alignment_out (pcs_0_alignment),
 
       .pcs_1_valid_out  (pcs_1_valid_out),
       .pcs_1_header_out (pcs_1_header_out[1:0]),
       .pcs_1_data_out   (pcs_1_data_out[63:0]),
+      .pcs_1_alignment_out (pcs_1_alignment),
 
       .pcs_2_valid_out  (pcs_2_valid_out),
       .pcs_2_header_out (pcs_2_header_out[1:0]),
       .pcs_2_data_out   (pcs_2_data_out[63:0]),
+      .pcs_2_alignment_out (pcs_2_alignment),
 
       .pcs_3_valid_out  (pcs_3_valid_out),
       .pcs_3_header_out (pcs_3_header_out[1:0]),
       .pcs_3_data_out   (pcs_3_data_out[63:0]),
+      .pcs_3_alignment_out (pcs_3_alignment),
+
 
       .fifo_empty_0 (fifo_reorder_empty_0),
       .fifo_empty_1 (fifo_reorder_empty_1),
@@ -668,10 +716,22 @@ module wrapper_macpcs_rx(
         .seed_A             (seed_A),
         .seed_B             (seed_B),
 
-        .rx_header_valid_in (pcs_0_valid_out),
-        .rx_data_valid_in   (pcs_0_valid_out),
-        .rx_header_in       (pcs_0_header_out[1:0]),
-        .rx_data_in         (pcs_0_data_out[63:0]),
+        // .rx_header_valid_in (pcs_0_valid_out),
+        // .rx_data_valid_in   (pcs_0_valid_out),
+        // .rx_header_in       (pcs_0_header_out[1:0]),
+        // .rx_data_in         (pcs_0_data_out[63:0]),
+        .rx_header_valid_in (v0),
+        .rx_data_valid_in   (v0),
+        .rx_header_in       (hh0[1:0]),
+        .rx_data_in         (d0[63:0]),
+
+        .is_alig            (pcs_0_alignment),
+        // .val_in             (valid_0_out_wire),
+        .val_in             (dscr_en_ipg),
+        .fifo_in            (dscr_0_out_wire),
+
+        // .gap                (gap),
+        // .setIPG             (setIPG),
 
         .hi_ber             (hi_ber_0),
         .blk_lock           (blk_lock_0),
@@ -693,6 +753,7 @@ module wrapper_macpcs_rx(
         .xgmii_txd          (xgmii_txd_lane_0),
         .xgmii_rxd          (xgmii_rxd_lane_0),
         .xgmii_rxc          (xgmii_rxc_lane_0),
+        .dscr_out           (pcs_0_dscr),
 
         .rx_old_header_in   (old_header_0),
         .rx_old_data_in     (old_data_0),
@@ -743,10 +804,22 @@ module wrapper_macpcs_rx(
         .seed_A             (seed_A),
         .seed_B             (seed_B),
 
-        .rx_header_valid_in (pcs_1_valid_out),
-        .rx_data_valid_in   (pcs_1_valid_out),
-        .rx_header_in       (pcs_1_header_out[1:0]),
-        .rx_data_in         (pcs_1_data_out[63:0]),
+        // .rx_header_valid_in (pcs_1_valid_out),
+        // .rx_data_valid_in   (pcs_1_valid_out),
+        // .rx_header_in       (pcs_1_header_out[1:0]),
+        // .rx_data_in         (pcs_1_data_out[63:0]),
+        .rx_header_valid_in (v1),
+        .rx_data_valid_in   (v1),
+        .rx_header_in       (hh1[1:0]),
+        .rx_data_in         (d1[63:0]),
+
+        .is_alig            (pcs_1_alignment),
+        // .val_in             (valid_1_out_wire),
+        .val_in             (dscr_en_ipg),
+        .fifo_in            (dscr_1_out_wire),
+
+        // .gap                (gap),
+        // .setIPG             (setIPG),
 
         .hi_ber             (hi_ber_1),
         .blk_lock           (blk_lock_1),
@@ -768,9 +841,12 @@ module wrapper_macpcs_rx(
         .xgmii_txd          (xgmii_txd_lane_1), // MII do zero POR ENQUANTO
         .xgmii_rxd          (xgmii_rxd_lane_1),
         .xgmii_rxc          (xgmii_rxc_lane_1),
+        .dscr_out           (pcs_1_dscr),
 
-        .rx_old_header_in   (pcs_0_header_out[1:0]),
-        .rx_old_data_in     (pcs_0_data_out[63:0]),
+        // .rx_old_header_in   (pcs_0_header_out[1:0]),
+        // .rx_old_data_in     (pcs_0_data_out[63:0]),
+        .rx_old_header_in   (hh0[1:0]),
+        .rx_old_data_in     (d0[63:0]),
         .scram_en           (pcs_1_scram_en),
 
         .tx_old_scr_data_out (tx_old_encod_data_out_1),
@@ -818,10 +894,22 @@ module wrapper_macpcs_rx(
         .seed_A             (seed_A),
         .seed_B             (seed_B),
 
-        .rx_header_valid_in (pcs_2_valid_out),
-        .rx_data_valid_in   (pcs_2_valid_out),
-        .rx_header_in       (pcs_2_header_out[1:0]),
-        .rx_data_in         (pcs_2_data_out[63:0]),
+        // .rx_header_valid_in (pcs_2_valid_out),
+        // .rx_data_valid_in   (pcs_2_valid_out),
+        // .rx_header_in       (pcs_2_header_out[1:0]),
+        // .rx_data_in         (pcs_2_data_out[63:0]),
+        .rx_header_valid_in (v2),
+        .rx_data_valid_in   (v2),
+        .rx_header_in       (hh2[1:0]),
+        .rx_data_in         (d2[63:0]),
+
+        .is_alig            (pcs_2_alignment),
+        // .val_in             (valid_2_out_wire),
+        .val_in             (dscr_en_ipg),
+        .fifo_in            (dscr_2_out_wire),
+
+        // .gap                (gap),
+        // .setIPG             (setIPG),
 
         .hi_ber             (hi_ber_2),
         .blk_lock           (blk_lock_2),
@@ -843,9 +931,12 @@ module wrapper_macpcs_rx(
         .xgmii_txd          (xgmii_txd_lane_2), // MII do zero POR ENQUANTO
         .xgmii_rxd          (xgmii_rxd_lane_2),
         .xgmii_rxc          (xgmii_rxc_lane_2),
+        .dscr_out           (pcs_2_dscr),
 
-        .rx_old_header_in   (pcs_1_header_out[1:0]),
-        .rx_old_data_in     (pcs_1_data_out[63:0]),
+        // .rx_old_header_in   (pcs_1_header_out[1:0]),
+        // .rx_old_data_in     (pcs_1_data_out[63:0]),
+        .rx_old_header_in   (hh1[1:0]),
+        .rx_old_data_in     (d1[63:0]),
 
         .tx_old_scr_data_out (tx_old_encod_data_out_2),
         .tx_old_scr_data_in	 (tx_old_encod_data_out_1),
@@ -893,10 +984,22 @@ module wrapper_macpcs_rx(
         .seed_A             (seed_A),
         .seed_B             (seed_B),
 
-        .rx_header_valid_in (pcs_3_valid_out),
-        .rx_data_valid_in   (pcs_3_valid_out),
-        .rx_header_in       (pcs_3_header_out[1:0]),
-        .rx_data_in         (pcs_3_data_out[63:0]),
+        // .rx_header_valid_in (pcs_3_valid_out),
+        // .rx_data_valid_in   (pcs_3_valid_out),
+        // .rx_header_in       (pcs_3_header_out[1:0]),
+        // .rx_data_in         (pcs_3_data_out[63:0]),
+        .rx_header_valid_in (v3),
+        .rx_data_valid_in   (v3),
+        .rx_header_in       (hh3[1:0]),
+        .rx_data_in         (d3[63:0]),
+
+        .is_alig            (pcs_3_alignment),
+        // .val_in             (valid_3_out_wire),
+        .val_in             (dscr_en_ipg),
+        .fifo_in            (dscr_3_out_wire),
+
+        // .gap                (gap),
+        // .setIPG             (setIPG),
 
         .hi_ber             (hi_ber_3),
         .blk_lock           (blk_lock_3),
@@ -918,9 +1021,12 @@ module wrapper_macpcs_rx(
         .xgmii_txd          (xgmii_txd_lane_3), // MII do zero POR ENQUANTO
         .xgmii_rxd          (xgmii_rxd_lane_3),
         .xgmii_rxc          (xgmii_rxc_lane_3),
+        .dscr_out           (pcs_3_dscr),
 
-        .rx_old_header_in   (pcs_2_header_out[1:0]),
-        .rx_old_data_in     (pcs_2_data_out[63:0]),
+        // .rx_old_header_in   (pcs_2_header_out[1:0]),
+        // .rx_old_data_in     (pcs_2_data_out[63:0]),
+        .rx_old_header_in   (hh2[1:0]),
+        .rx_old_data_in     (d2[63:0]),
 
         .tx_old_scr_data_out (tx_old_encod_data_out_3),
         .tx_old_scr_data_in	 (tx_old_encod_data_out_2),
@@ -1020,6 +1126,70 @@ module wrapper_macpcs_rx(
         .lane_3_valid_out   (tx_valid_out_3),
         .lane_3_data_out    (tx_data_out_3[63:0]),
         .lane_3_header_out  (tx_header_out_3[1:0])
+    );
+
+    alignment_removal INST_alignment_removal
+    (
+      .clk        (rx_clk_161_13),
+      .rst        (reset_rx_n),
+
+      .is_alig_0  (pcs_0_alignment),
+      .is_alig_1  (pcs_1_alignment),
+      .is_alig_2  (pcs_2_alignment),
+      .is_alig_3  (pcs_3_alignment),
+
+      .valid_0    (pcs_0_valid_out),
+      .valid_1    (pcs_1_valid_out),
+      .valid_2    (pcs_2_valid_out),
+      .valid_3    (pcs_3_valid_out),
+      .header_0   (pcs_0_header_out[1:0]),
+      .header_1   (pcs_1_header_out[1:0]),
+      .header_2   (pcs_2_header_out[1:0]),
+      .header_3   (pcs_3_header_out[1:0]),
+      .data_0     (pcs_0_data_out[63:0]),
+      .data_1     (pcs_1_data_out[63:0]),
+      .data_2     (pcs_2_data_out[63:0]),
+      .data_3     (pcs_3_data_out[63:0]),
+
+      .dscr_0     (pcs_0_dscr),
+      .dscr_1     (pcs_1_dscr),
+      .dscr_2     (pcs_2_dscr),
+      .dscr_3     (pcs_3_dscr),
+
+
+
+      .dscr_en_ipg    (dscr_en_ipg),
+
+      .vvalid_0_out   (v0),
+      .vvalid_1_out   (v1),
+      .vvalid_2_out   (v2),
+      .vvalid_3_out   (v3),
+      .header_0_out   (hh0[1:0]),
+      .header_1_out   (hh1[1:0]),
+      .header_2_out   (hh2[1:0]),
+      .header_3_out   (hh3[1:0]),
+      .data_0_out     (d0[63:0]),
+      .data_1_out     (d1[63:0]),
+      .data_2_out     (d2[63:0]),
+      .data_3_out     (d3[63:0]),
+
+      .valid_0_out (valid_0_out_wire),
+      .valid_1_out (valid_1_out_wire),
+      .valid_2_out (valid_2_out_wire),
+      .valid_3_out (valid_3_out_wire),
+
+      // .dscr_0_out (dscr_0_out_wire),
+      // .dscr_1_out (dscr_1_out_wire),
+      // .dscr_2_out (dscr_2_out_wire),
+      // .dscr_3_out (dscr_3_out_wire),
+
+      .ddscr_0_out (dscr_0_out_wire),
+      .ddscr_1_out (dscr_1_out_wire),
+      .ddscr_2_out (dscr_2_out_wire),
+      .ddscr_3_out (dscr_3_out_wire)
+
+      // .gap        (gap),
+      // .setIPG     (setIPG)
     );
 
 endmodule

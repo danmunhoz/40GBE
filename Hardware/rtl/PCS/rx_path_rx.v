@@ -65,10 +65,13 @@ module rx_path_rx (/*AUTOARG*/
                 clk156, lpbk, arstb, rx_jtm_en, rx_clk161,
                 rx_header_in, rx_data_in, rx_header_valid_in, rx_data_valid_in,
                 rx_old_header_in, rx_old_data_in, terminate_in, start_in,
-    		        // Outputs
+                // gap, setIPG,
+                is_alig, fifo_in, val_in,
+
+                // Outputs
     		        ber_cnt, blk_lock, jtest_errc_out, errd_blks, hi_ber, rxlf,
     		        spill, xgmii_rxc, xgmii_rxd, linkstatus, rxgearboxslip_out,
-                terminate_out, start_out,
+                terminate_out, start_out, dscr_out,
                 // Para uso do Testbench
     						RDEN_FIFO_PCS40,start_fifo
     		        );
@@ -97,6 +100,18 @@ module rx_path_rx (/*AUTOARG*/
 		input					start_fifo;
 		input					RDEN_FIFO_PCS40;
 
+    // input         gap;
+    // wire          gap;
+    // input         setIPG;
+    // wire          setIPG;
+
+    input         is_alig;
+    wire          is_alig;
+    input [65:0]  fifo_in;
+    input         val_in;
+    wire  [65:0]  fifo_in;
+    wire          val_in;
+
     output [5:0]    ber_cnt;
     output          blk_lock;
     output [15:0]   jtest_errc_out;
@@ -111,6 +126,7 @@ module rx_path_rx (/*AUTOARG*/
 
     output          terminate_out;
     output          start_out;
+    output [65:0]   dscr_out;
 
     wire [15:0]     jtest_errc_out;
     wire            blk_lock;
@@ -140,6 +156,7 @@ module rx_path_rx (/*AUTOARG*/
     wire            rx_clk161;
 
     assign rxd_sync_out = {rx_data_in,rx_header_in};
+    assign dscr_out = descram_data[65:0];
 
    frame_sync  INST_FRAME_SYNC
    (
@@ -182,13 +199,19 @@ module rx_path_rx (/*AUTOARG*/
     descramble_rx  INST_RX_PATH_DESCRAMBLE
         (
          .clr_jtest_errc    (1'b0),
-         .write_enable      (rx_data_valid_in),
+
+         // .write_enable      (rx_data_valid_in & !is_alig),
+         .write_enable      (rx_data_valid_in & val_in),
+
          .bypass_descram    (bypass_descram),
+         // .bypass_descram    (is_alig),
          .rx_jtm_en         (rx_jtm_en),
          .blk_lock          (blk_lock),
          .jtest_errc        (jtest_errc),
+
          .RXD_Sync          (rxd_sync_out[65:0]),
          .DeScr_RXD         (descram_data[65:0]),
+
          .clk               (rx_clk161),
          .rstb              (arstb),
          .rx_old_header_in  (rx_old_header_in),
@@ -203,8 +226,14 @@ module rx_path_rx (/*AUTOARG*/
          //.readen            (start_fifo),
          .readen            (RDEN_FIFO_PCS40), //tanauan, testanto TX40 -> RX40
          .wclk              (rx_clk161),
+
          .writen            (rx_data_valid_in),
-         .writedata         (descram_data[65:0]),
+         // .writen            (rx_data_valid_in & val_in),
+         // .writen            (val_in),
+
+         // .writedata         (descram_data[65:0]),
+         .writedata         (fifo_in[65:0]),
+
          .rst               (!arstb)
          );
 

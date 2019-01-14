@@ -15,14 +15,16 @@ entity reorder_fifo is
       rst_n                 : in std_logic;
       ren                   : in std_logic;
       wen                   : in std_logic;
-      data_in               : in std_logic_vector(66 downto 0);
+      -- data_in               : in std_logic_vector(66 downto 0);
+      data_in               : in std_logic_vector(67 downto 0);
 
   -- OUTPUTS
       almost_f              : out std_logic;
       full                  : out std_logic;
       almost_e              : out std_logic;
       empty                 : out std_logic;
-      data_out              : out std_logic_vector(66 downto 0)
+      -- data_out              : out std_logic_vector(66 downto 0)
+      data_out              : out std_logic_vector(67 downto 0)
       );
 end entity;
 
@@ -50,7 +52,8 @@ begin
       DEVICE => "7SERIES",            -- Target Device: "VIRTEX5, "VIRTEX6", "7SERIES"
       ALMOST_FULL_OFFSET => X"0080",  -- Sets almost full threshold
       ALMOST_EMPTY_OFFSET => X"0080", -- Sets the almost empty threshold
-      DATA_WIDTH => 67,               -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
+      -- DATA_WIDTH => 67,               -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
+      DATA_WIDTH => 68,               -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
       FIFO_SIZE => "36Kb")            -- Target BRAM, "18Kb" or "36Kb"
     port map (
       ALMOSTEMPTY => almost_e,  -- 1-bit output almost empty

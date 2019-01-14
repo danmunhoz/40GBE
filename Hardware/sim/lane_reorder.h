@@ -32,6 +32,10 @@ public:
     sc_out<sc_logic> pcs_1_valid_out;
     sc_out<sc_logic> pcs_2_valid_out;
     sc_out<sc_logic> pcs_3_valid_out;
+    sc_out<sc_logic> pcs_0_alignment_out;
+    sc_out<sc_logic> pcs_1_alignment_out;
+    sc_out<sc_logic> pcs_2_alignment_out;
+    sc_out<sc_logic> pcs_3_alignment_out;
     sc_out<sc_logic> fifo_empty_0;
     sc_out<sc_logic> fifo_empty_1;
     sc_out<sc_logic> fifo_empty_2;
@@ -66,6 +70,10 @@ public:
        pcs_1_valid_out("pcs_1_valid_out"),
        pcs_2_valid_out("pcs_2_valid_out"),
        pcs_3_valid_out("pcs_3_valid_out"),
+       pcs_0_alignment_out("pcs_0_alignment_out"),
+       pcs_1_alignment_out("pcs_1_alignment_out"),
+       pcs_2_alignment_out("pcs_2_alignment_out"),
+       pcs_3_alignment_out("pcs_3_alignment_out"),
        fifo_empty_0("fifo_empty_0"),
        fifo_empty_1("fifo_empty_1"),
        fifo_empty_2("fifo_empty_2"),
