@@ -408,6 +408,12 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire [63:0] d2;
     (* syn_keep = "true"*) wire [63:0] d3;
 
+    (* syn_keep = "true"*) wire tx_wr_pcs;
+    (* syn_keep = "true"*) wire [65:0] tx_encoded_pcs0;
+    (* syn_keep = "true"*) wire [65:0] tx_encoded_pcs1;
+    (* syn_keep = "true"*) wire [65:0] tx_encoded_pcs2;
+    (* syn_keep = "true"*) wire [65:0] tx_encoded_pcs3;
+
     (* syn_keep = "true"*) wire [65:0] dscr_0_out_wire;
     (* syn_keep = "true"*) wire [65:0] dscr_1_out_wire;
     (* syn_keep = "true"*) wire [65:0] dscr_2_out_wire;
@@ -729,6 +735,8 @@ module wrapper_macpcs_rx(
         // .val_in             (valid_0_out_wire),
         .val_in             (dscr_en_ipg),
         .fifo_in            (dscr_0_out_wire),
+        .pause_ipg          (),
+        .encoded_out        (tx_encoded_pcs0),
 
         // .gap                (gap),
         // .setIPG             (setIPG),
@@ -817,6 +825,8 @@ module wrapper_macpcs_rx(
         // .val_in             (valid_1_out_wire),
         .val_in             (dscr_en_ipg),
         .fifo_in            (dscr_1_out_wire),
+        .pause_ipg          (),
+        .encoded_out        (tx_encoded_pcs1),
 
         // .gap                (gap),
         // .setIPG             (setIPG),
@@ -907,6 +917,8 @@ module wrapper_macpcs_rx(
         // .val_in             (valid_2_out_wire),
         .val_in             (dscr_en_ipg),
         .fifo_in            (dscr_2_out_wire),
+        .pause_ipg          (),
+        .encoded_out        (tx_encoded_pcs2),
 
         // .gap                (gap),
         // .setIPG             (setIPG),
@@ -997,6 +1009,8 @@ module wrapper_macpcs_rx(
         // .val_in             (valid_3_out_wire),
         .val_in             (dscr_en_ipg),
         .fifo_in            (dscr_3_out_wire),
+        .pause_ipg          (),
+        .encoded_out        (tx_encoded_pcs3),
 
         // .gap                (gap),
         // .setIPG             (setIPG),
@@ -1112,6 +1126,12 @@ module wrapper_macpcs_rx(
         .lane_3_header_in   (tx_header_int_3[1:0]),
         .tx_sequence_cnt_in (tx_sequence_out_0[6:0]),
         .scr_en_in          (pcs_1_scram_en),
+
+        .tx_encoded_pcs0    (tx_encoded_pcs0),
+        .tx_encoded_pcs1    (tx_encoded_pcs1),
+        .tx_encoded_pcs2    (tx_encoded_pcs2),
+        .tx_encoded_pcs3    (tx_encoded_pcs3),
+        .tx_wr_pcs          (tx_wr_pcs),
 
         .pause_scr_alignm   (pcs_sync),
         .lane_0_valid_out   (tx_valid_out_0),

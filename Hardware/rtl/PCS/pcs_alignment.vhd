@@ -19,6 +19,12 @@ entity pcs_alignment is
       tx_sequence_cnt_in  : in std_logic_vector(6  downto 0);
       scr_en_in           : in std_logic;
 
+      tx_encoded_pcs0     : in std_logic_vector(65 downto 0);
+      tx_encoded_pcs1     : in std_logic_vector(65 downto 0);
+      tx_encoded_pcs2     : in std_logic_vector(65 downto 0);
+      tx_encoded_pcs3     : in std_logic_vector(65 downto 0);
+
+      tx_wr_pcs           : out std_logic;
       pause_scr_alignm    : out std_logic;
       lane_0_valid_out    : out std_logic;
       lane_1_valid_out    : out std_logic;
@@ -39,6 +45,8 @@ end entity;
 architecture behav_pcs_alignment of pcs_alignment is
     --  Intervalo de blocos para ser inserido alinhamento
     constant N_BLOCKS       : natural := 511 ;
+
+    constant IPG          : std_logic_vector(65 downto 0) := "000000000000000000000000000000000000000000000000000000000001111001";
 
     constant sync_lane0_high  : std_logic_vector(23 downto 0):= x"907647";
     constant sync_lane1_high  : std_logic_vector(23 downto 0):= x"f0c4e6";
@@ -70,6 +78,10 @@ architecture behav_pcs_alignment of pcs_alignment is
     signal bip_test         : std_logic_vector(7 downto 0);
     signal scr_en           : std_logic;
     signal scr_en_o         : std_logic;
+
+    signal IPGonTX          : std_logic;
+    signal flag_align       : std_logic;
+
 
     signal is_alignment_oo  : std_logic;
     signal is_alignment_o   : std_logic;
@@ -232,6 +244,27 @@ architecture behav_pcs_alignment of pcs_alignment is
       end if;
     end process;
 
+    IPGonTX <=  '1' when ( (tx_encoded_pcs0 = IPG) and (tx_encoded_pcs1 = IPG) and
+                           (tx_encoded_pcs2 = IPG) and (tx_encoded_pcs3 = IPG) ) else
+                '0';
+
+    tx_wr_pcs <= '0' when flag_align = '1' and IPGonTX = '1' else '1';
+
+    flag_reg: process (clk_161, rst)
+    begin
+      if rst = '0' then
+        flag_align <= '0';
+      elsif clk_161 = '1' and clk_161'event then
+
+        if is_alignment = '1' then
+          flag_align <= '1';
+        elsif IPGonTX = '1' and flag_align = '1' then
+          flag_align <= '0';
+        end if;
+        
+      end if;
+
+    end process;
 
      calc_bip: process (clk_161, rst)
      begin

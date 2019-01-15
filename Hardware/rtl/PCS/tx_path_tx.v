@@ -63,12 +63,14 @@ module tx_path_tx (/*AUTOARG*/
 		        // Outputs
 		        //gb_data_out,
 		        spill, txlf,tx_data_out, tx_header_out, tx_sequence_out,
+						encoded_out,
 		        // Inputs
 		        bypass_66encoder, bypass_scram, clk156, tx_clk161, jtm_dps_0, jtm_dps_1,
 		        arstb, seed_A, seed_B, tx_jtm_en,
 		        xgmii_txc, xgmii_txd, pcs_sync,
 						terminate_in, terminate_out, start_in, start_out,
 						tx_old_scr_data_in, tx_old_scr_data_out, scram_en,
+						pause_ipg,
 						// Para uso do Testbench
 						start_fifo, start_fifo_rd
 
@@ -100,6 +102,7 @@ module tx_path_tx (/*AUTOARG*/
 		//For Testbench use
 		input					start_fifo;
 		input					start_fifo_rd;
+		input 				pause_ipg;
 
 
     // Outputs
@@ -111,6 +114,7 @@ module tx_path_tx (/*AUTOARG*/
 		output 				terminate_out;
     output 				start_out;
 		output 				scram_en;
+		output [65:0] encoded_out;
 
     wire          bypass_66encoder;
     wire          bypass_scram;
@@ -133,10 +137,13 @@ module tx_path_tx (/*AUTOARG*/
     wire        data_pause;
     wire [63:0] tx_data_out;
     wire [1:0]  tx_header_out;
+		wire [65:0] encoded_out;
 
     assign tx_header_out = TXD_Scr[1:0];
     assign tx_data_out = TXD_Scr[65:2];
 
+
+		assign encoded_out = encoded_data[65:0];
 		// assign tx_old_scr_data_out = TXD_Scr[65:0];
 
 		// test with cont
@@ -208,7 +215,8 @@ module tx_path_tx (/*AUTOARG*/
           .rclk                  (tx_clk161),
 					.readen                (scram_en),
           .wclk                  (clk156),
-					.writen                (1'b1 & start_fifo),
+					// .writen                (1'b1 & start_fifo),
+					.writen                (start_fifo & pause_ipg),
           .writedata             (encoded_data[65:0]),
           .rst                   (!arstb)
           );

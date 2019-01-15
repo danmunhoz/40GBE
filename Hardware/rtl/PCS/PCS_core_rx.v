@@ -71,13 +71,14 @@ module PCS_core_rx  (  /*AUTOARG*/
                     terminate_in_rx, start_in_rx, terminate_in_tx, start_in_tx,
                     tx_old_scr_data_in, tx_old_scr_data_out, pcs_sync,
                     // gap, setIPG,
-                    is_alig, fifo_in, val_in,
+                    is_alig, fifo_in, val_in, start_fifo, pause_ipg,
 
                     // Outputs
                     jtest_errc, ber_cnt, hi_ber, blk_lock, linkstatus, rx_fifo_spill,
                     tx_fifo_spill, rxlf, txlf, errd_blks, xgmii_rxc, xgmii_rxd, scram_en,
                     tx_data_out, tx_header_out, tx_sequence_out, rxgearboxslip_out,
                     terminate_out_rx, start_out_rx, terminate_out_tx, start_out_tx, dscr_out,
+                    encoded_out,
                     // Para uso do Testbench
         						RDEN_FIFO_PCS40, start_fifo, start_fifo_rd
                     );
@@ -137,6 +138,10 @@ module PCS_core_rx  (  /*AUTOARG*/
     // input         gap;
     // input         setIPG;
     input         is_alig;
+    input 				pause_ipg;
+    wire 				  pause_ipg;
+
+
 
     //For Testbench use
 		input					start_fifo;
@@ -162,6 +167,7 @@ module PCS_core_rx  (  /*AUTOARG*/
     output        scram_en;
 
     output [65:0] dscr_out;
+    output [65:0] encoded_out;
 
     output         terminate_out_rx;
     wire           terminate_out_rx;
@@ -214,6 +220,7 @@ tx_path_tx #(
                         .start_fifo         (start_fifo),
                         .start_fifo_rd      (start_fifo_rd),
                         .pcs_sync           (pcs_sync),
+                        .pause_ipg          (pause_ipg),
                         // Outputs
                         .txlf               (txlf),
                         .spill              (tx_fifo_spill),
@@ -222,7 +229,8 @@ tx_path_tx #(
                         .tx_sequence_out    (tx_sequence_out),
                         .terminate_out      (terminate_out_tx),
                         .start_out          (start_out_tx),
-                        .scram_en           (scram_en)
+                        .scram_en           (scram_en),
+                        .encoded_out        (encoded_out)
                         );
 
 rx_path_rx INST_rx_path(   // Input Ports
