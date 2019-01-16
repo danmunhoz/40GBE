@@ -66,6 +66,7 @@ library ieee;
     signal eop_d3  : std_logic_vector(  4 downto 0);
 
     signal pkg_counter : integer; -- PARA SIMULAÇÃO
+    signal pkg_counter_fail : integer; -- PARA SIMULAÇÃO
 
 
   begin
@@ -76,14 +77,16 @@ library ieee;
     begin
       if rst_n = '0' then
         pkg_counter <= 0;
+        pkg_counter_fail <= 0;
       elsif clk_312'event and clk_312 = '1' then
 
         if crc_ok_int = '0' and crc_done = '1' then
           report "CRC_FALHOU @ "&time'image(now);
+          pkg_counter_fail <= pkg_counter_fail + 1;
         elsif crc_ok_int = '1' and crc_done = '1' then
           pkg_counter <= pkg_counter+1;
           if (pkg_counter mod 100) = 0 then
-            report "PACOTES RECEBIDOS => "&integer'image(pkg_counter)&" @ "&time'image(now);
+            report "PKT RECVD => "&integer'image(pkg_counter)&" x  PKT FAILED -> "&integer'image(pkg_counter_fail)&" @ "&time'image(now);
           end if;
         end if;
       end if;
