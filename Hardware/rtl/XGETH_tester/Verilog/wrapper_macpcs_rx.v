@@ -1115,6 +1115,7 @@ module wrapper_macpcs_rx(
     pcs_alignment INST_pcs_alignment
     (
         .clk_161            (tx_clk_161_13),
+        .clk_156            (clk_156),
         .rst                (reset_rx_n),
         .lane_0_data_in     (tx_data_int_0[63:0]),
         .lane_0_header_in   (tx_header_int_0[1:0]),

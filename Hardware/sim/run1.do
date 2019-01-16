@@ -167,9 +167,10 @@ vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 -L secureip -L xilinxcorelib work.glbl \
 work.Top -t 1ps
 
-do wave.do
 transcript file transcript#
-#run 5 us
+run 1.5 ms
+do wave.do
+run 0.5 ms
 
 exec cp lane0.txt lane0_rx.txt
 exec cp lane1.txt lane1_rx.txt

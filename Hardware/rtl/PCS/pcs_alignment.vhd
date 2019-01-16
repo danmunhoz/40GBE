@@ -7,6 +7,7 @@ library ieee;
 entity pcs_alignment is
   port(
       clk_161             : in std_logic;
+      clk_156             : in std_logic;
       rst                 : in std_logic;
       lane_0_header_in    : in std_logic_vector(1  downto 0);
       lane_1_header_in    : in std_logic_vector(1  downto 0);
@@ -250,18 +251,18 @@ architecture behav_pcs_alignment of pcs_alignment is
 
     tx_wr_pcs <= '0' when flag_align = '1' and IPGonTX = '1' else '1';
 
-    flag_reg: process (clk_161, rst)
+    flag_reg: process (clk_156, rst)
     begin
       if rst = '0' then
         flag_align <= '0';
-      elsif clk_161 = '1' and clk_161'event then
+      elsif clk_156 = '1' and clk_156'event then
 
         if is_alignment = '1' then
           flag_align <= '1';
         elsif IPGonTX = '1' and flag_align = '1' then
           flag_align <= '0';
         end if;
-        
+
       end if;
 
     end process;
