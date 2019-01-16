@@ -15,6 +15,7 @@ struct line {
 
 #define MAX_PL_CYCLES  17
 #define MAX_IPG_CYCLES 5
+// #define MAX_IPG_CYCLES 1
 // #define IPG_CYCLES 3  // IPG_CYCLES sempre > (MAX_PL_CYCLES+1)
 
 SC_MODULE(app_tx) {

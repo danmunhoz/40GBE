@@ -1505,6 +1505,7 @@ add wave -noupdate -expand -group CRC-S_FIFO -radix hexadecimal -radixshowbase 0
 add wave -noupdate -expand -group CRC-S_FIFO -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_value
 add wave -noupdate -expand -group CRC-S_FIFO -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_final
 add wave -noupdate -expand -group CRC-S_FIFO -color Magenta -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_received
+add wave -noupdate -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/pkg_counter
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_ok
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_done
 add wave -noupdate -height 40 -expand -group FIFO-frame_out -expand -group INPUTS_ -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/clk
@@ -1951,7 +1952,7 @@ add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_encode
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_encoded_pcs2
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_encoded_pcs3
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor rx} {206859200 ps} 1} {TX_CRC {202236800 ps} 1} {{Cursor 3} {1347313335 ps} 1} {{Cursor 4} {1340945935 ps} 1} {{Cursor 5} {3203326 ps} 0}
+WaveRestoreCursors {{Cursor rx} {206859200 ps} 1} {TX_CRC {202236800 ps} 1} {{Cursor 3} {1347313335 ps} 1} {{Cursor 4} {1340945935 ps} 1} {{Cursor 5} {19992864 ps} 0}
 quietly wave cursor active 5
 configure wave -namecolwidth 252
 configure wave -valuecolwidth 171
@@ -1967,7 +1968,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {3191156 ps} {3238217 ps}
+WaveRestoreZoom {19955293 ps} {20002354 ps}
 bookmark add wave bookmark5 {{770754 ps} {811500 ps}} 13
 bookmark add wave bookmark6 {{780000 ps} {800000 ps}} 8
 bookmark add wave bookmark7 {{0 ps} {42010 ps}} 0

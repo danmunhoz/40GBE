@@ -735,7 +735,7 @@ module wrapper_macpcs_rx(
         // .val_in             (valid_0_out_wire),
         .val_in             (dscr_en_ipg),
         .fifo_in            (dscr_0_out_wire),
-        .pause_ipg          (),
+        .pause_ipg          (tx_wr_pcs),
         .encoded_out        (tx_encoded_pcs0),
 
         // .gap                (gap),
@@ -825,7 +825,7 @@ module wrapper_macpcs_rx(
         // .val_in             (valid_1_out_wire),
         .val_in             (dscr_en_ipg),
         .fifo_in            (dscr_1_out_wire),
-        .pause_ipg          (),
+        .pause_ipg          (tx_wr_pcs),
         .encoded_out        (tx_encoded_pcs1),
 
         // .gap                (gap),
@@ -917,7 +917,7 @@ module wrapper_macpcs_rx(
         // .val_in             (valid_2_out_wire),
         .val_in             (dscr_en_ipg),
         .fifo_in            (dscr_2_out_wire),
-        .pause_ipg          (),
+        .pause_ipg          (tx_wr_pcs),
         .encoded_out        (tx_encoded_pcs2),
 
         // .gap                (gap),
@@ -1009,7 +1009,7 @@ module wrapper_macpcs_rx(
         // .val_in             (valid_3_out_wire),
         .val_in             (dscr_en_ipg),
         .fifo_in            (dscr_3_out_wire),
-        .pause_ipg          (),
+        .pause_ipg          (tx_wr_pcs),
         .encoded_out        (tx_encoded_pcs3),
 
         // .gap                (gap),
@@ -1058,59 +1058,59 @@ module wrapper_macpcs_rx(
     );
 
 
-    xge_mac_rx INST_xge_mac
-    (   // Simple Tx-Rx interface signals
-        .clk_156m25         (clk_156),
-        .clk_xgmii_rx       (clk_xgmii_rx),
-        .clk_xgmii_tx       (clk_xgmii_tx),
-
-        .reset_156m25_n     (async_reset_n),
-        .reset_xgmii_tx_n   (reset_tx_done),
-        .reset_xgmii_rx_n   (reset_rx_done),
-
-        .pkt_rx_ren         (pkt_rx_ren),
-        .pkt_rx_avail       (pkt_rx_avail),
-        .pkt_rx_data        (pkt_rx_data),
-        .pkt_rx_eop         (pkt_rx_eop),
-        .pkt_rx_err         (pkt_rx_err),
-        .pkt_rx_mod         (pkt_rx_mod),
-        .pkt_rx_sop         (pkt_rx_sop),
-        .pkt_rx_val         (pkt_rx_val),
-
-        .pkt_tx_data        (pkt_tx_data[63:0]),
-        .pkt_tx_eop         (pkt_tx_eop),
-        .pkt_tx_mod         (pkt_tx_mod[2:0]),
-        .pkt_tx_sop         (pkt_tx_sop[1]),
-        .pkt_tx_full        (pkt_tx_full),
-        .pkt_tx_val         (pkt_tx_val),
-
-        .wb_clk_i           (clk_156),
-        .wb_rst_i           (async_reset_n),
-        .wb_adr_i           (wb_adr_i),
-        .wb_cyc_i           (wb_cyc_i),
-        .wb_dat_i           (wb_dat_i),
-        .wb_stb_i           (wb_stb_i),
-        .wb_we_i            (wb_we_i),
-        .wb_ack_o           (wb_ack_o),
-        .wb_dat_o           (wb_dat_o),
-        .wb_int_o           (wb_int_o),
-
-        .data_in_from_if    (mac_data),
-        .eop_in_from_if     (mac_eop),
-        .sop_in_from_if     (mac_sop),
-
-        .xgmii_txc          (xgmii_txc),
-        .xgmii_txd          (xgmii_txd),
-
-        .xgmii_rxc_0        (xgmii_rxc_lane_0),
-        .xgmii_rxd_0        (xgmii_rxd_lane_0),
-        .xgmii_rxc_1        (xgmii_rxc_lane_1),
-        .xgmii_rxd_1        (xgmii_rxd_lane_1),
-        .xgmii_rxc_2        (xgmii_rxc_lane_2),
-        .xgmii_rxd_2        (xgmii_rxd_lane_2),
-        .xgmii_rxc_3        (xgmii_rxc_lane_3),
-        .xgmii_rxd_3        (xgmii_rxd_lane_3)
-    );
+    // xge_mac_rx INST_xge_mac
+    // (   // Simple Tx-Rx interface signals
+    //     .clk_156m25         (clk_156),
+    //     .clk_xgmii_rx       (clk_xgmii_rx),
+    //     .clk_xgmii_tx       (clk_xgmii_tx),
+    //
+    //     .reset_156m25_n     (async_reset_n),
+    //     .reset_xgmii_tx_n   (reset_tx_done),
+    //     .reset_xgmii_rx_n   (reset_rx_done),
+    //
+    //     .pkt_rx_ren         (pkt_rx_ren),
+    //     .pkt_rx_avail       (pkt_rx_avail),
+    //     .pkt_rx_data        (pkt_rx_data),
+    //     .pkt_rx_eop         (pkt_rx_eop),
+    //     .pkt_rx_err         (pkt_rx_err),
+    //     .pkt_rx_mod         (pkt_rx_mod),
+    //     .pkt_rx_sop         (pkt_rx_sop),
+    //     .pkt_rx_val         (pkt_rx_val),
+    //
+    //     .pkt_tx_data        (pkt_tx_data[63:0]),
+    //     .pkt_tx_eop         (pkt_tx_eop),
+    //     .pkt_tx_mod         (pkt_tx_mod[2:0]),
+    //     .pkt_tx_sop         (pkt_tx_sop[1]),
+    //     .pkt_tx_full        (pkt_tx_full),
+    //     .pkt_tx_val         (pkt_tx_val),
+    //
+    //     .wb_clk_i           (clk_156),
+    //     .wb_rst_i           (async_reset_n),
+    //     .wb_adr_i           (wb_adr_i),
+    //     .wb_cyc_i           (wb_cyc_i),
+    //     .wb_dat_i           (wb_dat_i),
+    //     .wb_stb_i           (wb_stb_i),
+    //     .wb_we_i            (wb_we_i),
+    //     .wb_ack_o           (wb_ack_o),
+    //     .wb_dat_o           (wb_dat_o),
+    //     .wb_int_o           (wb_int_o),
+    //
+    //     .data_in_from_if    (mac_data),
+    //     .eop_in_from_if     (mac_eop),
+    //     .sop_in_from_if     (mac_sop),
+    //
+    //     .xgmii_txc          (xgmii_txc),
+    //     .xgmii_txd          (xgmii_txd),
+    //
+    //     .xgmii_rxc_0        (xgmii_rxc_lane_0),
+    //     .xgmii_rxd_0        (xgmii_rxd_lane_0),
+    //     .xgmii_rxc_1        (xgmii_rxc_lane_1),
+    //     .xgmii_rxd_1        (xgmii_rxd_lane_1),
+    //     .xgmii_rxc_2        (xgmii_rxc_lane_2),
+    //     .xgmii_rxd_2        (xgmii_rxd_lane_2),
+    //     .xgmii_rxc_3        (xgmii_rxc_lane_3),
+    //     .xgmii_rxd_3        (xgmii_rxd_lane_3)
+    // );
 
     pcs_alignment INST_pcs_alignment
     (

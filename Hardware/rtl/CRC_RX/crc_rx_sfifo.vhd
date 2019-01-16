@@ -65,16 +65,26 @@ library ieee;
 
     signal eop_d3  : std_logic_vector(  4 downto 0);
 
+    signal pkg_counter : integer; -- PARA SIMULAÇÃO
+
 
   begin
     crc_ok <= crc_ok_int;
     crc_ok_int <= '1' when crc_received = crc_reg and crc_done = '1' else '0';
 
-    DEBUG: process(clk_312)
+    DEBUG: process(rst_n, clk_312)
     begin
-      if clk_312'event and clk_312 = '1' then
+      if rst_n = '0' then
+        pkg_counter <= 0;
+      elsif clk_312'event and clk_312 = '1' then
+
         if crc_ok_int = '0' and crc_done = '1' then
           report "CRC_FALHOU @ "&time'image(now);
+        elsif crc_ok_int = '1' and crc_done = '1' then
+          pkg_counter <= pkg_counter+1;
+          if (pkg_counter mod 100) = 0 then
+            report "PACOTES RECEBIDOS => "&integer'image(pkg_counter)&" @ "&time'image(now);
+          end if;
         end if;
       end if;
     end process;
@@ -242,5 +252,6 @@ library ieee;
         end case;
       end if;
     end process;
+
 
   end behav_crc_rx_sfifo;
