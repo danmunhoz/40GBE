@@ -181,11 +181,15 @@ transcript file transcript#
 #run 1000 ms
 #run 1000 ms
 
-#run 1 348 106 400 ps
-run 1340000000 ps
+## #run 1 348 106 400 ps
+## run 1340000000 ps
+## do wave.do
+## run 348106400 ps
+## run 550 ns
+
+transcript file transcript#
 do wave.do
-run 348106400 ps
-run 550 ns
+run 30 us
 
 
 exec cp lane0.txt lane0_rx.txt

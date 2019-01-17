@@ -31,6 +31,8 @@ library ieee;
     mac_data        : in std_logic_vector(127 downto 0);
     mac_sop         : in std_logic;
     mac_eop         : in std_logic_vector(4 downto 0);
+    almost_e        : in std_logic;
+    ren             : out std_logic;
 
     --OUTPUTS
     app_data        : out std_logic_vector(127 downto 0);
@@ -45,8 +47,10 @@ library ieee;
 
   architecture behav_crc_rx_sfifo of crc_rx_sfifo is
 
-    TYPE states_crc is (IDLE, D128, EOP);
+    TYPE states_crc is (IDLE, D128, EOP, NOT_READING);
     signal ns_crc, ps_crc : states_crc;
+
+    signal ren_int        : std_logic;
 
     signal crc_value      : std_logic_vector(31 downto 0);
     signal crc_final      : std_logic_vector(31 downto 0);
@@ -70,6 +74,7 @@ library ieee;
 
 
   begin
+    ren <= ren_int;
     crc_ok <= crc_ok_int;
     crc_ok_int <= '1' when crc_received = crc_reg and crc_done = '1' else '0';
 
@@ -127,7 +132,8 @@ library ieee;
       end if;
     end process;
 
-    next_state_decoder: process(rst_n, ps_crc, data_d1, sop_d1, eop_d1)
+    next_state_decoder: process(rst_n, ps_crc, data_d1, sop_d1, eop_d1,
+                                almost_e, mac_sop)
     begin
       if rst_n = '0' then
         -- ns_crc <= IDLE;
@@ -154,25 +160,37 @@ library ieee;
               end if;
 
           when EOP => -- confere com o CRC gerado no TX
-              if sop_d1 = '1' then
+              if almost_e = '1' and mac_sop = '0' and sop_d1 = '0' then
+                ns_crc <= NOT_READING;
+              elsif sop_d1 = '1' then
                 ns_crc <= D128;
               else
                 ns_crc <= IDLE;
               end if;
+
+          WHEN NOT_READING =>
+            if almost_e = '1' then
+              ns_crc <= NOT_READING;
+            else
+              ns_crc <= IDLE;
+            end if;
+
         end case;
       end if;
     end process;
 
 
-    output_decoder: process(ps_crc, clk_312, rst_n)
+    output_decoder: process(clk_312, rst_n)
     begin
       if rst_n = '0' then
         crc_reg <= (others=>'1');
         crc_received <= (others=>'0');
         crc_done <= '0';
+        ren_int <= '0';
 
       elsif clk_312'event and clk_312 = '1' then
         crc_done <= '0';
+        ren_int <= '1';
 
         case ps_crc is
 
@@ -180,6 +198,9 @@ library ieee;
             crc_reg <= x"FFFFFFFF";
             -- crc_value <= (others = '1');
             -- crc_reg <= nextCRC32_D128(reverse(data_d2), x"FFFFFFFF");
+            -- if almost_e = '1' and mac_sop = '0' and sop_d1 = '0' then
+            --   ren_int <= '0';
+            -- end if;
 
           when D128 =>
             -- crc_reg <= nextCRC32_D128(reverse(data_d2), crc_reg);
@@ -218,6 +239,9 @@ library ieee;
 
           when EOP =>
               crc_done <= '1';
+              if almost_e = '1' and mac_sop = '0' and sop_d1 = '0' then
+                ren_int <= '0';
+              end if;
               case eop_d2(3 downto 0) is
                 -- when x"0" => null;  -- valor para calc do crc no ciclo anterior, estes valores no CRc correspondem ao CRc de comparação e FD
                 -- when x"1" => null;  -- valor para calc do crc no ciclo anterior, estes valores no CRc correspondem ao CRc de comparação e FD
@@ -251,6 +275,9 @@ library ieee;
                               crc_received <= data_d2(119 downto 88);
                 when others => null;
               end case;
+
+            when NOT_READING =>
+              ren_int <= '0';
 
         end case;
       end if;

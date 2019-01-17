@@ -293,6 +293,8 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire app_val;
     (* syn_keep = "true"*) wire [127:0] app_data;
     (* syn_keep = "true"*) wire crc_ok;
+    (* syn_keep = "true"*) wire ren_coreif;
+    (* syn_keep = "true"*) wire almost_e_coreif;
 
     wire            tx_clk_161_13;
     wire            rx_clk_161_13;
@@ -628,22 +630,6 @@ module wrapper_macpcs_rx(
     //   .crc_ok   (crc_ok)
     // );
 
-
-    (* dont_touch = "true" *) crc_rx_sfifo INST_crc_rx_sfifo
-    (
-      .clk_312  (clk_312),
-      .rst_n    (reset_rx_n),
-      .mac_data (mac_data),
-      .mac_sop  (mac_sop),
-      .mac_eop  (mac_eop),
-      //.almost_full (),
-      .app_data (),
-      .app_sop  (),
-      .app_val  (),
-      .app_eop  (),
-      .crc_ok   (crc_ok)
-    );
-
     (* dont_touch = "true" *) core_interface INST_core_interface
     (
       	.clk_156			      (clk_156),
@@ -657,7 +643,7 @@ module wrapper_macpcs_rx(
       	.xgmii_rxd_2	      (xgmii_rxd_lane_2),
       	.xgmii_rxc_3	      (xgmii_rxc_lane_3),
       	.xgmii_rxd_3	      (xgmii_rxd_lane_3),
-        .ren                (read_fifo),
+        .ren                (ren_coreif),
 
         .mac_data           (mac_data),
         .mac_sop            (mac_sop),
@@ -667,6 +653,25 @@ module wrapper_macpcs_rx(
         .fifo_empty         (empty_fifo),
         .fifo_almost_f      (fifo_almost_f),
         .fifo_almost_e      (fifo_almost_e)
+   );
+
+   assign almost_e_coreif = fifo_almost_e;
+
+   (* dont_touch = "true" *) crc_rx_sfifo INST_crc_rx_sfifo
+   (
+     .clk_312  (clk_312),
+     .rst_n    (reset_rx_n),
+     .mac_data (mac_data),
+     .mac_sop  (mac_sop),
+     .mac_eop  (mac_eop),
+     .ren      (ren_coreif),
+     .almost_e (almost_e_coreif),
+     //.almost_full (),
+     .app_data (),
+     .app_sop  (),
+     .app_val  (),
+     .app_eop  (),
+     .crc_ok   (crc_ok)
    );
 
    (* dont_touch = "true" *) mac_tx_path INST_mac_tx_path

@@ -204,7 +204,7 @@ begin
                 pause_read <= '0';
             elsif clk_312'event and clk_312 = '1' then
               if fifo_saida_almost_e = '1' then
-                if mac_eop_wire /= "00000" then
+                if mac_eop_wire /= "00000" and mac_sop_wire = '0' then
                   pause_read <= '1';
                 end if;
               else

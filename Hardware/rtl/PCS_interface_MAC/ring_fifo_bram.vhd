@@ -47,6 +47,10 @@ architecture behav of ring_fifo_bram is
   constant ARRAY_8_ONES : std_logic_vector(7 downto 0) := (others => '1');
 
   signal rst : std_logic;
+  signal clk_w_n : std_logic;
+  signal clk_r_n : std_logic;
+
+  signal ren_d : std_logic;
 
   signal mem_low_in_0 : std_logic_vector(63 downto 0);
   signal mem_low_in_1 : std_logic_vector(71 downto 0);
@@ -54,11 +58,20 @@ architecture behav of ring_fifo_bram is
   signal mem_low_out_0 : std_logic_vector(63 downto 0);
   signal mem_low_out_1 : std_logic_vector(71 downto 0);
 
+  signal mem_low_out_0_d : std_logic_vector(63 downto 0);
+  signal mem_low_out_1_d : std_logic_vector(71 downto 0);
+
   signal mem_high_in_0 : std_logic_vector(63 downto 0);
   signal mem_high_in_1 : std_logic_vector(71 downto 0);
 
   signal mem_high_out_0 : std_logic_vector(63 downto 0);
   signal mem_high_out_1 : std_logic_vector(71 downto 0);
+
+  signal mem_high_out_0_d : std_logic_vector(63 downto 0);
+  signal mem_high_out_1_d : std_logic_vector(71 downto 0);
+
+  signal mem_high_out_0_d2 : std_logic_vector(63 downto 0);
+  signal mem_high_out_1_d2 : std_logic_vector(71 downto 0);
 
   signal w_ptr   : std_logic_vector(N-1 downto 0);
   signal r_ptr_l : std_logic_vector(N-1 downto 0);
@@ -127,14 +140,14 @@ begin
   almost_f <= '1' when a_full_h_0 = '1' or a_full_l_0 = '1' or
                        a_full_l_1 = '1' or a_full_h_1 = '1' else '0';
 
-  regs : process (clk_w,rst_n)
+  regs_w : process (clk_w,rst_n)
   begin
     if rst_n = '0' then
       wen_reg <= '0';
-      mem_low_in_0_reg      <= (others=>'0');
-      mem_low_in_1_reg      <= (others=>'0');
-      mem_high_in_0_reg     <= (others=>'0');
-      mem_high_in_1_reg     <= (others=>'0');
+      mem_low_in_0_reg  <= (others=>'0');
+      mem_low_in_1_reg  <= (others=>'0');
+      mem_high_in_0_reg <= (others=>'0');
+      mem_high_in_1_reg <= (others=>'0');
     elsif clk_w'event and clk_w = '1' then
       wen_reg <= wen;
       mem_low_in_0_reg      <= mem_low_in_0;
@@ -143,6 +156,30 @@ begin
       mem_high_in_1_reg     <= mem_high_in_1;
     end if;
   end process;
+
+  regs_r : process (clk_r,rst_n)
+  begin
+    if rst_n = '0' then
+      ren_d <= '0';
+      mem_high_out_0_d  <= (others=>'0');
+      mem_high_out_1_d  <= (others=>'0');
+      mem_low_out_0_d   <= (others=>'0');
+      mem_low_out_1_d   <= (others=>'0');
+      mem_high_out_0_d2 <= (others=>'0');
+      mem_high_out_1_d2 <= (others=>'0');
+    elsif clk_r'event and clk_r = '1' then
+      ren_d <= ren;
+      mem_high_out_0_d <= mem_high_out_0;
+      mem_high_out_1_d <= mem_high_out_1;
+      mem_low_out_0_d  <= mem_low_out_0;
+      mem_low_out_1_d  <= mem_low_out_1;
+      mem_high_out_0_d2 <= mem_high_out_0_d;
+      mem_high_out_1_d2 <= mem_high_out_1_d;
+    end if;
+  end process;
+
+  clk_w_n <= not clk_w;
+  clk_r_n <= not clk_r;
 
   wen_bram <= wen or wen_reg;
   data_val <= data_val_w;
@@ -181,9 +218,6 @@ begin
   r_low_in_o  <=  mem_low_in_0_reg;
   r_low_in_1  <=  mem_low_in_1_reg(69 downto 6);
 
-  DO_L_1 <=   mem_low_out_1(69 downto 6);
-  DO_H_1 <=   mem_high_out_1(69 downto 6);
-
   FIFO_inst_l_0 : FIFO_DUALCLOCK_MACRO
     generic map (
       DEVICE => "7SERIES",              -- Target Device: "VIRTEX5", "VIRTEX6", "7SERIES"
@@ -203,10 +237,10 @@ begin
       WRCOUNT => wrcount_l_0,           -- Output write count, width determined by FIFO depth
       WRERR => open,                    -- 1-bit output write error
       DI => mem_low_in_0_reg,           -- Input data, width defined by DATA_WIDTH parameter
-      RDCLK => clk_r,                   -- 1-bit input read clock
+      RDCLK => clk_r_n,                   -- 1-bit input read clock
       RDEN => ren_int_l,                -- 1-bit input read enable
       RST => rst,                       -- 1-bit input reset
-      WRCLK => clk_w,                   -- 1-bit input write clock
+      WRCLK => clk_w_n,                   -- 1-bit input write clock
       WREN => wen_bram                  -- 1-bit input write enable
     );
 
@@ -229,10 +263,10 @@ begin
         WRCOUNT => wrcount_l_1,
         WRERR => open,
         DI => mem_low_in_1_reg,
-        RDCLK => clk_r,
+        RDCLK => clk_r_n,
         RDEN => ren_int_l,
         RST => rst,
-        WRCLK => clk_w,
+        WRCLK => clk_w_n,
         WREN => wen_bram
       );
 
@@ -255,10 +289,10 @@ begin
         WRCOUNT => wrcount_h_0,
         WRERR => open,
         DI => mem_high_in_0_reg,
-        RDCLK => clk_r,
+        RDCLK => clk_r_n,
         RDEN => ren_int_h,
         RST => rst,
-        WRCLK => clk_w,
+        WRCLK => clk_w_n,
         WREN => wen_bram
       );
 
@@ -282,70 +316,50 @@ begin
         WRCOUNT => wrcount_h_1,
         WRERR => open,
         DI => mem_high_in_1_reg,
-        RDCLK => clk_r,
+        RDCLK => clk_r_n,
         RDEN => ren_int_h,
         RST => rst,
-        WRCLK => clk_w,
+        WRCLK => clk_w_n,
         WREN => wen_bram
       );
-
-
-
-  sync_w: process(clk_w, rst_n)
-  begin
-    if rst_n = '0' then
-      w_ptr <= (others=>'0');
-    elsif clk_w'event and clk_w = '1' then
-        if wen = '1' then              -- Does not check if full, will overwrite
-          w_ptr <= w_ptr + 1;
-          last_w <= '1';
-        else
-          last_w <= '0';
-        end if;
-    end if;
-  end process;
 
   sync_r: process(clk_r, rst_n)
   begin
     if rst_n = '0' then
-      ren_int_l <= '0';
-      ren_int_h <= '0';
-      r_ptr_l  <= (others=>'0');
-      r_ptr_h  <= (others=>'0');
+      -- ren_int_l <= '0';
+      -- ren_int_h <= '0';
       rr <= '0';
-      data_val_w <= '0';
     elsif clk_r'event and clk_r = '1' then
-      if ren = '1' then              -- Does not check if empty, will underwrite
-        data_val_w <= '1';
-        if rr = '0' then
-          r_ptr_l <= r_ptr_l + 1;
-          ren_int_l <= '0';
-          ren_int_h <= '1';
-        else
-          r_ptr_h <= r_ptr_h + 1;
-          ren_int_h <= '0';
-          ren_int_l <= '1';
-        end if;
-        rr <= not rr;
 
-      else
-        data_val_w <= '0';
-        ren_int_l <= '0';
-        ren_int_h <= '0';
+      if ren_d = '0' and ren = '1' then
+        rr <= '1';
+      elsif ren = '1' then
+        rr <= not rr;
       end if;
 
     end if;
   end process;
 
-  data_out <= mem_low_out_1(69 downto 6) & mem_low_out_0   when (rr = '0' and data_val_w = '1') else
-              mem_high_out_1(69 downto 6) & mem_high_out_0 when (rr = '1' and data_val_w = '1') else
-              (others=>'0');
+  ren_int_l <= '1' when ren = '1' and rr = '1' else '0';
+  ren_int_h <= '1' when ren = '1' and rr = '1' else '0';
 
-  eop_addr_out <= mem_low_out_1(5 downto 1) when (rr = '0' and data_val_w = '1') else
-                  mem_high_out_1(5 downto 1) when (rr = '1' and data_val_w = '1') else
-                  (others=>'0');
+  -- data_out <= mem_low_out_1(69 downto 6) & mem_low_out_0   when (rr = '0' and data_val_w = '1') else
+  --             mem_high_out_1(69 downto 6) & mem_high_out_0 when (rr = '1' and data_val_w = '1') else
+  --             (others=>'0');
+  --
+  -- eop_addr_out <= mem_low_out_1(5 downto 1) when (rr = '0' and data_val_w = '1') else
+  --                 mem_high_out_1(5 downto 1) when (rr = '1' and data_val_w = '1') else
+  --                 (others=>'0');
+  --
+  -- is_sop_out <= mem_low_out_1(0) when (rr = '0' and data_val_w = '1') else
+  --               '0';
 
-  is_sop_out <= mem_low_out_1(0) when (rr = '0' and data_val_w = '1') else
-                '0';
+  data_out <= mem_low_out_1_d(69 downto 6) & mem_low_out_0_d when (rr = '0' and ren = '1') else
+              mem_high_out_1_d2(69 downto 6) & mem_high_out_0_d2 when (rr = '1' and ren = '1') else (others=>'0');
+
+  eop_addr_out <= mem_low_out_1_d(5 downto 1) when (rr = '0' and ren = '1') else
+                  mem_high_out_1_d2(5 downto 1) when (rr = '1' and ren = '1') else (others=>'0');
+
+  is_sop_out <= mem_low_out_1_d(0) when (rr = '0' and ren = '1') else '0';
 
 end behav;
