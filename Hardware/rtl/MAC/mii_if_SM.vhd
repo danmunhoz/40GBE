@@ -46,6 +46,7 @@ architecture behav_mii_if of mii_if is
   signal eop_in_o   : std_logic_vector(5 downto 0);
   signal eop_in_o_o : std_logic_vector(5 downto 0);
   signal sop_in_o   : std_logic_vector(1 downto 0);
+  signal sop_in_o_o : std_logic_vector(1 downto 0);
 
   signal data_0_o : std_logic_vector(63 downto 0);
   signal data_1_o : std_logic_vector(63 downto 0);
@@ -360,15 +361,15 @@ architecture behav_mii_if of mii_if is
               mii_ctrl_2 <= x"01";
               mii_ctrl_3 <= x"00";
 
-            --elsif sop_in_o = "11" then
-              -- mii_data_0 <= LANE_IDLE;
-              -- mii_data_1 <= LANE_IDLE;
-              -- mii_data_2 <= data_0_o;
-              -- mii_data_3 <= data_1_o;
-              -- mii_ctrl_0 <= x"ff";
-              -- mii_ctrl_1 <= x"ff";
-              -- mii_ctrl_2 <= x"01";
-              -- mii_ctrl_3 <= x"00";
+            elsif sop_in_o_o = "11" then
+              mii_data_0 <= data_2_o_o;
+              mii_data_1 <= data_3_o_o;
+              mii_data_2 <= data_0_o;
+              mii_data_3 <= data_1_o;
+              mii_ctrl_0 <= x"01";
+              mii_ctrl_1 <= x"00";
+              mii_ctrl_2 <= x"00";
+              mii_ctrl_3 <= x"00";
             else
               mii_data_0 <= data_2_o_o;
               mii_data_1 <= data_3_o_o;
@@ -982,7 +983,14 @@ architecture behav_mii_if of mii_if is
         mii_ctrl_3 <= x"ff";
 
         if eop_in_o_o = "011111" then
-          mii_data_0 <= x"07070707070707FD";
+          mii_data_0 <= data_2_o_o;
+          mii_data_1 <= data_3_o_o;
+          mii_data_2 <= x"07070707070707FD";
+          mii_data_3 <= LANE_IDLE;
+          mii_ctrl_0 <= x"00";
+          mii_ctrl_1 <= x"00";
+          mii_ctrl_2 <= x"ff";
+          mii_ctrl_3 <= x"ff";
         end if;
 
         if sop_in_o(1) = '0' then
@@ -1116,6 +1124,11 @@ architecture behav_mii_if of mii_if is
     end if;
   end process;
 
+
+
+
+
+
   REG_LANES: process (clk, rst)
   begin
     if rst = '0' then
@@ -1129,13 +1142,17 @@ architecture behav_mii_if of mii_if is
       data_3_o_o <= (others =>'0');
       ren_int_o <= '0';
 
+      sop_in_o_o <= "00";
+      sop_in_o <= "00";
+
     elsif clk'event and clk = '1' then
 
       ren_int_o <= ren_int;
-      if ren_int_o = '1' then
+      if ren_int_o = '1' or eop_in_o(5) = '0' then
         eop_in_o <= eop_in;
         eop_in_o_o <= eop_in_o;
         sop_in_o <= sop_in;
+        sop_in_o_o <= sop_in_o;
         data_0_o <= data_in(63 downto 0);
         data_1_o <= data_in(127 downto 64);
         data_2_o <= data_in(191 downto 128);

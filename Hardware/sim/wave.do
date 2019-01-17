@@ -1491,7 +1491,8 @@ add wave -noupdate -expand -group CRC-S_FIFO -radix hexadecimal -radixshowbase 0
 add wave -noupdate -expand -group CRC-S_FIFO -divider <NULL>
 add wave -noupdate -expand -group CRC-S_FIFO -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_reg
 add wave -noupdate -expand -group CRC-S_FIFO -color Magenta -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_received
-add wave -noupdate -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/pkg_counter
+add wave -noupdate -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/pkg_counter
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/pkt_id
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_ok
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_done
 add wave -noupdate -height 40 -expand -group FIFO-frame_out -expand -group INPUTS_ -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/clk
@@ -1943,8 +1944,8 @@ add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_encode
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_encoded_pcs3
 add wave -noupdate -divider PCS_RX_40
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 5} {1878772800 ps} 1} {{Cursor 2} {1878109312 ps} 1} {{Cursor 3} {13194044 ps} 0}
-quietly wave cursor active 3
+WaveRestoreCursors {{Cursor 5} {1878772800 ps} 1} {{Cursor 2} {1878109312 ps} 1} {{Cursor 3} {2846887 ps} 0} {{Cursor 4} {29951785 ps} 0}
+quietly wave cursor active 4
 configure wave -namecolwidth 252
 configure wave -valuecolwidth 279
 configure wave -justifyvalue left
@@ -1959,7 +1960,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {13170093 ps} {13243369 ps}
+WaveRestoreZoom {29951558 ps} {30002550 ps}
 bookmark add wave bookmark5 {{770754 ps} {811500 ps}} 13
 bookmark add wave bookmark6 {{780000 ps} {800000 ps}} 8
 bookmark add wave bookmark7 {{0 ps} {42010 ps}} 0

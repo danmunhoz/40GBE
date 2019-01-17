@@ -71,7 +71,7 @@ library ieee;
 
     signal pkg_counter : integer; -- PARA SIMULAÇÃO
     signal pkg_counter_fail : integer; -- PARA SIMULAÇÃO
-
+    signal pkt_id   : integer; -- PARA SIMULAÇÃO
 
   begin
     ren <= ren_int;
@@ -83,7 +83,12 @@ library ieee;
       if rst_n = '0' then
         pkg_counter <= 0;
         pkg_counter_fail <= 0;
+        pkt_id <= 0;
+
       elsif clk_312'event and clk_312 = '1' then
+        if sop_d2 = '1' then
+          pkt_id <= to_integer(unsigned(mac_data(63 downto 0)));
+        end if;
 
         if crc_ok_int = '0' and crc_done = '1' then
           report "CRC_FALHOU @ "&time'image(now);
@@ -92,6 +97,9 @@ library ieee;
           pkg_counter <= pkg_counter+1;
           if (pkg_counter mod 100) = 0 then
             report "PKT RECVD => "&integer'image(pkg_counter)&" x  PKT FAILED -> "&integer'image(pkg_counter_fail)&" @ "&time'image(now);
+          end if;
+          if (pkt_id - pkg_counter) > 1 then
+            report integer'image(pkt_id-pkg_counter)&" PKGS LOST !!!"&" @ "&time'image(now);
           end if;
         end if;
       end if;

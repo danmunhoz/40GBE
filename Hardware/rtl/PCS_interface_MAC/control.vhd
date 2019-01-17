@@ -18,6 +18,7 @@ entity control is
     xgmii_rxd_2     : in  std_logic_vector(63 downto 0);
     xgmii_rxc_3     : in  std_logic_vector( 7 downto 0);
     xgmii_rxd_3     : in  std_logic_vector(63 downto 0);
+    almost_f        : in std_logic;
     ctrl_delay      : out std_logic_vector( 1 downto 0);
     shift_out       : out std_logic_vector(2 downto 0);
     is_sop          : out std_logic;
@@ -461,7 +462,7 @@ end process;
         wen_fifo_reg <= '1';
 
       -- EOP: stop writing
-    elsif eop_location_reg_reg /= "00100000" and sop_location = "1000" and sop_location_reg = "1000" then
+    elsif almost_f = '1' and eop_location_reg_reg /= "00100000" and sop_location = "1000" and sop_location_reg = "1000" then
           wen_fifo_reg <= '0';
       end if;
 

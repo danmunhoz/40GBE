@@ -39,10 +39,13 @@ architecture behav_core_interface of core_interface is
     signal shifter_out         : std_logic_vector(255 downto 0);
     signal shifter_out_ut      : std_logic_vector(255 downto 0);
     signal fifo_wen            : std_logic;
+    signal fifo_almost_f_int   : std_logic;
     signal is_sop_control      : std_logic;
     signal eop_addr            : std_logic_vector(5 downto 0);
 
   begin
+
+    fifo_almost_f <= fifo_almost_f_int;
 
     controller: entity work.control port map(
           clk             => clk_156,
@@ -56,6 +59,7 @@ architecture behav_core_interface of core_interface is
           xgmii_rxc_3     => xgmii_rxc_3,
           xgmii_rxd_3     => xgmii_rxd_3,
           ctrl_delay      => ctrl_mux_delay,
+          almost_f        => fifo_almost_f_int,
           shift_out       => ctrl_shift_reg,
           is_sop          => is_sop_control,
           eop_location_out=> eop_addr,
@@ -97,7 +101,7 @@ architecture behav_core_interface of core_interface is
           ren          => ren,
           empty        => fifo_empty,
           full         => fifo_full,
-          almost_f     => fifo_almost_f,
+          almost_f     => fifo_almost_f_int,
           almost_e     => fifo_almost_e
     );
 
