@@ -61,7 +61,10 @@ use IEEE.std_logic_1164.all;
 use IEEE.std_logic_arith.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
-
+library UNISIM;
+  use UNISIM.vcomponents.all;
+library UNIMACRO;
+  use unimacro.Vcomponents.all;
 --This entity is responsible for invert MACs and IPs from packet header, used in loopback mode.
 
 entity pkt_creation_mngr is
@@ -113,6 +116,9 @@ entity pkt_creation_mngr is
     -- TX mac interface
     pkt_tx_full         : in  std_logic;                     -- Informs if xMAC tx buffer is full
 
+    wen        : in  std_logic;
+    ren        : in  std_logic;
+
     payload_type        : in std_logic_vector(1 downto 0);
     payload_cycles      : in std_logic_vector(31 downto 0);
 
@@ -147,6 +153,8 @@ architecture arch_pkt_creation_mngr of pkt_creation_mngr is
 
  signal data_rebuild : std_logic_vector (255 downto 0);
  signal turn         : std_logic;
+ signal parity       : std_logic;
+ signal data_fifo_out : std_logic_vector(127 downto 0);
 
  --LOOPBACK SIGNALS
 
@@ -163,32 +171,246 @@ architecture arch_pkt_creation_mngr of pkt_creation_mngr is
  signal lb_ip_source        :  std_logic_vector(31 downto 0);
 
 --GEN SIGNALS
+
   signal gen_pkt_tx_data      :  std_logic_vector(255 downto 0); -- Data bus
   signal gen_pkt_tx_val       :  std_logic;                     -- Indicates if the data is valid
   signal gen_pkt_tx_sop       :  std_logic_vector(1 downto 0);                     -- Start of packet flag (sent along with the first frame)
   signal gen_pkt_tx_eop       :  std_logic;                     -- End of packet flag (sent along with the last frame)
   signal gen_pkt_tx_mod       :  std_logic_vector(4 downto 0);   -- Module (frame size, only read when eop='1')
 
+
+
+  signal pkt_fifo_out    :   std_logic_vector(127 downto 0);
+  signal teste           :   std_logic_vector(1 downto 0);
+
+  type   state_type is (idle, writing);
+  signal current_s : state_type;
+  signal fifo_rst : std_logic;
+  signal fifo_r_en : std_logic;
+  signal fifo_w_en : std_logic;
+  signal fifo_afull_l  : std_logic;
+  signal fifo_full_l  : std_logic;
+  signal fifo_empty_l  : std_logic;
+  signal fifo_aempty_l  : std_logic;
+  signal fifo_afull_h  : std_logic;
+  signal fifo_full_h  : std_logic;
+  signal fifo_empty_h  : std_logic;
+  signal fifo_aempty_h  : std_logic;
+
+  signal fifo_r_error_l  : std_logic;
+  signal fifo_r_error_h  : std_logic;
+  signal fifo_w_error_l  : std_logic;
+  signal fifo_w_error_h  : std_logic;
+
+
+  signal fifo_wrcount_l : std_logic_vector(8 downto 0);
+  signal fifo_rdcount_l : std_logic_vector(8 downto 0);
+  signal fifo_wrcount_h : std_logic_vector(8 downto 0);
+  signal fifo_rdcount_h : std_logic_vector(8 downto 0);
+
+  signal fifo_datain_l  : std_logic_vector(63 downto 0);
+  signal fifo_dataout_l  : std_logic_vector(63 downto 0);
+  signal fifo_datain_h  : std_logic_vector(63 downto 0);
+  signal fifo_dataout_h  : std_logic_vector(63 downto 0);
+
+  signal fifo_datain_reg : std_logic_vector(127 downto 0);
+  signal data_concat_l : std_logic_vector(127 downto 0);
+  signal data_concat_h : std_logic_vector(127 downto 0);
+
+  signal rebuilding_pkt     :  std_logic_vector(255 downto 0); -- Data bus
+
+  signal fifo_counter : integer range 0 to 6000;
+
+
+  type teste_type is array (0 to 1) of std_logic_vector (127 downto 0);
+  signal teste_reg : teste_type;
+  signal teste_reg_out0 : std_logic_vector (255 downto 0);
+  signal teste_reg_out1 : std_logic_vector (255 downto 0);
+  signal teste_reg_out2 : std_logic_vector (255 downto 0);
+  signal teste_reg_out3 : std_logic_vector (255 downto 0);
+  signal teste_turn_156 : std_logic;
+  signal teste_turn_312 : std_logic;
+
+  type teste_fsm_type is (S_IDLE, S_REBUILD_SOP, S_REBUILD_EOP);
+  signal current_s_312: teste_fsm_type;
+  signal current_s_156: teste_fsm_type;
+
 begin
 
+  ---------------------------------------------------------
+  -- Test
+  --------------------------------------------------------
 
----------------------------------------------------------
--- DATA REBUILD
----------------------------------------------------------
-
-  packet_rebuild: process(rst_n, clk_312)
-  BEGIN
-    if (rst_n = '0') Then
-      turn <= '0';
-      data_rebuild <= (others =>'0');
+  teste312 : process(clk_312, rst_n)
+  begin
+    if rst_n = '0' Then
+      current_s_312 <= S_IDLE;
+      teste_reg(0) <= (others => '0');
+      teste_reg(1) <= (others => '0');
+      teste_reg_out0 <= (others => '0');
+      teste_reg_out1 <= (others => '0');
+      teste_turn_312 <= '0';
     elsif (clk_312'event and clk_312 = '1') then
-      if (turn = '0') then
-        data_rebuild(255 downto 128) <= pkt_rx_data_in;
-      else
-        data_rebuild(127 downto 0) <= pkt_rx_data_in;
+      if (pkt_rx_avail_in = '1') then
+        case current_s_312 is
+          when S_IDLE =>
+            teste_turn_312 <= '0';
+            if( pkt_rx_sop_in = '1') then
+              current_s_312 <= S_REBUILD_SOP;
+            end if;
+          when S_REBUILD_EOP =>
+            current_s_312 <= S_IDLE;
+            if(pkt_rx_eop_in = '1') then
+                current_s_312 <= S_IDLE;
+            end if;
+            if(teste_turn_312 = '1') Then
+              teste_reg(0) <= pkt_rx_data_in;
+              teste_turn_312 <= '0';
+              teste_reg_out1 <= teste_reg_out0;
+            else
+              teste_reg(1) <= pkt_rx_data_in;
+              teste_reg_out0 <= teste_reg(0) & pkt_rx_data_in ;
+              teste_turn_312 <= '1';
+            end if;
+        end case;
       end if;
     end if;
-  end process packet_rebuild;
+  end process teste312;
+
+
+
+  teste156 : process(clk_156, rst_n)
+  begin
+    if rst_n = '0' Then
+      current_s_156 <= S_IDLE;
+      teste_turn_156 <= '0';
+      teste_reg_out2 <= (others => '0');
+      teste_reg_out3 <= (others => '0');
+    elsif (clk_156'event and clk_156 = '1') then
+      if (pkt_rx_avail_in = '1') then
+        case current_s_156 is
+          when S_IDLE =>
+            teste_turn_156 <= '0';
+            if(pkt_rx_sop_in = '1') then
+              current_s_156 <= S_REBUILD;
+            end if;
+          when S_REBUILD =>
+            if(pkt_rx_eop_in = '1') then
+                current_s_156 <= S_IDLE;
+            end if;
+            if(teste_turn_156 = '0') then
+              teste_reg_out2 <= teste_reg_out1;
+              teste_turn_156 <= '1';
+            else
+              teste_reg_out3 <= teste_reg_out1;
+              teste_turn_156 <= '0';
+            end if;
+          end case;
+        end if;
+    end if;
+  end process teste156;
+
+  ---------------------------------------------------------
+  -- DUAL CLOCK FIFO
+  --------------------------------------------------------
+
+      fifo_rst <= not rst_n;
+      data_rebuild <= data_concat_h & data_concat_l;
+
+      Read_from_Fifo : process (clk_156,rst_n)
+      begin
+        if rst_n = '0' then
+          teste <= "00";
+          turn <= '0';
+          fifo_r_en <= '0';
+          data_concat_l     <= (others=>'0');
+          data_concat_h      <= (others=>'0');
+        elsif (clk_156'event and clk_156 = '1') then
+          if (teste = "00") Then
+              fifo_r_en <= '0';
+              if (fifo_full_l = '1' or fifo_full_h = '1') Then
+                teste <= "01";
+              end if;
+          end if;
+          if (teste = "01") Then
+              fifo_r_en <= '1';
+              if (fifo_aempty_l = '1' or fifo_aempty_h = '1') Then
+                teste <= "00";
+              end if;
+          end if;
+        end if;
+      end process Read_from_Fifo;
+
+    Write_in_Fifo : process (rst_n, clk_312)
+    begin
+      if (rst_n = '0') then
+        fifo_w_en <= '0';
+        fifo_datain_reg  <= (others=>'0');
+        fifo_datain_l      <= (others=>'0');
+        fifo_datain_h      <= (others=>'0');
+      elsif (clk_312'event and clk_312 = '1') then
+        if (pkt_rx_avail_in = '1') then
+          fifo_datain_reg <= pkt_rx_data_in;
+          fifo_datain_l <= fifo_datain_reg(63 downto 0);
+          fifo_datain_h <= fifo_datain_reg(127 downto 64);
+          fifo_w_en <= '1';
+        else
+          fifo_w_en <= '0';
+        end if;
+      end if;
+    end process Write_in_Fifo;
+
+    FIFO_high : FIFO_DUALCLOCK_MACRO
+    generic map (
+      DEVICE => "7SERIES",              -- Target Device: "VIRTEX5", "VIRTEX6", "7SERIES"
+      ALMOST_FULL_OFFSET => X"0016",    -- Sets almost full threshold
+      ALMOST_EMPTY_OFFSET => X"0016",   -- Sets the almost empty threshold
+      DATA_WIDTH => 64,                 -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
+      FIFO_SIZE => "36Kb",              -- Target BRAM, "18Kb" or "36Kb"
+      FIRST_WORD_FALL_THROUGH => FALSE) -- Sets the FIFO FWFT to TRUE or FALSE
+    port map (
+      ALMOSTEMPTY => fifo_aempty_h,       -- 1-bit output almost empty
+      ALMOSTFULL => fifo_afull_h,         -- 1-bit output almost full
+      DO => fifo_dataout_h,              -- Output data, width defined by DATA_WIDTH parameter
+      EMPTY => fifo_empty_h,               -- 1-bit output empty
+      FULL =>  fifo_full_h,                -- 1-bit output full
+      RDCOUNT => fifo_rdcount_h,           -- Output read count, width determined by FIFO depth
+      RDERR => fifo_r_error_h,                    -- 1-bit output read error
+      WRCOUNT => fifo_wrcount_h,           -- Output write count, width determined by FIFO depth
+      WRERR => fifo_w_error_h,                    -- 1-bit output write error
+      DI =>  fifo_datain_h,  -- Input data, width defined by DATA_WIDTH parameter
+      RDCLK => clk_312,                   -- 1-bit input read clock
+      RDEN => fifo_r_en,                -- 1-bit input read enable
+      RST => fifo_rst,                       -- 1-bit input reset
+      WRCLK => clk_156,                   -- 1-bit input write clock
+      WREN => fifo_w_en                -- 1-bit input write enable
+    );
+
+    FIFO_low : FIFO_DUALCLOCK_MACRO
+    generic map (
+      DEVICE => "7SERIES",              -- Target Device: "VIRTEX5", "VIRTEX6", "7SERIES"
+      ALMOST_FULL_OFFSET => X"0016",    -- Sets almost full threshold
+      ALMOST_EMPTY_OFFSET => X"0016",   -- Sets the almost empty threshold
+      DATA_WIDTH => 64,                 -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
+      FIFO_SIZE => "36Kb",              -- Target BRAM, "18Kb" or "36Kb"
+      FIRST_WORD_FALL_THROUGH => FALSE) -- Sets the FIFO FWFT to TRUE or FALSE
+    port map (
+      ALMOSTEMPTY => fifo_aempty_l,       -- 1-bit output almost empty
+      ALMOSTFULL => fifo_afull_l,         -- 1-bit output almost full
+      DO => fifo_dataout_l,              -- Output data, width defined by DATA_WIDTH parameter
+      EMPTY => fifo_empty_l,               -- 1-bit output empty
+      FULL =>  fifo_full_l,                -- 1-bit output full
+      RDCOUNT => fifo_rdcount_l,           -- Output read count, width determined by FIFO depth
+      RDERR => fifo_r_error_l,                    -- 1-bit output read error
+      WRCOUNT => fifo_wrcount_l,           -- Output write count, width determined by FIFO depth
+      WRERR => fifo_w_error_l,                    -- 1-bit output write error
+      DI =>  fifo_datain_l,  -- Input data, width defined by DATA_WIDTH parameter
+      RDCLK => clk_312,                   -- 1-bit input read clock
+      RDEN => fifo_r_en,                -- 1-bit input read enable
+      RST => fifo_rst,                       -- 1-bit input reset
+      WRCLK => clk_156,                   -- 1-bit input write clock
+      WREN => fifo_w_en                -- 1-bit input write enable
+    );
 
   ---------------------------------------------------------
   -- MUX to select ECHO GEN or LOOPBACK  -> MAC bus
@@ -221,8 +443,9 @@ begin
 
   loopback_inst : entity work.loopback_v2 port map (
       -- STANDARD INPUTS
-      clk_156               => clk_156,
+      clk_156             => clk_156,
       reset               => rst_n,
+      parity              => parity,
       mac_source          => mac_source,
 
       pkt_rx_avail        => pkt_rx_avail_in,--FROM INTERFACE

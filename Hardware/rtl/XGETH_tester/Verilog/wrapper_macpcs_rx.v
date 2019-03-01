@@ -749,7 +749,8 @@ module wrapper_macpcs_rx(
 
       //GEN PORTS
       .start          (start_tx_begin),
-
+      .wen            (cj_pkt_tx_val),
+      .ren            (1'b1),
       //MAC AND IP
 
       .mac_destination   (48'hAA00BB11CC22),
@@ -776,7 +777,7 @@ module wrapper_macpcs_rx(
       .pkt_rx_data_in    (app_data),
       .pkt_rx_mod_in     (app_eop[3:0]),
 
-      .mac_filter      (3'b011)
+      .mac_filter      (3'b000)
 
 
     );
