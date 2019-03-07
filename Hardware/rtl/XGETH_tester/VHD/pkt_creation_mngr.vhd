@@ -183,7 +183,7 @@ architecture arch_pkt_creation_mngr of pkt_creation_mngr is
   signal pkt_fifo_out    :   std_logic_vector(127 downto 0);
   signal teste           :   std_logic_vector(1 downto 0);
 
-  type   state_type is (idle, executing);
+  type   state_type is (idle, executing, ending);
   signal current_w_s : state_type;
   signal current_r_s : state_type;
   signal fifo_rst : std_logic;
@@ -265,32 +265,38 @@ begin
                 current_r_s <= idle;
                 fifo_r_en <= '0';
               end if;
-              if turn = '0' then
+              if turn = '1' then
                 fifo_ctrl_out_reg <= fifo_dataout_ctrl_lag;
                 data_rebuild <= data_concat_h & data_concat_l;
-                turn <= '1';
+                  if fifo_dataout_ctrl_lag(0) = '1' then
+                    turn <= '1';
+                  else
+                    turn <= '0';
+                  end if;
               else
-                turn <= '0';
+                turn <= '1';
               end if;
+            when others => null;
           end case;
         end if;
       end process Read_from_Fifo;
 
-
-
+      fifo_datain_reg <= pkt_rx_data_in;
+      fifo_datain_ctrl <= pkt_rx_avail_in & pkt_rx_sop_in & pkt_rx_val_in & pkt_rx_mod_in & pkt_rx_eop_in;
 
     Write_in_Fifo : process (rst_n, clk_312)
     begin
       if (rst_n = '0') then
         current_w_s <= idle;
         fifo_w_en <= '0';
-        fifo_datain_ctrl <= (others=>'0');
-        fifo_datain_reg    <= (others=>'0');
+        --fifo_datain_ctrl <= (others=>'0');
+        --fifo_datain_reg    <= (others=>'0');
         fifo_datain_l      <= (others=>'0');
         fifo_datain_h      <= (others=>'0');
+
       elsif (clk_312'event and clk_312 = '1') then
-        fifo_datain_reg <= pkt_rx_data_in;
-        fifo_datain_ctrl <= pkt_rx_avail_in & pkt_rx_sop_in & pkt_rx_val_in & pkt_rx_mod_in & pkt_rx_eop_in;
+
+
         fifo_datain_l <= fifo_datain_ctrl & fifo_datain_reg(63 downto 0);
         fifo_datain_h <= fifo_datain_reg(127 downto 64);
         case current_w_s is
@@ -301,9 +307,11 @@ begin
           end if;
         when executing =>
           if (pkt_rx_avail_in = '1' and pkt_rx_eop_in = '1') then
-            current_w_s <= idle;
-            fifo_w_en <= '0';
+            current_w_s <= ending;
           end if;
+        when ending =>
+          current_w_s <= idle;
+          fifo_w_en <= '0';
         end case;
       end if;
     end process Write_in_Fifo;

@@ -278,6 +278,7 @@ add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/current_w_s
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_156
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_312
+add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/turn
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_data_in
 add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_datain_ctrl
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_datain_reg
@@ -289,7 +290,7 @@ add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_concat_h
 add wave -noupdate -expand -group PKT_GEN -color White /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_rebuild
 add wave -noupdate -expand -group PKT_GEN -color Blue -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_dataout_ctrl
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_dataout_ctrl_lag
+add wave -noupdate -expand -group PKT_GEN -color Blue -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_dataout_ctrl_lag
 add wave -noupdate -expand -group PKT_GEN -color Blue -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_ctrl_out_reg
 add wave -noupdate -expand -group PKT_GEN -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_r_en
 add wave -noupdate -expand -group PKT_GEN -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_w_en
@@ -331,7 +332,7 @@ add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/rdcount_pattern
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/wrcount_pattern
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 4} {15785600 ps} 0} {{Cursor 5} {49990716 ps} 0}
+WaveRestoreCursors {{Cursor 4} {15727981 ps} 0} {{Cursor 5} {49990716 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 257
 configure wave -valuecolwidth 122
@@ -347,7 +348,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {15753394 ps} {15799804 ps}
+WaveRestoreZoom {15716229 ps} {15761461 ps}
 bookmark add wave bookmark5 {{770754 ps} {811500 ps}} 13
 bookmark add wave bookmark6 {{780000 ps} {800000 ps}} 8
 bookmark add wave bookmark7 {{0 ps} {42010 ps}} 0
