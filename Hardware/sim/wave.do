@@ -214,17 +214,6 @@ add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_avail_in
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_sop_in
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_eop_in
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/current_s_312
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/current_s_156
-add wave -noupdate -expand -group PKT_GEN -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/teste_turn_156
-add wave -noupdate -expand -group PKT_GEN -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/teste_turn_312
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_data_in
-add wave -noupdate -expand -group PKT_GEN -color Magenta -radix hexadecimal -childformat {{/Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/teste_reg(0) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/teste_reg(1) -radix hexadecimal}} -expand -subitemconfig {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/teste_reg(0) {-color Magenta -height 16 -radix hexadecimal} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/teste_reg(1) {-color Magenta -height 16 -radix hexadecimal}} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/teste_reg
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/teste_reg
-add wave -noupdate -expand -group PKT_GEN -color Yellow /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/teste_reg_out0
-add wave -noupdate -expand -group PKT_GEN -color Yellow -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/teste_reg_out1
-add wave -noupdate -expand -group PKT_GEN -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/teste_reg_out2
-add wave -noupdate -expand -group PKT_GEN -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/teste_reg_out3
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loop_select
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/mac_source
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_tx_data
@@ -281,11 +270,16 @@ add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/gen_pkt_tx_mod
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_fifo_out
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/rebuilding_pkt
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/current_s
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_rst
+add wave -noupdate -expand -group PKT_GEN -color {Pale Green} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_avail_in
+add wave -noupdate -expand -group PKT_GEN -color Goldenrod /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_sop_in
+add wave -noupdate -expand -group PKT_GEN -color White /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_eop_in
+add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/current_r_s
+add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/current_w_s
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_156
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_312
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_data_in
+add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_datain_ctrl
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_datain_reg
 add wave -noupdate -expand -group PKT_GEN -color Yellow -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_datain_l
 add wave -noupdate -expand -group PKT_GEN -color Yellow -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_datain_h
@@ -294,6 +288,9 @@ add wave -noupdate -expand -group PKT_GEN -color Magenta -radix hexadecimal /Top
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_concat_l
 add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_concat_h
 add wave -noupdate -expand -group PKT_GEN -color White /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_rebuild
+add wave -noupdate -expand -group PKT_GEN -color Blue -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_dataout_ctrl
+add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_dataout_ctrl_lag
+add wave -noupdate -expand -group PKT_GEN -color Blue -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_ctrl_out_reg
 add wave -noupdate -expand -group PKT_GEN -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_r_en
 add wave -noupdate -expand -group PKT_GEN -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_w_en
 add wave -noupdate -expand -group PKT_GEN -color {Orange Red} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_aempty_l
@@ -304,16 +301,37 @@ add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_w
 add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_empty_h
 add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_full_l
 add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_full_h
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_r_error_l
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_r_error_h
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_w_error_l
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_w_error_h
+add wave -noupdate -expand -group PKT_GEN -color {Medium Orchid} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_r_error_l
+add wave -noupdate -expand -group PKT_GEN -color {Medium Orchid} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_r_error_h
+add wave -noupdate -expand -group PKT_GEN -color {Medium Orchid} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_w_error_l
+add wave -noupdate -expand -group PKT_GEN -color {Medium Orchid} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_w_error_h
 add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_wrcount_l
-add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_rdcount_l
 add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_wrcount_h
+add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_rdcount_l
 add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_rdcount_h
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/RST
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/RDCLK
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/WRCLK
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/DI
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/DO
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/ALMOSTEMPTY
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/ALMOSTFULL
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/RDEN
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/WREN
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/EMPTY
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/FULL
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/RDERR
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/WRERR
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/RDCOUNT
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/WRCOUNT
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/di_pattern
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/do_pattern
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/dip_pattern
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/dop_pattern
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/rdcount_pattern
+add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/wrcount_pattern
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 4} {12635274 ps} 0} {{Cursor 5} {49766122 ps} 0}
+WaveRestoreCursors {{Cursor 4} {15785600 ps} 0} {{Cursor 5} {49990716 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 257
 configure wave -valuecolwidth 122
@@ -329,7 +347,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {12625597 ps} {12647283 ps}
+WaveRestoreZoom {15753394 ps} {15799804 ps}
 bookmark add wave bookmark5 {{770754 ps} {811500 ps}} 13
 bookmark add wave bookmark6 {{780000 ps} {800000 ps}} 8
 bookmark add wave bookmark7 {{0 ps} {42010 ps}} 0
