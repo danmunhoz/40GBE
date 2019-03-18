@@ -1,118 +1,134 @@
 onerror {resume}
 quietly virtual function -install /glbl -env /glbl { 907643} virtual_000001
 quietly WaveActivateNextPane {} 0
-add wave -noupdate /Top/tx_xgt4/echo_gen_inst/ip_source_reg
-add wave -noupdate /Top/tx_xgt4/echo_gen_inst/ip_destination_reg
-add wave -noupdate /Top/tx_xgt4/echo_gen_inst/ip_checksum
-add wave -noupdate /Top/tx_xgt4/echo_gen_inst/ip_message_length
-add wave -noupdate /Top/tx_xgt4/echo_gen_inst/udp_message_length
-add wave -noupdate /Top/tx_xgt4/echo_gen_inst/mac_source_reg
-add wave -noupdate /Top/tx_xgt4/echo_gen_inst/mac_destination_reg
-add wave -noupdate /Top/tx_xgt4/echo_gen_inst/packet_length_reg
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/reset
-add wave -noupdate -group LOOP_BACK -expand -group lb_in /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/clk_156
-add wave -noupdate -group LOOP_BACK -expand -group lb_in /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_312
-add wave -noupdate -group LOOP_BACK -expand -group lb_in /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/parity
-add wave -noupdate -group LOOP_BACK -expand -group lb_in /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_data
-add wave -noupdate -group LOOP_BACK -expand -group lb_in -color Magenta /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/current_s
-add wave -noupdate -group LOOP_BACK -expand -group lb_in -color Magenta /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/next_s
-add wave -noupdate -group LOOP_BACK -expand -group lb_in -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_data_N
-add wave -noupdate -group LOOP_BACK -expand -group lb_in /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/mac_source
-add wave -noupdate -group LOOP_BACK -expand -group lb_in /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_avail
-add wave -noupdate -group LOOP_BACK -expand -group lb_in /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_sop
-add wave -noupdate -group LOOP_BACK -expand -group lb_in /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_eop
-add wave -noupdate -group LOOP_BACK -expand -group lb_in /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_val
-add wave -noupdate -group LOOP_BACK -expand -group lb_in /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_err
-add wave -noupdate -group LOOP_BACK -expand -group lb_in /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_mod
-add wave -noupdate -group LOOP_BACK -expand -group lb_in /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/mac_filter
-add wave -noupdate -group LOOP_BACK -group lb_out /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_pkt_tx_eop
-add wave -noupdate -group LOOP_BACK -group lb_out /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_pkt_tx_sop
-add wave -noupdate -group LOOP_BACK -group lb_out /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_pkt_tx_val
-add wave -noupdate -group LOOP_BACK -group lb_out /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_pkt_tx_data
-add wave -noupdate -group LOOP_BACK -group lb_out /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_pkt_tx_mod
-add wave -noupdate -group LOOP_BACK -group lb_out /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_mac_destination
-add wave -noupdate -group LOOP_BACK -group lb_out /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_mac_source
-add wave -noupdate -group LOOP_BACK -group lb_out /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_ip_destination
-add wave -noupdate -group LOOP_BACK -group lb_out /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_ip_source
-add wave -noupdate -group LOOP_BACK -expand -group wire /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/wire_mac_source
-add wave -noupdate -group LOOP_BACK -expand -group wire /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/wire_mac_destination
-add wave -noupdate -group LOOP_BACK -expand -group wire /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/wire_ip_source
-add wave -noupdate -group LOOP_BACK -expand -group wire /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/wire_ethernet_type
-add wave -noupdate -group LOOP_BACK -expand -group wire /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/wire_ip_protocol
-add wave -noupdate -group LOOP_BACK -expand -group wire /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/wire_ip_message_length
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/wire_ip_checksum
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/ip_destination_reg
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/ip_high
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/time_stamp_generator
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_mac_source_reg
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_mac_destination_reg
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_ip_message_length
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_ip_source_reg
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_ip_destination_reg
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_ip_checksum
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/lb_udp_message_length
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rebuilt
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/mod_rebuilt
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/HEADER2
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/HEADER
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/IP
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/MAC
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/PAYLOAD
-add wave -noupdate -group LOOP_BACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/IDLE_VALUE
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/rst_n
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_156
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_312
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_312_n
+add wave -noupdate -group PKT_GEN -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_data_in
+add wave -noupdate -group PKT_GEN -color Orange -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_concat
+add wave -noupdate -group PKT_GEN -color {Medium Spring Green} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_rebuild
+add wave -noupdate -group PKT_GEN -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/test_tbd_data_ctrl_out
+add wave -noupdate -group PKT_GEN -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_ctrl_in
+add wave -noupdate -group PKT_GEN -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_ctrl_out
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/parity
+add wave -noupdate -group PKT_GEN -color {Medium Violet Red} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_val_in
+add wave -noupdate -group PKT_GEN -color {Medium Violet Red} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_avail_in
+add wave -noupdate -group PKT_GEN -color White /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_sop_in
+add wave -noupdate -group PKT_GEN -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_eop_in
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loop_select
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/mac_source
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_tx_data
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_tx_val
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_tx_sop
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_tx_eop
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_tx_mod
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/rec_mac_source_rx
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/rec_mac_destination_rx
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/rec_ip_source_rx
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/rec_ip_destination_rx
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/start
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lfsr_seed
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/valid_seed
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lfsr_polynomial
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/mac_destination
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/ip_source
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/ip_destination
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/packet_length
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/timestamp_base
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/time_stamp_flag
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_tx_full
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/wen
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/ren
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/payload_type
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/payload_cycles
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_avail_in
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_eop_in
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_sop_in
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_val_in
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_err_in
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_mod_in
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/mac_filter
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/mac_source_out
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/mac_destination_out
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/ip_source_out
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/ip_destination_out
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/parity
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_pkt_tx_eop
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_pkt_tx_sop
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_pkt_tx_val
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_pkt_tx_data
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_pkt_tx_mod
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_mac_destination
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_mac_source
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_ip_destination
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_ip_source
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/gen_pkt_tx_data
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/gen_pkt_tx_val
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/gen_pkt_tx_sop
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/gen_pkt_tx_eop
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/gen_pkt_tx_mod
+add wave -noupdate -group PKT_GEN -color {Pale Green} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_avail_in
+add wave -noupdate -group PKT_GEN -color Goldenrod /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_sop_in
+add wave -noupdate -group PKT_GEN -color White /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_eop_in
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_156
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_312
+add wave -noupdate -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_data_in
+add wave -noupdate -group PKT_GEN -color White /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_rebuild
 add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/clock
 add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/reset
 add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/start
 add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/lfsr_seed
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/valid_seed
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/lfsr_polynomial
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/mac_source
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/mac_destination
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ip_source
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ip_destination
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/packet_length
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/timestamp_base
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/time_stamp_flag
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_full
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_data
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_val
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_sop
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_eop
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_mod
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/payload_type
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/payload_cycles
+add wave -noupdate -group GEN -color {Medium Violet Red} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_data_N
+add wave -noupdate -group GEN -color {Medium Violet Red} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_data_buffer
+add wave -noupdate -group GEN -color Yellow /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_data
 add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/current_s
 add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/next_s
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/MAC
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/IP
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/EOH_SOF
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/HEADER
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/PAYLOAD
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/PAYLOAD_PKT
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/PAYLOAD_LAST
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/IDLE_VALUE
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/UPD_INFO
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ALL_ONE
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ALL_ZERO
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/PKT_COUNTER
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ID_COUNTER_H
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ID_COUNTER_L
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/SEED
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/RANDOM
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/start_lfsr
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/preset_lfsr
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/count
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_data_N
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_data_buffer
+add wave -noupdate -group GEN -color {Medium Blue} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_val
+add wave -noupdate -group GEN -color White -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_sop
+add wave -noupdate -group GEN -color Gray75 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_eop
 add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_mod_reg
 add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_eop_reg
+add wave -noupdate -group GEN -color {Medium Blue} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_mod
 add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/last_pkt
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/time_stamp
+add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/payload_type
+add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/payload_cycles
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/valid_seed
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/lfsr_polynomial
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/mac_source
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/mac_destination
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ip_source
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ip_destination
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/packet_length
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/timestamp_base
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/time_stamp_flag
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ip_checksum
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/aux_checksum
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ip_message_length
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/udp_message_length
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/pkt_tx_full
+add wave -noupdate -group GEN -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/time_stamp
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/MAC
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/IP
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/EOH_SOF
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/HEADER
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/PAYLOAD
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/PAYLOAD_PKT
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/PAYLOAD_LAST
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/IDLE_VALUE
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/UPD_INFO
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ALL_ONE
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ALL_ZERO
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/PKT_COUNTER
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ID_COUNTER_H
+add wave -noupdate -group GEN -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ID_COUNTER_L
+add wave -noupdate -group GEN -group LFSR /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/SEED
+add wave -noupdate -group GEN -group LFSR /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/RANDOM
+add wave -noupdate -group GEN -group LFSR /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/start_lfsr
+add wave -noupdate -group GEN -group LFSR /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/preset_lfsr
+add wave -noupdate -group GEN -group LFSR /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/count
 add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/it_payload
 add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/it_mod
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ip_checksum
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/aux_checksum
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/ip_message_length
-add wave -noupdate -group GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/echo_gen_inst/udp_message_length
 add wave -noupdate -group REC /Top/rx_xgt4/inst_wrapper_macpcs/INST_echo_receiver_128_v2/clk_312
 add wave -noupdate -group REC /Top/rx_xgt4/inst_wrapper_macpcs/INST_echo_receiver_128_v2/reset
 add wave -noupdate -group REC /Top/rx_xgt4/inst_wrapper_macpcs/INST_echo_receiver_128_v2/lfsr_seed
@@ -207,133 +223,54 @@ add wave -noupdate -group REC /Top/rx_xgt4/inst_wrapper_macpcs/INST_echo_receive
 add wave -noupdate -group REC /Top/rx_xgt4/inst_wrapper_macpcs/INST_echo_receiver_128_v2/recovery_ON
 add wave -noupdate -group REC /Top/rx_xgt4/inst_wrapper_macpcs/INST_echo_receiver_128_v2/recovery_start_pkt
 add wave -noupdate -group REC /Top/rx_xgt4/inst_wrapper_macpcs/INST_echo_receiver_128_v2/recovery_stop_pkt
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_156
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_312
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/rst_n
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_val_in
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_avail_in
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_sop_in
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_eop_in
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loop_select
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/mac_source
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_tx_data
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_tx_val
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_tx_sop
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_tx_eop
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_tx_mod
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/rec_mac_source_rx
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/rec_mac_destination_rx
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/rec_ip_source_rx
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/rec_ip_destination_rx
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/start
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lfsr_seed
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/valid_seed
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lfsr_polynomial
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/mac_destination
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/ip_source
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/ip_destination
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/packet_length
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/timestamp_base
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/time_stamp_flag
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_tx_full
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/wen
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/ren
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/payload_type
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/payload_cycles
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_avail_in
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_eop_in
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_sop_in
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_val_in
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_err_in
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_mod_in
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/mac_filter
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/mac_source_out
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/mac_destination_out
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/ip_source_out
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/ip_destination_out
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/turn
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/parity
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_fifo_out
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_pkt_tx_eop
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_pkt_tx_sop
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_pkt_tx_val
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_pkt_tx_data
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_pkt_tx_mod
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_mac_destination
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_mac_source
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_ip_destination
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/lb_ip_source
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/gen_pkt_tx_data
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/gen_pkt_tx_val
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/gen_pkt_tx_sop
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/gen_pkt_tx_eop
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/gen_pkt_tx_mod
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_fifo_out
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/rebuilding_pkt
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_rst
-add wave -noupdate -expand -group PKT_GEN -color {Pale Green} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_avail_in
-add wave -noupdate -expand -group PKT_GEN -color Goldenrod /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_sop_in
-add wave -noupdate -expand -group PKT_GEN -color White /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_eop_in
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/current_r_s
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/current_w_s
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_156
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/clk_312
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/turn
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/pkt_rx_data_in
-add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_datain_ctrl
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_datain_reg
-add wave -noupdate -expand -group PKT_GEN -color Yellow -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_datain_l
-add wave -noupdate -expand -group PKT_GEN -color Yellow -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_datain_h
-add wave -noupdate -expand -group PKT_GEN -color Magenta -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_dataout_l
-add wave -noupdate -expand -group PKT_GEN -color Magenta -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_dataout_h
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_concat_l
-add wave -noupdate -expand -group PKT_GEN /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_concat_h
-add wave -noupdate -expand -group PKT_GEN -color White /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/data_rebuild
-add wave -noupdate -expand -group PKT_GEN -color Blue -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_dataout_ctrl
-add wave -noupdate -expand -group PKT_GEN -color Blue -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_dataout_ctrl_lag
-add wave -noupdate -expand -group PKT_GEN -color Blue -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_ctrl_out_reg
-add wave -noupdate -expand -group PKT_GEN -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_r_en
-add wave -noupdate -expand -group PKT_GEN -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_w_en
-add wave -noupdate -expand -group PKT_GEN -color {Orange Red} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_aempty_l
-add wave -noupdate -expand -group PKT_GEN -color {Orange Red} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_aempty_h
-add wave -noupdate -expand -group PKT_GEN -color {Orange Red} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_afull_l
-add wave -noupdate -expand -group PKT_GEN -color {Orange Red} -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_afull_h
-add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_empty_l
-add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_empty_h
-add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_full_l
-add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_full_h
-add wave -noupdate -expand -group PKT_GEN -color {Medium Orchid} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_r_error_l
-add wave -noupdate -expand -group PKT_GEN -color {Medium Orchid} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_r_error_h
-add wave -noupdate -expand -group PKT_GEN -color {Medium Orchid} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_w_error_l
-add wave -noupdate -expand -group PKT_GEN -color {Medium Orchid} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_w_error_h
-add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_wrcount_l
-add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_wrcount_h
-add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_rdcount_l
-add wave -noupdate -expand -group PKT_GEN -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/fifo_rdcount_h
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/RST
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/RDCLK
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/WRCLK
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/DI
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/DO
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/ALMOSTEMPTY
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/ALMOSTFULL
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/RDEN
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/WREN
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/EMPTY
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/FULL
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/RDERR
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/WRERR
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/RDCOUNT
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/WRCOUNT
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/di_pattern
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/do_pattern
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/dip_pattern
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/dop_pattern
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/rdcount_pattern
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/FIFO_low/wrcount_pattern
+add wave -noupdate -group LOOPBACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/clk_156
+add wave -noupdate -group LOOPBACK -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/current_s
+add wave -noupdate -group LOOPBACK -color Magenta /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/next_s
+add wave -noupdate -group LOOPBACK -color {Medium Spring Green} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_data_in
+add wave -noupdate -group LOOPBACK -color Khaki /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_data_N
+add wave -noupdate -group LOOPBACK -color Khaki /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_data_buffer
+add wave -noupdate -group LOOPBACK -color Yellow /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rebuilt
+add wave -noupdate -group LOOPBACK -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_tx_data_out
+add wave -noupdate -group LOOPBACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_avail_in
+add wave -noupdate -group LOOPBACK -color White /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_sop_in
+add wave -noupdate -group LOOPBACK -color Gray75 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_eop_in
+add wave -noupdate -group LOOPBACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_err_in
+add wave -noupdate -group LOOPBACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_mod_in
+add wave -noupdate -group LOOPBACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_rx_val_in
+add wave -noupdate -group LOOPBACK -color White -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_tx_sop_out
+add wave -noupdate -group LOOPBACK -color Gray75 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_tx_eop_out
+add wave -noupdate -group LOOPBACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_tx_mod_out
+add wave -noupdate -group LOOPBACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/pkt_tx_val_out
+add wave -noupdate -group LOOPBACK -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/EOH_SOF
+add wave -noupdate -group LOOPBACK -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/HEADER_H
+add wave -noupdate -group LOOPBACK -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/HEADER_L
+add wave -noupdate -group LOOPBACK -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/IDLE_VALUE
+add wave -noupdate -group LOOPBACK -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/IP
+add wave -noupdate -group LOOPBACK -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/MAC
+add wave -noupdate -group LOOPBACK -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/PAYLOAD
+add wave -noupdate -group LOOPBACK -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/ip_message_length_reg
+add wave -noupdate -group LOOPBACK -group CABECALHO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/udp_message_length_reg
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/mac_source_in
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/mac_destination_reg
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/mac_source_reg
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/ethernet_type_reg
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/ip_message_length_reg
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/ip_protocol_reg
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/ip_source_reg
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/ip_destination_reg
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/ip_checksum_reg
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/mac_filter_in
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/parity
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/ip_destination_wire
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/ip_high
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/mac_destination_out
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/mac_source_out
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/ip_destination_out
+add wave -noupdate -group LOOPBACK -group MAC_IP_INFO /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/ip_source_out
+add wave -noupdate -group LOOPBACK /Top/rx_xgt4/inst_wrapper_macpcs/INST_pkt_generator/loopback_inst/reset
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 4} {15727981 ps} 0} {{Cursor 5} {49990716 ps} 0}
-quietly wave cursor active 1
+WaveRestoreCursors {{Cursor 4} {12642445 ps} 0} {{Cursor 5} {47996800 ps} 0}
+quietly wave cursor active 2
 configure wave -namecolwidth 257
 configure wave -valuecolwidth 122
 configure wave -justifyvalue left
@@ -348,7 +285,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {15716229 ps} {15761461 ps}
+WaveRestoreZoom {47975487 ps} {48027381 ps}
 bookmark add wave bookmark5 {{770754 ps} {811500 ps}} 13
 bookmark add wave bookmark6 {{780000 ps} {800000 ps}} 8
 bookmark add wave bookmark7 {{0 ps} {42010 ps}} 0
