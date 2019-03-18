@@ -429,6 +429,11 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire [31:0]  cj_pkt_lost_counter;
     (* syn_keep = "true"*) reg         start_tx_begin;
     (* syn_keep = "true"*) reg         start_tx_begin_delay;
+    (* syn_keep = "true"*) wire [47:0]  mac_source_out;
+    (* syn_keep = "true"*) wire [47:0]  mac_destination_out;
+    (* syn_keep = "true"*) wire [31:0]  ip_source_out;
+    (* syn_keep = "true"*) wire [31:0]  ip_destination_out;
+
     //END ECHO GEN WIRES
 
     //ECHO RECEIVER WIRES
@@ -616,7 +621,7 @@ module wrapper_macpcs_rx(
                 // ECHO receiver v2
                 // Review pkt_rx_avail
 
-            (* dont_touch = "true" *) echo_receiver_128_v2 INST_echo_receiver_128_v2
+            (* dont_touch = "true" *) echo_receiver INST_echo_receiver
              (
               //IMPUT
               .clk_312              (clk_312),
@@ -777,7 +782,12 @@ module wrapper_macpcs_rx(
       .pkt_rx_data_in    (app_data),
       .pkt_rx_mod_in     (app_eop[3:0]),
 
-      .mac_filter      (3'b000)
+      .mac_filter      (3'b000),
+
+      .mac_source_out      (mac_source_out),
+      .mac_destination_out (mac_destination_out),
+      .ip_source_out       (ip_source_out),
+      .ip_destination_out  (ip_destination_out)
 
 
     );

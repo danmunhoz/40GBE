@@ -447,7 +447,7 @@ begin
   -- MUX to select ECHO GEN or LOOPBACK  -> MAC bus
   ---------------------------------------------------------
 
-  loopback_inst : entity work.loopback_v2 port map (
+  loopback_inst : entity work.loopback port map (
       -- STANDARD INPUTS
       clk_156             => clk_156,
       reset               => rst_n,
@@ -476,7 +476,7 @@ begin
 
   );
 
-  echo_gen_inst : entity work.echo_generator_256 port map (
+  echo_gen_inst : entity work.echo_generator port map (
       clock         => clk_156,
       reset         => rst_n,
 

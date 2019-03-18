@@ -58,10 +58,10 @@ architecture behav of tx_xgt4 is
 	signal	tx_sequence_out     : std_logic_vector(6 downto 0);
 
   -- echo generator
-  signal pkt_tx_data : std_logic_vector(63 downto 0);
+  signal pkt_tx_data : std_logic_vector(255 downto 0);
   --signal pkt_tx_start, pkt_tx_val, pkt_tx_sop, pkt_tx_eop, pkt_tx_full : std_logic;
   signal pkt_tx_val, pkt_tx_sop, pkt_tx_eop, pkt_tx_full, pkt_tx_start : std_logic;
-  signal pkt_tx_mod : std_logic_vector(2 downto 0);
+  signal pkt_tx_mod : std_logic_vector(3 downto 0);
 
   signal pkt_rx_ren   : std_logic;
   signal pkt_rx_data  : std_logic_vector(63 downto 0);
@@ -301,7 +301,7 @@ begin
 --
 
 -- INST ECHO GEN
-    echo_gen_inst : entity work.echo_generator port map (
+    echo_gen_inst : entity work.echo_generator_old port map (
         clock             => clk_156,
         reset         		=> reset_in,
 
@@ -335,7 +335,7 @@ begin
         -- valid_seed          => seed_val,
 
         -- payload_type        => (others=>'0'),
-        payload_type        => "000",
+        payload_type        => "00",
         --payload_cycles      => (others=>'0'),
 --CHANGE_PAYLOAD
         payload_cycles      => x"0000000E",
@@ -354,7 +354,7 @@ begin
         pkt_tx_start <= '1';
         wait until pkt_tx_eop = '1';
         pkt_tx_start <= '0';
-        --wait;
+        --wait;z
         -- wait for 32 ns;
         -- pkt_tx_start <= '1';
         -- wait until pkt_tx_eop = '1';

@@ -303,7 +303,7 @@ begin
 --
 
 -- INST ECHO GEN
-    echo_gen_inst : entity work.echo_generator port map (
+    echo_gen_inst : entity work.echo_generator_old port map (
         clock             => clk_156,
         reset         		=> reset_in,
 
@@ -341,7 +341,7 @@ begin
         --payload_cycles      => (others=>'0'),
 --CHANGE_PAYLOAD
         payload_cycles      => x"0000000E",
-        payload_last_size   => (others=>'0'),
+      payload_last_size   => (others=>'0'),
         -- payload_last_size   => "0001000",
         pkt_lost_counter    => open
     );

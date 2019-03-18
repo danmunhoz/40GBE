@@ -136,14 +136,14 @@ vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs_rx.v
 
 vcom -novopt ../rtl/XGETH_tester/VHD/lfsr.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/txsequence_counter.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/LFSR_GEN.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/LFSR_REC.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/echo_receiver.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator_old.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/loopback.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/loopback_v2.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator_256.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/echo_receiver_128_v2.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/loopback_old.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/txsequence_counter.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/pkt_creation_mngr.vhd
 
 vcom -novopt tx_xgt4.vhd

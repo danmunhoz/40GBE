@@ -384,9 +384,9 @@ begin
         pkt_tx_eop          => pkt_tx_eop_echo,
         pkt_tx_mod          => pkt_tx_mod_echo,
         payload_type        => payload_type,
-        payload_cycles      => payload_cycles,
-        payload_last_size   => payload_last_size,
-        pkt_lost_counter    => pkt_lost_counter
+        payload_cycles      => payload_cycles
+        --payload_last_size   => payload_last_size,
+        --pkt_lost_counter    => pkt_lost_counter
     );
 
     echo_rec_inst : entity work.echo_receiver port map(

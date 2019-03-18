@@ -6,7 +6,7 @@ use IEEE.numeric_std.all;
 use ieee.numeric_std.all;
 -- MUDAR BARRAMENTO 256b
 -- MUDAR CLOCK 312.5 Mhz
-entity echo_receiver_128 is
+entity echo_receiver_128_old is
   port
     (
         clock : in std_logic;             -- Clock 156.25 MHz ---> mudar 312.5 Mhz
@@ -52,9 +52,9 @@ entity echo_receiver_128 is
         cont_error               : out std_logic_vector(127 downto 0);
         IDLE_count               : out std_logic_vector(127 downto 0)
     );
-end echo_receiver_128;
+end echo_receiver_128_old;
 
-architecture arch_echo_receiver_128 of echo_receiver_128 is
+architecture arch_echo_receiver_128_old of echo_receiver_128_old is
     -------------------------------------------------------------------------------
     -- Debug
     -------------------------------------------------------------------------------
@@ -679,4 +679,4 @@ end process;
 
     cont_error <= bits_wrong;
 
-end arch_echo_receiver_128;
+end arch_echo_receiver_128_old;
