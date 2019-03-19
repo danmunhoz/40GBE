@@ -169,20 +169,20 @@ work.Top -t 1ps
 
 transcript file transcript#
 do wave.do
-run 1.5 ms
-run 0.5 ms
+#run 1.5 ms
+#run 0.5 ms
 
-exec cp lane0.txt lane0_rx.txt
-exec cp lane1.txt lane1_rx.txt
-exec cp lane2.txt lane2_rx.txt
-exec cp lane3.txt lane3_rx.txt
+#exec cp lane0.txt lane0_rx.txt
+#exec cp lane1.txt lane1_rx.txt
+#exec cp lane2.txt lane2_rx.txt
+#exec cp lane3.txt lane3_rx.txt
 
-exec cp lane0_tx40.txt lane0_rx40.txt
-exec cp lane1_tx40.txt lane1_rx40.txt
-exec cp lane2_tx40.txt lane2_rx40.txt
-exec cp lane3_tx40.txt lane3_rx40.txt
+#exec cp lane0_tx40.txt lane0_rx40.txt
+#exec cp lane1_tx40.txt lane1_rx40.txt
+#exec cp lane2_tx40.txt lane2_rx40.txt
+#exec cp lane3_tx40.txt lane3_rx40.txt
 
-exec cp dump_mii_tx.txt dump_app.txt
+#exec cp dump_mii_tx.txt dump_app.txt
 
 #do list.do
 #exit

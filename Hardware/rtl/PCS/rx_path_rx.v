@@ -71,7 +71,7 @@ module rx_path_rx (/*AUTOARG*/
                 // Outputs
     		        ber_cnt, blk_lock, jtest_errc_out, errd_blks, hi_ber, rxlf,
     		        spill, xgmii_rxc, xgmii_rxd, linkstatus, rxgearboxslip_out,
-                terminate_out, start_out, dscr_out,
+                terminate_out, start_out, dscr_out, fill_out,
                 // Para uso do Testbench
     						RDEN_FIFO_PCS40,start_fifo
     		        );
@@ -127,6 +127,7 @@ module rx_path_rx (/*AUTOARG*/
     output          terminate_out;
     output          start_out;
     output [65:0]   dscr_out;
+    output [8:0]    fill_out;
 
     wire [15:0]     jtest_errc_out;
     wire            blk_lock;
@@ -222,6 +223,7 @@ module rx_path_rx (/*AUTOARG*/
         (
          .readdata          (decoder_data_in[65:0]),
          .spill             (spill),
+         .fill_out					(fill_out),
          .rclk              (clk156),
          //.readen            (start_fifo),
          .readen            (RDEN_FIFO_PCS40), //tanauan, testanto TX40 -> RX40

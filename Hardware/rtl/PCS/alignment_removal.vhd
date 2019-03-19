@@ -32,7 +32,10 @@ entity alignment_removal is
     dscr_2    : in  std_logic_vector(65 downto 0);
     dscr_3    : in  std_logic_vector(65 downto 0);
 
-
+    rx_fill_pcs0    : in std_logic_vector(8 downto 0);
+    rx_fill_pcs1    : in std_logic_vector(8 downto 0);
+    rx_fill_pcs2    : in std_logic_vector(8 downto 0);
+    rx_fill_pcs3    : in std_logic_vector(8 downto 0);
 
     vvalid_0_out  : out  std_logic;
     vvalid_1_out  : out  std_logic;
@@ -504,7 +507,8 @@ end process;
   flag_ipg  <=    '1' when (dscr_0 = IPG or dscr_1 = IPG or dscr_2 = IPG or dscr_3 = IPG) else
                   '0';
 
-  flag_setipg <=  '1' when (flag_align = '1' and flag_ipg = '1') else '0';
+  -- flag_setipg <=  '1' when (flag_align = '1' and flag_ipg = '1') else '0';
+  flag_setipg <=  '1' when (flag_align = '1' and flag_ipg = '1' and (rx_fill_pcs0 < 400)) else '0';
 
 
   ------------------------------------------------------------------------------

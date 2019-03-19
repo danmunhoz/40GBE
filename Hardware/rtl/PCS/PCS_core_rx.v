@@ -78,7 +78,7 @@ module PCS_core_rx  (  /*AUTOARG*/
                     tx_fifo_spill, rxlf, txlf, errd_blks, xgmii_rxc, xgmii_rxd, scram_en,
                     tx_data_out, tx_header_out, tx_sequence_out, rxgearboxslip_out,
                     terminate_out_rx, start_out_rx, terminate_out_tx, start_out_tx, dscr_out,
-                    encoded_out,
+                    encoded_out, fill_pcs_tx, fill_pcs_rx,
                     // Para uso do Testbench
         						RDEN_FIFO_PCS40, start_fifo, start_fifo_rd
                     );
@@ -179,6 +179,9 @@ module PCS_core_rx  (  /*AUTOARG*/
     output         start_out_tx;
     wire           start_out_tx;
 
+    output [8:0]  fill_pcs_tx;
+    output [8:0]  fill_pcs_rx;
+
     wire          txpclkn_int;
     wire          txpclkp_int;
     wire          tx_clk161;
@@ -222,6 +225,7 @@ tx_path_tx #(
                         .pcs_sync           (pcs_sync),
                         .pause_ipg          (pause_ipg),
                         // Outputs
+                        .fill_out           (fill_pcs_tx),
                         .txlf               (txlf),
                         .spill              (tx_fifo_spill),
                         .tx_data_out        (tx_data_out[63:0]),
@@ -260,6 +264,7 @@ rx_path_rx INST_rx_path(   // Input Ports
                         .val_in             (val_in),
 
                         // Output Ports
+                        .fill_out           (fill_pcs_rx),
                         .xgmii_rxc          (xgmii_rxc[7:0]),
                         .xgmii_rxd          (xgmii_rxd[63:0]),
                         .jtest_errc_out     (jtest_errc),

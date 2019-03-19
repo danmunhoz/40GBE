@@ -375,6 +375,15 @@ module wrapper_macpcs_rx(
     wire [65:0]     pcs_2_dscr;
     wire [65:0]     pcs_3_dscr;
 
+    wire [8:0]      fill_tx_pcs0;
+    wire [8:0]      fill_tx_pcs1;
+    wire [8:0]      fill_tx_pcs2;
+    wire [8:0]      fill_tx_pcs3;
+    wire [8:0]      fill_rx_pcs0;
+    wire [8:0]      fill_rx_pcs1;
+    wire [8:0]      fill_rx_pcs2;
+    wire [8:0]      fill_rx_pcs3;
+
     assign empty_fifo = fifo_interface_empty;
     assign full_fifo = fifo_interface_full;
 
@@ -768,6 +777,9 @@ module wrapper_macpcs_rx(
         .xgmii_rxc          (xgmii_rxc_lane_0),
         .dscr_out           (pcs_0_dscr),
 
+        .fill_pcs_tx        (fill_tx_pcs0),
+        .fill_pcs_rx        (fill_rx_pcs0),
+
         .rx_old_header_in   (old_header_0),
         .rx_old_data_in     (old_data_0),
 
@@ -857,6 +869,9 @@ module wrapper_macpcs_rx(
         .xgmii_rxd          (xgmii_rxd_lane_1),
         .xgmii_rxc          (xgmii_rxc_lane_1),
         .dscr_out           (pcs_1_dscr),
+
+        .fill_pcs_tx        (fill_tx_pcs1),
+        .fill_pcs_rx        (fill_rx_pcs1),
 
         // .rx_old_header_in   (pcs_0_header_out[1:0]),
         // .rx_old_data_in     (pcs_0_data_out[63:0]),
@@ -950,6 +965,9 @@ module wrapper_macpcs_rx(
         .xgmii_rxc          (xgmii_rxc_lane_2),
         .dscr_out           (pcs_2_dscr),
 
+        .fill_pcs_tx        (fill_tx_pcs2),
+        .fill_pcs_rx        (fill_rx_pcs2),
+
         // .rx_old_header_in   (pcs_1_header_out[1:0]),
         // .rx_old_data_in     (pcs_1_data_out[63:0]),
         .rx_old_header_in   (hh1[1:0]),
@@ -1041,6 +1059,9 @@ module wrapper_macpcs_rx(
         .xgmii_rxd          (xgmii_rxd_lane_3),
         .xgmii_rxc          (xgmii_rxc_lane_3),
         .dscr_out           (pcs_3_dscr),
+
+        .fill_pcs_tx        (fill_tx_pcs3),
+        .fill_pcs_rx        (fill_rx_pcs3),
 
         // .rx_old_header_in   (pcs_2_header_out[1:0]),
         // .rx_old_data_in     (pcs_2_data_out[63:0]),
@@ -1137,6 +1158,12 @@ module wrapper_macpcs_rx(
         .tx_encoded_pcs1    (tx_encoded_pcs1),
         .tx_encoded_pcs2    (tx_encoded_pcs2),
         .tx_encoded_pcs3    (tx_encoded_pcs3),
+
+        .tx_fill_pcs0       (fill_tx_pcs0),
+        .tx_fill_pcs1       (fill_tx_pcs1),
+        .tx_fill_pcs2       (fill_tx_pcs2),
+        .tx_fill_pcs3       (fill_tx_pcs3),
+
         .tx_wr_pcs          (tx_wr_pcs),
 
         .pause_scr_alignm   (pcs_sync),
@@ -1182,7 +1209,10 @@ module wrapper_macpcs_rx(
       .dscr_2     (pcs_2_dscr),
       .dscr_3     (pcs_3_dscr),
 
-
+      .rx_fill_pcs0       (fill_rx_pcs0),
+      .rx_fill_pcs1       (fill_rx_pcs1),
+      .rx_fill_pcs2       (fill_rx_pcs2),
+      .rx_fill_pcs3       (fill_rx_pcs3),
 
       .dscr_en_ipg    (dscr_en_ipg),
 

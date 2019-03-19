@@ -168,9 +168,7 @@ vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 work.Top -t 1ps
 
 #do wave.do
-transcript file transcript#
 
-#run 1000 ms
 #run 1000 ms
 #run 1000 ms
 #run 1000 ms
@@ -183,13 +181,20 @@ transcript file transcript#
 
 ## #run 1 348 106 400 ps
 ## run 1340000000 ps
-## do wave.do
-## run 348106400 ps
-## run 550 ns
+
 
 transcript file transcript#
+#run 30 ms
 do wave.do
-run 30 us
+#run 30 ms
+
+
+
+
+
+#transcript file transcript#
+#do wave.do
+#run 30 us
 
 
 exec cp lane0.txt lane0_rx.txt

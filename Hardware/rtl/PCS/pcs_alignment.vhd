@@ -25,6 +25,11 @@ entity pcs_alignment is
       tx_encoded_pcs2     : in std_logic_vector(65 downto 0);
       tx_encoded_pcs3     : in std_logic_vector(65 downto 0);
 
+      tx_fill_pcs0        : in std_logic_vector(8 downto 0);
+      tx_fill_pcs1        : in std_logic_vector(8 downto 0);
+      tx_fill_pcs2        : in std_logic_vector(8 downto 0);
+      tx_fill_pcs3        : in std_logic_vector(8 downto 0);
+
       tx_wr_pcs           : out std_logic;
       pause_scr_alignm    : out std_logic;
       lane_0_valid_out    : out std_logic;
@@ -88,6 +93,7 @@ architecture behav_pcs_alignment of pcs_alignment is
     signal is_alignment_o   : std_logic;
     signal is_alignment     : std_logic;
 
+    signal count_alignm     : std_logic_vector(13 downto 0);
   begin
 
     pause_scr_alignm <= is_alignment;
@@ -132,11 +138,13 @@ architecture behav_pcs_alignment of pcs_alignment is
       if rst = '0' then
         is_alignment <= '0';
         count <= (others => '0');
+        count_alignm <= (others => '0');
 
       elsif clk_161'event and clk_161 = '1' then
         count <= count + '1';
         if count = (N_BLOCKS - 2) then
           is_alignment <= '1';
+          count_alignm <= count_alignm + '1';
         elsif count = (N_BLOCKS - 1) then
           count <= (others => '0');
           is_alignment <= '0';
@@ -251,20 +259,33 @@ architecture behav_pcs_alignment of pcs_alignment is
 
     tx_wr_pcs <= '0' when flag_align = '1' and IPGonTX = '1' else '1';
 
+    -- flag_reg: process (clk_156, rst)
+    -- begin
+    --   if rst = '0' then
+    --     flag_align <= '0';
+    --   elsif clk_156 = '1' and clk_156'event then
+    --
+    --     if is_alignment = '1' then
+    --       flag_align <= '1';
+    --     elsif IPGonTX = '1' and flag_align = '1' then
+    --       flag_align <= '0';
+    --     end if;
+    --
+    --   end if;
+    -- end process;
     flag_reg: process (clk_156, rst)
     begin
       if rst = '0' then
         flag_align <= '0';
       elsif clk_156 = '1' and clk_156'event then
 
-        if is_alignment = '1' then
+        if (is_alignment = '1' and tx_fill_pcs0 > 50) then
           flag_align <= '1';
-        elsif IPGonTX = '1' and flag_align = '1' then
+        elsif IPGonTX = '1' and flag_align = '1'  then
           flag_align <= '0';
         end if;
 
       end if;
-
     end process;
 
      calc_bip: process (clk_161, rst)

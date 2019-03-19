@@ -565,8 +565,8 @@ add wave -noupdate -height 30 -expand -group RX -height 30 -expand -group ALIG_R
 add wave -noupdate -height 30 -expand -group RX -height 30 -expand -group ALIG_REMOVAL /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/ddscr_1_out
 add wave -noupdate -height 30 -expand -group RX -height 30 -expand -group ALIG_REMOVAL /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/ddscr_2_out
 add wave -noupdate -height 30 -expand -group RX -height 30 -expand -group ALIG_REMOVAL /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/ddscr_3_out
-add wave -noupdate -height 30 -expand -group RX -height 30 -expand -group ALIG_REMOVAL /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/flag_setipg
-add wave -noupdate -height 30 -expand -group RX -height 30 -expand -group ALIG_REMOVAL /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/flag_setipg_d
+add wave -noupdate -height 30 -expand -group RX -height 30 -expand -group ALIG_REMOVAL -color {Yellow Green} /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/flag_setipg
+add wave -noupdate -height 30 -expand -group RX -height 30 -expand -group ALIG_REMOVAL -color {Yellow Green} /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/flag_setipg_d
 add wave -noupdate -height 30 -expand -group RX -height 30 -expand -group ALIG_REMOVAL -color Magenta /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/dscr_en_ipg
 add wave -noupdate -height 30 -expand -group RX -height 30 -expand -group ALIG_REMOVAL /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/lane_ipg
 add wave -noupdate -height 30 -expand -group RX -height 30 -expand -group ALIG_REMOVAL /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/lane_ipg_d
@@ -1492,7 +1492,7 @@ add wave -noupdate -expand -group CRC-S_FIFO -divider <NULL>
 add wave -noupdate -expand -group CRC-S_FIFO -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_reg
 add wave -noupdate -expand -group CRC-S_FIFO -color Magenta -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_received
 add wave -noupdate -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/pkg_counter
-add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/pkt_id
+add wave -noupdate -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/pkt_id
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_ok
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_done
 add wave -noupdate -height 40 -expand -group FIFO-frame_out -expand -group INPUTS_ -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/clk
@@ -1832,47 +1832,47 @@ add wave -noupdate -height 30 -group TX_PCS -expand -group PCS_3 -group tx_count
 add wave -noupdate -height 30 -group TX_PCS -expand -group PCS_3 -group tx_counter_PCS3 -color Magenta /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/INST_tx_path/INST_txsequence_counter/DATA_PAUSE
 add wave -noupdate -height 30 -group TX_PCS -expand -group PCS_3 -group tx_counter_PCS3 /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/INST_tx_path/INST_txsequence_counter/txseq_counter_r
 add wave -noupdate -height 30 -group TX_PCS -divider <NULL>
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/clk_161
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/rst
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_header_in
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_header_in
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_header_in
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_header_in
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_data_in
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_data_in
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_data_in
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_data_in
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_in
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/scr_en_in
-add wave -noupdate -expand -group PCS_ALIGNMENT /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/scr_en
-add wave -noupdate -expand -group PCS_ALIGNMENT /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/scr_en_o
-add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_header
-add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_header
-add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_header
-add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_header
-add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_data
-add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_data
-add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_data
-add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_data
-add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -color {Orange Red} -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/count
-add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/pause_scr_alignm
-add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/is_alignment
-add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/is_alignment_o
-add wave -noupdate -expand -group PCS_ALIGNMENT -expand -group signals -color Plum -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_header_out
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_header_out
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_header_out
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_header_out
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_data_out
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_data_out
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_data_out
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_data_out
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_valid_out
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_valid_out
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_valid_out
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_valid_out
-add wave -noupdate -expand -group PCS_ALIGNMENT -color Gold -radix hexadecimal -childformat {{/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(6) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(5) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(4) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(3) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(2) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(1) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(0) -radix hexadecimal}} -radixshowbase 0 -subitemconfig {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(6) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(5) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(4) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(3) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(2) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(1) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(0) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0}} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out
-add wave -noupdate -expand -group PCS_ALIGNMENT -color {Orange Red} -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/count_out
+add wave -noupdate -group PCS_ALIGNMENT -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/clk_161
+add wave -noupdate -group PCS_ALIGNMENT -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/rst
+add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_header_in
+add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_header_in
+add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_header_in
+add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_header_in
+add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_data_in
+add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_data_in
+add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_data_in
+add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_data_in
+add wave -noupdate -group PCS_ALIGNMENT -color Cyan -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_in
+add wave -noupdate -group PCS_ALIGNMENT -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/scr_en_in
+add wave -noupdate -group PCS_ALIGNMENT /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/scr_en
+add wave -noupdate -group PCS_ALIGNMENT /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/scr_en_o
+add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_header
+add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_header
+add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_header
+add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_header
+add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_data
+add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_data
+add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_data
+add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -color Green -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_data
+add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -color {Orange Red} -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/count
+add wave -noupdate -group PCS_ALIGNMENT -expand -group signals /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/pause_scr_alignm
+add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/is_alignment
+add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/is_alignment_o
+add wave -noupdate -group PCS_ALIGNMENT -expand -group signals -color Plum -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt
+add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_header_out
+add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_header_out
+add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_header_out
+add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix binary -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_header_out
+add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_data_out
+add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_data_out
+add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_data_out
+add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_data_out
+add wave -noupdate -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_0_valid_out
+add wave -noupdate -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_1_valid_out
+add wave -noupdate -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_2_valid_out
+add wave -noupdate -group PCS_ALIGNMENT -color Gold /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/lane_3_valid_out
+add wave -noupdate -group PCS_ALIGNMENT -color Gold -radix unsigned -childformat {{/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(6) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(5) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(4) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(3) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(2) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(1) -radix hexadecimal} {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(0) -radix hexadecimal}} -radixshowbase 0 -subitemconfig {/Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(6) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(5) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(4) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(3) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(2) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(1) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out(0) {-color Gold -height 16 -radix hexadecimal -radixshowbase 0}} /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_sequence_cnt_out
+add wave -noupdate -group PCS_ALIGNMENT -color {Orange Red} -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/count_out
 add wave -noupdate -group PLOT_FIFOs /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/FIFO_L0/WRCOUNT
 add wave -noupdate -group PLOT_FIFOs /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/FIFO_L0/RDCOUNT
 add wave -noupdate -group PLOT_FIFOs /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/payload_in/FIFO_L1/WRCOUNT
@@ -1943,9 +1943,26 @@ add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_encode
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_encoded_pcs2
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_encoded_pcs3
 add wave -noupdate -divider PCS_RX_40
+add wave -noupdate -color Cyan -radix unsigned -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/wr_count
+add wave -noupdate -color Gold -radix unsigned -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_0_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/rd_count
+add wave -noupdate -color Cyan -radix unsigned -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_1_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/wr_count
+add wave -noupdate -color Gold -radix unsigned -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_1_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/rd_count
+add wave -noupdate -color Cyan -radix unsigned -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_2_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/wr_count
+add wave -noupdate -color Gold -radix unsigned -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_2_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/rd_count
+add wave -noupdate -color Cyan -radix unsigned -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/wr_count
+add wave -noupdate -color Gold -radix unsigned -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_3_PCS_core/INST_tx_path/INST_TX_PATH_FIFO/rd_count
+add wave -noupdate -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/count_alignm
+add wave -noupdate -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_fill_pcs0
+add wave -noupdate -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_fill_pcs1
+add wave -noupdate -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_fill_pcs2
+add wave -noupdate -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_pcs_alignment/tx_fill_pcs3
+add wave -noupdate -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/rx_fill_pcs0
+add wave -noupdate -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/rx_fill_pcs1
+add wave -noupdate -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/rx_fill_pcs2
+add wave -noupdate -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_alignment_removal/rx_fill_pcs3
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 5} {1878772800 ps} 1} {{Cursor 2} {1878109312 ps} 1} {{Cursor 3} {2846887 ps} 0} {{Cursor 4} {29951785 ps} 0}
-quietly wave cursor active 4
+WaveRestoreCursors {{inicio do pkt no rx} {366601643200 ps} 1} {{Cursor 5} {899733320 ps} 0}
+quietly wave cursor active 2
 configure wave -namecolwidth 252
 configure wave -valuecolwidth 279
 configure wave -justifyvalue left
@@ -1960,7 +1977,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {29951558 ps} {30002550 ps}
+WaveRestoreZoom {899708698 ps} {900015332 ps}
 bookmark add wave bookmark5 {{770754 ps} {811500 ps}} 13
 bookmark add wave bookmark6 {{780000 ps} {800000 ps}} 8
 bookmark add wave bookmark7 {{0 ps} {42010 ps}} 0

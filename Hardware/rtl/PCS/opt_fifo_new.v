@@ -30,7 +30,7 @@
 
 module opt_fifo_new (   /*AUTOARG*/
                         // Outputs
-                        readdata, spill,
+                        readdata, spill, fill_out,
                         // Inputs
                         rclk, readen, wclk, writen, writedata, rst
                         );
@@ -44,6 +44,7 @@ module opt_fifo_new (   /*AUTOARG*/
 
     output        spill;
     output [65:0] readdata;
+    output [8:0]  fill_out;
 
     wire          wr_ctrl;
     wire          wr_seq;
@@ -57,8 +58,10 @@ module opt_fifo_new (   /*AUTOARG*/
     wire [8:0]    wr_count,rd_count;
     wire [23:0]   seq_data;
     wire [69:0]   rfifo_data;
+    wire [8:0]    fill_out;
 
 //   reg            seq_repeat;
+    reg [8:0]          fifo_fill;
     reg           wr_ctrl_idle;
     reg           wr_idle_seq;
     reg           wr_seq_idle;
@@ -211,6 +214,21 @@ begin
         registered_write_data   <= wfifo_data;
     end
 end
+
+always@(posedge rclk or posedge rst)
+    if (rst) begin
+        fifo_fill  <=  9'b0;
+    end
+    else if ( rd_count == 9'b0 && wr_count == 9'b0 ) begin
+        fifo_fill  <=  9'b0;
+    end
+    else if ( wr_count > rd_count) begin
+        fifo_fill  <=  wr_count - rd_count;
+    end
+    else if ( rd_count > wr_count) begin
+        fifo_fill  <=  (512 - rd_count) + wr_count;
+    end
+assign fill_out = fifo_fill;
 
 // read FIFO and insert idles
 // We are only allowed to insert idles.
