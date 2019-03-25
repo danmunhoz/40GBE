@@ -42,7 +42,7 @@ module wrapper_macpcs_rx(
                         // PCS
                         jtest_errc, ber_cnt, hi_ber, blk_lock, linkstatus, rx_fifo_spill, tx_fifo_spill, rxlf, txlf, errd_blks,
                         // XMAC
-                        pkt_rx_avail, pkt_rx_data, pkt_rx_eop, pkt_rx_err, pkt_rx_mod, pkt_rx_sop, pkt_rx_val, pkt_tx_full,
+                          pkt_rx_avail, pkt_rx_data  , pkt_rx_eop, pkt_rx_err, pkt_rx_mod, pkt_rx_sop, pkt_rx_val, pkt_tx_full,
                         // Wishbone (XMAC)
                         wb_ack_o, wb_dat_o, wb_int_o,
                         // Para uso do Testbench
@@ -67,7 +67,14 @@ module wrapper_macpcs_rx(
                         empty_fifo,
                         full_fifo,
                         fifo_almost_f,
-                        fifo_almost_e
+                        fifo_almost_e,
+                        // output to RECEIVER
+                        rx_eop_out,
+                        rx_sop_out,
+                        rx_val_out,
+                        rx_data_out,
+                        rx_crc_ok_out,
+                        rx_avail_out
                         );
     // Clocks
     input           clk_156;
@@ -295,6 +302,23 @@ module wrapper_macpcs_rx(
     (* syn_keep = "true"*) wire app_val;
     (* syn_keep = "true"*) wire [127:0] app_data;
     (* syn_keep = "true"*) wire crc_ok;
+    (* syn_keep = "true"*) wire app_avail;
+
+    ///OUTPUTS TO RECEIVER
+    (* syn_keep = "true"*) output  [4:0] rx_eop_out;
+    (* syn_keep = "true"*) output  rx_sop_out;
+    (* syn_keep = "true"*) output  rx_val_out;
+    (* syn_keep = "true"*) output  [127:0] rx_data_out;
+    (* syn_keep = "true"*) output  rx_crc_ok_out;
+    (* syn_keep = "true"*) output  rx_avail_out;
+
+    assign rx_eop_out = app_eop;
+    assign rx_sop_out = app_sop;
+    assign rx_val_out = app_val;
+    assign rx_data_out = app_data;
+    assign rx_crc_ok_out = crc_ok;
+    assign rx_avail_out = app_avail;
+    ///
 
     wire            tx_clk_161_13;
     wire            rx_clk_161_13;
