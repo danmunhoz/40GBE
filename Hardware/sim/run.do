@@ -168,24 +168,15 @@ vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 work.Top -t 1ps
 
 #do wave.do
-
-#run 1000 ms
-#run 1000 ms
-#run 1000 ms
-#run 1000 ms
-#run 1000 ms
-#run 1000 ms
-#run 1000 ms
-#run 1000 ms
 #run 1000 ms
 
-## #run 1 348 106 400 ps
-## run 1340000000 ps
 
 
 transcript file transcript#
-#run 30 ms
-do wave.do
+run 1000 ms
+
+
+#do wave.do
 #run 30 ms
 
 
