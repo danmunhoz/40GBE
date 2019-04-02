@@ -250,11 +250,11 @@ begin
         pkt_rx_mod      => pkt_rx_mod,
         pkt_rx_sop      => pkt_rx_sop,
         pkt_rx_val      => pkt_rx_val,
-
         -- MAC Outputs
         pkt_rx_ren      => pkt_rx_ren,
 
         pkt_tx_data     => pkt_tx_data,
+
         pkt_tx_eop      => pkt_tx_eop,
         pkt_tx_mod      => pkt_tx_mod,
         pkt_tx_sop      => pkt_tx_sop,
@@ -303,7 +303,7 @@ begin
 --
 
 -- INST ECHO GEN
-    echo_gen_inst : entity work.echo_generator port map (
+    echo_gen_inst : entity work.echo_generator_old port map (
         clock             => clk_156,
         reset         		=> reset_in,
 

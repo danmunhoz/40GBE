@@ -1,9 +1,15 @@
+--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-- ECHO GENERATOR ARCHITECTURE DEVELOPED BY MATHEUS LEMES FERRONATO
+-- AND GABRIEL SUSIN. BASED UPON OLD ARCHITECTURE FROM 10GB PROJECT
+-- NEW ARCHITECTURE CREATED TO ADDRESS 128 BITS DATA
+--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 library IEEE;
 use IEEE.std_logic_1164.all;
---use IEEE.std_logic_arith.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
 
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
 entity echo_generator is
   port
   (
@@ -14,7 +20,7 @@ entity echo_generator is
     start               : in  std_logic;  -- Enable the packet generation
 
     --LFSR Initialization
-    lfsr_seed       : in std_logic_vector(63 downto 0);
+    lfsr_seed       : in std_logic_vector(255 downto 0);
     valid_seed      : in std_logic;
     lfsr_polynomial : in std_logic_vector(1 downto 0);
 
@@ -30,72 +36,61 @@ entity echo_generator is
 
     -- TX mac interface
     pkt_tx_full         : in  std_logic;                     -- Informs if xMAC tx buffer is full
-    pkt_tx_data         : out std_logic_vector(63 downto 0); -- Data bus
+    pkt_tx_data         : out std_logic_vector(255 downto 0); -- Data bus
     pkt_tx_val          : out std_logic;                     -- Indicates if the data is valid
-    pkt_tx_sop          : out std_logic;                     -- Start of packet flag (sent along with the first frame)
+    pkt_tx_sop          : out std_logic_vector(1 downto 0);                     -- Start of packet flag (sent along with the first frame)
     pkt_tx_eop          : out std_logic;                     -- End of packet flag (sent along with the last frame)
-    pkt_tx_mod          : out std_logic_vector(2 downto 0);   -- Module (frame size, only read when eop='1')
-    pkt_lost_counter    : out std_logic_vector(31 downto 0);
-    payload_type        : in std_logic_vector(2 downto 0);
-    payload_cycles      : in std_logic_vector(31 downto 0);
-    payload_last_size   : in std_logic_vector(6 downto 0)
+    pkt_tx_mod          : out std_logic_vector(4 downto 0);   -- Module (frame size, only read when eop='1')
+    payload_type        : in std_logic_vector(1 downto 0);
+    payload_cycles      : in std_logic_vector(31 downto 0)
   );
 end echo_generator;
 
 architecture arch_echo_generator of echo_generator is
 
   -------------------------------------------------------------------------------
-  -- Debug
+  -- SIGNALS
   -------------------------------------------------------------------------------
   attribute mark_debug : string;
 
-  -- State
-  type state_type is (S_IDLE, S_HEADER_FIRST, S_HEADER_0, S_HEADER_1, S_HEADER_2, S_HEADER_3, S_HEADER_4 , S_HEADER_5, S_PAYLOAD_FIRST, S_PAYLOAD, S_PAYLOAD_LAST);
+  type state_type is (S_IDLE, S_HEADER_H, S_HEADER_L, S_PAYLOAD);
   signal current_s, next_s: state_type;
-  --attribute mark_debug of current_s : signal is "true";
 
-  signal header_0, header_1, header_2, header_3, header_4 : std_logic_vector(63 downto 0);
+  signal MAC          : std_logic_vector(127 downto 0);
+  signal IP           : std_logic_vector(191 downto 0);
+  signal EOH_SOF      : std_logic_vector(127 downto 0); --END OF HEADER - START OF FRAME
+  signal HEADER       : std_logic_vector(255 downto 0);
+  signal PAYLOAD      : std_logic_vector(255 downto 0);
+  signal PAYLOAD_PKT  : std_logic_vector(255 downto 0);
+  signal PAYLOAD_LAST : std_logic_vector(255 downto 0);
+  signal IDLE_VALUE   : std_logic_vector(127 downto 0) := x"07070707070707070707070707070707";
 
-  -------------------------------------------------------------------------------
-  -- Input Registers
-  -------------------------------------------------------------------------------
-  signal mac_source_reg       :  std_logic_vector(47 downto 0); -- MAC source address
-  signal mac_destination_reg  :  std_logic_vector(47 downto 0); -- MAC destination address
-  signal ip_source_reg        :  std_logic_vector(31 downto 0); -- IP source address
-  signal ip_destination_reg   :  std_logic_vector(31 downto 0); -- IP destination address
-  signal packet_length_reg    :  std_logic_vector(15 downto 0);  -- Packet size:  "000" - 64B, "001" - 128B, "010" - 256B, "011" - 512B,:
-                                                                --               "100" - 768B, "101" - 1024B, "110" - 1280B, "111" - 1518B
-  signal timestamp_base_reg   :  std_logic_vector(47 downto 0);
-  signal time_stamp_flag_reg  :  std_logic;                      -- If the timestamp is needed in the latency test, first bit of payload is '1'
-  signal start_reg            :  std_logic;
-  -------------------------------------------------------------------------------
-  -- Output Registers
-  -------------------------------------------------------------------------------
-  signal pkt_tx_data_reg      : std_logic_vector(63 downto 0);
-  attribute mark_debug of pkt_tx_data_reg : signal is "true";
-  signal pkt_tx_val_reg, pkt_tx_sop_reg, pkt_tx_eop_reg : std_logic;
-  --attribute mark_debug of pkt_tx_sop_reg : signal is "true";
-  --attribute mark_debug of pkt_tx_eop_reg : signal is "true";
+  signal UPD_INFO   : std_logic_vector(15 downto 0) := x"0000";
+  signal ALL_ONE    : std_logic_vector(127 downto 0) := (others => '1');
+  signal ALL_ZERO   : std_logic_vector(127 downto 0) := (others => '0');
+  signal PKT_COUNTER : std_logic_vector(127 downto 0);
+  signal ID_COUNTER_H : std_logic_vector(127 downto 0); -- counter for ID
+  signal ID_COUNTER_L : std_logic_vector(127 downto 0);
+
+  signal SEED        : std_logic_vector(255 downto 0);
+  signal RANDOM : std_logic_vector(255 downto 0);
+  signal start_lfsr  : std_logic;
+  signal preset_lfsr : std_logic;
+  signal count :  integer range 0 to 15;
 
 
+  signal pkt_tx_data_N  : std_logic_vector(255 downto 0);
+  signal pkt_tx_data_buffer : std_logic_vector(255 downto 0);
+  signal pkt_tx_mod_reg : std_logic_vector(4 downto 0);
+  signal pkt_tx_eop_reg : std_logic;
+  signal last_pkt : std_logic;
 
-  signal pkt_one              : std_logic_vector(63 downto 0) := (others=>'1');
-
-  signal pkt_tx_mod_reg       : std_logic_vector(2 downto 0);
-  --attribute mark_debug of pkt_tx_mod_reg : signal is "true";
-
-
-  signal pkt_tx_data_wire      : std_logic_vector(63 downto 0);
-  signal pkt_tx_val_wire, pkt_tx_sop_wire, pkt_tx_eop_wire : std_logic;
-  signal pkt_tx_mod_wire       : std_logic_vector(2 downto 0);
   -------------------------------------------------------------------------------
   -- Traffic control
   -------------------------------------------------------------------------------
-  signal time_stamp        : std_logic_vector(46 downto 0); --
-  signal time_stamp_value  : std_logic_vector(63 downto 0); --
-  signal it_header         : std_logic_vector(2 downto 0); -- iterator used in header
+  signal time_stamp        : std_logic_vector(47 downto 0); --
   signal it_payload        : std_logic_vector(31 downto 0); -- iterator used in payload
-  signal id_counter        : std_logic_vector(63 downto 0); -- counter for ID
+  signal it_mod        : std_logic_vector(4 downto 0);
 
   -------------------------------------------------------------------------------
   -- IP
@@ -109,871 +104,222 @@ architecture arch_echo_generator of echo_generator is
   -------------------------------------------------------------------------------
   signal udp_message_length : std_logic_vector(15 downto 0);  -- UDP packet length
 
-  -------------------------------------------------------------------------------
-  -- LFSR 64 bits - Signals to be used
-  -------------------------------------------------------------------------------
-  signal random           : std_logic_vector(63 downto 0);
-  attribute mark_debug of time_stamp_value : signal is "true";
-  signal last_random      : std_logic_vector(63 downto 0);
-  signal linear_feedback  : std_logic;
-  signal start_lfsr            : std_logic;
-  attribute mark_debug of start_lfsr : signal is "true";
-
-  signal counter : std_logic_vector(63 downto 0); -- KOROL
-
-  signal flag_lfsr_16_rem, flag_lfsr_32_rem, flag_lfsr_48_rem, flag_lfsr_8_rem, flag_lfsr_24_rem, flag_lfsr_40_rem, flag_lfsr_56_rem : std_logic;
-  signal lfsr_rem : std_logic_vector(55 downto 0) := (others=>'0');
-
-begin
-  counter_proc: process (clock, reset) -- KOROL
-  begin
-    if reset = '0' then
-      counter <= (others =>'0');
-    elsif clock'event and clock = '1' then
-        counter <= counter + 1;
-    end if;
-  end process;
-
-  process (clock, reset)
-  begin
-    if reset = '0' then
-        mac_source_reg         <= (others=>'0');
-        mac_destination_reg    <= (others=>'0');
-        ip_source_reg          <= (others=>'0');
-        ip_destination_reg     <= (others=>'0');
-        packet_length_reg      <= (others=>'0');
-        timestamp_base_reg     <= (others=>'0');
-        time_stamp_flag_reg    <= '0';
-        pkt_tx_val_reg         <= '0';
-    elsif rising_edge(clock) then
-         mac_source_reg         <= mac_source;
-         mac_destination_reg    <= mac_destination;
-         ip_source_reg          <= ip_source;
-         ip_destination_reg     <= ip_destination;
-         packet_length_reg      <= packet_length;
-         timestamp_base_reg     <= timestamp_base;
-         time_stamp_flag_reg    <= time_stamp_flag;
-         pkt_tx_val_reg         <= pkt_tx_val_wire;
-         pkt_tx_sop_reg         <= pkt_tx_sop_wire;
-         pkt_tx_eop_reg         <= pkt_tx_eop_wire;
-         pkt_tx_mod_reg         <= pkt_tx_mod_wire;
-         pkt_tx_data_reg        <= pkt_tx_data_wire;
-         start_reg              <= start;
-    end if;
-  end process;
 
 
-  --pkt_tx_mod <= pkt_tx_mod_reg;
-  --pkt_tx_val <= pkt_tx_val_reg;
-  --pkt_tx_sop <= pkt_tx_sop_reg;
-  --pkt_tx_eop <= pkt_tx_eop_reg;
-  pkt_tx_data <= pkt_tx_data_wire;
+  function invert_bytes(bytes : std_logic_vector)
+                   return std_logic_vector
+    is
+      variable bytes_N : std_logic_vector(255 downto 0) := (others => '0');
+      variable i_N : integer range 0 to 255;
+      begin
+        for i in 1 to 32 loop
+          bytes_N(((i*8)-1) downto ((i-1)*8)) := bytes((255-(8*(i-1))) downto (255-((8*(i-1))+7)));
+      end loop;
+      return bytes_N;
+  end function invert_bytes;
+BEGIN
 
-  header_0 <= mac_destination_reg & mac_source_reg(47 downto 32);
-  header_1 <= mac_source_reg(31 downto 0) & x"08004500";
-  header_2 <= ip_message_length & x"000000000A11";
-  header_3 <= ip_checksum & ip_source_reg & ip_destination_reg(31 downto 16);
-  header_4 <= ip_destination_reg(15 downto 0) & x"C020C021" & udp_message_length;
 
-  -- Timestamp value to be sent in the packet payload
-  time_stamp_value <= x"0000" & timestamp_base_reg(46 downto 0) & time_stamp_flag_reg;
+  pkt_tx_data <= pkt_tx_data_N;
+  pkt_tx_data_N <= invert_bytes(pkt_tx_data_buffer);
+  pkt_tx_data_buffer <= PAYLOAD when current_s = S_PAYLOAD else
+                        IDLE_VALUE & IDLE_VALUE when current_s = S_IDLE else
+                        HEADER;
 
-  ip_message_length <= packet_length_reg - 18;
+  HEADER <=   MAC & IP(191 downto 64) when current_s = S_HEADER_H else
+              EOH_SOF & PKT_COUNTER;
 
+  PAYLOAD <= PAYLOAD_LAST when last_pkt = '1' else
+             PAYLOAD_PKT;
+
+  PAYLOAD_PKT <=  ID_COUNTER_L & ID_COUNTER_H when payload_type = "00" else
+                  SEED when payload_type = "01" else
+                  ALL_ZERO & ALL_ZERO when payload_type = "10" else
+                  ALL_ONE & ALL_ONE   when payload_type = "11";
+
+  MAC      <= mac_destination & mac_source & x"08004500";
+  IP       <= ip_message_length & x"000000000A11" & ip_checksum &
+              ip_source & ip_destination & x"C020C021" & udp_message_length;
+  EOH_SOF  <= IP(63 downto 0) & UPD_INFO & time_stamp;
+
+
+  pkt_tx_val <= '0' when current_s = S_IDLE
+                else '1';
+
+  last_pkt <= '1' when it_payload = payload_cycles else '0';
+  pkt_tx_eop_reg <= '0' when last_pkt = '1' else '1';
+  pkt_tx_mod <= pkt_tx_mod_reg when pkt_tx_eop_reg = '0' else (others=>'0');
+  pkt_tx_eop <= pkt_tx_eop_reg;
+-------------------------------------------------------------------------------
+-- RFC2544 FEEDBACK
+-------------------------------------------------------------------------------
+
+-- Timestamp value to be sent in the packet payload
+  time_stamp <= timestamp_base(46 downto 0) & time_stamp_flag;
+  ip_message_length <= packet_length - 18;
   udp_message_length <= ip_message_length - 20;     -- Packet length minus 20 bytes of header (MACs and type)
-
       --Checksum calculation
   aux_checksum <= x"0000_4F11" +  --4F11 -> sum of all constants
                   ip_message_length(15 downto 0) +
-                  ip_source_reg(31 downto 16) +
-                  ip_source_reg(15 downto 0) +
-                  ip_destination_reg(31 downto 16) +
-                  ip_destination_reg(15 downto 0);
+                  ip_source(31 downto 16) +
+                  ip_source(15 downto 0) +
+                  ip_destination(31 downto 16) +
+                  ip_destination(15 downto 0);
 
   ip_checksum <= not(aux_checksum(31 downto 16) + aux_checksum(15 downto 0));
 
   -------------------------------------------------------------------------------
-  -- Sequential Logic
+  -- FSM NEXT_STATE CONTROL
   -------------------------------------------------------------------------------
-  -- Update the current state
-  process (clock, reset)
+
+  NEXT_CTRL : process (current_s, reset, clock)
   begin
     if reset='0' then
-      current_s <= S_IDLE;
-    elsif rising_edge(clock) then
-      current_s <= next_s;
+      next_s <= S_IDLE;
+    else
+      case current_s is
+        when S_IDLE => if (start = '1') then next_s <= S_HEADER_H; end if;
+        when S_HEADER_H => next_s <= S_HEADER_L;
+        when S_HEADER_L => next_s <= S_PAYLOAD;
+        when S_PAYLOAD =>
+          if(it_payload >= payload_cycles) then
+            next_s <= S_IDLE;
+          end if;
+        end case;
     end if;
   end process;
 
+
   -------------------------------------------------------------------------------
-  -- Combinational Logic
+  -- FSM CURRENT_STATE SIGNALS CONTROL
   -------------------------------------------------------------------------------
-  -- Updates the state
-  process (current_s, it_payload, start, payload_cycles, flag_lfsr_48_rem, flag_lfsr_32_rem, flag_lfsr_16_rem, flag_lfsr_24_rem, flag_lfsr_8_rem, flag_lfsr_40_rem, flag_lfsr_56_rem, payload_type, payload_last_size)
-  begin
-        next_s <= current_s;
+
+
+
+    STATE_CTRL : process (reset, clock)
+    begin
+      if(reset = '0') then
+        current_s <= S_IDLE;
+        pkt_tx_sop <= "00";
+        ID_COUNTER_L <= (OTHERS => '0');
+        ID_COUNTER_H <= ALL_ZERO(126 downto 0) & '1';
+        it_payload <= (OTHERS => '0');
         start_lfsr <= '0';
+        pkt_tx_mod_reg <= "00000";
+        PKT_COUNTER <= (OTHERS => '0');
+        SEED <= (OTHERS => '0');
+        it_mod <= "11111";
+      elsif (clock'event and clock = '1') then
+        current_s <= next_s;
         case current_s is
           when S_IDLE =>
-            if(start = '1') then
-              next_s <= S_HEADER_0;
-            end if;
-
-          when S_HEADER_0 =>
-            next_s <= S_HEADER_1;
-
-          when S_HEADER_1 =>
-            next_s <= S_HEADER_2;
-
-          when S_HEADER_2 =>
-            next_s <= S_HEADER_3;
-
-          when S_HEADER_3 =>
-            next_s <= S_HEADER_4;
-
-          when S_HEADER_4 =>
-            next_s <= S_HEADER_5;
-
-          when S_HEADER_5 =>
-            if(payload_type = 1 and flag_lfsr_48_rem = '0' and flag_lfsr_56_rem = '0') then
+            if (next_s = S_HEADER_H) then pkt_tx_sop <= "10"; end if;
+            it_payload <= (OTHERS => '0');
+          when S_HEADER_H =>
+            pkt_tx_sop <= "00";
+            if (payload_type = "01") then
               start_lfsr <= '1';
             end if;
-            next_s <= S_PAYLOAD_FIRST;
-
-          when S_PAYLOAD_FIRST =>
-            start_lfsr <='1';
-            if(it_payload >= payload_cycles) then
-              next_s <= S_PAYLOAD_LAST;
-            else
-              next_s <= S_PAYLOAD;
-            end if;
-
+          when S_HEADER_L =>
+            SEED <=  RANDOM;
           when S_PAYLOAD =>
-            start_lfsr <='1';
-            if(it_payload >= payload_cycles) then
-              next_s <= S_PAYLOAD_LAST;
-            end if;
-
-          when S_PAYLOAD_LAST =>
-            next_s <= S_IDLE;
-
-            if payload_type = 0 then --PACKET ID
-              start_lfsr <='1';
-            elsif payload_type = 1 then -- BERT
-              if payload_last_size = 8 and flag_lfsr_8_rem = '0' and flag_lfsr_16_rem = '0' and flag_lfsr_24_rem = '0' and flag_lfsr_32_rem = '0' and flag_lfsr_40_rem = '0' and flag_lfsr_48_rem = '0' and flag_lfsr_56_rem = '0' then
-                start_lfsr <= '1';
-              elsif payload_last_size = 16 and flag_lfsr_16_rem = '0' and flag_lfsr_24_rem = '0' and flag_lfsr_32_rem = '0' and flag_lfsr_40_rem = '0' and flag_lfsr_48_rem = '0' and flag_lfsr_56_rem = '0'  then
-                  start_lfsr <='1';
-              elsif payload_last_size = 24 and flag_lfsr_24_rem = '0' and flag_lfsr_32_rem = '0' and flag_lfsr_40_rem = '0' and flag_lfsr_48_rem = '0' and flag_lfsr_56_rem = '0'  then
-                  start_lfsr <='1';
-              elsif payload_last_size = 32 and flag_lfsr_32_rem = '0' and flag_lfsr_40_rem = '0' and flag_lfsr_48_rem = '0' and flag_lfsr_56_rem = '0'  then
-                  start_lfsr <='1';
-              elsif payload_last_size = 40 and flag_lfsr_40_rem = '0' and flag_lfsr_48_rem = '0' and flag_lfsr_56_rem = '0'  then
-                  start_lfsr <='1';
-              elsif payload_last_size = 48 and flag_lfsr_48_rem = '0' and flag_lfsr_56_rem = '0'  then
-                  start_lfsr <='1';
-              elsif payload_last_size = 56 and flag_lfsr_56_rem = '0'  then
-                  start_lfsr <='1';
-              elsif payload_last_size = 0 then
-                  start_lfsr <='1';
+            start_lfsr <= '1';
+            SEED <=  RANDOM;
+            ID_COUNTER_L <= ID_COUNTER_L + 2;
+            ID_COUNTER_H <= ID_COUNTER_H + 2;
+            it_payload <= it_payload + 2;
+            if(it_payload = 0) Then
+              PKT_COUNTER <= PKT_COUNTER + 1;
+            elsif(it_payload >= payload_cycles-1) then
+              start_lfsr <= '0';
+              pkt_tx_mod_reg <= it_mod;
+              if(it_mod = "01010" ) then
+                it_mod <= "01111";
+              elsif(it_mod = "10010" ) then
+                it_mod <= "11111";
+              else
+                it_mod <= it_mod + 1;
               end if;
+              pkt_tx_sop <= "00";
             end if;
-          when others =>
-            next_s <= S_IDLE;
         end case;
-  end process;
+      end if;
+    end process;
 
-  process (reset, clock)
-  begin
-    if(reset = '0') then
-      flag_lfsr_8_rem <= '0';
-      flag_lfsr_16_rem <= '0';
-      flag_lfsr_24_rem <= '0';
-      flag_lfsr_32_rem <= '0';
-      flag_lfsr_40_rem <= '0';
-      flag_lfsr_48_rem <= '0';
-      flag_lfsr_56_rem <= '0';
-      pkt_tx_sop <= '0';
-      pkt_tx_eop <= '0';
-      pkt_tx_val <= '0';
-      pkt_tx_mod <= "000";
-      pkt_tx_data_wire <= (others=>'0');
+    -------------------------------------------------------------------------------
+    -- PKT N BIT CTRL --TBD
+    -------------------------------------------------------------------------------
 
-    elsif rising_edge(clock) then
-      case current_s is
-        when S_IDLE =>
-          pkt_tx_val <= '0';
-          pkt_tx_eop <= '0';
-          pkt_tx_mod <= "000";
+    PAYLOAD_LAST <= PAYLOAD_PKT(7 downto 0) & IDLE_VALUE & IDLE_VALUE(119 downto 0)    when pkt_tx_mod_reg  = "00000" else
+                    PAYLOAD_PKT(15 downto 0) & IDLE_VALUE & IDLE_VALUE(111 downto 0)   when pkt_tx_mod_reg  = "00001" else
+                    PAYLOAD_PKT(23 downto 0) & IDLE_VALUE & IDLE_VALUE(103 downto 0)   when pkt_tx_mod_reg  = "00010" else
+                    PAYLOAD_PKT(31 downto 0) & IDLE_VALUE & IDLE_VALUE(95 downto 0)    when pkt_tx_mod_reg  = "00011" else
+                    PAYLOAD_PKT(39 downto 0) & IDLE_VALUE & IDLE_VALUE(87 downto 0)    when pkt_tx_mod_reg  = "00100" else
+                    PAYLOAD_PKT(47 downto 0) & IDLE_VALUE & IDLE_VALUE(79 downto 0)    when pkt_tx_mod_reg  = "00101" else
+                    PAYLOAD_PKT(55 downto 0) & IDLE_VALUE & IDLE_VALUE(71 downto 0)    when pkt_tx_mod_reg  = "00110" else
+                    PAYLOAD_PKT(63 downto 0) & IDLE_VALUE & IDLE_VALUE(63 downto 0)    when pkt_tx_mod_reg  = "00111" else
+                    PAYLOAD_PKT(71 downto 0) & IDLE_VALUE & IDLE_VALUE(55 downto 0)    when pkt_tx_mod_reg  = "01000" else
+                    PAYLOAD_PKT(79 downto 0) & IDLE_VALUE & IDLE_VALUE(47 downto 0)    when pkt_tx_mod_reg  = "01001" else
+                    PAYLOAD_PKT(87 downto 0) & IDLE_VALUE & IDLE_VALUE(39 downto 0)    when pkt_tx_mod_reg  = "01010" else
+                    PAYLOAD_PKT(95 downto 0) & IDLE_VALUE & IDLE_VALUE(31 downto 0)    when pkt_tx_mod_reg  = "01011" else
+                    PAYLOAD_PKT(103 downto 0) & IDLE_VALUE & IDLE_VALUE(23 downto 0)   when pkt_tx_mod_reg  = "01100" else
+                    PAYLOAD_PKT(111 downto 0) & IDLE_VALUE & IDLE_VALUE(15 downto 0)   when pkt_tx_mod_reg  = "01101" else
+                    PAYLOAD_PKT(119 downto 0) & IDLE_VALUE & IDLE_VALUE(7 downto 0)    when pkt_tx_mod_reg  = "01110" else
+                    PAYLOAD_PKT(127 downto 0) & IDLE_VALUE                             when pkt_tx_mod_reg  = "01111" else
+                    PAYLOAD_PKT(135 downto 0) & IDLE_VALUE(119 downto 0)               when pkt_tx_mod_reg  = "10000" else
+                    PAYLOAD_PKT(143 downto 0) & IDLE_VALUE(111 downto 0)               when pkt_tx_mod_reg  = "10001" else
+                    PAYLOAD_PKT(151 downto 0) & IDLE_VALUE(103 downto 0)               when pkt_tx_mod_reg  = "10010" else
+                    PAYLOAD_PKT(159 downto 0) & IDLE_VALUE(95 downto 0)                when pkt_tx_mod_reg  = "10011" else
+                    PAYLOAD_PKT(167 downto 0) & IDLE_VALUE(87 downto 0)                when pkt_tx_mod_reg  = "10100" else
+                    PAYLOAD_PKT(175 downto 0) & IDLE_VALUE(79 downto 0)                when pkt_tx_mod_reg  = "10101" else
+                    PAYLOAD_PKT(183 downto 0) & IDLE_VALUE(71 downto 0)                when pkt_tx_mod_reg  = "10110" else
+                    PAYLOAD_PKT(191 downto 0) & IDLE_VALUE(63 downto 0)                when pkt_tx_mod_reg  = "10111" else
+                    PAYLOAD_PKT(199 downto 0) & IDLE_VALUE(55 downto 0)                when pkt_tx_mod_reg  = "11000" else
+                    PAYLOAD_PKT(207 downto 0) & IDLE_VALUE(47 downto 0)                when pkt_tx_mod_reg  = "11001" else
+                    PAYLOAD_PKT(215 downto 0) & IDLE_VALUE(39 downto 0)                when pkt_tx_mod_reg  = "11010" else
+                    PAYLOAD_PKT(223 downto 0) & IDLE_VALUE(31 downto 0)                when pkt_tx_mod_reg  = "11011" else
+                    PAYLOAD_PKT(231 downto 0) & IDLE_VALUE(23 downto 0)                when pkt_tx_mod_reg  = "11100" else
+                    PAYLOAD_PKT(239 downto 0) & IDLE_VALUE(15 downto 0)                when pkt_tx_mod_reg  = "11101" else
+                    PAYLOAD_PKT(247 downto 0) & IDLE_VALUE(7 downto 0)                 when pkt_tx_mod_reg  = "11110" else
+                    PAYLOAD_PKT;
 
-        when S_HEADER_0 =>
-          pkt_tx_val <= '1';
-          pkt_tx_sop <= '1';
-          pkt_tx_mod <= "000";
-          pkt_tx_data_wire <= header_0;
+    -------------------------------------------------------------------------------
+    -- LFSR
+    -------------------------------------------------------------------------------
 
-        when S_HEADER_1 =>
-          pkt_tx_val <= '1';
-          pkt_tx_sop <= '0';
-          pkt_tx_data_wire <= header_1;
 
-        when S_HEADER_2 =>
-          pkt_tx_val <= '1';
-          pkt_tx_data_wire <= header_2;
 
-        when S_HEADER_3 =>
-          pkt_tx_val <= '1';
-          pkt_tx_data_wire <= header_3;
-
-        when S_HEADER_4 =>
-          pkt_tx_val <= '1';
-          pkt_tx_data_wire <= header_4;
-
-        when S_HEADER_5 => -- send 16 bits of UDP Checksum (all zeros) + 48 bits of payload
-          pkt_tx_val <= '1';
-          if payload_type = 0 then
-            pkt_tx_data_wire <= time_stamp_value;
-
-          elsif payload_type = 1 then -- BERT
-            if flag_lfsr_8_rem = '1' then
-              pkt_tx_data_wire(63 downto 0) <= x"0000" & lfsr_rem(7 downto 0) & random(63 downto 24);
-              lfsr_rem(23 downto 0) <= random(23 downto 0);
-              flag_lfsr_8_rem <= '0';
-              flag_lfsr_24_rem <= '1';
-
-            elsif(flag_lfsr_16_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= x"0000" & lfsr_rem(15 downto 0) & random(63 downto 32);
-              lfsr_rem(31 downto 0) <= random(31 downto 0);
-              flag_lfsr_16_rem <= '0';
-              flag_lfsr_32_rem <= '1';
-
-            elsif(flag_lfsr_24_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= x"0000" & lfsr_rem(23 downto 0) & random(63 downto 40);
-              lfsr_rem(39 downto 0) <= random(39 downto 0);
-              flag_lfsr_24_rem <= '0';
-              flag_lfsr_40_rem <= '1';
-
-            elsif(flag_lfsr_32_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= x"0000" & lfsr_rem(31 downto 0) & random (63 downto 48);
-              lfsr_rem(47 downto 0) <= random(47 downto 0);
-              flag_lfsr_32_rem <= '0';
-              flag_lfsr_48_rem <= '1';
-
-            elsif(flag_lfsr_40_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= x"0000" & lfsr_rem(39 downto 0) & random(63 downto 56);
-              lfsr_rem(55 downto 0) <= random(55 downto 0);
-              flag_lfsr_40_rem <= '0';
-              flag_lfsr_56_rem <= '1';
-
-            elsif(flag_lfsr_48_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= x"0000" & lfsr_rem(47 downto 0);
-              flag_lfsr_48_rem <= '0';
-
-            elsif(flag_lfsr_56_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= x"0000" & lfsr_rem(55 downto 8);
-              flag_lfsr_8_rem <= '1';
-              flag_lfsr_56_rem <= '0';
-
+    PRESET_LFSR_CTRL : process (clock, reset)
+    begin
+      if reset = '0' then
+         preset_lfsr <= '0';
+       else
+         if rising_edge(clock) then
+            if(count = 13) then
+              preset_lfsr <= '0';
             else
-              pkt_tx_data_wire(63 downto 0) <= x"0000" & random(63 downto 16);
-              lfsr_rem(15 downto 0) <= random(15 downto 0);
-              flag_lfsr_16_rem <= '1';
+              count <= count + 1;
+              preset_lfsr <= '1';
             end if;
-
-          elsif payload_type = 2 then -- all 0s
-            pkt_tx_data_wire <= (others=>'0');
-
-          elsif payload_type = 3 then -- all 1s
-            pkt_tx_data_wire <= x"0000" & x"FFFFFFFFFFFF";
           end if;
+        end if;
+     end process;
 
-        when S_PAYLOAD_FIRST =>
-          pkt_tx_val <= '1';
-          if payload_type = 0 then --PACKET ID
-            pkt_tx_data_wire(63 downto 0) <= id_counter;
-          elsif payload_type = 1 then -- BERT
-            if(flag_lfsr_8_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(7 downto 0) & random (63 downto 8);
-              lfsr_rem(7 downto 0) <= random(7 downto 0);
 
-            elsif(flag_lfsr_16_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(15 downto 0) & random (63 downto 16);
-              lfsr_rem(15 downto 0) <= random(15 downto 0);
-
-            elsif(flag_lfsr_24_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(23 downto 0) & random (63 downto 24);
-              lfsr_rem(23 downto 0) <= random(23 downto 0);
-
-            elsif(flag_lfsr_32_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(31 downto 0) & random (63 downto 32);
-              lfsr_rem(31 downto 0) <= random(31 downto 0);
-
-            elsif(flag_lfsr_40_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(39 downto 0) & random (63 downto 40);
-              lfsr_rem(39 downto 0) <= random(39 downto 0);
-
-            elsif(flag_lfsr_48_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(47 downto 0) & random (63 downto 48);
-              lfsr_rem(47 downto 0) <= random(47 downto 0);
-
-            elsif(flag_lfsr_56_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(55 downto 0) & random (63 downto 56);
-              lfsr_rem(55 downto 0) <= random(55 downto 0);
-
-            else
-              pkt_tx_data_wire(63 downto 0) <= random(63 downto 0);
-            end if;
-
-          elsif payload_type = 2 then -- all 0s
-            pkt_tx_data_wire(63 downto 0) <= (others=>'0');
-          elsif payload_type = 3 then -- all 1s
-            pkt_tx_data_wire(63 downto 0) <= (others=>'1');
-          end if;
-
-        when S_PAYLOAD =>
-          pkt_tx_val <= '1';
-          if payload_type = 0 then --PACKET ID
-            -- pkt_tx_data_wire(63 downto 0) <= random(63 downto 0);
-            pkt_tx_data_wire(63 downto 0) <= counter; -- KOROL
-            
-          elsif payload_type = 1 then -- BERT
-            if(flag_lfsr_8_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(7 downto 0) & random (63 downto 8);
-              lfsr_rem(7 downto 0) <= random(7 downto 0);
-
-            elsif(flag_lfsr_16_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(15 downto 0) & random (63 downto 16);
-              lfsr_rem(15 downto 0) <= random(15 downto 0);
-
-            elsif(flag_lfsr_24_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(23 downto 0) & random (63 downto 24);
-              lfsr_rem(23 downto 0) <= random(23 downto 0);
-
-            elsif(flag_lfsr_32_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(31 downto 0) & random (63 downto 32);
-              lfsr_rem(31 downto 0) <= random(31 downto 0);
-
-            elsif(flag_lfsr_40_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(39 downto 0) & random (63 downto 40);
-              lfsr_rem(39 downto 0) <= random(39 downto 0);
-
-            elsif(flag_lfsr_48_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(47 downto 0) & random (63 downto 48);
-              lfsr_rem(47 downto 0) <= random(47 downto 0);
-
-            elsif(flag_lfsr_56_rem = '1') then
-              pkt_tx_data_wire(63 downto 0) <= lfsr_rem(55 downto 0) & random (63 downto 56);
-              lfsr_rem(55 downto 0) <= random(55 downto 0);
-
-            else
-              pkt_tx_data_wire(63 downto 0) <= random(63 downto 0);
-            end if;
-
-          elsif payload_type = "010" then -- all 0s
-            pkt_tx_data_wire(63 downto 0) <= (others=>'0');
-
-          elsif payload_type = "011" then -- all 1s
-            pkt_tx_data_wire(63 downto 0) <= (others=>'1');
-          end if;
-
-        when S_PAYLOAD_LAST =>
-          pkt_tx_val <= '1';
-          pkt_tx_eop <= '1';
-
-          if payload_last_size = 8 then
-            pkt_tx_mod <= "001"; -- 8 bits (63 downto 56)
-          elsif payload_last_size = 16 then
-            pkt_tx_mod <= "010"; -- 16 bits (63 downto 48)
-          elsif payload_last_size = 24 then
-            pkt_tx_mod <= "011"; -- 24 bits (63 downto 40)
-          elsif payload_last_size = 32 then
-            pkt_tx_mod <= "100"; -- 32 bits (63 downto 32)
-          elsif payload_last_size = 40 then
-            pkt_tx_mod <= "101"; -- 40 bits (63 downto 24)
-          elsif payload_last_size = 48 then
-            pkt_tx_mod <= "110"; -- 48 bits (63 downto 16)
-          elsif payload_last_size = 56 then
-            pkt_tx_mod <= "111"; -- 56 bits (63 downto 8)
-          else
-            pkt_tx_mod <= "000"; -- 64 bits (63 downto 0)
-          end if;
-
-          if payload_type = 0 then --PACKET ID
-            if payload_last_size = 8 then
-              pkt_tx_data_wire(63 downto 56) <= random(63 downto 56);
-            elsif payload_last_size = 16 then
-              pkt_tx_data_wire(63 downto 48) <= random(63 downto 48);
-            elsif payload_last_size = 24 then
-              pkt_tx_data_wire(63 downto 40) <= random(63 downto 40);
-            elsif payload_last_size = 32 then
-              pkt_tx_data_wire(63 downto 32) <= random(63 downto 32);
-            elsif payload_last_size = 40 then
-              pkt_tx_data_wire(63 downto 24) <= random(63 downto 24);
-            elsif payload_last_size = 48 then
-              pkt_tx_data_wire(63 downto 16) <= random(63 downto 16);
-            elsif payload_last_size = 56 then
-              pkt_tx_data_wire(63 downto 8) <= random(63 downto 8);
-            else
-              pkt_tx_data_wire(63 downto 0) <= random(63 downto 0);
-            end if;
-
-          elsif payload_type = 1 then -- BERT
-            if payload_last_size = 8 then
-                if flag_lfsr_8_rem = '1' then
-                  pkt_tx_data_wire(63 downto 56) <= lfsr_rem(7 downto 0);
-                  pkt_tx_data_wire(55 downto 0) <= (others=>'0');
-                  flag_lfsr_8_rem <= '0';
-
-                elsif(flag_lfsr_16_rem = '1') then
-                  pkt_tx_data_wire(63 downto 56) <= lfsr_rem(15 downto 8);
-                  pkt_tx_data_wire(47 downto 0) <= (others=>'0');
-                  flag_lfsr_8_rem <= '1';
-                  flag_lfsr_16_rem <= '0';
-
-                elsif flag_lfsr_24_rem = '1' then
-                  pkt_tx_data_wire(63 downto 56) <= lfsr_rem(23 downto 16);
-                  pkt_tx_data_wire(55 downto 0) <= (others=>'0');
-                  flag_lfsr_16_rem <= '1';
-                  flag_lfsr_24_rem <= '0';
-
-                elsif(flag_lfsr_32_rem = '1') then
-                  pkt_tx_data_wire(63 downto 56) <= lfsr_rem(31 downto 24);
-                  pkt_tx_data_wire(55 downto 0) <= (others=>'0');
-                  flag_lfsr_24_rem <= '1';
-                  flag_lfsr_32_rem <= '0';
-
-                elsif flag_lfsr_40_rem = '1' then
-                  pkt_tx_data_wire(63 downto 56) <= lfsr_rem(39 downto 32);
-                  pkt_tx_data_wire(55 downto 0) <= (others=>'0');
-                  flag_lfsr_32_rem <= '1';
-                  flag_lfsr_40_rem <= '0';
-
-                elsif(flag_lfsr_48_rem = '1') then
-                  pkt_tx_data_wire(63 downto 56) <= lfsr_rem(47 downto 40);
-                  pkt_tx_data_wire(55 downto 0) <= (others=>'0');
-                  flag_lfsr_40_rem <= '1';
-                  flag_lfsr_48_rem <= '0';
-
-                elsif flag_lfsr_56_rem = '1' then
-                  pkt_tx_data_wire(63 downto 56) <= lfsr_rem(55 downto 48);
-                  pkt_tx_data_wire(55 downto 0) <= (others=>'0');
-                  flag_lfsr_48_rem <= '1';
-                  flag_lfsr_56_rem <= '0';
-
-                else
-                  pkt_tx_data_wire(63 downto 56) <= random(63 downto 56);
-                  pkt_tx_data_wire(55 downto 0) <= (others=>'0');
-                  lfsr_rem(55 downto 0) <= random(55 downto 0);
-                  flag_lfsr_56_rem <= '1';
-                end if;
-
-            elsif payload_last_size = 16 then
-                if flag_lfsr_8_rem = '1' then
-                  pkt_tx_data_wire(63 downto 48) <= lfsr_rem(7 downto 0) & random(63 downto 56);
-                  pkt_tx_data_wire(47 downto 0) <= (others=>'0');
-                  lfsr_rem(55 downto 0) <= random(55 downto 0);
-                  flag_lfsr_8_rem <= '0';
-                  flag_lfsr_56_rem <= '1';
-
-                elsif(flag_lfsr_16_rem = '1') then
-                  pkt_tx_data_wire(63 downto 48) <= lfsr_rem(15 downto 0);
-                  pkt_tx_data_wire(47 downto 0) <= (others=>'0');
-                  flag_lfsr_16_rem <= '0';
-
-                elsif flag_lfsr_24_rem = '1' then
-                  pkt_tx_data_wire(63 downto 48) <= lfsr_rem(23 downto 8);
-                  pkt_tx_data_wire(47 downto 0) <= (others=>'0');
-                  flag_lfsr_8_rem <= '1';
-                  flag_lfsr_24_rem <= '0';
-
-                elsif(flag_lfsr_32_rem = '1') then
-                  pkt_tx_data_wire(63 downto 48) <= lfsr_rem(31 downto 16);
-                  pkt_tx_data_wire(47 downto 0) <= (others=>'0');
-                  flag_lfsr_16_rem <= '1';
-                  flag_lfsr_32_rem <= '0';
-
-                elsif flag_lfsr_40_rem = '1' then
-                  pkt_tx_data_wire(63 downto 48) <= lfsr_rem(39 downto 24);
-                  pkt_tx_data_wire(47 downto 0) <= (others=>'0');
-                  flag_lfsr_24_rem <= '1';
-                  flag_lfsr_40_rem <= '0';
-
-                elsif(flag_lfsr_48_rem = '1') then
-                  pkt_tx_data_wire(63 downto 48) <= lfsr_rem(47 downto 32);
-                  pkt_tx_data_wire(47 downto 0) <= (others=>'0');
-                  flag_lfsr_32_rem <= '1';
-                  flag_lfsr_48_rem <= '0';
-
-                elsif flag_lfsr_56_rem = '1' then
-                  pkt_tx_data_wire(63 downto 48) <= lfsr_rem(55 downto 40);
-                  pkt_tx_data_wire(47 downto 0) <= (others=>'0');
-                  flag_lfsr_40_rem <= '1';
-                  flag_lfsr_56_rem <= '0';
-
-                else
-                  pkt_tx_data_wire(63 downto 48) <= random(63 downto 48);
-                  pkt_tx_data_wire(47 downto 0) <= (others=>'0');
-                  lfsr_rem(47 downto 0) <= random(47 downto 0);
-                  flag_lfsr_48_rem <= '1';
-                end if;
-
-            elsif payload_last_size = 24 then
-                if flag_lfsr_8_rem = '1' then
-                  pkt_tx_data_wire(63 downto 40) <= lfsr_rem(7 downto 0) & random(63 downto 48);
-                  pkt_tx_data_wire(39 downto 0) <= (others=>'0');
-                  lfsr_rem(47 downto 0) <= random(47 downto 0);
-                  flag_lfsr_8_rem <= '0';
-                  flag_lfsr_48_rem <= '1';
-
-                elsif(flag_lfsr_16_rem = '1') then
-                  pkt_tx_data_wire(63 downto 40) <= lfsr_rem(15 downto 0) & random(63 downto 56);
-                  pkt_tx_data_wire(39 downto 0) <= (others=>'0');
-                  lfsr_rem(55 downto 0) <= random(55 downto 0);
-                  flag_lfsr_16_rem <= '0';
-                  flag_lfsr_56_rem <= '1';
-
-                elsif flag_lfsr_24_rem = '1' then
-                  pkt_tx_data_wire(63 downto 40) <= lfsr_rem(23 downto 0);
-                  pkt_tx_data_wire(39 downto 0) <= (others=>'0');
-                  flag_lfsr_24_rem <= '0';
-
-                elsif(flag_lfsr_32_rem = '1') then
-                  pkt_tx_data_wire(63 downto 40) <= lfsr_rem(31 downto 8);
-                  pkt_tx_data_wire(39 downto 0) <= (others=>'0');
-                  flag_lfsr_8_rem <= '1';
-                  flag_lfsr_32_rem <= '0';
-
-                elsif flag_lfsr_40_rem = '1' then
-                  pkt_tx_data_wire(63 downto 40) <= lfsr_rem(39 downto 16);
-                  pkt_tx_data_wire(39 downto 0) <= (others=>'0');
-                  flag_lfsr_16_rem <= '1';
-                  flag_lfsr_40_rem <= '0';
-
-                elsif(flag_lfsr_48_rem = '1') then
-                  pkt_tx_data_wire(63 downto 40) <= lfsr_rem(47 downto 24);
-                  pkt_tx_data_wire(39 downto 0) <= (others=>'0');
-                  flag_lfsr_24_rem <= '1';
-                  flag_lfsr_48_rem <= '0';
-
-                elsif flag_lfsr_56_rem = '1' then
-                  pkt_tx_data_wire(63 downto 40) <= lfsr_rem(55 downto 32);
-                  pkt_tx_data_wire(39 downto 0) <= (others=>'0');
-                  flag_lfsr_32_rem <= '1';
-                  flag_lfsr_56_rem <= '0';
-
-                else
-                  pkt_tx_data_wire(63 downto 40) <= random(63 downto 40);
-                  pkt_tx_data_wire(39 downto 0) <= (others=>'0');
-                  lfsr_rem(39 downto 0) <= random(39 downto 0);
-                  flag_lfsr_40_rem <= '1';
-                end if;
-
-            elsif payload_last_size = 32 then
-                if flag_lfsr_8_rem = '1' then
-                  pkt_tx_data_wire(63 downto 32) <= lfsr_rem(7 downto 0) & random(63 downto 40);
-                  pkt_tx_data_wire(31 downto 0) <= (others=>'0');
-                  lfsr_rem(39 downto 0) <= random(39 downto 0);
-                  flag_lfsr_8_rem <= '0';
-                  flag_lfsr_40_rem <= '1';
-
-                elsif(flag_lfsr_16_rem = '1') then
-                  pkt_tx_data_wire(63 downto 32) <= lfsr_rem(15 downto 0) & random(63 downto 48);
-                  pkt_tx_data_wire(31 downto 0) <= (others=>'0');
-                  lfsr_rem(47 downto 0) <= random(47 downto 0);
-                  flag_lfsr_16_rem <= '0';
-                  flag_lfsr_48_rem <= '1';
-
-                elsif flag_lfsr_24_rem = '1' then
-                  pkt_tx_data_wire(63 downto 32) <= lfsr_rem(23 downto 0) & random(63 downto 56);
-                  pkt_tx_data_wire(31 downto 0) <= (others=>'0');
-                  lfsr_rem(55 downto 0) <= random(55 downto 0);
-                  flag_lfsr_24_rem <= '0';
-                  flag_lfsr_56_rem <= '1';
-
-                elsif(flag_lfsr_32_rem = '1') then
-                  pkt_tx_data_wire(63 downto 32) <= lfsr_rem(31 downto 0);
-                  pkt_tx_data_wire(31 downto 0) <= (others=>'0');
-                  flag_lfsr_32_rem <= '0';
-
-                elsif flag_lfsr_40_rem = '1' then
-                  pkt_tx_data_wire(63 downto 32) <= lfsr_rem(39 downto 8);
-                  pkt_tx_data_wire(31 downto 0) <= (others=>'0');
-                  flag_lfsr_8_rem <= '1';
-                  flag_lfsr_40_rem <= '0';
-
-                elsif(flag_lfsr_48_rem = '1') then
-                  pkt_tx_data_wire(63 downto 32) <= lfsr_rem(47 downto 16);
-                  pkt_tx_data_wire(31 downto 0) <= (others=>'0');
-                  flag_lfsr_16_rem <= '1';
-                  flag_lfsr_48_rem <= '0';
-
-                elsif flag_lfsr_56_rem = '1' then
-                  pkt_tx_data_wire(63 downto 32) <= lfsr_rem(55 downto 24);
-                  pkt_tx_data_wire(31 downto 0) <= (others=>'0');
-                  flag_lfsr_24_rem <= '1';
-                  flag_lfsr_56_rem <= '0';
-
-                else
-                  pkt_tx_data_wire(63 downto 32) <= random(63 downto 32);
-                  pkt_tx_data_wire(31 downto 0) <= (others=>'0');
-                  lfsr_rem(31 downto 0) <= random(31 downto 0);
-                  flag_lfsr_32_rem <= '1';
-                end if;
-
-            elsif payload_last_size = 40 then
-                if flag_lfsr_8_rem = '1' then
-                  pkt_tx_data_wire(63 downto 24) <= lfsr_rem(7 downto 0) & random(63 downto 32);
-                  pkt_tx_data_wire(23 downto 0) <= (others=>'0');
-                  lfsr_rem(31 downto 0) <= random(31 downto 0);
-                  flag_lfsr_8_rem <= '0';
-                  flag_lfsr_32_rem <= '1';
-
-                elsif(flag_lfsr_16_rem = '1') then
-                  pkt_tx_data_wire(63 downto 24) <= lfsr_rem(15 downto 0) & random(63 downto 40);
-                  pkt_tx_data_wire(23 downto 0) <= (others=>'0');
-                  lfsr_rem(39 downto 0) <= random(39 downto 0);
-                  flag_lfsr_16_rem <= '0';
-                  flag_lfsr_40_rem <= '1';
-
-                elsif flag_lfsr_24_rem = '1' then
-                  pkt_tx_data_wire(63 downto 24) <= lfsr_rem(23 downto 0) & random(63 downto 48);
-                  pkt_tx_data_wire(23 downto 0) <= (others=>'0');
-                  lfsr_rem(47 downto 0) <= random(47 downto 0);
-                  flag_lfsr_24_rem <= '0';
-                  flag_lfsr_48_rem <= '1';
-
-                elsif(flag_lfsr_32_rem = '1') then
-                  pkt_tx_data_wire(63 downto 24) <= lfsr_rem(31 downto 0) & random(63 downto 56);
-                  pkt_tx_data_wire(23 downto 0) <= (others=>'0');
-                  lfsr_rem(55 downto 0) <= random(55 downto 0);
-                  flag_lfsr_32_rem <= '0';
-                  flag_lfsr_56_rem <= '1';
-
-                elsif flag_lfsr_40_rem = '1' then
-                  pkt_tx_data_wire(63 downto 24) <= lfsr_rem(39 downto 0);
-                  pkt_tx_data_wire(23 downto 0) <= (others=>'0');
-                  flag_lfsr_40_rem <= '0';
-
-                elsif(flag_lfsr_48_rem = '1') then
-                  pkt_tx_data_wire(63 downto 24) <= lfsr_rem(47 downto 8);
-                  pkt_tx_data_wire(23 downto 0) <= (others=>'0');
-                  flag_lfsr_8_rem <= '1';
-                  flag_lfsr_48_rem <= '0';
-
-                elsif flag_lfsr_56_rem = '1' then
-                  pkt_tx_data_wire(63 downto 24) <= lfsr_rem(55 downto 16);
-                  pkt_tx_data_wire(23 downto 0) <= (others=>'0');
-                  flag_lfsr_16_rem <= '1';
-                  flag_lfsr_56_rem <= '0';
-
-                else
-                  pkt_tx_data_wire(63 downto 24) <= random(63 downto 24);
-                  pkt_tx_data_wire(23 downto 0) <= (others=>'0');
-                  lfsr_rem(23 downto 0) <= random(23 downto 0);
-                  flag_lfsr_24_rem <= '1';
-                end if;
-
-            elsif payload_last_size = 48 then
-                if flag_lfsr_8_rem = '1' then
-                  pkt_tx_data_wire(63 downto 16) <= lfsr_rem(7 downto 0) & random(63 downto 24);
-                  pkt_tx_data_wire(15 downto 0) <= (others=>'0');
-                  lfsr_rem(23 downto 0) <= random(23 downto 0);
-                  flag_lfsr_8_rem <= '0';
-                  flag_lfsr_24_rem <= '1';
-
-                elsif(flag_lfsr_16_rem = '1') then
-                  pkt_tx_data_wire(63 downto 16) <= lfsr_rem(15 downto 0) & random(63 downto 32);
-                  pkt_tx_data_wire(15 downto 0) <= (others=>'0');
-                  lfsr_rem(31 downto 0) <= random(31 downto 0);
-                  flag_lfsr_16_rem <= '0';
-                  flag_lfsr_32_rem <= '1';
-
-                elsif flag_lfsr_24_rem = '1' then
-                  pkt_tx_data_wire(63 downto 16) <= lfsr_rem(23 downto 0) & random(63 downto 40);
-                  pkt_tx_data_wire(15 downto 0) <= (others=>'0');
-                  lfsr_rem(39 downto 0) <= random(39 downto 0);
-                  flag_lfsr_24_rem <= '0';
-                  flag_lfsr_40_rem <= '1';
-
-                elsif(flag_lfsr_32_rem = '1') then
-                  pkt_tx_data_wire(63 downto 16) <= lfsr_rem(31 downto 0) & random(63 downto 48);
-                  pkt_tx_data_wire(15 downto 0) <= (others=>'0');
-                  lfsr_rem(47 downto 0) <= random(47 downto 0);
-                  flag_lfsr_32_rem <= '0';
-                  flag_lfsr_48_rem <= '1';
-
-                elsif flag_lfsr_40_rem = '1' then
-                  pkt_tx_data_wire(63 downto 16) <= lfsr_rem(39 downto 0) & random(63 downto 56);
-                  pkt_tx_data_wire(15 downto 0) <= (others=>'0');
-                  lfsr_rem(55 downto 0) <= random(55 downto 0);
-                  flag_lfsr_40_rem <= '0';
-                  flag_lfsr_56_rem <= '1';
-
-                elsif(flag_lfsr_48_rem = '1') then
-                  pkt_tx_data_wire(63 downto 16) <= lfsr_rem(47 downto 0);
-                  pkt_tx_data_wire(15 downto 0) <= (others=>'0');
-                  flag_lfsr_48_rem <= '0';
-
-                elsif flag_lfsr_56_rem = '1' then
-                  pkt_tx_data_wire(63 downto 16) <= lfsr_rem(55 downto 8);
-                  pkt_tx_data_wire(15 downto 0) <= (others=>'0');
-                  flag_lfsr_8_rem <= '1';
-                  flag_lfsr_56_rem <= '0';
-
-                else
-                  pkt_tx_data_wire(63 downto 16) <= random(63 downto 16);
-                  pkt_tx_data_wire(15 downto 0) <= (others=>'0');
-                  lfsr_rem(15 downto 0) <= random(15 downto 0);
-                  flag_lfsr_16_rem <= '1';
-                end if;
-
-            elsif payload_last_size = 56 then
-                if flag_lfsr_8_rem = '1' then
-                  pkt_tx_data_wire(63 downto 8) <= lfsr_rem(7 downto 0) & random(63 downto 16);
-                  pkt_tx_data_wire(7 downto 0) <= (others=>'0');
-                  lfsr_rem(15 downto 0) <= random(15 downto 0);
-                  flag_lfsr_8_rem <= '0';
-                  flag_lfsr_16_rem <= '1';
-
-                elsif(flag_lfsr_16_rem = '1') then
-                  pkt_tx_data_wire(63 downto 8) <= lfsr_rem(15 downto 0) & random(63 downto 24);
-                  pkt_tx_data_wire(7 downto 0) <= (others=>'0');
-                  lfsr_rem(23 downto 0) <= random(23 downto 0);
-                  flag_lfsr_16_rem <= '0';
-                  flag_lfsr_24_rem <= '1';
-
-                elsif flag_lfsr_24_rem = '1' then
-                  pkt_tx_data_wire(63 downto 8) <= lfsr_rem(23 downto 0) & random(63 downto 32);
-                  pkt_tx_data_wire(7 downto 0) <= (others=>'0');
-                  lfsr_rem(31 downto 0) <= random(31 downto 0);
-                  flag_lfsr_24_rem <= '0';
-                  flag_lfsr_32_rem <= '1';
-
-                elsif(flag_lfsr_32_rem = '1') then
-                  pkt_tx_data_wire(63 downto 8) <= lfsr_rem(31 downto 0) & random(63 downto 40);
-                  pkt_tx_data_wire(7 downto 0) <= (others=>'0');
-                  lfsr_rem(39 downto 0) <= random(39 downto 0);
-                  flag_lfsr_32_rem <= '0';
-                  flag_lfsr_40_rem <= '1';
-
-                elsif flag_lfsr_40_rem = '1' then
-                  pkt_tx_data_wire(63 downto 8) <= lfsr_rem(39 downto 0) & random(63 downto 48);
-                  pkt_tx_data_wire(7 downto 0) <= (others=>'0');
-                  lfsr_rem(47 downto 0) <= random(47 downto 0);
-                  flag_lfsr_40_rem <= '0';
-                  flag_lfsr_48_rem <= '1';
-
-                elsif(flag_lfsr_48_rem = '1') then
-                  pkt_tx_data_wire(63 downto 8) <= lfsr_rem(47 downto 0) & random(63 downto 56);
-                  pkt_tx_data_wire(7 downto 0) <= (others=>'0');
-                  lfsr_rem(55 downto 0) <= random(55 downto 0);
-                  flag_lfsr_48_rem <= '0';
-                  flag_lfsr_56_rem <= '1';
-
-                elsif flag_lfsr_56_rem = '1' then
-                  pkt_tx_data_wire(63 downto 8) <= lfsr_rem(55 downto 0);
-                  pkt_tx_data_wire(7 downto 0) <= (others=>'0');
-                  flag_lfsr_56_rem <= '0';
-
-                else
-                  pkt_tx_data_wire(63 downto 8) <= random(63 downto 8);
-                  pkt_tx_data_wire(7 downto 0) <= (others=>'0');
-                  lfsr_rem(7 downto 0) <= random(7 downto 0);
-                  flag_lfsr_8_rem <= '1';
-                end if;
-
-            else --payload size = 64
-                if flag_lfsr_8_rem = '1' then
-                  pkt_tx_data_wire(63 downto 0) <= lfsr_rem(7 downto 0) & random(63 downto 8);
-                  lfsr_rem(7 downto 0) <= random(7 downto 0);
-
-                elsif(flag_lfsr_16_rem = '1') then
-                  pkt_tx_data_wire(63 downto 0) <= lfsr_rem(15 downto 0) & random(63 downto 16);
-                  lfsr_rem(15 downto 0) <= random(15 downto 0);
-
-                elsif flag_lfsr_24_rem = '1' then
-                  pkt_tx_data_wire(63 downto 0) <= lfsr_rem(23 downto 0) & random(63 downto 24);
-                  lfsr_rem(23 downto 0) <= random(23 downto 0);
-
-                elsif(flag_lfsr_32_rem = '1') then
-                  pkt_tx_data_wire(63 downto 0) <= lfsr_rem(31 downto 0) & random(63 downto 32);
-                  lfsr_rem(31 downto 0) <= random(31 downto 0);
-
-                elsif flag_lfsr_40_rem = '1' then
-                  pkt_tx_data_wire(63 downto 0) <= lfsr_rem(39 downto 0) & random(63 downto 40);
-                  lfsr_rem(39 downto 0) <= random(39 downto 0);
-
-                elsif(flag_lfsr_48_rem = '1') then
-                  pkt_tx_data_wire(63 downto 0) <= lfsr_rem(47 downto 0) & random(63 downto 48);
-                  lfsr_rem(47 downto 0) <= random(47 downto 0);
-
-                elsif flag_lfsr_56_rem = '1' then
-                  pkt_tx_data_wire(63 downto 0) <= lfsr_rem(55 downto 0) & random(63 downto 56);
-                  lfsr_rem(55 downto 0) <= random(55 downto 0);
-
-                else
-                  pkt_tx_data_wire(63 downto 0) <= random(63 downto 0);
-                end if;
-
-            end if;
-
-          elsif payload_type = "010" then -- all 0s
-            pkt_tx_data_wire(63 downto 0) <= (others=>'0');
-          elsif payload_type = "011" then -- all 1s
-            pkt_tx_data_wire(63 downto 0) <= (others=>'1');
-          end if;
-
-        when others =>
-          pkt_tx_val <= '0';
-          pkt_tx_data_wire(63 downto 0) <= (others=>'0');
-
-      end case;
-    end if;
-  end process;
-
-  -- Updates the payload iterator
-  process (reset, clock)
-  begin
-    if(reset = '0') then
-      it_payload <= (others => '0');
-    elsif rising_edge(clock) then
-      case current_s is
-        when S_PAYLOAD_FIRST => it_payload <= it_payload + 1;
-        when S_PAYLOAD => it_payload <= it_payload + 1;
-        when S_PAYLOAD_LAST => it_payload <= (others => '0');
-        when others => it_payload <= it_payload;
-      end case;
-    end if;
-  end process;
-
-  --"000" - 64B, "001" - 128B, "010" - 256B, "011" - 512B,:
-  --"100" - 768B, "101" - 1024B, "110" - 1280B, "111" - 1518B
-
-lfsr_i: entity work.lfsr
+    LFSR_GEN: entity work.LFSR_GEN
+    generic map (DATA_SIZE => 256,
+                 PPL_SIZE => 4)
     port map(
       clock => clock,
-      reset => reset,
+      reset_N => reset,
       seed => lfsr_seed,
-      valid_seed => valid_seed,
       polynomial => lfsr_polynomial,
-      data_in => random,
+      data_in => RANDOM,
       start => start_lfsr,
-      data_out => random
+      preset => preset_lfsr,
+      data_out => RANDOM
     );
 
--- id counter
-  process (clock, reset)
-  begin
-    if (reset = '0') then
-      id_counter <= (others => '0');
-     -- pkt_lost_counter_reg <= (others => '0');
-    elsif rising_edge(clock) then
-      if current_s = S_HEADER_5 then
-        id_counter <= id_counter + '1';
-      end if;
-    end if;
-  end process;
 
---pkt_lost_counter <= pkt_lost_counter_reg;
 
 end arch_echo_generator;

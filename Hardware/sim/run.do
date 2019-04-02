@@ -135,13 +135,27 @@ vcom -novopt ../rtl/MAC/mac_tx_path.vhd
 vcom -novopt ../rtl/PCS/pcs_alignment.vhd
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs_rx.v
+vlog -novopt ../rtl/XGETH_tester/Verilog/TX_PATHWAY.v
+vlog -novopt ../rtl/XGETH_tester/Verilog/RX_PATHWAY.v
 
 vcom -novopt ../rtl/XGETH_tester/VHD/lfsr.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/txsequence_counter.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/LFSR_GEN.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/LFSR_REC.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/echo_receiver.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/Archive/echo_generator_old.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/loopback.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/Archive/loopback_old.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/txsequence_counter.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/pkt_creation_mngr.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TX_ARCH.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/RX_ARCH.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TB_40Gb.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/ClockGodTest.vhd
 
-vcom -novopt tx_xgt4.vhd
-vcom -novopt rx_xgt4.vhd
+
+#vcom -novopt tx_xgt4.vhd
+#vcom -novopt rx_xgt4.vhd
 vcom -novopt ../rtl/PCS/shuffle.vhd
 vcom -novopt ../rtl/PCS/bip_calculator.vhd
 vcom -novopt ../rtl/PCS/reorder_fifo.vhd
@@ -149,23 +163,23 @@ vcom -novopt ../rtl/PCS/lane_reordering.vhd
 vcom -novopt ../rtl/PCS/alignment_removal.vhd
 
 
-scgenmod tx_xgt4 > tx_xgt4.h
-scgenmod rx_xgt4 > rx_xgt4.h
-scgenmod lane_reorder > lane_reorder.h
-scgenmod shuffle > shuffle.h
+#scgenmod tx_xgt4 > tx_xgt4.h
+#scgenmod rx_xgt4 > rx_xgt4.h
+#scgenmod lane_reorder > lane_reorder.h
+#scgenmod shuffle > shuffle.h
 
 
-sccom dump_output.cpp
-sccom pkt_buffer.cpp
-sccom pkt_buffer_tx40.cpp
-sccom fiber.cpp
-sccom app_tx.cpp
-sccom -novopt -g sc_tb.cpp
-sccom -link -B/usr/bin/
+#sccom dump_output.cpp
+#sccom pkt_buffer.cpp
+#sccom pkt_buffer_tx40.cpp
+#sccom fiber.cpp
+#sccom app_tx.cpp
+#sccom -novopt -g sc_tb.cpp
+#sccom -link -B/usr/bin/
 
 vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 -L secureip -L xilinxcorelib work.glbl \
-work.Top -t 1ps
+work.Tb_40Gb -t 1ps
 
 #do wave.do
 

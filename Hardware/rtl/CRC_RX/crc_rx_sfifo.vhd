@@ -50,6 +50,9 @@ library ieee;
     TYPE states_crc is (IDLE, D128, EOP, NOT_READING);
     signal ns_crc, ps_crc : states_crc;
 
+
+
+
     signal ren_int        : std_logic;
 
     signal crc_value      : std_logic_vector(31 downto 0);
@@ -73,7 +76,54 @@ library ieee;
     signal pkg_counter_fail : integer; -- PARA SIMULAÇÃO
     signal pkt_id   : integer; -- PARA SIMULAÇÃO
 
+
+    ----------OUTPUT --- TESTE DO Receiver
+
+
+    TYPE states_val is (IDLE, VAL_UP);
+    signal val_state: states_val;
+
+    signal data_out : std_logic_vector(127 downto 0);
+    signal sop_out  : std_logic;
+    signal val_out  : std_logic;
+    signal eop_out  : std_logic_vector(4 downto 0);
+    signal mac_eop_reg : std_logic;
+
   begin
+    ---------------------------------------
+    ---------------------------------------
+    --------RECEIVER-------------
+    data_out <= mac_data;
+    app_data <= data_out;
+
+    sop_out  <= mac_sop;
+    app_sop  <= sop_out;
+
+    app_val  <= val_out;
+
+    eop_out  <= mac_eop;
+    app_eop  <= eop_out;
+
+    val_proc : process(mac_eop,mac_sop)
+    begin
+      val_out <= '0';
+          case val_state is
+            when IDLE =>
+              val_out <= '0';
+              if mac_sop = '1' then
+                val_state <= VAL_UP;
+                val_out <= '1';
+              end if;
+            when VAL_UP =>
+              val_out <= '1';
+              if mac_eop_reg ='1' then
+                val_state <= IDLE;
+                val_out <= '0';
+              end if;
+          end case;
+    end process;
+  ---------------------------------------
+  ---------------------------------------
     ren <= ren_int;
     crc_ok <= crc_ok_int;
     crc_ok_int <= '1' when crc_received = crc_reg and crc_done = '1' else '0';
@@ -192,13 +242,13 @@ library ieee;
         crc_received <= (others=>'0');
         crc_done <= '0';
         ren_int <= '0';
+        mac_eop_reg <= '0';
 
       elsif clk_312'event and clk_312 = '1' then
         crc_done <= '0';
         ren_int <= '1';
-
+        mac_eop_reg <= mac_eop(4);
         case ps_crc is
-
           when IDLE =>
             crc_reg <= x"FFFFFFFF";
             -- crc_value <= (others = '1');
@@ -206,8 +256,11 @@ library ieee;
             -- if almost_e = '1' and mac_sop = '0' and sop_d1 = '0' then
             --   ren_int <= '0';
             -- end if;
+            mac_eop_reg <= mac_eop(4);
 
           when D128 =>
+          mac_eop_reg <= mac_eop(4);
+
             -- crc_reg <= nextCRC32_D128(reverse(data_d2), crc_reg);
             if (eop_d1(4) = '1' and eop_d1(3 downto 0) < x"5") then
               crc_done <= '1';
@@ -231,6 +284,7 @@ library ieee;
               end case;
 
             else
+              mac_eop_reg <= mac_eop(4);
 
               -- crc_reg <= nextCRC32_D128(reverse(data_d2), crc_reg);
               if (eop_d3(4) = '1') then
@@ -243,6 +297,8 @@ library ieee;
 
 
           when EOP =>
+            mac_eop_reg <= mac_eop(4);
+
               crc_done <= '1';
               if almost_e = '1' and mac_sop = '0' and sop_d1 = '0' then
                 ren_int <= '0';
@@ -283,6 +339,8 @@ library ieee;
 
             when NOT_READING =>
               ren_int <= '0';
+              mac_eop_reg <= mac_eop(4);
+
 
         end case;
       end if;
