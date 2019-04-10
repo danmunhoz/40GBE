@@ -1,3 +1,16 @@
+--////////////////////////////////////////////////////////////////////////
+--////                                                                ////
+--//// File name "echo_receiver.vhd"                                  ////
+--////                                                                ////
+--//// This file is part of "Testset X40G" project                    ////
+--////                                                                ////
+--//// Author(s):                                                     ////
+--//// - Matheus Lemes Ferronato                                      ////
+--//// - Gabriel Susin                                                ////
+--////                                                                ////
+--////////////////////////////////////////////////////////////////////////
+
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 
@@ -119,7 +132,7 @@ entity echo_receiver is
         time_stamp_out  : out std_logic_vector(47 downto 0);  -- Packet timestamp
         received_packet : out std_logic;  -- Asserted when a valid UDP packet is received
         end_latency     : out std_logic;
-        packets_lost    : out std_logic_vector(127 downto 0);
+        packets_lost    : out std_logic_vector(63 downto 0);
         RESET_done      : out std_logic; -- to RFC254|
         -------------------------------------------------------------------------------
         -- RX mac interface
@@ -140,8 +153,8 @@ entity echo_receiver is
         pkt_sequence_in          : in std_logic_vector(31 downto 0);   -- number of packets to define if recovery is completed
         pkt_sequence_error_flag  : out std_logic; -- to RFC254|
         pkt_sequence_error       : out std_logic;                -- '0' if sequence is ok, '1' if error in sequence and not recovered -- to RFC254|
-        count_error               : out std_logic_vector(127 downto 0);
-        IDLE_count               : out std_logic_vector(127 downto 0)
+        count_error              : out std_logic_vector(63 downto 0);
+        IDLE_count               : out std_logic_vector(63 downto 0)
     );
 end echo_receiver;
 
@@ -162,11 +175,11 @@ architecture arch_echo_receiver_unary of echo_receiver is
     signal lfsr_state : lfsr_state_type;
     signal recovery_state : recovery_state_type;
 
-    signal pkt_rx_data_buffer            : std_logic_vector(127 downto 0);
-    signal pkt_rx_data_nbits     : std_logic_vector(127 downto 0);
-    signal pkt_rx_data_N                 : std_logic_vector(127 downto 0);
+    signal pkt_rx_data_buffer                  : std_logic_vector(127 downto 0);
+    signal pkt_rx_data_nbits                   : std_logic_vector(127 downto 0);
+    signal pkt_rx_data_N                       : std_logic_vector(127 downto 0);
 
-    signal pkt_sequence_error_flag_aux   : std_logic;
+    signal pkt_sequence_error_flag_aux         : std_logic;
 
 
     --------------------------------------------------------------------------------
@@ -176,7 +189,7 @@ architecture arch_echo_receiver_unary of echo_receiver is
     signal reg_ethernet_type                   : std_logic_vector(15 downto 0);
     signal reg_ip_protocol                     : std_logic_vector(7 downto 0);
     signal reg_ip_message_length               : std_logic_vector(15 downto 0);
-    signal ip_low, ip_high                     : std_logic_vector(15 downto 0);
+    signal ip_high                     : std_logic_vector(15 downto 0);
     signal ip_pkt_type                         : std_logic;
     signal udp_pkt_type                        : std_logic;
     signal time_stamp_generator                : std_logic_vector(47 downto 0);
@@ -186,58 +199,51 @@ architecture arch_echo_receiver_unary of echo_receiver is
     --------------------------------------------------------------------------------
     --ID TESTS
 
-    signal id_pkt_tester : std_logic_vector(127 downto 0) := (OTHERS => '0');
-    signal id_sequence_counter : std_logic_vector(31 downto 0) := (OTHERS => '0');
-    signal id_checker_reg : std_logic_vector(127 downto 0) := (OTHERS => '0');
+    signal id_pkt_tester                       : std_logic_vector(63 downto 0);
+    signal id_sequence_counter                 : std_logic_vector(31 downto 0);
+    signal id_current_pkg_number               : std_logic_vector(63 downto 0);
+           --signal created for readability reasons, as a workaround for the alias synthesis error;
 
-    signal lost_pkt_flag : std_logic;
-    signal not_lost_pkt_test : std_logic;
-    signal lost_counter : std_logic_vector(31 downto 0) := (OTHERS => '0');
-    signal lost_pkt_tester : std_logic_vector(127 downto 0) := (OTHERS => '0');
+    signal lost_pkt_flag                       : std_logic;
+    signal not_lost_pkt_test                   : std_logic;
+    signal lost_counter                        : std_logic_vector(31 downto 0);
+    signal lost_pkt_tester                     : std_logic_vector(63 downto 0);
 
 
 
     ------------------------------------------------------------------------------
-    signal IDLE_count_reg : std_logic_vector(127 downto 0) := (OTHERS => '0');
-    signal pkt_zeros      : std_logic_vector(127 downto 0) := (OTHERS => '0');
-    signal pkt_ones       : std_logic_vector(127 downto 0) := (OTHERS => '0');
+    signal IDLE_count_reg                      : std_logic_vector(63 downto 0) := (OTHERS => '0');
 
 
     --------------------------------------------------------------------------------
     --LFSR AND BERT SIGNALS
     subtype byte is integer range 0 to 7;
 
-    signal RANDOM : std_logic_vector(127 downto 0);
-    signal lfsr_bert : std_logic_vector(127 downto 0);
-    signal start : std_logic;
-    signal lfsr_start : std_logic;
-    signal lfsr_start_delay : std_logic;
-    signal lfsr_resync_ON : std_logic;
-    signal lfsr_fsm_begin : std_logic;
-    signal lfsr_test_begin : std_logic;
-    signal lfsr_load_seed : std_logic;
-    signal delay_B0, delay_B1, delay_B2: std_logic_vector (127 downto 0);
-    signal lfsr_resync_SIGNAL : std_logic_vector (127 downto 0);
-    signal lfsr_resync_RANDOM : std_logic_vector (127 downto 0);
-    signal lfsr_counter : byte;
+    signal RANDOM                              : std_logic_vector(127 downto 0);
+    signal lfsr_bert                           : std_logic_vector(127 downto 0);
+    signal start                               : std_logic;
+    signal lfsr_start                          : std_logic;
+    signal lfsr_start_delay                    : std_logic;
+    signal lfsr_resync_ON                      : std_logic;
+    signal lfsr_fsm_begin                      : std_logic;
+    signal lfsr_test_begin                     : std_logic;
+    signal lfsr_load_seed                      : std_logic;
+    signal delay_B0, delay_B1, delay_B2        : std_logic_vector (127 downto 0);
+    signal lfsr_resync_SIGNAL                  : std_logic_vector (127 downto 0);
+    signal lfsr_resync_RANDOM                  : std_logic_vector (127 downto 0);
+    signal lfsr_counter                        : byte;
 
-    signal const_test_begin : std_logic;
+    signal const_test_begin                    : std_logic;
 
-    signal bert_target_lfsr : std_logic_vector (127 downto 0);
-    signal bert_xor : std_logic_vector (127 downto 0);
-    signal bert_cycle_wrong : std_logic_vector (127 downto 0);
-    signal bert_n_flipped_b : std_logic_vector (127 downto 0);
-    signal bert_count_flip : std_logic_vector (7 downto 0);
-    signal bert_test_begin : std_logic;
+    signal bert_target_lfsr                    : std_logic_vector (127 downto 0);
+    signal bert_xor                            : std_logic_vector (127 downto 0);
+    signal bert_cycle_wrong                    : std_logic_vector (63 downto 0);
+    signal bert_n_flipped_b                    : std_logic_vector (63 downto 0);
+    signal bert_count_flip                     : std_logic_vector (7 downto 0);
+    signal bert_test_begin                     : std_logic;
 
-    signal ALL_ONE : std_logic_vector(127 downto 0) := (OTHERS => '1');
-    signal ALL_ZERO : std_logic_vector(127 downto 0) := (OTHERS => '0');
-
-    signal recovery_n_flipped_b : std_logic_vector(127 downto 0);
-    signal recovery_cycle_wrong : std_logic_vector(127 downto 0);
-    signal recovery_ON : std_logic;
-    signal recovery_start_pkt : std_logic;
-    signal recovery_stop_pkt : std_logic;
+    signal ALL_ONE                             : std_logic_vector(127 downto 0) := (OTHERS => '1');
+    signal ALL_ZERO                            : std_logic_vector(127 downto 0) := (OTHERS => '0');
 
 
 
@@ -340,10 +346,12 @@ BEGIN
         reg_ip_source <= (others => '0');
         ip_high <= (others => '0');
         reg_ip_destination <= (others => '0');
+        time_stamp_generator <= (others => '0');
+        const_test_begin     <= '0';
       elsif rising_edge(clk_312) then
         case current_s is
           when S_IDLE =>
-	    lfsr_load_seed <= '0';
+	          lfsr_load_seed <= '0';
             lfsr_fsm_begin <= '0';
             if pkt_rx_avail = '1' then
               IDLE_count_reg <= IDLE_count_reg + '1';
@@ -362,7 +370,7 @@ BEGIN
             reg_ip_destination <= ip_high & pkt_rx_data_N (127 downto 112);
           when S_PAYLOAD_START =>
             if payload_type = "00" then
-              id_pkt_tester <= pkt_rx_data_N;
+              id_pkt_tester <= pkt_rx_data_N(63 downto 0);
             elsif payload_type = "10" or payload_type = "11" then
               const_test_begin <= '1';
             end if;
@@ -406,6 +414,8 @@ BEGIN
     pkt_sequence_error <= '1' when (id_sequence_counter < pkt_sequence_in) else '0';
     pkt_sequence_error_flag <= pkt_sequence_error_flag_aux;
 
+    id_current_pkg_number <= pkt_rx_data_N(63 downto 0);
+
     id_checker : process(reset, clk_312)
     begin
       if reset = '0' then
@@ -413,7 +423,7 @@ BEGIN
         pkt_sequence_error_flag_aux <= '0';
       elsif rising_edge(clk_312) then
         if current_s = S_PAYLOAD_START and payload_type = "00" and verify_system_rec = '1' then
-           if (id_pkt_tester = (pkt_rx_data_N - '1')) then
+           if (id_pkt_tester = (id_current_pkg_number - '1')) then
              pkt_sequence_error_flag_aux <= '0';
              id_sequence_counter <= id_sequence_counter + '1';
            else
@@ -439,13 +449,13 @@ BEGIN
         lost_counter <= (others => '0');
       elsif rising_edge(clk_312) then
         if current_s = S_PAYLOAD_START and payload_type = "00" and reset_test = '1' then
-          if (id_pkt_tester = (pkt_rx_data_N - '1')) then
+          if (id_pkt_tester = (id_current_pkg_number - '1')) then
             if lost_pkt_flag = '1' then
               lost_counter <= lost_counter + '1';
             end if;
             not_lost_pkt_test <= '1';
           else
-            lost_pkt_tester <= lost_pkt_tester + pkt_rx_data_N - id_pkt_tester - '1';
+            lost_pkt_tester <= lost_pkt_tester + (id_current_pkg_number - (id_pkt_tester - '1'));
             lost_counter <= (others => '0');
             lost_pkt_flag <= '1';
             not_lost_pkt_test <= '0';
@@ -582,7 +592,7 @@ BEGIN
         bert_cycle_wrong <= (others=>'0');
       elsif rising_edge(clk_312) then
         if bert_test_begin = '1' then
-            bert_n_flipped_b <= bert_n_flipped_b + (ALL_ZERO(119 downto 0) & bert_count_flip);
+            bert_n_flipped_b <= bert_n_flipped_b + (ALL_ZERO(55 downto 0) & bert_count_flip);
             if (bert_count_flip /= 0 ) then
                 bert_cycle_wrong <= bert_cycle_wrong + 1;
             end if;

@@ -23,10 +23,10 @@ module rx_pathway(
       rx_header_in_3, rx_valid_in_0, rx_valid_in_1, rx_valid_in_2,
       rx_valid_in_3,
 
-      //rx_path_rx
+      //PCS_RX
       //INPUTS
       rx_jtm_en, bypass_descram, bypass_66decoder, clear_errblk, clear_ber_cnt,
-      RDEN_FIFO_PCS40, 	start_fifo,
+      RDEN_FIFO_PCS40, 	start_fifo,  linkstatus,
 
       //CRc
       //output
@@ -59,7 +59,7 @@ module rx_pathway(
     input        rx_valid_in_2;
     input        rx_valid_in_3;
 
-    //rx_path_rx
+    //PCS_RX
     //inputs
     input         rx_jtm_en;
     input         bypass_descram;
@@ -68,6 +68,8 @@ module rx_pathway(
     input         clear_ber_cnt;
     input					RDEN_FIFO_PCS40;
 	  input					start_fifo;
+
+    output        linkstatus;
 
 
     ///CRC
@@ -268,6 +270,8 @@ module rx_pathway(
         start_out_3_rx_r <= start_out_3_rx;
       end
     end
+
+    assign linkstatus = linkstatus_0;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //CORE INTERFACE///////////////////////////////////////////////////////////////////////////////////

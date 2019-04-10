@@ -1,4 +1,13 @@
-
+--////////////////////////////////////////////////////////////////////////
+--////                                                                ////
+--//// File name "pkt_creation_mngr.vhd"                              ////
+--////                                                                ////
+--//// This file is part of "Testset X40G" project                    ////
+--////                                                                ////
+--//// Author(s):                                                     ////
+--//// - Matheus Lemes Ferronato                                      ////
+--////                                                                ////
+--////////////////////////////////////////////////////////////////////////
 
 --++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 -- TOP
@@ -99,13 +108,9 @@ end pkt_creation_mngr;
 architecture arch_pkt_creation_mngr of pkt_creation_mngr is
 
  --LOOPBACK SIGNALS
- type   lb_type is (S_WRITE, S_READ, S_IDLE);
- signal lb_s                   : lb_type;
- signal lb_en                  :   std_logic;
  signal lb_pkt_start           :   std_logic;
  signal lb_pkt_tx_eop          :   std_logic;
  signal lb_pkt_tx_sop          :   std_logic_vector (1 downto 0);
- signal lb_pkt_tx_val_delay          :   std_logic;
  signal lb_pkt_tx_val          :   std_logic;
  signal lb_pkt_tx_data         :   std_logic_vector(255 downto 0);
  signal lb_pkt_tx_mod          :   std_logic_vector(4 downto 0);
@@ -127,27 +132,11 @@ architecture arch_pkt_creation_mngr of pkt_creation_mngr is
 
   type   build_type is (S_IDLE, S_REBUILD, S_STOP);
   signal build_s                 : build_type;
-  
-  signal parity_stop_156         : std_logic;
+
+  signal parity_stop_156          : std_logic;
   signal parity_start_156         : std_logic;
-  signal data_pkt_start          : std_logic;
-  signal data_delay_coutner      : std_logic_vector(1 downto 0);
-  signal data_ctrl_in_reg_312    : std_logic_vector(7 downto 0);
-  signal data_ctrl_in_reg_312_n  : std_logic_vector(7 downto 0);
-  signal data_ctrl_312_reg_312_n : std_logic_vector(7 downto 0);
-  signal data_ctrl_delay         : std_logic_vector(7 downto 0);
-  signal data_ctrl_delay_2       : std_logic_vector(7 downto 0);
-  signal data_ctrl_in_wire      : std_logic_vector(7 downto 0);
-  signal data_wire_out          : std_logic_vector(7 downto 0);
-  signal data_buffer_out        : std_logic_vector(7 downto 0);
+  signal data_rebuild             : std_logic_vector (255 downto 0);
   signal data_ctrl_out          : std_logic_vector(7 downto 0);
-  signal data_buffer_312_n      : std_logic_vector(127 downto 0);
-  signal data_hold_312          : std_logic_vector(135 downto 0);
-  signal data_buffer_312        : std_logic_vector(135 downto 0);
-  signal data_156_h             :  std_logic;
-  signal data_wire_156          : std_logic_vector (255 downto 0);
-  signal data_buffer_156        : std_logic_vector (255 downto 0);
-  signal data_rebuild           : std_logic_vector (255 downto 0);
 
 
   type   rebuild_type is (S_IDLE, S_REBUILD, S_STOP);
@@ -169,8 +158,6 @@ architecture arch_pkt_creation_mngr of pkt_creation_mngr is
   signal rebuild_data_312_delay    : std_logic_vector(127 downto 0);
   signal rebuild_data_312_n_delay  : std_logic_vector(127 downto 0);
 
-  signal teste : std_logic_vector(2 downto 0);
-  signal fifo_en : std_logic;
 
 begin
 

@@ -1,8 +1,14 @@
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
--- PARALLEL AND PIPELINED LFSR ARCHITECTURE DEVELOPED BY MATHEUS LEMES FERRONATO
--- AND GABRIEL SUSIN. BASED UPON OLD ARCHITECTURE FROM 10GB PROJECT
--- NEW ARCHITECTURE CREATED TO ADDRESS ANY BITS DATA AND ANY PIPELINE STAGES
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+--////////////////////////////////////////////////////////////////////////
+--////                                                                ////
+--//// File name "lsfr_rec.vhd"                                        ////
+--////                                                                ////
+--//// This file is part of "Testset X40G" project                    ////
+--////                                                                ////
+--//// Author(s):                                                     ////
+--//// - Matheus Lemes Ferronato                                      ////
+--////                                                                ////
+--////////////////////////////////////////////////////////////////////////
+
 --++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 -- Generic LSFR
 --++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -1,8 +1,14 @@
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
--- ECHO GENERATOR ARCHITECTURE DEVELOPED BY MATHEUS LEMES FERRONATO
--- AND GABRIEL SUSIN. BASED UPON OLD ARCHITECTURE FROM 10GB PROJECT
--- NEW ARCHITECTURE CREATED TO ADDRESS 128 BITS DATA
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+--////////////////////////////////////////////////////////////////////////
+--////                                                                ////
+--//// File name "echo_generator.vhd"                                 ////
+--////                                                                ////
+--//// This file is part of "Testset X40G" project                    ////
+--////                                                                ////
+--//// Author(s):                                                     ////
+--//// - Matheus Lemes Ferronato                                      ////
+--////                                                                ////
+--////////////////////////////////////////////////////////////////////////
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
@@ -56,41 +62,41 @@ architecture arch_echo_generator of echo_generator is
   type state_type is (S_IDLE, S_HEADER_H, S_HEADER_L, S_PAYLOAD);
   signal current_s, next_s: state_type;
 
-  signal MAC          : std_logic_vector(127 downto 0);
-  signal IP           : std_logic_vector(191 downto 0);
-  signal EOH_SOF      : std_logic_vector(127 downto 0); --END OF HEADER - START OF FRAME
-  signal HEADER       : std_logic_vector(255 downto 0);
-  signal PAYLOAD      : std_logic_vector(255 downto 0);
-  signal PAYLOAD_PKT  : std_logic_vector(255 downto 0);
-  signal PAYLOAD_LAST : std_logic_vector(255 downto 0);
-  signal IDLE_VALUE   : std_logic_vector(127 downto 0) := x"07070707070707070707070707070707";
+  signal MAC                : std_logic_vector(127 downto 0);
+  signal IP                 : std_logic_vector(191 downto 0);
+  signal EOH_SOF            : std_logic_vector(127 downto 0); --END OF HEADER - START OF FRAME
+  signal HEADER             : std_logic_vector(255 downto 0);
+  signal PAYLOAD            : std_logic_vector(255 downto 0);
+  signal PAYLOAD_PKT        : std_logic_vector(255 downto 0);
+  signal PAYLOAD_LAST       : std_logic_vector(255 downto 0);
+  signal IDLE_VALUE         : std_logic_vector(127 downto 0) := x"07070707070707070707070707070707";
 
-  signal UPD_INFO   : std_logic_vector(15 downto 0) := x"0000";
-  signal ALL_ONE    : std_logic_vector(127 downto 0) := (others => '1');
-  signal ALL_ZERO   : std_logic_vector(127 downto 0) := (others => '0');
-  signal PKT_COUNTER : std_logic_vector(127 downto 0);
-  signal ID_COUNTER_H : std_logic_vector(127 downto 0); -- counter for ID
-  signal ID_COUNTER_L : std_logic_vector(127 downto 0);
+  signal UPD_INFO           : std_logic_vector(15 downto 0) := x"0000";
+  signal ALL_ONE            : std_logic_vector(127 downto 0) := (others => '1');
+  signal ALL_ZERO           : std_logic_vector(127 downto 0) := (others => '0');
+  signal PKT_COUNTER        : std_logic_vector(63 downto 0);
+  signal ID_COUNTER_H       : std_logic_vector(127 downto 0); -- counter for ID
+  signal ID_COUNTER_L       : std_logic_vector(127 downto 0);
 
-  signal SEED        : std_logic_vector(255 downto 0);
-  signal RANDOM : std_logic_vector(255 downto 0);
-  signal start_lfsr  : std_logic;
-  signal preset_lfsr : std_logic;
-  signal count :  integer range 0 to 15;
+  signal SEED               : std_logic_vector(255 downto 0);
+  signal RANDOM             : std_logic_vector(255 downto 0);
+  signal start_lfsr         : std_logic;
+  signal preset_lfsr        : std_logic;
+  signal count              :  integer range 0 to 15;
 
 
-  signal pkt_tx_data_N  : std_logic_vector(255 downto 0);
+  signal pkt_tx_data_N      : std_logic_vector(255 downto 0);
   signal pkt_tx_data_buffer : std_logic_vector(255 downto 0);
-  signal pkt_tx_mod_reg : std_logic_vector(4 downto 0);
-  signal pkt_tx_eop_reg : std_logic;
-  signal last_pkt : std_logic;
+  signal pkt_tx_mod_reg     : std_logic_vector(4 downto 0);
+  signal pkt_tx_eop_reg     : std_logic;
+  signal last_pkt           : std_logic;
 
   -------------------------------------------------------------------------------
   -- Traffic control
   -------------------------------------------------------------------------------
   signal time_stamp        : std_logic_vector(47 downto 0); --
   signal it_payload        : std_logic_vector(31 downto 0); -- iterator used in payload
-  signal it_mod        : std_logic_vector(4 downto 0);
+  signal it_mod            : std_logic_vector(4 downto 0);
 
   -------------------------------------------------------------------------------
   -- IP
@@ -127,7 +133,7 @@ BEGIN
                         HEADER;
 
   HEADER <=   MAC & IP(191 downto 64) when current_s = S_HEADER_H else
-              EOH_SOF & PKT_COUNTER;
+              EOH_SOF & ALL_ZERO(63 downto 0) & PKT_COUNTER;
 
   PAYLOAD <= PAYLOAD_LAST when last_pkt = '1' else
              PAYLOAD_PKT;
@@ -227,7 +233,7 @@ BEGIN
             SEED <=  RANDOM;
             ID_COUNTER_L <= ID_COUNTER_L + 2;
             ID_COUNTER_H <= ID_COUNTER_H + 2;
-            it_payload <= it_payload + 2;
+            it_payload <= it_payload + 1;
             if(it_payload = 0) Then
               PKT_COUNTER <= PKT_COUNTER + 1;
             elsif(it_payload >= payload_cycles-1) then
@@ -250,18 +256,18 @@ BEGIN
     -- PKT N BIT CTRL --TBD
     -------------------------------------------------------------------------------
 
-    PAYLOAD_LAST <= PAYLOAD_PKT(7 downto 0) & IDLE_VALUE & IDLE_VALUE(119 downto 0)    when pkt_tx_mod_reg  = "00000" else
-                    PAYLOAD_PKT(15 downto 0) & IDLE_VALUE & IDLE_VALUE(111 downto 0)   when pkt_tx_mod_reg  = "00001" else
-                    PAYLOAD_PKT(23 downto 0) & IDLE_VALUE & IDLE_VALUE(103 downto 0)   when pkt_tx_mod_reg  = "00010" else
-                    PAYLOAD_PKT(31 downto 0) & IDLE_VALUE & IDLE_VALUE(95 downto 0)    when pkt_tx_mod_reg  = "00011" else
-                    PAYLOAD_PKT(39 downto 0) & IDLE_VALUE & IDLE_VALUE(87 downto 0)    when pkt_tx_mod_reg  = "00100" else
-                    PAYLOAD_PKT(47 downto 0) & IDLE_VALUE & IDLE_VALUE(79 downto 0)    when pkt_tx_mod_reg  = "00101" else
-                    PAYLOAD_PKT(55 downto 0) & IDLE_VALUE & IDLE_VALUE(71 downto 0)    when pkt_tx_mod_reg  = "00110" else
-                    PAYLOAD_PKT(63 downto 0) & IDLE_VALUE & IDLE_VALUE(63 downto 0)    when pkt_tx_mod_reg  = "00111" else
-                    PAYLOAD_PKT(71 downto 0) & IDLE_VALUE & IDLE_VALUE(55 downto 0)    when pkt_tx_mod_reg  = "01000" else
-                    PAYLOAD_PKT(79 downto 0) & IDLE_VALUE & IDLE_VALUE(47 downto 0)    when pkt_tx_mod_reg  = "01001" else
-                    PAYLOAD_PKT(87 downto 0) & IDLE_VALUE & IDLE_VALUE(39 downto 0)    when pkt_tx_mod_reg  = "01010" else
-                    PAYLOAD_PKT(95 downto 0) & IDLE_VALUE & IDLE_VALUE(31 downto 0)    when pkt_tx_mod_reg  = "01011" else
+    PAYLOAD_LAST <= PAYLOAD_PKT(7 downto 0)   & IDLE_VALUE & IDLE_VALUE(119 downto 0)  when pkt_tx_mod_reg  = "00000" else
+                    PAYLOAD_PKT(15 downto 0)  & IDLE_VALUE & IDLE_VALUE(111 downto 0)  when pkt_tx_mod_reg  = "00001" else
+                    PAYLOAD_PKT(23 downto 0)  & IDLE_VALUE & IDLE_VALUE(103 downto 0)  when pkt_tx_mod_reg  = "00010" else
+                    PAYLOAD_PKT(31 downto 0)  & IDLE_VALUE & IDLE_VALUE(95 downto 0)   when pkt_tx_mod_reg  = "00011" else
+                    PAYLOAD_PKT(39 downto 0)  & IDLE_VALUE & IDLE_VALUE(87 downto 0)   when pkt_tx_mod_reg  = "00100" else
+                    PAYLOAD_PKT(47 downto 0)  & IDLE_VALUE & IDLE_VALUE(79 downto 0)   when pkt_tx_mod_reg  = "00101" else
+                    PAYLOAD_PKT(55 downto 0)  & IDLE_VALUE & IDLE_VALUE(71 downto 0)   when pkt_tx_mod_reg  = "00110" else
+                    PAYLOAD_PKT(63 downto 0)  & IDLE_VALUE & IDLE_VALUE(63 downto 0)   when pkt_tx_mod_reg  = "00111" else
+                    PAYLOAD_PKT(71 downto 0)  & IDLE_VALUE & IDLE_VALUE(55 downto 0)   when pkt_tx_mod_reg  = "01000" else
+                    PAYLOAD_PKT(79 downto 0)  & IDLE_VALUE & IDLE_VALUE(47 downto 0)   when pkt_tx_mod_reg  = "01001" else
+                    PAYLOAD_PKT(87 downto 0)  & IDLE_VALUE & IDLE_VALUE(39 downto 0)   when pkt_tx_mod_reg  = "01010" else
+                    PAYLOAD_PKT(95 downto 0)  & IDLE_VALUE & IDLE_VALUE(31 downto 0)   when pkt_tx_mod_reg  = "01011" else
                     PAYLOAD_PKT(103 downto 0) & IDLE_VALUE & IDLE_VALUE(23 downto 0)   when pkt_tx_mod_reg  = "01100" else
                     PAYLOAD_PKT(111 downto 0) & IDLE_VALUE & IDLE_VALUE(15 downto 0)   when pkt_tx_mod_reg  = "01101" else
                     PAYLOAD_PKT(119 downto 0) & IDLE_VALUE & IDLE_VALUE(7 downto 0)    when pkt_tx_mod_reg  = "01110" else

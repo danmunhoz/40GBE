@@ -1,3 +1,15 @@
+--////////////////////////////////////////////////////////////////////////
+--////                                                                ////
+--//// File name "tx_arch.vhd"                                        ////
+--////                                                                ////
+--//// This file is part of "Testset X40G" project                    ////
+--////                                                                ////
+--//// Author(s):                                                     ////
+--//// - Matheus Lemes Ferronato                                      ////
+--//// - Gabriel Susin                                                ////
+--////                                                                ////
+--////////////////////////////////////////////////////////////////////////
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -18,6 +30,7 @@ entity TX_ARCH is
       async_reset_n          : in  std_logic; -- Reset (Active High);
       reset_tx_n             : in  std_logic; -- Reset (Active High);
       reset_rx_n             : in  std_logic; -- Reset (Active High);
+      tester_reset           : in std_logic;
 
       --FROM INTERFACE
       loop_select            : in std_logic;
@@ -107,7 +120,14 @@ entity TX_ARCH is
       tx_valid_out_2   : out std_logic;
       tx_valid_out_3   : out std_logic;
 
-      pkt_tx_eop_batata      : out std_logic
+      pkt_tx_eop_out   : out std_logic;
+
+  -- PKT CREATION
+    --OUTPUTS
+      mac_source_tx      : out  std_logic_vector(47 downto 0);
+      mac_destination_tx : out  std_logic_vector(47 downto 0);
+      ip_source_tx       : out  std_logic_vector(31 downto 0);
+      ip_destination_tx  : out  std_logic_vector(31 downto 0)
 
     );
 end TX_ARCH;
@@ -166,6 +186,7 @@ component TX_PATHWAY port(
     tx_valid_out_2   : out std_logic;
     tx_valid_out_3   : out std_logic
 
+
 );
     end component;
 
@@ -183,7 +204,7 @@ component TX_PATHWAY port(
     signal pkt_tx_eop             : std_logic;
     signal pkt_tx_val             : std_logic;
 begin
-    pkt_tx_eop_batata <= pkt_tx_eop;
+    pkt_tx_eop_out <= pkt_tx_eop;
 
   --###############################################
   --######TX PATH INSTANTIATION####################
@@ -244,6 +265,13 @@ begin
   --######PKT_GENERATION INSTANTIATION#############
   --###############################################
 
+    mac_source_tx      <= mac_source_out;
+    mac_destination_tx <= mac_destination_out;
+    ip_source_tx       <= ip_source_out;
+    ip_destination_tx  <= ip_destination_out;
+
+
+
   inst_pkt_creation_mngr : entity work.pkt_creation_mngr port map (
   --###############################################
   --######STANDART PORTS###########################
@@ -252,7 +280,7 @@ begin
     clk_156                => clk_156,   -- Clock 156.25 MHz
     clk_312                => clk_312,   -- Clock 312 MHz
     clk_312_n              => clk_312_n, -- Clock 312 MHz
-    rst_n                  => rst_n,     -- Reset (Active High);
+    rst_n                  => tester_reset,     -- Reset (Active High);
 
     --FROM INTERFACE
     loop_select            => loop_select,

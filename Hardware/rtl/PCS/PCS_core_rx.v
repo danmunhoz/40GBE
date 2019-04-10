@@ -249,7 +249,7 @@ rx_path_rx INST_rx_path(   // Input Ports
                         //.lpbk               (1'b0),
                         .lpbk               (1'b1),
                         // New inputs.
-                10      .rx_header_valid_in (rx_header_valid_in),
+                      .rx_header_valid_in (rx_header_valid_in),
                         .rx_header_in       (rx_header_in[1:0]),
                         .rx_data_valid_in   (rx_data_valid_in),
                         .rx_data_in         (rx_data_in[63:0]),
@@ -261,7 +261,7 @@ rx_path_rx INST_rx_path(   // Input Ports
                         // .setIPG             (setIPG),
                         .is_alig            (is_alig),
                         .fifo_in            (fifo_in),
-                10        .val_in             (val_in),
+                        .val_in             (val_in),
 
                         // Output Ports
                         .fill_out           (fill_pcs_rx),
@@ -273,7 +273,7 @@ rx_path_rx INST_rx_path(   // Input Ports
                         .blk_lock           (blk_lock),
                         .linkstatus         (linkstatus),
                         .spill              (rx_fifo_spill),
-                  10      .rxlf               (rxlf),
+                        .rxlf               (rxlf),
                         .errd_blks          (errd_blks),
                         .rxgearboxslip_out  (rxgearboxslip_out),
                         .terminate_out      (terminate_out_rx),

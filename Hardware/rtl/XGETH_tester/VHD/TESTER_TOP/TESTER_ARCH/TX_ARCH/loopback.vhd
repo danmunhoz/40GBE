@@ -1,6 +1,14 @@
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
--- TOP ARCHITECTURE DEVELOPED BY MATHEUS LEMES FERRONATO AND GABRIEL SUSIN.
---++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+--////////////////////////////////////////////////////////////////////////
+--////                                                                ////
+--//// File name "loopback.vhd"                                       ////
+--////                                                                ////
+--//// This file is part of "Testset X40G" project                    ////
+--////                                                                ////
+--//// Author(s):                                                     ////
+--//// - Matheus Lemes Ferronato                                      ////
+--//// - Gabriel Susin                                                ////
+--////                                                                ////
+--////////////////////////////////////////////////////////////////////////
 
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -32,7 +40,6 @@ entity loopback is
                                                             -- 001 does not invert mac source and mac target and receives just packets in broadcast or intended for its mac
                                                             -- 010 inverts mac source and mac target and operates in promiscous mode
                                                             -- 011 does not invert mac source and mac target and operates in promiscous mode
-
 
         pkt_tx_eop_out   : out  std_logic;
         pkt_tx_sop_out   : out  std_logic_vector (1 downto 0);

@@ -293,7 +293,6 @@ architecture arch_pkt_creation_mngr of pkt_creation_mngr is
   signal clk_312_n               : std_logic;
   signal parity_stop_156         : std_logic;
   signal parity_start_156         : std_logic;
-  signal data_pkt_start          : std_logic;
   signal data_delay_coutner      : std_logic_vector(1 downto 0);
   signal data_ctrl_in_reg_312    : std_logic_vector(7 downto 0);
   signal data_ctrl_in_reg_312_n  : std_logic_vector(7 downto 0);

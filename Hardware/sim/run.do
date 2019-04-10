@@ -3,6 +3,7 @@ if [file exists work] {
     vdel -all
 }
 vlib work
+
 vmap work work
 
 vmap unisims_ver /soft64/xilinx/ferramentas/ISE/14.6/ISE_DS/ISE/verilog/mti_se/10.3a/lin64/unisims_ver
@@ -138,20 +139,23 @@ vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs_rx.v
 vlog -novopt ../rtl/XGETH_tester/Verilog/TX_PATHWAY.v
 vlog -novopt ../rtl/XGETH_tester/Verilog/RX_PATHWAY.v
 
-vcom -novopt ../rtl/XGETH_tester/VHD/lfsr.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/LFSR_GEN.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/LFSR_REC.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/echo_receiver.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/Archive/lfsr.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH/LFSR_GEN.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/RX_ARCH/LFSR_REC.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH/echo_generator.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/RX_ARCH/echo_receiver.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/Archive/echo_generator_old.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/loopback.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH/loopback.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/Archive/loopback_old.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/txsequence_counter.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/pkt_creation_mngr.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/TX_ARCH.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/RX_ARCH.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/TB_40Gb.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/ClockGodTest.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH/pkt_creation_mngr.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH/TX_ARCH.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/RX_ARCH/RX_ARCH.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/interface_upc_xgeth.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/RFC2544.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_4XGTH.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TB_4XGTH.vhd
+
 
 
 #vcom -novopt tx_xgt4.vhd
@@ -177,13 +181,16 @@ vcom -novopt ../rtl/PCS/alignment_removal.vhd
 #sccom -novopt -g sc_tb.cpp
 #sccom -link -B/usr/bin/
 
+
 vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 -L secureip -L xilinxcorelib work.glbl \
-work.Tb_40Gb -t 1ps
+work.TB_4XGTH -t 1ps
+
+run 50000 ns
 
 #do wave.do
 
-#run 1000 ms
+
 #run 1000 ms
 #run 1000 ms
 #run 1000 ms
@@ -200,7 +207,7 @@ work.Tb_40Gb -t 1ps
 transcript file transcript#
 #run 30 ms
 do wave.do
-#run 30 ms
+run 3000 ns
 
 
 
