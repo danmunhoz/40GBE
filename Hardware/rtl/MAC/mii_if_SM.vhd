@@ -168,15 +168,20 @@ architecture behav_mii_if of mii_if is
 
       when S_EOP =>
         -- if sop_in(1) = '0' and eop_in < "010100" then -- Garante IPG sem SOP, com EOP < 20°byte
-        if sop_in(1) = '0' and eop_in < "010011" then -- Garante IPG sem SOP, com EOP < 19°byte
+        -- if sop_in(1) = '0' and eop_in < "010011" then -- Garante IPG sem SOP, com EOP < 19°byte
+        if sop_in(1) = '0' and eop_in < "010011" and shift = "00" then -- Garante IPG sem SOP, com EOP < 19°byte
           ns_mii <= S_IDLE;
+
+        -- elsif sop_in(1) = '0' and eop_in(4 downto 0) > "01110" and shift = "01" then
+          -- ns_mii <= S_IPG;
+
         -- elsif sop_in(1) = '1' and eop_in_o < "010011" then -- Garante IPG - Tanauan
         --   ns_mii <= S_TX;
         elsif sop_in(1) = '1' and eop_in_o < "010011" and sop_in_o(1) = '0' then
           ns_mii <= S_TX;
         elsif sop_in(1) = '1' and eop_in_o < "001111" and sop_in_o(1) = '1'then
           ns_mii <= S_WAIT_1C;
-
+                                                                                          -- Talvez < 000011
         elsif reading = '1' and val_in = '1' and sop_in = "11" and eop_in < "000100" then -- Garante IPG com SOP e EOP < 3° byte
           ns_mii <= S_IDLE;
         -- elsif sop_in(1) = '0' and eop_in > "010011" then -- EOP > 19ºbyte
@@ -189,6 +194,16 @@ architecture behav_mii_if of mii_if is
         elsif reading = '1' and val_in = '1' and eop_in >= "000011" and shift = "01" then -- Pausa 1C e reoderna transmição
           ns_mii <= S_WAIT_1C;
           fifo_wait <= '1';
+
+
+
+        -- Tanauan dia 08/04/19
+        --
+        -- elsif reading = '1' and val_in = '1' and eop_in_o_o < "000011" and shift = "01" then
+        --     ns_mii <= S_IDLE;
+      elsif reading = '0' and val_in = '1' and eop_in < "001111" and shift = "01" and sop_in(1)='0' then
+          ns_mii <= S_IPG;
+
         else
           --ns_mii <= S_ERROR;
         end if;
@@ -350,7 +365,7 @@ architecture behav_mii_if of mii_if is
                               data_3_o(39 downto 32) & data_3_o(47 downto 40) & data_3_o(55 downto 48) & data_3_o(63 downto 56);
             end if;
 
-          when "01" =>
+          when "01" =>  --shift = 01
             if sop_in_o = "10" then
               mii_data_0 <= LANE_IDLE;
               mii_data_1 <= LANE_IDLE;
@@ -360,6 +375,16 @@ architecture behav_mii_if of mii_if is
               mii_ctrl_1 <= x"ff";
               mii_ctrl_2 <= x"01";
               mii_ctrl_3 <= x"00";
+
+            -- elsif sop_in_o = "11" then --tanauan dia 04/04/19
+            --   mii_data_0 <= LANE_IDLE;
+            --   mii_data_1 <= LANE_IDLE;
+            --   mii_data_2 <= LANE_IDLE;
+            --   mii_data_3 <= LANE_IDLE;
+            --   mii_ctrl_0 <= x"ff";
+            --   mii_ctrl_1 <= x"ff";
+            --   mii_ctrl_2 <= x"ff";
+            --   mii_ctrl_3 <= x"ff";
 
             elsif sop_in_o_o = "11" then
               mii_data_0 <= data_2_o_o;
@@ -495,7 +520,16 @@ architecture behav_mii_if of mii_if is
                                             data_3_o_o(39 downto 32) & data_3_o_o(47 downto 40) & data_3_o_o(55 downto 48) & data_3_o_o(63 downto 56);
                               inv_data_2 <= data_0_o(7 downto 0) & data_0_o(15 downto 8) & x"FD0707070707";
                               inv_data_3 <= LANE_IDLE;
+
+                              --tanauan dia 08/04/19
+                              --
+                              if eop_in_o_o = "000001" and sop_in_o_o(1) = '0' then
+                                mii_ctrl_0 <= x"ff"; mii_ctrl_1 <= x"ff"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
+                                mii_data_0 <= LANE_IDLE; mii_data_1 <= LANE_IDLE; mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
+                              end if;
+
                             end if;
+
 
           when "000010" =>  if shift = "00" then
                               mii_ctrl_0 <= "11111000"; mii_ctrl_1 <= x"ff"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
@@ -515,6 +549,13 @@ architecture behav_mii_if of mii_if is
                               mii_data_0 <= data_2_o_o; mii_data_1 <= data_3_o_o;
                               mii_data_2 <= x"07070707FD" & data_0_o(23 downto 0); mii_data_3 <= LANE_IDLE;
                               ------------------------------------
+                              --tanauan dia 08/04/19
+                              --
+                              if eop_in_o_o = "000010" and sop_in_o_o(1) = '0' then
+                                mii_ctrl_0 <= x"ff"; mii_ctrl_1 <= x"ff"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
+                                mii_data_0 <= LANE_IDLE; mii_data_1 <= LANE_IDLE; mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
+                              end if;
+
                               inv_ctrl_0 <= x"00";
                               inv_ctrl_1 <= x"00";
                               inv_ctrl_2 <= "00011111";
@@ -544,6 +585,13 @@ architecture behav_mii_if of mii_if is
                               mii_ctrl_0 <= x"00"; mii_ctrl_1 <= x"00"; mii_ctrl_2 <= "11110000"; mii_ctrl_3 <= x"ff";
                               mii_data_0 <= data_2_o_o; mii_data_1 <= data_3_o_o;
                               mii_data_2 <= x"070707FD" & data_0_o(31 downto 0); mii_data_3 <= LANE_IDLE;
+
+                              --tanauan dia 08/04/19
+                              --
+                              if eop_in_o_o = "000011" and sop_in_o_o(1) = '0' then
+                                mii_ctrl_0 <= x"ff"; mii_ctrl_1 <= x"ff"; mii_ctrl_2 <= x"ff"; mii_ctrl_3 <= x"ff";
+                                mii_data_0 <= LANE_IDLE; mii_data_1 <= LANE_IDLE; mii_data_2 <= LANE_IDLE; mii_data_3 <= LANE_IDLE;
+                              end if;
                               ------------------------------------
                               inv_ctrl_0 <= x"00";
                               inv_ctrl_1 <= x"00";
@@ -982,13 +1030,40 @@ architecture behav_mii_if of mii_if is
         mii_ctrl_2 <= x"ff";
         mii_ctrl_3 <= x"ff";
 
-        if eop_in_o_o = "011111" then
-          mii_data_0 <= data_2_o_o;
-          mii_data_1 <= data_3_o_o;
-          mii_data_2 <= x"07070707070707FD";
+        -- tanauan testando dia 04/04/19
+        --
+        -- if eop_in_o_o = "010011" and (shift = "01") then
+        --   mii_data_0 <= x"070707FD" & data_2_o_o(31 downto 0);
+        --   mii_data_1 <= LANE_IDLE;
+        --   mii_data_2 <= LANE_IDLE;
+        --   mii_data_3 <= LANE_IDLE;
+        --   mii_ctrl_0 <= "11110000";
+        --   mii_ctrl_1 <= x"ff";
+        --   mii_ctrl_2 <= x"ff";
+        --   mii_ctrl_3 <= x"ff";
+        -- end if;
+        --
+        -- if eop_in_o_o = "011111" and (shift = "01") then
+        --   mii_data_0 <= data_2_o_o;
+        --   mii_data_1 <= data_3_o_o;
+        --   mii_data_2 <= x"07070707070707FD";
+        --   mii_data_3 <= LANE_IDLE;
+        --   mii_ctrl_0 <= x"00";
+        --   mii_ctrl_1 <= x"00";
+        --   mii_ctrl_2 <= x"ff";
+        --   mii_ctrl_3 <= x"ff";
+        -- end if;
+
+
+
+
+        if eop_in_o_o = "011111" and shift = "00" then
+          mii_data_0 <= x"07070707070707FD";
+          mii_data_1 <= LANE_IDLE;
+          mii_data_2 <= LANE_IDLE;
           mii_data_3 <= LANE_IDLE;
-          mii_ctrl_0 <= x"00";
-          mii_ctrl_1 <= x"00";
+          mii_ctrl_0 <= x"ff";
+          mii_ctrl_1 <= x"ff";
           mii_ctrl_2 <= x"ff";
           mii_ctrl_3 <= x"ff";
         end if;

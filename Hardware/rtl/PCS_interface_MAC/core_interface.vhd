@@ -43,6 +43,8 @@ architecture behav_core_interface of core_interface is
     signal is_sop_control      : std_logic;
     signal eop_addr            : std_logic_vector(5 downto 0);
 
+    signal ff256_sop           : std_logic_vector(1 downto 0);
+
   begin
 
     fifo_almost_f <= fifo_almost_f_int;
@@ -103,6 +105,39 @@ architecture behav_core_interface of core_interface is
           full         => fifo_full,
           almost_f     => fifo_almost_f_int,
           almost_e     => fifo_almost_e
+    );
+
+
+    --      TANAUAN TESTANDO COM BARRAMENTO DE DE SAIDA 256 BITS
+    --
+
+    --  ff256_sop : signal std_logic_vector(1 downto 0);
+
+    ff256_sop <= is_sop_control & '0';
+
+    fifo_256 : entity work.data_frame_fifo port map (
+    --INPUTS
+    clk        => clk_156,      -- : in std_logic;
+    rst_n      => rst_n,        -- : in std_logic;
+    data_in    => shifter_out,    -- : in std_logic_vector(255 downto 0);
+    eop_in     => eop_addr,     -- : in std_logic_vector(5 downto 0);
+    sop_in     => ff256_sop,    -- : in std_logic_vector(1 downto 0);
+    val_in     => '0' ,   --  ???         -- : in std_logic;
+    ren        => ren,          -- : in std_logic;
+    wen        => fifo_wen,     -- : in std_logic;
+    --OUTPUTS
+    data_out   => open,-- : out std_logic_vector(255 downto 0);
+    eop_out    => open,-- : out std_logic_vector(  5 downto 0);
+    sop_out    => open,-- : out std_logic_vector(1 downto 0);
+    val_out    => open,-- : out std_logic;
+
+    almost_e   => open,-- : out std_logic;
+    almost_f   => open,-- : out std_logic;
+    full       => open,-- : out std_logic;
+    empty      => open -- : out std_logic
+
+
+
     );
 
 end behav_core_interface;

@@ -231,7 +231,10 @@ begin
   -- original
   -- ctrl_delay <= ctrl_delay_reg_reg_reg;
 
+  -- ctrl_delay <= ctrl_delay_reg_reg when ctrl_delay_int = "00" and is_sop_reg_reg = '1' and shift_out_int = "110" and ctrl_delay_reg_reg_reg ="10"else
+  --               ctrl_delay_reg_reg_reg;
   ctrl_delay <= ctrl_delay_reg_reg when ctrl_delay_int = "00" and is_sop_reg_reg = '1' and shift_out_int = "110" and ctrl_delay_reg_reg_reg ="10"else
+                ctrl_delay_reg_reg when ctrl_delay_int = "00" and is_sop_reg_reg = '1' and shift_out_int = "010" and ctrl_delay_reg_reg_reg ="10"else
                 ctrl_delay_reg_reg_reg;
 
   reg_shift_ctrl: process (sop_location, eop_location)

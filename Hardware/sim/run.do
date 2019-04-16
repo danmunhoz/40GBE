@@ -87,6 +87,8 @@ vcom -novopt ../rtl/PCS_interface_MAC/mii_shift_register.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/mii_shifter.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/ring_fifo_bram.vhd
+
+vcom -novopt ../rtl/MAC/data_frame_fifo.vhd
 vcom -novopt ../rtl/PCS_interface_MAC/core_interface.vhd
 
 vcom -novopt ../rtl/CRC_RX/CRC32_D8.vhd
@@ -173,11 +175,10 @@ work.Top -t 1ps
 
 
 transcript file transcript#
-run 1000 ms
-
+#run 1000 ms
 
 #do wave.do
-#run 30 ms
+#run 1 ms
 
 
 
