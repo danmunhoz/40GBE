@@ -1032,27 +1032,27 @@ architecture behav_mii_if of mii_if is
 
         -- tanauan testando dia 04/04/19
         --
-        -- if eop_in_o_o = "010011" and (shift = "01") then
-        --   mii_data_0 <= x"070707FD" & data_2_o_o(31 downto 0);
-        --   mii_data_1 <= LANE_IDLE;
-        --   mii_data_2 <= LANE_IDLE;
-        --   mii_data_3 <= LANE_IDLE;
-        --   mii_ctrl_0 <= "11110000";
-        --   mii_ctrl_1 <= x"ff";
-        --   mii_ctrl_2 <= x"ff";
-        --   mii_ctrl_3 <= x"ff";
-        -- end if;
-        --
-        -- if eop_in_o_o = "011111" and (shift = "01") then
-        --   mii_data_0 <= data_2_o_o;
-        --   mii_data_1 <= data_3_o_o;
-        --   mii_data_2 <= x"07070707070707FD";
-        --   mii_data_3 <= LANE_IDLE;
-        --   mii_ctrl_0 <= x"00";
-        --   mii_ctrl_1 <= x"00";
-        --   mii_ctrl_2 <= x"ff";
-        --   mii_ctrl_3 <= x"ff";
-        -- end if;
+        if eop_in_o_o = "010011" and (shift = "01") then
+          mii_data_0 <= x"070707FD" & data_2_o_o(31 downto 0);
+          mii_data_1 <= LANE_IDLE;
+          mii_data_2 <= LANE_IDLE;
+          mii_data_3 <= LANE_IDLE;
+          mii_ctrl_0 <= "11110000";
+          mii_ctrl_1 <= x"ff";
+          mii_ctrl_2 <= x"ff";
+          mii_ctrl_3 <= x"ff";
+        end if;
+
+        if eop_in_o_o = "011111" and (shift = "01") then
+          mii_data_0 <= data_2_o_o;
+          mii_data_1 <= data_3_o_o;
+          mii_data_2 <= x"07070707070707FD";
+          mii_data_3 <= LANE_IDLE;
+          mii_ctrl_0 <= x"00";
+          mii_ctrl_1 <= x"00";
+          mii_ctrl_2 <= x"ff";
+          mii_ctrl_3 <= x"ff";
+        end if;
 
 
 

@@ -13,8 +13,9 @@ struct line {
   std::string ctrl;
 };
 
-#define MAX_PL_CYCLES  17
-// #define MAX_PL_CYCLES  19
+// #define MAX_PL_CYCLES  17
+
+#define MAX_PL_CYCLES  4
 // #define MAX_PL_CYCLES  19
 // #define MAX_PL_CYCLES  19
 // #define MAX_PL_CYCLES  19
