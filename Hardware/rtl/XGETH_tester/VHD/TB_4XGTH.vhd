@@ -11,7 +11,6 @@
 
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE.std_logic_arith.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
 
@@ -22,7 +21,7 @@ end TB_4XGTH;
 
 architecture ARCH_TB_4XGTH of TB_4XGTH is
   type array_data64_type  is array (0 to 3) of std_logic_vector (63 downto 0);
-  type array_data32_type  is array (0 to 3) of std_logic_vector (31 downto 0);
+  type array_data32_type  is array (0 to 1) of std_logic_vector (31 downto 0);
   type array_address_type is array (0 to 3) of std_logic_vector (6 downto 0);
   type array_header_type  is array (0 to 3) of std_logic_vector (1 downto 0);
   type array_bit_type   is array (0 to 3) of std_logic;
@@ -60,7 +59,7 @@ architecture ARCH_TB_4XGTH of TB_4XGTH is
  signal xgeth_wdata              :  array_data32_type;
  signal xgeth_raddr              :  array_address_type;
  signal xgeth_rdata              :  array_data32_type;
- signal xgeth_wen                :  array_bit_type;
+ signal xgeth_wen                :  std_logic_vector(1 downto 0);
 
  signal eth_rx_los               :  array_bit_type;
  signal on_frame_sent            :  array_bit_type;
@@ -69,35 +68,79 @@ architecture ARCH_TB_4XGTH of TB_4XGTH is
  signal linkstatus               :  array_bit_type;
 
  signal pkt_rx_avail_in          : std_logic;
-signal start_tx_begin_delay     : std_logic;
-signal start_tx_begin           : std_logic := '0';
+ signal start_tx_begin_delay     : std_logic;
+ signal start_tx_begin           : std_logic := '0';
+
+ signal index                     : std_logic_vector(6 downto 0) := (others => '0');
+ signal xgeth_wdata_0_reg         : std_logic_vector(31 downto 0);
+ signal xgeth_wdata_1_reg         : std_logic_vector(31 downto 0);
+
+ type reg_values is array (0 to 27) of std_logic_vector(31 downto 0);
+
+ constant reg_values_0_in: reg_values := (x"00000000", x"00000000", x"000005EE", x"0000000A", x"00000010",
+    x"00000000", x"00000000",   x"00AA11BB", x"000022CC", x"AA00BB11", x"0000CC22", x"0ABCDE01", x"0ABCDE02",
+    x"0000000A",   x"00000000", x"00000003", x"0000000C", x"00000000", x"00000000", x"00000000", x"00000000",
+    x"00000000", x"00000000",x"00000000", x"0000002E", x"00001000", x"00000001", x"00000001");
+
+ constant reg_values_1_in: reg_values := (x"00000000", x"00000000", x"000005EE", x"0000000A", x"00000010",
+  x"00000000", x"00000000",   x"AA00BB11", x"0000CC22", x"00AA11BB", x"000022CC",  x"0ABCDE02", x"0ABCDE01",
+  x"0000000A",   x"00000000", x"00000003", x"0000000C",x"00000000", x"00000000", x"00000000", x"00000000",
+  x"00000000", x"00000000" , x"00000000", x"0000002E", x"00001000", x"00000001", x"00000001");
+
+  signal estado : std_logic;
 
 begin
   --///////////////////////////////////////////////////////////////////////////////////////////////////
-  --//CLOCK AND AUX////////////////////////////////////////////////////////////////////////////////////
+  --//STIMULUS GENERATOR///////////////////////////////////////////////////////////////////////////////
   --///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    clk_156    <= not clk_156 after 3.20512821 ns;
     tx_clk161  <= not tx_clk161 after 3.10559006 ns;
     rx_clk161  <= not tx_clk161 after 3.10559006 ns;
     tx_clk161  <= not tx_clk161 after 3.10559006 ns;
-    clk_312    <= not clk_312 after 1.602564105 ns;
+    clk_312    <= not clk_312 after 1.6 ns;
     clk_312_n  <= not clk_312;
     clk_250    <= not clk_250 after 2 ns;
 
-    rst_n          <= '0','1' after 35 ns;
-    async_reset_n  <= '0','1' after 35 ns;
-    reset_tx_n     <= '0','1' after 40 ns;
-    reset_rx_n     <= '0','1' after 40 ns;
-    pkt_rx_avail_in   <= '0','1' after 5000 ns;
+    clock156: process (clk_312)
+    begin
+      if rising_edge(clk_312) then
+        clk_156 <= not clk_156;
+      end if;
+    end process;
 
-    start_fifo <= '0', '1' after 65 ns;
-    start_fifo_rd <= '0', '1' after 150 ns;  -- Tanauan, testando repeticao mii
-
-
+    rst_n           <= '0','1' after 35 ns;
+    async_reset_n   <= '0','1' after 35 ns;
+    reset_tx_n      <= '0','1' after 40 ns;
+    reset_rx_n      <= '0','1' after 40 ns;
+    pkt_rx_avail_in <= '0','1' after 5000 ns;
+    start_fifo      <= '0', '1' after 65 ns;
+    start_fifo_rd   <= '0', '1' after 150 ns;  -- Tanauan, testando repeticao mii
     RDEN_FIFO_PCS40 <= '0', '1' after 4000 ns;
 
+    xgeth_wdata(0)  <= reg_values_0_in(to_integer(unsigned(index)));
+    xgeth_wdata(1)  <= reg_values_1_in(to_integer(unsigned(index)));
+    xgeth_waddr(0)  <= index;
+    xgeth_waddr(1)  <= index;
 
+    regs_iterator : process(clk_250, rst_n)
+    begin
+      if rst_n = '0' then
+        estado            <= '0';
+        index             <= (others => '0');
+        xgeth_wdata_0_reg <= (others => '0');
+        xgeth_wdata_1_reg <= (others => '0');
+        xgeth_wen         <= "00";
+      elsif (rising_edge(clk_250)) then
+        if (estado = '0') then
+          xgeth_wen         <= "11";
+          estado <= '1';
+        elsif index < 27 then
+          index <= index + '1';
+        else
+          xgeth_wen <= "00";
+        end if;
+      end if;
+    end process;
 
 
     --///////////////////////////////////////////////////////////////////////////////////////////////////

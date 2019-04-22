@@ -274,24 +274,24 @@ BEGIN
   -- Updates the current state
     next_updater : process(current_s, pkt_rx_avail, pkt_rx_sop, pkt_rx_eop)
     begin
-	next_s <= S_IDLE;
-	case current_s is
-	    when S_IDLE =>
-		if pkt_rx_avail = '1' and pkt_rx_sop = '1' then
-			next_s <= S_ETHERNET;
-		end if;
-	    when S_ETHERNET => next_s <= S_IP;
-	    when S_IP => next_s <= S_REST_IP;
-	    when S_REST_IP => next_s <= S_PAYLOAD_START;
-	    when S_PAYLOAD_START => next_s <= S_PAYLOAD;
-	    when S_PAYLOAD =>
-	      if pkt_rx_eop = '1' then
-		  next_s <= S_PAYLOAD_END;
-	      else
-		  next_s <= S_PAYLOAD;
-	      end if;
-	  when S_PAYLOAD_END => next_s <= S_IDLE;
-	end case;
+    	next_s <= S_IDLE;
+    	case current_s is
+    	    when S_IDLE =>
+    		if pkt_rx_avail = '1' and pkt_rx_sop = '1' then
+    			next_s <= S_ETHERNET;
+    		end if;
+    	    when S_ETHERNET => next_s <= S_IP;
+    	    when S_IP => next_s <= S_REST_IP;
+    	    when S_REST_IP => next_s <= S_PAYLOAD_START;
+    	    when S_PAYLOAD_START => next_s <= S_PAYLOAD;
+    	    when S_PAYLOAD =>
+    	      if pkt_rx_eop = '1' then
+    		  next_s <= S_PAYLOAD_END;
+    	      else
+    		  next_s <= S_PAYLOAD;
+    	      end if;
+    	  when S_PAYLOAD_END => next_s <= S_IDLE;
+    	end case;
     end process;
 
     current_updater : process(reset, clk_312)
@@ -599,6 +599,7 @@ BEGIN
         end if;
       end if;
     end process;
+
 
 
 end arch_echo_receiver_unary;

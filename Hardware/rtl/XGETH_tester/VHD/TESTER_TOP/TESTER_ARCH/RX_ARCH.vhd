@@ -88,7 +88,12 @@ entity RX_ARCH is
        pkt_sequence_error_flag  : out std_logic; -- to RFC254|
        pkt_sequence_error       : out std_logic;                -- '0' if sequence is ok, '1' if error in sequence and not recovered -- to RFC254|
        count_error              : out std_logic_vector(63 downto 0);
-       IDLE_count               : out std_logic_vector(63 downto 0)
+       IDLE_count               : out std_logic_vector(63 downto 0);
+
+       eop_156                  : out std_logic;
+       sop_156                  : out std_logic;
+       val_156                  : out std_logic;
+       crc_ok_156               : out std_logic
     );
   end RX_ARCH;
 
@@ -149,25 +154,102 @@ entity RX_ARCH is
   signal crc_pkt_rx_data_out     : std_logic_vector(127 downto 0);
   signal crc_ok_out              : std_logic;
 
+  type unstable_data is array (0 to 3) of std_logic;
+  type metastable_data is array (0 to 3) of std_logic;
+  type stable_data is array (0 to 3) of std_logic;
+  type stretcher_counter is array (0 to 3) of integer range 0 to 2;
+
+  signal unstable : unstable_data := ('0','0','0','0');
+  signal metastable : metastable_data := ('0','0','0','0');
+  signal stable : stable_data := ('0','0','0','0');
+  signal stc_counter : stretcher_counter := (0, 0, 0, 0);
+
 begin
-
-
-
-
-
-
-
 
 
     --###############################################
     --######RX PATH INSTANTIATION####################
     --###############################################
 
-    pkt_rx_eop <= crc_pkt_rx_eop_out;
+    pkt_rx_eop  <= crc_pkt_rx_eop_out;
     pkt_rx_sop  <= crc_pkt_rx_sop_out;
     pkt_rx_val  <= crc_pkt_rx_val_out;
-    pkt_rx_data  <= crc_pkt_rx_data_out;
+    pkt_rx_data <= crc_pkt_rx_data_out;
     crc_ok      <= crc_ok_out;
+
+    eop_156     <= stable(0);
+    sop_156     <= stable(1);
+    val_156     <= stable(2);
+    crc_ok_156  <= stable(3);
+
+
+  faster_eop : process(clk_312)
+  begin
+    if rising_edge(clk_312) then
+      if crc_pkt_rx_eop_out(4) = '1' then
+        stc_counter(0) <= 2;
+      elsif stc_counter(0) > 0 then
+        stc_counter(0) <= stc_counter(0) - 1;
+      end if;
+    end if;
+  end process;
+
+  faster_sop : process(clk_312)
+  begin
+    if rising_edge(clk_312) then
+      if crc_pkt_rx_sop_out = '1' then
+        stc_counter(1) <= 2;
+      elsif stc_counter(1) > 0 then
+        stc_counter(1) <= stc_counter(1) - 1;
+      end if;
+    end if;
+  end process;
+
+  faster_val : process(clk_312)
+  begin
+    if rising_edge(clk_312) then
+      if crc_pkt_rx_val_out = '1' then
+        stc_counter(2) <= 2;
+      elsif stc_counter(2) > 0 then
+        stc_counter(2) <= stc_counter(2) - 1;
+      end if;
+    end if;
+  end process;
+
+  faster_crc_ok : process(clk_312)
+  begin
+    if rising_edge(clk_312) then
+      if crc_ok_out = '1' then
+        stc_counter(3) <= 2;
+      elsif stc_counter(3) > 0 then
+        stc_counter(3) <= stc_counter(3) - 1;
+      end if;
+    end if;
+  end process;
+
+
+  unstable(0) <= '1' when stc_counter(0) > 0 else '0';
+  unstable(1) <= '1' when stc_counter(1) > 0 else '0';
+  unstable(2) <= '1' when stc_counter(2) > 0 else '0';
+  unstable(3) <= '1' when stc_counter(3) > 0 else '0';
+
+  slower_updater : process(clk_156)
+  begin
+      if rising_edge(clk_156) then
+        metastable(0) <= unstable(0);
+        stable(0) <= metastable(0);
+
+        metastable(1) <= unstable(1);
+        stable(1) <= metastable(1);
+
+        metastable(2) <= unstable(2);
+        stable(2) <= metastable(2);
+
+        metastable(3) <= unstable(3);
+        stable(3) <= metastable(3);
+      end if;
+  end process;
+
 
   inst_rx_pathway: RX_PATHWAY port map(
      rx_clk161       =>   rx_clk161,
@@ -211,12 +293,6 @@ begin
      pkt_rx_data      => crc_pkt_rx_data_out,
      crc_ok           => crc_ok_out
   );
-
-
-
-
-
-
 
 
 

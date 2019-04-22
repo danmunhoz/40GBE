@@ -35,9 +35,7 @@ entity pkt_creation_mngr is
     clk_312_n              : in  std_logic;
     rst_n                  : in  std_logic; -- Reset (Active High);
 
-    --FROM INTERFACE
     loop_select            : in std_logic;
-    mac_source             : in  std_logic_vector(47 downto 0); -- MAC source address
 
     --FROM REC
     rec_mac_source_rx      : in  std_logic_vector(47 downto 0);
@@ -64,6 +62,8 @@ entity pkt_creation_mngr is
     lfsr_polynomial        : in std_logic_vector(1 downto 0);
 
     -- Settings
+    --FROM INTERFACE
+    mac_source             : in  std_logic_vector(47 downto 0); -- MAC source address
     mac_destination        : in  std_logic_vector(47 downto 0); -- MAC destination address
     ip_source              : in  std_logic_vector(31 downto 0); -- IP source address
     ip_destination         : in  std_logic_vector(31 downto 0); -- IP destination address
@@ -159,7 +159,9 @@ architecture arch_pkt_creation_mngr of pkt_creation_mngr is
   signal rebuild_data_312_n_delay  : std_logic_vector(127 downto 0);
 
 
+
 begin
+
 
 ---------------------------------------------------------
 -- SHIFTED CLOCK DATA REBUILD
@@ -263,10 +265,10 @@ begin
 -- MUX to select ECHO GEN or LOOPBACK  -> MAC bus
 ---------------------------------------------------------
 
-  mac_source_out       <= lb_mac_source when loop_select = '1' else rec_mac_source_rx;
-  mac_destination_out  <= lb_mac_destination when loop_select = '1' else rec_mac_destination_rx;
-  ip_source_out        <= lb_ip_source when loop_select = '1' else rec_ip_source_rx;
-  ip_destination_out   <= lb_ip_destination when loop_select = '1' else rec_ip_destination_rx;
+  mac_source_out       <= lb_mac_source when loop_select = '1' else mac_source;
+  mac_destination_out  <= lb_mac_destination when loop_select = '1' else mac_destination;
+  ip_source_out        <= lb_ip_source when loop_select = '1' else ip_source;
+  ip_destination_out   <= lb_ip_destination when loop_select = '1' else ip_destination;
 
 
   pkt_tx_data <= lb_pkt_tx_data when loop_select = '1' else
@@ -347,7 +349,8 @@ begin
       pkt_tx_eop          => gen_pkt_tx_eop,
       pkt_tx_mod          => gen_pkt_tx_mod,
       payload_type        => payload_type,
-      payload_cycles      => payload_cycles
+      payload_cycles      => payload_cycles,
+      payload_last_cycle  => "00000001"
   );
 
 

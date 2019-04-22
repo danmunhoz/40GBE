@@ -149,8 +149,8 @@ vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH/loopback.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/Archive/loopback_old.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/txsequence_counter.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH/pkt_creation_mngr.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH/TX_ARCH.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/RX_ARCH/RX_ARCH.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/RX_ARCH.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/interface_upc_xgeth.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/RFC2544.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_4XGTH.vhd

@@ -109,7 +109,6 @@ signal rec_mac_destination_rx   : std_logic_vector(47 downto 0);
 signal rec_ip_source_rx         : std_logic_vector(31 downto 0);
 signal rec_ip_destination_rx    : std_logic_vector(31 downto 0);
 signal start                    : std_logic;  -- Enable the pack
-signal gen_lfsr_seed_in         : std_logic_vector(255 downto 0) := x"0000000000000000000000000000000000000000000000000000000C00000003";
 signal valid_seed               : std_logic :=  '1';
 signal lfsr_polynomial          : std_logic_vector(1 downto 0);
 signal mac_source_tx            : std_logic_vector(47 downto 0);
@@ -220,14 +219,20 @@ signal fill_pcs_tx              : std_logic_vector(8 downto 0);
   signal TIMEOUT_number          : std_logic_vector(15 downto 0);
   signal RFC_running             : std_logic;
   signal check_reduce_frame_rate : std_logic;
-  signal lfsr_seed               : std_logic_vector(63 downto 0);
+  signal lfsr_seed               : std_logic_vector(255 downto 0);
 
 --RFC Signals
   signal RFC_pkt_rx_out          : std_logic_vector(63 downto 0);
   signal latency                 : std_logic_vector(47 downto 0);
   signal TX_count                : std_logic_vector(63 downto 0);
   signal IDLE_count_receiver_out : std_logic_vector(63 downto 0);
-signal start_tx_begin           : std_logic := '0';
+  signal start_tx_begin          : std_logic := '0';
+
+  signal eop_156                 : std_logic;
+  signal sop_156                 : std_logic;
+  signal val_156                 : std_logic;
+  signal crc_ok_156              : std_logic;
+
 
 begin
 
@@ -257,7 +262,7 @@ TX_ARCH_INST  : entity work.TX_ARCH
       tester_reset           => tester_reset,
 
       --FROM INTERFACE
-      loop_select            => TBD_1,--loop_select,
+      loop_select            => loop_select,--loop_select,
 
       --FROM REC
       rec_mac_source_rx      => rec_mac_source_rx_out,
@@ -272,7 +277,7 @@ TX_ARCH_INST  : entity work.TX_ARCH
       start                  => start_tx_begin,  -- Enable the packet generation
 
       --LFSR Initialization
-      lfsr_seed              => gen_lfsr_seed_in,
+      lfsr_seed              => lfsr_seed,
       valid_seed             => valid_seed,
       lfsr_polynomial        => lfsr_polynomial,
 
@@ -288,7 +293,7 @@ TX_ARCH_INST  : entity work.TX_ARCH
 
       -- TX mac interface
       pkt_tx_full            => pkt_tx_full,                      -- Informs if xMAC tx buffer is full
-      payload_type           => TBD_0, --payload_type,
+      payload_type           => payload_type, --payload_type,
       payload_cycles         => payload_cycles,
 
       --###############################################
@@ -354,12 +359,11 @@ TX_ARCH_INST  : entity work.TX_ARCH
     );
 
 
-
 --///////////////////////////////////////////////////////////////////////////////////////////////////
 --//RX ARCH//////////////////////////////////////////////////////////////////////////////////////////
 --///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    rec_lfsr_seed_in <= gen_lfsr_seed_in(127 downto 0);
+    rec_lfsr_seed_in <= lfsr_seed(127 downto 0);
     linkstatus_out   <= linkstatus;
 
     RX_ARCH_INST  : entity work.RX_ARCH
@@ -437,7 +441,12 @@ TX_ARCH_INST  : entity work.TX_ARCH
      pkt_rx_sop               => crc_pkt_rx_sop_out,
      pkt_rx_val               => crc_pkt_rx_val_out,
      pkt_rx_data              => crc_pkt_rx_data_out,
-     crc_ok                   => crc_ok
+     crc_ok                   => crc_ok,
+
+     eop_156                  => eop_156,
+     sop_156                  => sop_156,
+     val_156                  => val_156,
+     crc_ok_156               => crc_ok_156
   );
 
 
