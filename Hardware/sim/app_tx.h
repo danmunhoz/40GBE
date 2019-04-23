@@ -13,9 +13,17 @@ struct line {
   std::string ctrl;
 };
 
-// #define MAX_PL_CYCLES  17
+ // #define MAX_PL_CYCLES  17
 
-#define MAX_PL_CYCLES  4
+
+extern int MAX_PL_CYCLES;
+extern int MAX_IPG_CYCLES;
+
+extern int max_pl_cycles;
+extern int max_ipg_cycles;
+
+
+// #define MAX_PL_CYCLES  24
 // #define MAX_PL_CYCLES  19
 // #define MAX_PL_CYCLES  19
 // #define MAX_PL_CYCLES  19
@@ -38,7 +46,7 @@ struct line {
 // #define MAX_PL_CYCLES  19
 // #define MAX_PL_CYCLES  19
 
-#define MAX_IPG_CYCLES 5
+// #define MAX_IPG_CYCLES 5
 // #define MAX_IPG_CYCLES 1
 // #define MAX_IPG_CYCLES 1
 // #define MAX_IPG_CYCLES 1
@@ -81,6 +89,9 @@ SC_MODULE(app_tx) {
     line pr0;
     std::string line0;
     static int end = 0;
+
+    MAX_PL_CYCLES = max_pl_cycles;
+    MAX_IPG_CYCLES = max_ipg_cycles;
 
     if (reset_in == SC_LOGIC_1) {       // RESET ativo baixo
 
@@ -179,6 +190,8 @@ SC_MODULE(app_tx) {
   SC_CTOR(app_tx) {
 
     IPG_CYCLES = 1;
+
+
 
     in_file.open("dump_app.txt");
     if (in_file.is_open()){

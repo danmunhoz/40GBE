@@ -816,7 +816,8 @@ architecture behav_frame_builder of frame_builder is
 
         when S_EOP_N =>
           -- if almost_e = '1' then
-          if almost_e_d = '1' then
+          -- if almost_e_d = '1' then --tanauan 20epoucos/04 originals
+          if almost_e_d = '1' and sop_reg_in(1) = '0'then --tanauan 20epoucos/04
             ns_frame <= S_WAIT_NOT_EMPTY;
           elsif sop_reg_in(1) = '1' then   -- aproveita o ciclo: 64b_data + Preambulo
             ns_frame <= S_PREAM;

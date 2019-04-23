@@ -331,6 +331,25 @@ SC_MODULE(Top) {
     app_tx_inst->eop(app_tx_eop);
     app_tx_inst->val(app_tx_val);
 
+    // tanauan args
+    int argc;
+    size_t i;
+  	const char * const *argv;
+
+    argc = sc_argc();
+  	argv = sc_argv();
+
+  	cout << "Numero de argumentos: [" << argc << "]" << endl;
+    cout << "Argumentos: " << endl;
+      for(i = 1; i < argc; i++)
+      	cout << "[" << argv[i] << "]" << endl;
+
+    max_pl_cycles = atoi (argv[1]);
+    cout << max_pl_cycles << " <- MAX_PL_CYCLES" << endl;
+
+    max_ipg_cycles = atoi (argv[2]);
+    cout << max_ipg_cycles << " <- MAX_IPG_CYCLES" << endl;
+
     SC_METHOD(clock_assign);
     sensitive << clk_156.signal();
     sensitive << clk_161.signal();

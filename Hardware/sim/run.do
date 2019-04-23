@@ -167,22 +167,16 @@ sccom -link -B/usr/bin/
 
 vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 -L secureip -L xilinxcorelib work.glbl \
-work.Top -t 1ps
+work.Top -sc_arg $1 -sc_arg $2 -t 1ps
 
 #do wave.do
 #run 1000 ms
 
-
-
-transcript file transcript#
+transcript file transcript
 #run 1000 ms
 
 #do wave.do
-#run 1 ms
-
-
-
-
+run $3 $4
 
 #transcript file transcript#
 #do wave.do

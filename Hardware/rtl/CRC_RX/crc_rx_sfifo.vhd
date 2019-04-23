@@ -72,6 +72,8 @@ library ieee;
     signal pkg_counter : integer; -- PARA SIMULAÇÃO
     signal pkg_counter_fail : integer; -- PARA SIMULAÇÃO
     signal pkt_id   : integer; -- PARA SIMULAÇÃO
+    signal pkg_counter_lost : integer; -- PARA SIMULAÇÃO
+    signal pkg_counter_lost_reg : integer; -- PARA SIMULAÇÃO
 
   begin
     ren <= ren_int;
@@ -84,6 +86,7 @@ library ieee;
         pkg_counter <= 0;
         pkg_counter_fail <= 0;
         pkt_id <= 0;
+        pkg_counter_lost <= 0;
 
       elsif clk_312'event and clk_312 = '1' then
         if sop_d2 = '1' then
@@ -95,11 +98,17 @@ library ieee;
           pkg_counter_fail <= pkg_counter_fail + 1;
         elsif crc_ok_int = '1' and crc_done = '1' then
           pkg_counter <= pkg_counter+1;
-          if (pkg_counter mod 5000) = 0 then
-          -- if (pkg_counter mod 100) = 0 then
+          -- if (pkg_counter mod 5000) = 0 then
+          if (pkg_counter mod 100) = 0 then
             report "PKT RECVD (CRC OK) => "&integer'image(pkg_counter)&" |  PKT RECVD (CRC NOK) => "&integer'image(pkg_counter_fail)&" |  PKTS LOST/COMING => "&integer'image(pkt_id-pkg_counter)&" @ "&time'image(now);
           end if;
         end if;
+        pkg_counter_lost <= pkt_id - pkg_counter;
+
+       --if pkg_counter_lost_reg /= pkg_counter_lost then
+       --  report " PKTS LOST/COMING => "&integer'image(pkg_counter_lost)&" @ "&time'image(now);
+       --end if;
+
       end if;
     end process;
 
@@ -114,6 +123,7 @@ library ieee;
         data_d2  <= (others=>'0');
 
         eop_d3  <= (others=>'0');
+        pkg_counter_lost_reg <= 0;
 
       elsif clk_312'event and clk_312 = '1' then
         sop_d1   <= mac_sop;
@@ -124,7 +134,7 @@ library ieee;
         data_d2  <= data_d1;
 
         eop_d3   <= eop_d2;
-
+        pkg_counter_lost_reg <= pkg_counter_lost;
       end if;
     end process;
 

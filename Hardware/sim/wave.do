@@ -1494,6 +1494,8 @@ add wave -noupdate -expand -group CRC-S_FIFO -radix hexadecimal -radixshowbase 0
 add wave -noupdate -expand -group CRC-S_FIFO -color Magenta -radix hexadecimal -radixshowbase 0 /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_received
 add wave -noupdate -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/pkg_counter
 add wave -noupdate -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/pkt_id
+add wave -noupdate -color Cyan -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/pkg_counter_lost
+add wave -noupdate -color Cyan -radix unsigned /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/pkg_counter_lost_reg
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_ok
 add wave -noupdate /Top/rx_xgt4/inst_wrapper_macpcs/INST_crc_rx_sfifo/crc_done
 add wave -noupdate -height 40 -expand -group FIFO-frame_out -expand -group INPUTS_ -color Cyan /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/frame_out/clk
@@ -1524,6 +1526,7 @@ add wave -noupdate -height 40 -expand -group mii_if -expand -group IN /Top/rx_xg
 add wave -noupdate -height 40 -expand -group mii_if -expand -group IN /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/full
 add wave -noupdate -height 40 -expand -group mii_if -expand -group SIGNALS -color Magenta /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/ps_mii
 add wave -noupdate -height 40 -expand -group mii_if -expand -group SIGNALS /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/ren_int
+add wave -noupdate -height 40 -expand -group mii_if -expand -group SIGNALS -color {Pale Green} /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/ren_int_o
 add wave -noupdate -height 40 -expand -group mii_if -expand -group SIGNALS -color {Orange Red} -radix binary /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/shift
 add wave -noupdate -height 40 -expand -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_0_o
 add wave -noupdate -height 40 -expand -group mii_if -expand -group SIGNALS -color Cyan -radix hexadecimal /Top/rx_xgt4/inst_wrapper_macpcs/INST_mac_tx_path/mii/data_1_o
@@ -2159,7 +2162,7 @@ add wave -noupdate -height 36 -group RX-FIFO256_CRC /Top/rx_xgt4/inst_wrapper_ma
 add wave -noupdate -height 36 -group RX-FIFO256_CRC /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_256/rst_safe
 add wave -noupdate -height 36 -group RX-FIFO256_CRC /Top/rx_xgt4/inst_wrapper_macpcs/INST_core_interface/fifo_256/enable_fifo
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {erro1 {10164800 ps} 1} {erro3 {53179200 ps} 1} {erro2 {31668800 ps} 1} {{Cursor 4} {26678906 ps} 0}
+WaveRestoreCursors {erro1 {10164800 ps} 1} {erro3 {53179200 ps} 1} {erro2 {31668800 ps} 1} {{Cursor 4} {4580800 ps} 0}
 quietly wave cursor active 4
 configure wave -namecolwidth 254
 configure wave -valuecolwidth 216
@@ -2175,7 +2178,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {26653014 ps} {26703787 ps}
+WaveRestoreZoom {4555283 ps} {4640317 ps}
 bookmark add wave bookmark5 {{770754 ps} {811500 ps}} 13
 bookmark add wave bookmark6 {{780000 ps} {800000 ps}} 8
 bookmark add wave bookmark7 {{0 ps} {42010 ps}} 0
