@@ -98,8 +98,8 @@ library ieee;
           pkg_counter_fail <= pkg_counter_fail + 1;
         elsif crc_ok_int = '1' and crc_done = '1' then
           pkg_counter <= pkg_counter+1;
-          -- if (pkg_counter mod 5000) = 0 then
-          if (pkg_counter mod 100) = 0 then
+          if (pkg_counter mod 5000) = 0 then
+          -- if (pkg_counter mod 100) = 0 then
             report "PKT RECVD (CRC OK) => "&integer'image(pkg_counter)&" |  PKT RECVD (CRC NOK) => "&integer'image(pkg_counter_fail)&" |  PKTS LOST/COMING => "&integer'image(pkt_id-pkg_counter)&" @ "&time'image(now);
           end if;
         end if;
