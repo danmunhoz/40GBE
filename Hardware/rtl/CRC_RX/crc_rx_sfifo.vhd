@@ -75,10 +75,54 @@ library ieee;
     signal pkg_counter_lost : integer; -- PARA SIMULAÇÃO
     signal pkg_counter_lost_reg : integer; -- PARA SIMULAÇÃO
 
+    ----------OUTPUT --- TESTE DO Receiver
+
+
+    TYPE states_val is (IDLE, VAL_UP);
+    signal val_state: states_val;
+
+    signal data_out : std_logic_vector(127 downto 0);
+    signal sop_out  : std_logic;
+    signal val_out  : std_logic;
+    signal eop_out  : std_logic_vector(4 downto 0);
+    signal mac_eop_reg : std_logic;
+
   begin
     ren <= ren_int;
     crc_ok <= crc_ok_int;
     crc_ok_int <= '1' when crc_received = crc_reg and crc_done = '1' else '0';
+
+    --------RECEIVER-------------
+      data_out <= mac_data;
+      app_data <= data_out;
+
+      sop_out  <= mac_sop;
+      app_sop  <= sop_out;
+
+      app_val  <= val_out;
+
+      eop_out  <= mac_eop;
+      app_eop  <= eop_out;
+
+      val_proc : process(mac_eop,mac_sop)
+      begin
+        val_out <= '0';
+            case val_state is
+              when IDLE =>
+                val_out <= '0';
+                if mac_sop = '1' then
+                  val_state <= VAL_UP;
+                  val_out <= '1';
+                end if;
+              when VAL_UP =>
+                val_out <= '1';
+                if mac_eop_reg ='1' then
+                  val_state <= IDLE;
+                  val_out <= '0';
+                end if;
+            end case;
+      end process;
+    ---------------------------------------
 
     DEBUG: process(rst_n, clk_312)
     begin

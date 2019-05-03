@@ -4,7 +4,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
 
-entity echo_generator is
+entity echo_generator_old is
   port
   (
     clock               : in  std_logic; -- Clock 156.25 MHz
@@ -40,9 +40,9 @@ entity echo_generator is
     payload_cycles      : in std_logic_vector(31 downto 0);
     payload_last_size   : in std_logic_vector(6 downto 0)
   );
-end echo_generator;
+end echo_generator_old;
 
-architecture arch_echo_generator of echo_generator is
+architecture arch_echo_generator_old of echo_generator_old is
 
   -------------------------------------------------------------------------------
   -- Debug
@@ -435,7 +435,7 @@ begin
           if payload_type = 0 then --PACKET ID
             -- pkt_tx_data_wire(63 downto 0) <= random(63 downto 0);
             pkt_tx_data_wire(63 downto 0) <= counter; -- KOROL
-            
+
           elsif payload_type = 1 then -- BERT
             if(flag_lfsr_8_rem = '1') then
               pkt_tx_data_wire(63 downto 0) <= lfsr_rem(7 downto 0) & random (63 downto 8);
@@ -976,4 +976,4 @@ lfsr_i: entity work.lfsr
 
 --pkt_lost_counter <= pkt_lost_counter_reg;
 
-end arch_echo_generator;
+end arch_echo_generator_old;

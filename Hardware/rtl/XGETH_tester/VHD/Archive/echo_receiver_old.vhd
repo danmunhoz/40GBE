@@ -5,7 +5,7 @@ use IEEE.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
 use ieee.numeric_std.all;
 
-entity echo_receiver is
+entity echo_receiver_old is
   port
     (
         clock : in std_logic;             -- Clock 156.25 MHz
@@ -28,7 +28,7 @@ entity echo_receiver is
         received_packet : out std_logic;  -- Asserted when a valid UDP packet is received
         end_latency     : out std_logic;
         packets_lost    : out std_logic_vector(63 downto 0);
-        RESET_done 		: out std_logic; 
+        RESET_done 		: out std_logic;
 
         timestamp_base  : in std_logic_vector(47 downto 0);
         -------------------------------------------------------------------------------
@@ -38,17 +38,17 @@ entity echo_receiver is
         -- When asserted, the packet transfer will begin on next cycle. Should remain asserted until EOP.
         pkt_rx_ren      : out std_logic;
         pkt_rx_avail    : in  std_logic;  -- Asserted when a packet is available in for reading in receive FIFO
-        pkt_rx_eop      : in  std_logic;  -- Receive data is the first word of the packet 
-        pkt_rx_sop      : in  std_logic;  -- Receive data is the last word of the packet 
+        pkt_rx_eop      : in  std_logic;  -- Receive data is the first word of the packet
+        pkt_rx_sop      : in  std_logic;  -- Receive data is the last word of the packet
         pkt_rx_val      : in  std_logic;  -- Indicates that valid data is present on the bus
         pkt_rx_err      : in  std_logic;  -- Current packet is bad and should be discarded
         pkt_rx_data     : in  std_logic_vector(63 downto 0);  -- Receive data
         pkt_rx_mod      : in  std_logic_vector(2 downto 0);  -- Indicates valid bytes during last word
 
         IDLE_count      : out std_logic_vector(63 downto 0);
-        verify_system_rec  : in std_logic;  
+        verify_system_rec  : in std_logic;
         reset_test		   : in std_logic;						 -- activates reset test
-        pkt_sequence_in    : in std_logic_vector(15 downto 0);   -- number of packets to define if recovery is completed 
+        pkt_sequence_in    : in std_logic_vector(15 downto 0);   -- number of packets to define if recovery is completed
         pkt_sequence_error_flag: out std_logic;
         pkt_sequence_error : out std_logic;                -- '0' if sequence is ok, '1' if error in sequence and not recovered
         cont_error         : out std_logic_vector(63 downto 0);
@@ -56,9 +56,9 @@ entity echo_receiver is
         --current_id		   : out std_logic_vector(63 downto 0);
         payload_type       : in std_logic_vector(2 downto 0)
     );
-end echo_receiver;
+end echo_receiver_old;
 
-architecture arch_echo_receiver of echo_receiver is
+architecture arch_echo_receiver_old of echo_receiver_old is
     -------------------------------------------------------------------------------
     -- Debug
     -------------------------------------------------------------------------------
@@ -77,15 +77,15 @@ architecture arch_echo_receiver of echo_receiver is
     signal rx_mod : std_logic_vector(2 downto 0);
     --attribute mark_debug of rx_mod : signal is "true";
 
-    signal rx_eop : std_logic;  
+    signal rx_eop : std_logic;
     attribute mark_debug of rx_eop : signal is "true";
 
-    signal rx_sop : std_logic;  
+    signal rx_sop : std_logic;
     attribute mark_debug of rx_sop : signal is "true";
 
     -------------------------------------------------------------------------------
     -- Registers
-    ------------------------------------------------------------------------------- 
+    -------------------------------------------------------------------------------
     signal reg_mac_source, reg_mac_destination : std_logic_vector(47 downto 0);
     signal reg_ip_source, reg_ip_destination   : std_logic_vector(31 downto 0);
     signal reg_ethernet_type                   : std_logic_vector(15 downto 0);
@@ -103,7 +103,7 @@ architecture arch_echo_receiver of echo_receiver is
 
     signal reg_zero                            : std_logic_vector(63 downto 0) := (others => '0');
     signal reg_one                             : std_logic_vector(63 downto 0) := (others => '1');
-    
+
    -- attribute mark_debug of reg_lfsr      : signal is "true";
 
     signal turn                                : std_logic := '0';
@@ -125,12 +125,12 @@ architecture arch_echo_receiver of echo_receiver is
 
     -------------------------------------------------------------------------------
     -- Iterator
-    ------------------------------------------------------------------------------- 
+    -------------------------------------------------------------------------------
     signal it_header : std_logic_vector(2 downto 0);
 
     -------------------------------------------------------------------------------
     -- Others
-    ------------------------------------------------------------------------------- 
+    -------------------------------------------------------------------------------
    -- signal internal_packet_length  : std_logic_vector(2 downto 0);
     signal is_ip_packet            : std_logic;
     signal is_udp_packet           : std_logic;
@@ -141,9 +141,9 @@ architecture arch_echo_receiver of echo_receiver is
 
     signal sequence_counter          : std_logic_vector(15 downto 0);
     signal received_packet_wire: std_logic;
-    
+
     signal IDLE_count_reg             : std_logic_vector(63 downto 0);
-    
+
     signal flag_lfsr_16_rem, flag_lfsr_32_rem, flag_lfsr_48_rem, flag_lfsr_8_rem, flag_lfsr_24_rem, flag_lfsr_40_rem, flag_lfsr_56_rem : std_logic;
     signal lfsr_rem : std_logic_vector(55 downto 0) := (others=>'0');
 
@@ -159,18 +159,18 @@ architecture arch_echo_receiver of echo_receiver is
 	--attribute mark_debug of id_diff      : signal is "true";
 	signal debug_id_diff : std_logic_vector(63 downto 0);
 	attribute mark_debug of debug_id_diff      : signal is "true";
-	
+
 	signal reg_id_current		: std_logic_vector(63 downto 0);
 	signal reg_id_last		: std_logic_vector(63 downto 0);
-	
+
     function count_ones(s : std_logic_vector) return std_logic_vector is
         variable temp : std_logic_vector(63 downto 0) := (others => '0');
     begin
       for i in s'range loop
-        if s(i) = '1' then temp := temp + '1'; 
+        if s(i) = '1' then temp := temp + '1';
         end if;
       end loop;
-      
+
       return temp;
     end function count_ones;
 
@@ -200,17 +200,17 @@ begin
 
         case current_s is
             when S_FIRST_PKT =>
-                if pkt_rx_avail = '1' then                    
+                if pkt_rx_avail = '1' then
                     pkt_rx_ren <= '1';
                     next_s <= S_HEADER_FIRST;
-                else                    
+                else
                     pkt_rx_ren <= '0';
                 end if;
             when S_IDLE =>
-                if pkt_rx_avail = '1' then                    
+                if pkt_rx_avail = '1' then
                     pkt_rx_ren <= '1';
                     next_s <= S_HEADER_FIRST;
-                else                    
+                else
                     pkt_rx_ren <= '0';
                 end if;
 
@@ -227,40 +227,40 @@ begin
                     if (flag_lfsr_16_rem = '1' or flag_lfsr_24_rem = '1' or flag_lfsr_32_rem = '1' or flag_lfsr_40_rem = '1' or flag_lfsr_48_rem = '1' or flag_lfsr_56_rem = '1') then
                         start <= '1';
                     end if;
-                    next_s <= S_PAYLOAD_FIRST;                
+                    next_s <= S_PAYLOAD_FIRST;
                 end if;
 
-            when S_PAYLOAD_FIRST =>                
+            when S_PAYLOAD_FIRST =>
                 pkt_rx_ren <= '1';
-                next_s   <= S_PAYLOAD;  
-                start    <= '1'; 
+                next_s   <= S_PAYLOAD;
+                start    <= '1';
 
             when S_PAYLOAD =>
               if pkt_rx_eop = '1' then
                     if payload_type = "001" then
                         if pkt_rx_mod = "001" and flag_lfsr_56_rem = '1' then
                             start <= '1';
-                        elsif pkt_rx_mod = "010" and (flag_lfsr_48_rem = '1' or flag_lfsr_56_rem = '1')  then 
+                        elsif pkt_rx_mod = "010" and (flag_lfsr_48_rem = '1' or flag_lfsr_56_rem = '1')  then
                             start <= '1';
-                        elsif pkt_rx_mod = "011" and (flag_lfsr_40_rem = '1' or flag_lfsr_48_rem = '1' or flag_lfsr_56_rem = '1') then 
+                        elsif pkt_rx_mod = "011" and (flag_lfsr_40_rem = '1' or flag_lfsr_48_rem = '1' or flag_lfsr_56_rem = '1') then
                             start <= '1';
-                        elsif pkt_rx_mod = "100" and (flag_lfsr_32_rem = '1' or flag_lfsr_40_rem = '1' or flag_lfsr_48_rem = '1' or flag_lfsr_56_rem = '1')  then 
+                        elsif pkt_rx_mod = "100" and (flag_lfsr_32_rem = '1' or flag_lfsr_40_rem = '1' or flag_lfsr_48_rem = '1' or flag_lfsr_56_rem = '1')  then
                             start <= '1';
-                        elsif pkt_rx_mod = "101" and (flag_lfsr_24_rem = '1' or flag_lfsr_32_rem = '1' or flag_lfsr_40_rem = '1' or flag_lfsr_48_rem = '1' or flag_lfsr_56_rem = '1') then 
+                        elsif pkt_rx_mod = "101" and (flag_lfsr_24_rem = '1' or flag_lfsr_32_rem = '1' or flag_lfsr_40_rem = '1' or flag_lfsr_48_rem = '1' or flag_lfsr_56_rem = '1') then
                             start <= '1';
-                        elsif pkt_rx_mod = "110" and (flag_lfsr_16_rem = '1' or flag_lfsr_24_rem = '1' or flag_lfsr_32_rem = '1' or flag_lfsr_40_rem = '1' or flag_lfsr_48_rem = '1' or flag_lfsr_56_rem = '1') then 
+                        elsif pkt_rx_mod = "110" and (flag_lfsr_16_rem = '1' or flag_lfsr_24_rem = '1' or flag_lfsr_32_rem = '1' or flag_lfsr_40_rem = '1' or flag_lfsr_48_rem = '1' or flag_lfsr_56_rem = '1') then
                             start <= '1';
-                        elsif pkt_rx_mod = "111" and (flag_lfsr_8_rem = '1' or flag_lfsr_16_rem = '1' or flag_lfsr_24_rem = '1' or flag_lfsr_32_rem = '1' or flag_lfsr_40_rem = '1' or flag_lfsr_48_rem = '1' or flag_lfsr_56_rem = '1') then 
+                        elsif pkt_rx_mod = "111" and (flag_lfsr_8_rem = '1' or flag_lfsr_16_rem = '1' or flag_lfsr_24_rem = '1' or flag_lfsr_32_rem = '1' or flag_lfsr_40_rem = '1' or flag_lfsr_48_rem = '1' or flag_lfsr_56_rem = '1') then
                             start <= '1';
-                        elsif pkt_rx_mod = "000" then 
+                        elsif pkt_rx_mod = "000" then
                             start <= '1';
                         end if;
                     end if;
 
-                    if pkt_rx_err = '1' and pkt_rx_avail = '0' then                    
+                    if pkt_rx_err = '1' and pkt_rx_avail = '0' then
                         pkt_rx_ren <= '0';
                         next_s <= S_IDLE;
-                    elsif pkt_rx_err = '1' and pkt_rx_avail = '1' then                    
+                    elsif pkt_rx_err = '1' and pkt_rx_avail = '1' then
                         pkt_rx_ren <= '1';
                         next_s <= S_HEADER_FIRST;
                     elsif pkt_rx_avail = '0' then
@@ -269,15 +269,15 @@ begin
                             received_packet_wire <= '1';
                         end if;
                         next_s <= S_IDLE;
-                    else 
+                    else
                         pkt_rx_ren <= '1';
                         if mac_source = reg_mac_destination then
                             received_packet_wire <= '1';
                         end if;
                         next_s <= S_HEADER_FIRST;
                     end if;
-              else             
-                start <= '1';   
+              else
+                start <= '1';
                 pkt_rx_ren <= '1';
               end if;
             when others =>
@@ -355,8 +355,8 @@ begin
                     flag_lfsr_24_rem <= '0';
                     flag_lfsr_32_rem <= '0';
                     flag_lfsr_40_rem <= '0';
-                    flag_lfsr_48_rem <= '0'; 
-                    flag_lfsr_56_rem <= '0'; 
+                    flag_lfsr_48_rem <= '0';
+                    flag_lfsr_56_rem <= '0';
                 end if;
         case current_s is
            when S_IDLE =>
@@ -385,37 +385,37 @@ begin
                     when "011" =>
                         reg_ip_destination(15 downto 0) <= pkt_rx_data(63 downto 48);
 
-                    when "100" =>                          
+                    when "100" =>
                         if resync2_lfsr = '1' or resync_lfsr = '1' then
                             flag_lfsr_8_rem <= '0';
                             flag_lfsr_16_rem <= '0';
                             flag_lfsr_24_rem <= '0';
                             flag_lfsr_32_rem <= '0';
                             flag_lfsr_40_rem <= '0';
-                            flag_lfsr_48_rem <= '0'; 
-                            flag_lfsr_56_rem <= '0'; 
+                            flag_lfsr_48_rem <= '0';
+                            flag_lfsr_56_rem <= '0';
                         end if;
                         if payload_type = 0 then
-                            reg_time_stamp <= pkt_rx_data(47 downto 0);   
-                            pkt_id_counter <= reg_pkt_id;    
+                            reg_time_stamp <= pkt_rx_data(47 downto 0);
+                            pkt_id_counter <= reg_pkt_id;
                         elsif payload_type = 1 then -- BERT
                             if flag_lfsr_8_rem = '1' then
                               lfsr_rem(55 downto 48) <= lfsr_rem(7 downto 0);
                               lfsr_rem(47 downto 0)  <= pkt_rx_data(47 downto 0);
-                              flag_lfsr_8_rem <= '0'; 
-                              flag_lfsr_56_rem <= '1'; 
+                              flag_lfsr_8_rem <= '0';
+                              flag_lfsr_56_rem <= '1';
 
-                            elsif(flag_lfsr_16_rem = '1') then 
+                            elsif(flag_lfsr_16_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(15 downto 0) & pkt_rx_data(47 downto 0);
                               flag_lfsr_16_rem <= '0';
 
-                            elsif(flag_lfsr_24_rem = '1') then 
+                            elsif(flag_lfsr_24_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(23 downto 0) & pkt_rx_data(47 downto 8);
                               lfsr_rem(7 downto 0) <= pkt_rx_data(7 downto 0);
                               flag_lfsr_8_rem <= '1';
                               flag_lfsr_24_rem <= '0';
 
-                            elsif(flag_lfsr_32_rem = '1') then 
+                            elsif(flag_lfsr_32_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(31 downto 0) & pkt_rx_data(47 downto 16);
                               lfsr_rem(15 downto 0) <= pkt_rx_data(15 downto 0);
                               flag_lfsr_16_rem <= '1';
@@ -425,26 +425,26 @@ begin
                               reg_lfsr(63 downto 0) <= lfsr_rem(39 downto 0) & pkt_rx_data(47 downto 24);
                               lfsr_rem(23 downto 0) <= pkt_rx_data(23 downto 0);
                               flag_lfsr_24_rem <= '1';
-                              flag_lfsr_40_rem <= '0'; 
+                              flag_lfsr_40_rem <= '0';
 
                             elsif(flag_lfsr_48_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(47 downto 0) & pkt_rx_data(47 downto 32);
                               lfsr_rem(31 downto 0) <= pkt_rx_data(31 downto 0);
                               flag_lfsr_32_rem <= '1';
-                              flag_lfsr_48_rem <= '0'; 
+                              flag_lfsr_48_rem <= '0';
 
                             elsif(flag_lfsr_56_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(55 downto 0) & pkt_rx_data(47 downto 40);
                               lfsr_rem(39 downto 0) <= pkt_rx_data(39 downto 0);
                               flag_lfsr_40_rem <= '1';
-                              flag_lfsr_56_rem <= '0'; 
+                              flag_lfsr_56_rem <= '0';
 
                             else
                               lfsr_rem(47 downto 0) <= pkt_rx_data(47 downto 0);
-                              flag_lfsr_48_rem <= '1'; 
+                              flag_lfsr_48_rem <= '1';
                             end if;
 
-                        elsif payload_type = 2 then --all 0s 
+                        elsif payload_type = 2 then --all 0s
                             reg_zero(47 downto 0)  <= pkt_rx_data(47 downto 0);
                             reg_zero(63 downto 48) <= (others=>'0');
                         elsif payload_type = 3 then --all 1s
@@ -464,8 +464,8 @@ begin
                     flag_lfsr_24_rem <= '0';
                     flag_lfsr_32_rem <= '0';
                     flag_lfsr_40_rem <= '0';
-                    flag_lfsr_48_rem <= '0'; 
-                    flag_lfsr_56_rem <= '0'; 
+                    flag_lfsr_48_rem <= '0';
+                    flag_lfsr_56_rem <= '0';
                 end if;
                 if payload_type = 0 then
                     reg_pkt_id <= pkt_rx_data(63 downto 0);
@@ -473,19 +473,19 @@ begin
                     lfsr_resync_seed(63 downto 0) <= pkt_rx_data(63 downto 0);
 
 
-                    if(flag_lfsr_8_rem = '1') then 
+                    if(flag_lfsr_8_rem = '1') then
                       reg_lfsr(63 downto 0) <= lfsr_rem(7 downto 0) & pkt_rx_data(63 downto 8);
                       lfsr_rem(7 downto 0) <= pkt_rx_data(7 downto 0);
 
-                    elsif(flag_lfsr_16_rem = '1') then 
+                    elsif(flag_lfsr_16_rem = '1') then
                       reg_lfsr(63 downto 0) <= lfsr_rem(15 downto 0) & pkt_rx_data(63 downto 16);
                       lfsr_rem(15 downto 0) <= pkt_rx_data(15 downto 0);
 
-                    elsif(flag_lfsr_24_rem = '1') then 
+                    elsif(flag_lfsr_24_rem = '1') then
                       reg_lfsr(63 downto 0) <= lfsr_rem(23 downto 0) & pkt_rx_data(63 downto 24);
                       lfsr_rem(23 downto 0) <= pkt_rx_data(23 downto 0);
 
-                    elsif(flag_lfsr_32_rem = '1') then 
+                    elsif(flag_lfsr_32_rem = '1') then
                       reg_lfsr(63 downto 0) <= lfsr_rem(31 downto 0) & pkt_rx_data(63 downto 32);
                       lfsr_rem(31 downto 0) <= pkt_rx_data(31 downto 0);
 
@@ -510,54 +510,54 @@ begin
                 elsif payload_type = "011" then
                     reg_one(63 downto 0)  <= pkt_rx_data(63 downto 0);
                 end if;
-                
+
             when S_PAYLOAD =>
-                IDLE_count_reg <= IDLE_count_reg + '1';                
+                IDLE_count_reg <= IDLE_count_reg + '1';
                 if resync2_lfsr = '1' or resync_lfsr = '1' then
                     flag_lfsr_8_rem <= '0';
                     flag_lfsr_16_rem <= '0';
                     flag_lfsr_24_rem <= '0';
                     flag_lfsr_32_rem <= '0';
                     flag_lfsr_40_rem <= '0';
-                    flag_lfsr_48_rem <= '0'; 
-                    flag_lfsr_56_rem <= '0'; 
+                    flag_lfsr_48_rem <= '0';
+                    flag_lfsr_56_rem <= '0';
                 end if;
                 if pkt_rx_eop = '1' then
                     if payload_type = 1 then -- BERT
-                        if pkt_rx_mod = "001" then 
+                        if pkt_rx_mod = "001" then
                             --seed for resync lfsr
                             lfsr_resync_seed(63 downto 8) <= lfsr_resync_seed(55 downto 0);
                             lfsr_resync_seed(7 downto 0) <= pkt_rx_data(63 downto 56);
 
-                            if(flag_lfsr_8_rem = '1') then 
+                            if(flag_lfsr_8_rem = '1') then
                               lfsr_rem(15 downto 8) <= lfsr_rem(7 downto 0);
                               lfsr_rem(7 downto 0)  <= pkt_rx_data(63 downto 56);
                               flag_lfsr_8_rem <= '0';
                               flag_lfsr_16_rem <= '1';
 
-                            elsif(flag_lfsr_16_rem = '1') then 
+                            elsif(flag_lfsr_16_rem = '1') then
                               lfsr_rem(23 downto 8) <= lfsr_rem(15 downto 0);
                               lfsr_rem(7 downto 0)  <= pkt_rx_data(63 downto 56);
                               flag_lfsr_16_rem <= '0';
                               flag_lfsr_24_rem <= '1';
 
-                            elsif(flag_lfsr_24_rem = '1') then 
+                            elsif(flag_lfsr_24_rem = '1') then
                               lfsr_rem(31 downto 8) <= lfsr_rem(23 downto 0);
                               lfsr_rem(7 downto 0)  <= pkt_rx_data(63 downto 56);
                               flag_lfsr_24_rem <= '0';
-                              flag_lfsr_32_rem <= '1';  
+                              flag_lfsr_32_rem <= '1';
 
-                            elsif(flag_lfsr_32_rem = '1') then 
+                            elsif(flag_lfsr_32_rem = '1') then
                               lfsr_rem(39 downto 8) <= lfsr_rem(31 downto 0);
                               lfsr_rem(7 downto 0)  <= pkt_rx_data(63 downto 56);
                               flag_lfsr_32_rem <= '0';
-                              flag_lfsr_40_rem <= '1';  
+                              flag_lfsr_40_rem <= '1';
 
-                            elsif(flag_lfsr_40_rem = '1') then 
+                            elsif(flag_lfsr_40_rem = '1') then
                               lfsr_rem(47 downto 8) <= lfsr_rem(39 downto 0);
                               lfsr_rem(7 downto 0)  <= pkt_rx_data(63 downto 56);
                               flag_lfsr_40_rem <= '0';
-                              flag_lfsr_48_rem <= '1'; 
+                              flag_lfsr_48_rem <= '1';
 
                             elsif(flag_lfsr_48_rem = '1') then
                               lfsr_rem(55 downto 8) <= lfsr_rem(47 downto 0);
@@ -565,95 +565,95 @@ begin
                               flag_lfsr_48_rem <= '0';
                               flag_lfsr_56_rem <= '1';
 
-                            elsif(flag_lfsr_56_rem = '1') then 
+                            elsif(flag_lfsr_56_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(55 downto 0) & pkt_rx_data(63 downto 56);
-                              flag_lfsr_56_rem <= '0';  
-                                                
+                              flag_lfsr_56_rem <= '0';
+
                             else
                               lfsr_rem(7 downto 0)  <= pkt_rx_data(63 downto 56);
                               flag_lfsr_8_rem <= '1';
-                            end if;  
+                            end if;
 
-                        elsif pkt_rx_mod = "010" then 
+                        elsif pkt_rx_mod = "010" then
                             --seed for resync lfsr
                             lfsr_resync_seed(63 downto 16) <= lfsr_resync_seed(47 downto 0);
                             lfsr_resync_seed(15 downto 0) <= pkt_rx_data(63 downto 48);
 
-                            if(flag_lfsr_8_rem = '1') then 
+                            if(flag_lfsr_8_rem = '1') then
                               lfsr_rem(23 downto 16) <= lfsr_rem(7 downto 0);
                               lfsr_rem(15 downto 0)  <= pkt_rx_data(63 downto 48);
                               flag_lfsr_8_rem <= '0';
                               flag_lfsr_24_rem <= '1';
 
-                            elsif(flag_lfsr_16_rem = '1') then 
+                            elsif(flag_lfsr_16_rem = '1') then
                               lfsr_rem(31 downto 16) <= lfsr_rem(15 downto 0);
                               lfsr_rem(15 downto 0)  <= pkt_rx_data(63 downto 48);
                               flag_lfsr_16_rem <= '0';
                               flag_lfsr_32_rem <= '1';
 
-                            elsif(flag_lfsr_24_rem = '1') then 
+                            elsif(flag_lfsr_24_rem = '1') then
                               lfsr_rem(39 downto 16) <= lfsr_rem(23 downto 0);
                               lfsr_rem(15 downto 0) <= pkt_rx_data(63 downto 48);
                               flag_lfsr_24_rem <= '0';
-                              flag_lfsr_40_rem <= '1';  
+                              flag_lfsr_40_rem <= '1';
 
-                            elsif(flag_lfsr_32_rem = '1') then 
+                            elsif(flag_lfsr_32_rem = '1') then
                               lfsr_rem(47 downto 16) <= lfsr_rem(31 downto 0);
                               lfsr_rem(15 downto 0) <= pkt_rx_data(63 downto 48);
                               flag_lfsr_32_rem <= '0';
-                              flag_lfsr_48_rem <= '1';  
+                              flag_lfsr_48_rem <= '1';
 
-                            elsif(flag_lfsr_40_rem = '1') then 
+                            elsif(flag_lfsr_40_rem = '1') then
                               lfsr_rem(55 downto 16) <= lfsr_rem(39 downto 0);
                               lfsr_rem(15 downto 0) <= pkt_rx_data(63 downto 48);
                               flag_lfsr_40_rem <= '0';
-                              flag_lfsr_56_rem <= '1'; 
+                              flag_lfsr_56_rem <= '1';
 
                             elsif(flag_lfsr_48_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(47 downto 0) & pkt_rx_data(63 downto 48);
                               flag_lfsr_48_rem <= '0';
 
-                            elsif(flag_lfsr_56_rem = '1') then 
+                            elsif(flag_lfsr_56_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(55 downto 0) & pkt_rx_data(63 downto 56);
                               lfsr_rem(7 downto 0) <= pkt_rx_data(55 downto 48);
                               flag_lfsr_8_rem <= '1';
-                              flag_lfsr_56_rem <= '0';  
+                              flag_lfsr_56_rem <= '0';
 
                             else
                               lfsr_rem(15 downto 0) <= pkt_rx_data(63 downto 48);
                               flag_lfsr_16_rem <= '1';
-                            end if;  
+                            end if;
 
-                        elsif pkt_rx_mod = "011" then 
+                        elsif pkt_rx_mod = "011" then
                             --seed for resync lfsr
                             lfsr_resync_seed(63 downto 24) <= lfsr_resync_seed(39 downto 0);
                             lfsr_resync_seed(23 downto 0) <= pkt_rx_data(63 downto 40);
 
-                            if(flag_lfsr_8_rem = '1') then 
+                            if(flag_lfsr_8_rem = '1') then
                               lfsr_rem(31 downto 24) <= lfsr_rem(7 downto 0);
                               lfsr_rem(23 downto 0)  <= pkt_rx_data(63 downto 40);
                               flag_lfsr_8_rem <= '0';
                               flag_lfsr_32_rem <= '1';
 
-                            elsif(flag_lfsr_16_rem = '1') then 
+                            elsif(flag_lfsr_16_rem = '1') then
                               lfsr_rem(39 downto 24) <= lfsr_rem(15 downto 0);
                               lfsr_rem(23 downto 0)  <= pkt_rx_data(63 downto 40);
                               flag_lfsr_16_rem <= '0';
                               flag_lfsr_40_rem <= '1';
 
-                            elsif(flag_lfsr_24_rem = '1') then 
+                            elsif(flag_lfsr_24_rem = '1') then
                               lfsr_rem(47 downto 24) <= lfsr_rem(23 downto 0);
                               lfsr_rem(23 downto 0) <= pkt_rx_data(63 downto 40);
                               flag_lfsr_24_rem <= '0';
-                              flag_lfsr_48_rem <= '1';  
+                              flag_lfsr_48_rem <= '1';
 
-                            elsif(flag_lfsr_32_rem = '1') then 
+                            elsif(flag_lfsr_32_rem = '1') then
                               lfsr_rem(55 downto 24) <= lfsr_rem(31 downto 0);
                               lfsr_rem(23 downto 0) <= pkt_rx_data(63 downto 40);
                               flag_lfsr_32_rem <= '0';
-                              flag_lfsr_56_rem <= '1';  
+                              flag_lfsr_56_rem <= '1';
 
-                            elsif(flag_lfsr_40_rem = '1') then 
+                            elsif(flag_lfsr_40_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(39 downto 0) & pkt_rx_data(63 downto 40);
                               flag_lfsr_40_rem <= '0';
 
@@ -663,45 +663,45 @@ begin
                               flag_lfsr_8_rem <= '1';
                               flag_lfsr_48_rem <= '0';
 
-                            elsif(flag_lfsr_56_rem = '1') then 
+                            elsif(flag_lfsr_56_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(55 downto 0) & pkt_rx_data(63 downto 56);
                               lfsr_rem(15 downto 0) <= pkt_rx_data(55 downto 40);
                               flag_lfsr_16_rem <= '1';
-                              flag_lfsr_56_rem <= '0';  
+                              flag_lfsr_56_rem <= '0';
 
                             else
                               lfsr_rem(23 downto 0) <= pkt_rx_data(63 downto 40);
                               flag_lfsr_24_rem <= '1';
-                            end if;  
+                            end if;
 
-                        elsif pkt_rx_mod = "100" then 
+                        elsif pkt_rx_mod = "100" then
                             --seed for resync lfsr
                             lfsr_resync_seed(63 downto 32) <= lfsr_resync_seed(31 downto 0);
                             lfsr_resync_seed(31 downto 0) <= pkt_rx_data(63 downto 32);
 
-                            if(flag_lfsr_8_rem = '1') then 
+                            if(flag_lfsr_8_rem = '1') then
                               lfsr_rem(39 downto 32) <= lfsr_rem(7 downto 0);
                               lfsr_rem(31 downto 0)  <= pkt_rx_data(63 downto 32);
                               flag_lfsr_8_rem <= '0';
                               flag_lfsr_40_rem <= '1';
 
-                            elsif(flag_lfsr_16_rem = '1') then 
+                            elsif(flag_lfsr_16_rem = '1') then
                               lfsr_rem(47 downto 32) <= lfsr_rem(15 downto 0);
                               lfsr_rem(31 downto 0)  <= pkt_rx_data(63 downto 32);
                               flag_lfsr_16_rem <= '0';
                               flag_lfsr_48_rem <= '1';
 
-                            elsif(flag_lfsr_24_rem = '1') then 
+                            elsif(flag_lfsr_24_rem = '1') then
                               lfsr_rem(55 downto 32) <= lfsr_rem(23 downto 0);
                               lfsr_rem(31 downto 0) <= pkt_rx_data(63 downto 32);
                               flag_lfsr_24_rem <= '0';
-                              flag_lfsr_56_rem <= '1';  
+                              flag_lfsr_56_rem <= '1';
 
-                            elsif(flag_lfsr_32_rem = '1') then 
+                            elsif(flag_lfsr_32_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(31 downto 0) & pkt_rx_data(63 downto 32);
                               flag_lfsr_32_rem <= '0';
 
-                            elsif(flag_lfsr_40_rem = '1') then 
+                            elsif(flag_lfsr_40_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(39 downto 0) & pkt_rx_data(63 downto 40);
                               lfsr_rem(7 downto 0) <= pkt_rx_data(39 downto 32);
                               flag_lfsr_8_rem <= '1';
@@ -713,45 +713,45 @@ begin
                               flag_lfsr_16_rem <= '1';
                               flag_lfsr_48_rem <= '0';
 
-                            elsif(flag_lfsr_56_rem = '1') then 
+                            elsif(flag_lfsr_56_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(55 downto 0) & pkt_rx_data(63 downto 56);
                               lfsr_rem(23 downto 0) <= pkt_rx_data(55 downto 32);
                               flag_lfsr_24_rem <= '1';
-                              flag_lfsr_56_rem <= '0';  
+                              flag_lfsr_56_rem <= '0';
 
                             else
                               lfsr_rem(31 downto 0) <= pkt_rx_data(63 downto 32);
                               flag_lfsr_32_rem <= '1';
-                            end if;  
+                            end if;
 
-                        elsif pkt_rx_mod = "101" then 
+                        elsif pkt_rx_mod = "101" then
                             --seed for resync lfsr
                             lfsr_resync_seed(63 downto 40) <= lfsr_resync_seed(23 downto 0);
                             lfsr_resync_seed(39 downto 0) <= pkt_rx_data(63 downto 24);
 
-                            if(flag_lfsr_8_rem = '1') then 
+                            if(flag_lfsr_8_rem = '1') then
                               lfsr_rem(47 downto 40) <= lfsr_rem(7 downto 0);
                               lfsr_rem(39 downto 0)  <= pkt_rx_data(63 downto 24);
                               flag_lfsr_8_rem <= '0';
                               flag_lfsr_48_rem <= '1';
 
-                            elsif(flag_lfsr_16_rem = '1') then 
+                            elsif(flag_lfsr_16_rem = '1') then
                               lfsr_rem(55 downto 40) <= lfsr_rem(15 downto 0);
                               lfsr_rem(39 downto 0)  <= pkt_rx_data(63 downto 24);
                               flag_lfsr_16_rem <= '0';
                               flag_lfsr_56_rem <= '1';
 
-                            elsif(flag_lfsr_24_rem = '1') then 
+                            elsif(flag_lfsr_24_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(23 downto 0) & pkt_rx_data(63 downto 24);
                               flag_lfsr_24_rem <= '0';
 
-                            elsif(flag_lfsr_32_rem = '1') then 
+                            elsif(flag_lfsr_32_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(31 downto 0) & pkt_rx_data(63 downto 32);
                               lfsr_rem(7 downto 0) <= pkt_rx_data(31 downto 24);
                               flag_lfsr_8_rem <= '1';
                               flag_lfsr_32_rem <= '0';
 
-                            elsif(flag_lfsr_40_rem = '1') then 
+                            elsif(flag_lfsr_40_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(39 downto 0) & pkt_rx_data(63 downto 40);
                               lfsr_rem(15 downto 0) <= pkt_rx_data(39 downto 24);
                               flag_lfsr_16_rem <= '1';
@@ -767,41 +767,41 @@ begin
                               reg_lfsr(63 downto 0) <= lfsr_rem(55 downto 0) & pkt_rx_data(63 downto 56);
                               lfsr_rem(31 downto 0) <= pkt_rx_data(55 downto 24);
                               flag_lfsr_32_rem <= '1';
-                              flag_lfsr_56_rem <= '0';  
+                              flag_lfsr_56_rem <= '0';
 
                             else
                               lfsr_rem(39 downto 0) <= pkt_rx_data(63 downto 24);
                               flag_lfsr_40_rem <= '1';
-                            end if;  
+                            end if;
 
-                        elsif pkt_rx_mod = "110" then 
+                        elsif pkt_rx_mod = "110" then
                             --seed for resync lfsr
                             lfsr_resync_seed(63 downto 48) <= lfsr_resync_seed(15 downto 0);
                             lfsr_resync_seed(47 downto 0) <= pkt_rx_data(63 downto 16);
 
-                            if(flag_lfsr_8_rem = '1') then 
+                            if(flag_lfsr_8_rem = '1') then
                               lfsr_rem(55 downto 48) <= lfsr_rem(7 downto 0);
                               lfsr_rem(47 downto 0)  <= pkt_rx_data(63 downto 16);
                               flag_lfsr_8_rem <= '0';
                               flag_lfsr_56_rem <= '1';
 
-                            elsif(flag_lfsr_16_rem = '1') then 
+                            elsif(flag_lfsr_16_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(15 downto 0) & pkt_rx_data(63 downto 16);
                               flag_lfsr_16_rem <= '0';
 
-                            elsif(flag_lfsr_24_rem = '1') then 
+                            elsif(flag_lfsr_24_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(23 downto 0) & pkt_rx_data(63 downto 24);
                               lfsr_rem(7 downto 0) <= pkt_rx_data(23 downto 16);
                               flag_lfsr_8_rem <= '1';
                               flag_lfsr_24_rem <= '0';
 
-                            elsif(flag_lfsr_32_rem = '1') then 
+                            elsif(flag_lfsr_32_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(31 downto 0) & pkt_rx_data(63 downto 32);
                               lfsr_rem(15 downto 0) <= pkt_rx_data(31 downto 16);
                               flag_lfsr_16_rem <= '1';
                               flag_lfsr_32_rem <= '0';
 
-                            elsif(flag_lfsr_40_rem = '1') then 
+                            elsif(flag_lfsr_40_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(39 downto 0) & pkt_rx_data(63 downto 40);
                               lfsr_rem(23 downto 0) <= pkt_rx_data(39 downto 16);
                               flag_lfsr_24_rem <= '1';
@@ -817,41 +817,41 @@ begin
                               reg_lfsr(63 downto 0) <= lfsr_rem(55 downto 0) & pkt_rx_data(63 downto 56);
                               lfsr_rem(39 downto 0) <= pkt_rx_data(55 downto 16);
                               flag_lfsr_40_rem <= '1';
-                              flag_lfsr_56_rem <= '0';  
+                              flag_lfsr_56_rem <= '0';
 
                             else
                               lfsr_rem(47 downto 0) <= pkt_rx_data(63 downto 16);
                               flag_lfsr_48_rem <= '1';
-                            end if;  
+                            end if;
 
-                        elsif pkt_rx_mod = "111" then 
+                        elsif pkt_rx_mod = "111" then
                             --seed for resync lfsr
                             lfsr_resync_seed(63 downto 56) <= lfsr_resync_seed(7 downto 0);
                             lfsr_resync_seed(55 downto 0) <= pkt_rx_data(63 downto 8);
 
-                            if(flag_lfsr_8_rem = '1') then 
+                            if(flag_lfsr_8_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(7 downto 0) & pkt_rx_data(63 downto 8);
                               flag_lfsr_8_rem <= '0';
 
-                            elsif(flag_lfsr_16_rem = '1') then 
+                            elsif(flag_lfsr_16_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(15 downto 0) & pkt_rx_data(63 downto 16);
                               lfsr_rem(7 downto 0) <= pkt_rx_data(15 downto 8);
                               flag_lfsr_16_rem <= '0';
                               flag_lfsr_8_rem <= '1';
 
-                            elsif(flag_lfsr_24_rem = '1') then 
+                            elsif(flag_lfsr_24_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(23 downto 0) & pkt_rx_data(63 downto 24);
                               lfsr_rem(15 downto 0) <= pkt_rx_data(23 downto 8);
                               flag_lfsr_16_rem <= '1';
                               flag_lfsr_24_rem <= '0';
 
-                            elsif(flag_lfsr_32_rem = '1') then 
+                            elsif(flag_lfsr_32_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(31 downto 0) & pkt_rx_data(63 downto 32);
                               lfsr_rem(23 downto 0) <= pkt_rx_data(31 downto 8);
                               flag_lfsr_24_rem <= '1';
                               flag_lfsr_32_rem <= '0';
 
-                            elsif(flag_lfsr_40_rem = '1') then 
+                            elsif(flag_lfsr_40_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(39 downto 0) & pkt_rx_data(63 downto 40);
                               lfsr_rem(31 downto 0) <= pkt_rx_data(39 downto 8);
                               flag_lfsr_32_rem <= '1';
@@ -867,34 +867,34 @@ begin
                               reg_lfsr(63 downto 0) <= lfsr_rem(55 downto 0) & pkt_rx_data(63 downto 56);
                               lfsr_rem(47 downto 0) <= pkt_rx_data(55 downto 8);
                               flag_lfsr_48_rem <= '1';
-                              flag_lfsr_56_rem <= '0';  
+                              flag_lfsr_56_rem <= '0';
 
                             else
                               lfsr_rem(55 downto 0) <= pkt_rx_data(63 downto 8);
                               flag_lfsr_56_rem <= '1';
-                            end if; 
+                            end if;
 
-                        else 
+                        else
                             --seed for resync lfsr
                             lfsr_resync_seed(63 downto 0) <= pkt_rx_data(63 downto 0);
 
-                            if(flag_lfsr_8_rem = '1') then 
+                            if(flag_lfsr_8_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(7 downto 0) & pkt_rx_data(63 downto 8);
                               lfsr_rem(7 downto 0) <= pkt_rx_data(7 downto 0);
 
-                            elsif(flag_lfsr_16_rem = '1') then 
+                            elsif(flag_lfsr_16_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(15 downto 0) & pkt_rx_data(63 downto 16);
                               lfsr_rem(15 downto 0) <= pkt_rx_data(15 downto 0);
 
-                            elsif(flag_lfsr_24_rem = '1') then 
+                            elsif(flag_lfsr_24_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(23 downto 0) & pkt_rx_data(63 downto 24);
                               lfsr_rem(23 downto 0) <= pkt_rx_data(23 downto 0);
 
-                            elsif(flag_lfsr_32_rem = '1') then 
+                            elsif(flag_lfsr_32_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(31 downto 0) & pkt_rx_data(63 downto 32);
                               lfsr_rem(31 downto 0) <= pkt_rx_data(31 downto 0);
 
-                            elsif(flag_lfsr_40_rem = '1') then 
+                            elsif(flag_lfsr_40_rem = '1') then
                               reg_lfsr(63 downto 0) <= lfsr_rem(39 downto 0) & pkt_rx_data(63 downto 40);
                               lfsr_rem(39 downto 0) <= pkt_rx_data(39 downto 0);
 
@@ -908,54 +908,54 @@ begin
 
                             else
                               reg_lfsr(63 downto 0) <= pkt_rx_data(63 downto 0);
-                            end if; 
-                        end if;            
+                            end if;
+                        end if;
 
                     elsif payload_type = 2  then --all 0s
-                        if pkt_rx_mod = "001" then 
+                        if pkt_rx_mod = "001" then
                             reg_zero(63 downto 56) <= pkt_rx_data(63 downto 56);
                             reg_zero(55 downto 0)  <= (others=>'0');
-                        elsif pkt_rx_mod = "010" then 
+                        elsif pkt_rx_mod = "010" then
                             reg_zero(63 downto 48) <= pkt_rx_data(63 downto 48);
                             reg_zero(47 downto 0)  <= (others=>'0');
-                        elsif pkt_rx_mod = "011" then 
+                        elsif pkt_rx_mod = "011" then
                             reg_zero(63 downto 40) <= pkt_rx_data(63 downto 40);
                             reg_zero(39 downto 0)  <= (others=>'0');
-                        elsif pkt_rx_mod = "100" then 
+                        elsif pkt_rx_mod = "100" then
                             reg_zero(63 downto 32) <= pkt_rx_data(63 downto 32);
                             reg_zero(31 downto 0)  <= (others=>'0');
-                        elsif pkt_rx_mod = "101" then 
+                        elsif pkt_rx_mod = "101" then
                             reg_zero(63 downto 24) <= pkt_rx_data(63 downto 24);
                             reg_zero(23 downto 0)  <= (others=>'0');
-                        elsif pkt_rx_mod = "110" then 
+                        elsif pkt_rx_mod = "110" then
                             reg_zero(63 downto 16) <= pkt_rx_data(63 downto 16);
                             reg_zero(15 downto 0)  <= (others=>'0');
-                        elsif pkt_rx_mod = "111" then 
+                        elsif pkt_rx_mod = "111" then
                             reg_zero(63 downto 8) <= pkt_rx_data(63 downto 8);
                             reg_zero(7 downto 0)  <= (others=>'0');
                         else
                             reg_zero(63 downto 0) <= pkt_rx_data(63 downto 0);
                         end if;
                     elsif payload_type = 3  then --all 1s
-                        if pkt_rx_mod = "001" then 
+                        if pkt_rx_mod = "001" then
                             reg_one(63 downto 56) <= pkt_rx_data(63 downto 56);
                             reg_one(55 downto 0)  <= (others=>'1');
-                        elsif pkt_rx_mod = "010" then 
+                        elsif pkt_rx_mod = "010" then
                             reg_one(63 downto 48) <= pkt_rx_data(63 downto 48);
                             reg_one(47 downto 0)  <= (others=>'1');
-                        elsif pkt_rx_mod = "011" then 
+                        elsif pkt_rx_mod = "011" then
                             reg_one(63 downto 40) <= pkt_rx_data(63 downto 40);
                             reg_one(39 downto 0)  <= (others=>'1');
-                        elsif pkt_rx_mod = "100" then 
+                        elsif pkt_rx_mod = "100" then
                             reg_one(63 downto 32) <= pkt_rx_data(63 downto 32);
                             reg_one(31 downto 0)  <= (others=>'1');
-                        elsif pkt_rx_mod = "101" then 
+                        elsif pkt_rx_mod = "101" then
                             reg_one(63 downto 24) <= pkt_rx_data(63 downto 24);
                             reg_one(23 downto 0)  <= (others=>'1');
-                        elsif pkt_rx_mod = "110" then 
+                        elsif pkt_rx_mod = "110" then
                             reg_one(63 downto 16) <= pkt_rx_data(63 downto 16);
                             reg_one(15 downto 0)  <= (others=>'1');
-                        elsif pkt_rx_mod = "111" then 
+                        elsif pkt_rx_mod = "111" then
                             reg_one(63 downto 8) <= pkt_rx_data(63 downto 8);
                             reg_one(7 downto 0)  <= (others=>'1');
                         else
@@ -966,19 +966,19 @@ begin
                 else
                     if payload_type = 1 then -- BERT
                         lfsr_resync_seed <= pkt_rx_data;
-                        if(flag_lfsr_8_rem = '1') then 
+                        if(flag_lfsr_8_rem = '1') then
                           reg_lfsr(63 downto 0) <= lfsr_rem(7 downto 0) & pkt_rx_data(63 downto 8);
                           lfsr_rem(7 downto 0) <= pkt_rx_data(7 downto 0);
 
-                        elsif(flag_lfsr_16_rem = '1') then 
+                        elsif(flag_lfsr_16_rem = '1') then
                           reg_lfsr(63 downto 0) <= lfsr_rem(15 downto 0) & pkt_rx_data(63 downto 16);
                           lfsr_rem(15 downto 0) <= pkt_rx_data(15 downto 0);
 
-                        elsif(flag_lfsr_24_rem = '1') then 
+                        elsif(flag_lfsr_24_rem = '1') then
                           reg_lfsr(63 downto 0) <= lfsr_rem(23 downto 0) & pkt_rx_data(63 downto 24);
                           lfsr_rem(23 downto 0) <= pkt_rx_data(23 downto 0);
 
-                        elsif(flag_lfsr_32_rem = '1') then 
+                        elsif(flag_lfsr_32_rem = '1') then
                           reg_lfsr(63 downto 0) <= lfsr_rem(31 downto 0) & pkt_rx_data(63 downto 32);
                           lfsr_rem(31 downto 0) <= pkt_rx_data(31 downto 0);
 
@@ -1000,7 +1000,7 @@ begin
                     elsif payload_type = 2 or payload_type = 3 then --all 0s or all 1s
                         reg_lfsr(63 downto 0)  <= pkt_rx_data(63 downto 0);
                     end if;
-                end if; 
+                end if;
             when others =>
                 null;
 
@@ -1021,15 +1021,15 @@ end process;
             sequence_counter <= (others => '0');
         elsif rising_edge(clock) then
             if current_s = S_PAYLOAD_FIRST and verify_system_rec = '1'  then
-                if (pkt_id_counter = (pkt_rx_data(63 downto 0) - '1')) then 
+                if (pkt_id_counter = (pkt_rx_data(63 downto 0) - '1')) then
                     pkt_sequence_error_flag_aux <= '0';
                     sequence_counter <= sequence_counter + '1';
-                else 
+                else
                     pkt_sequence_error_flag_aux <= '1';
                     sequence_counter <= (others => '0');
                 end if;
-            else      
-                pkt_sequence_error_flag_aux <= '0';  
+            else
+                pkt_sequence_error_flag_aux <= '0';
             end if;
         end if;
     end process;
@@ -1045,12 +1045,12 @@ end process;
 			count_one_lost <= '0';
         elsif rising_edge(clock) then
             if current_s = S_PAYLOAD_FIRST and reset_test = '1'  then
-                if (pkt_id_counter = (pkt_rx_data(63 downto 0) - '1')) then 
+                if (pkt_id_counter = (pkt_rx_data(63 downto 0) - '1')) then
 					if lost = '1' then
 						reset_counter <= reset_counter + '1';
 					end if;
                     count_one_lost <= '1';
-                else					
+                else
 					--report "Salvando ID perdido!";
 					last_pkt_id <= pkt_rx_data(63 downto 0);
                     lost <= '1';
@@ -1061,34 +1061,34 @@ end process;
 					reset_counter <= (others => '0');
                 end if;
             end if;
-            
+
         end if;
     end process;
-      
-    
+
+
     -- the system has recovered from the reset
-	packets_lost <= id_diff; 
+	packets_lost <= id_diff;
 	--last_id		 <= reg_id_current;
 	--current_id   <= reg_id_last;
-	RESET_done   <= '1' when reset_counter >= 1000 else '0'; 
+	RESET_done   <= '1' when reset_counter >= 1000 else '0';
 	debug_reset  <= '1' when reset_counter >= 1000 else '0';
 
-    lfsr_i: entity work.lfsr 
-    port map(   
+    lfsr_i: entity work.lfsr
+    port map(
       clock => clock,
       reset => reset,
-      seed => lfsr_seed_wire,      
+      seed => lfsr_seed_wire,
       valid_seed => valid_seed_wire,
       polynomial => lfsr_polynomial,
       data_in => random,
       start => start,
       data_out => random
-    ); 
-    
+    );
+
     --Verify payload
     bits_wrong_xor <= reg_zero(63 downto 0) xor x"0000000000000000" when payload_type = "010" and (current_s = S_PAYLOAD_FIRST or current_s = S_PAYLOAD or (current_s = S_HEADER and it_header = 4)) else
                       reg_one(63 downto 0)  xor x"FFFFFFFFFFFFFFFF" when payload_type = "011" and (current_s = S_PAYLOAD_FIRST or current_s = S_PAYLOAD or (current_s = S_HEADER and it_header = 4)) else
-                      random_reg(63 downto 0) xor (reg_lfsr(63 downto 0)) when payload_type = "001" and start_reg = '1' else 
+                      random_reg(63 downto 0) xor (reg_lfsr(63 downto 0)) when payload_type = "001" and start_reg = '1' else
                       (others=>'0');
 
     -- Process for BERT test.
@@ -1110,15 +1110,15 @@ end process;
             if (count_ones(bits_wrong_xor) /= 0 and (current_s = S_PAYLOAD or current_s = S_PAYLOAD_FIRST or (current_s = S_HEADER and it_header = 4))) then
                 cycle_with_bits_wrong <= cycle_with_bits_wrong + 1;
             end if;
-       
+
         end if;
-        if resync_lfsr = '1' then 
+        if resync_lfsr = '1' then
             cycle_with_bits_wrong <= (others=>'0');
             resync_done <= '1';
-        elsif resync2_lfsr = '1' then            
+        elsif resync2_lfsr = '1' then
             cycle_with_bits_wrong <= (others=>'0');
             resync_done <= '0';
-        end if; 
+        end if;
 
       end if;
     end process;
@@ -1131,8 +1131,8 @@ end process;
 
     valid_seed_wire <= resync_lfsr or resync2_lfsr or valid_seed;
 
-    pkt_sequence_error <= '1' when (sequence_counter < pkt_sequence_in) else '0'; 
-    
+    pkt_sequence_error <= '1' when (sequence_counter < pkt_sequence_in) else '0';
+
 -- Timestamp value to be compared with the timestamp from packet
     time_stamp_recv <= timestamp_base (46 downto 0);
 
@@ -1143,4 +1143,4 @@ end process;
 
     cont_error <= bits_wrong;
 
-end arch_echo_receiver;
+end arch_echo_receiver_old;

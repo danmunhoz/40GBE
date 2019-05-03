@@ -137,13 +137,29 @@ vcom -novopt ../rtl/MAC/mac_tx_path.vhd
 vcom -novopt ../rtl/PCS/pcs_alignment.vhd
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs.v
 vlog -novopt ../rtl/XGETH_tester/Verilog/wrapper_macpcs_rx.v
+vlog -novopt ../rtl/XGETH_tester/Verilog/TX_PATHWAY.v
+vlog -novopt ../rtl/XGETH_tester/Verilog/RX_PATHWAY.v
 
-vcom -novopt ../rtl/XGETH_tester/VHD/lfsr.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/Archive/lfsr.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH/LFSR_GEN.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/RX_ARCH/LFSR_REC.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH/echo_generator.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/RX_ARCH/echo_receiver.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/Archive/echo_generator_old.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH/loopback.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/Archive/loopback_old.vhd
 vcom -novopt ../rtl/XGETH_tester/VHD/txsequence_counter.vhd
-vcom -novopt ../rtl/XGETH_tester/VHD/echo_generator.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH/pkt_creation_mngr.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/TX_ARCH.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/RX_ARCH.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/interface_upc_xgeth.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_ARCH/RFC2544.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TESTER_TOP/TESTER_4XGTH.vhd
+vcom -novopt ../rtl/XGETH_tester/VHD/TB_4XGTH.vhd
 
-vcom -novopt tx_xgt4.vhd
-vcom -novopt rx_xgt4.vhd
+
+#vcom -novopt tx_xgt4.vhd
+#vcom -novopt rx_xgt4.vhd
 vcom -novopt ../rtl/PCS/shuffle.vhd
 vcom -novopt ../rtl/PCS/bip_calculator.vhd
 vcom -novopt ../rtl/PCS/reorder_fifo.vhd
@@ -151,23 +167,23 @@ vcom -novopt ../rtl/PCS/lane_reordering.vhd
 vcom -novopt ../rtl/PCS/alignment_removal.vhd
 
 
-scgenmod tx_xgt4 > tx_xgt4.h
-scgenmod rx_xgt4 > rx_xgt4.h
-scgenmod lane_reorder > lane_reorder.h
-scgenmod shuffle > shuffle.h
+#scgenmod tx_xgt4 > tx_xgt4.h
+#scgenmod rx_xgt4 > rx_xgt4.h
+#scgenmod lane_reorder > lane_reorder.h
+#scgenmod shuffle > shuffle.h
 
 
-sccom dump_output.cpp
-sccom pkt_buffer.cpp
-sccom pkt_buffer_tx40.cpp
-sccom fiber.cpp
-sccom app_tx.cpp
-sccom -novopt -g sc_tb.cpp
-sccom -link -B/usr/bin/
+#sccom dump_output.cpp
+#sccom pkt_buffer.cpp
+#sccom pkt_buffer_tx40.cpp
+#sccom fiber.cpp
+#sccom app_tx.cpp
+#sccom -novopt -g sc_tb.cpp
+#sccom -link -B/usr/bin/
 
 vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 -L secureip -L xilinxcorelib work.glbl \
-work.Top -sc_arg $1 -sc_arg $2 -t 1ps
+work.TB_4XGTH -t 1ps
 
 #do wave.do
 #run 1000 ms
@@ -176,24 +192,24 @@ transcript file transcript
 #run 1000 ms
 
 #do wave.do
-run $3 $4
+#run $3 $4
 
 #transcript file transcript#
 #do wave.do
 #run 30 us
 
 
-exec cp lane0.txt lane0_rx.txt
-exec cp lane1.txt lane1_rx.txt
-exec cp lane2.txt lane2_rx.txt
-exec cp lane3.txt lane3_rx.txt
+#exec cp lane0.txt lane0_rx.txt
+#exec cp lane1.txt lane1_rx.txt
+#exec cp lane2.txt lane2_rx.txt
+#exec cp lane3.txt lane3_rx.txt
 
-exec cp lane0_tx40.txt lane0_rx40.txt
-exec cp lane1_tx40.txt lane1_rx40.txt
-exec cp lane2_tx40.txt lane2_rx40.txt
-exec cp lane3_tx40.txt lane3_rx40.txt
+#exec cp lane0_tx40.txt lane0_rx40.txt
+#exec cp lane1_tx40.txt lane1_rx40.txt
+#exec cp lane2_tx40.txt lane2_rx40.txt
+#exec cp lane3_tx40.txt lane3_rx40.txt
 
-exec cp dump_mii_tx.txt dump_app.txt
+#exec cp dump_mii_tx.txt dump_app.txt
 
 #do list.do
 #exit

@@ -1229,10 +1229,10 @@ module wrapper_macpcs_rx(
       .data_2_out     (d2[63:0]),
       .data_3_out     (d3[63:0]),
 
-      // .valid_0_out (valid_0_out_wire), // não usado
-      // .valid_1_out (valid_1_out_wire),
-      // .valid_2_out (valid_2_out_wire),
-      // .valid_3_out (valid_3_out_wire),
+      .valid_0_out (valid_0_out_wire),
+      .valid_1_out (valid_1_out_wire),
+      .valid_2_out (valid_2_out_wire),
+      .valid_3_out (valid_3_out_wire),
 
       // .dscr_0_out (dscr_0_out_wire),
       // .dscr_1_out (dscr_1_out_wire),
