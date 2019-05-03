@@ -200,58 +200,6 @@ attribute mark_debug : string;
 
 begin
 
-  ---------------------------------------------------------------------------------------
-    -- Register Bank
-   ---------------------------------------------------------------------------------------
-
-   latency_buffer             <= x"0000" & latency;
-   linkstatus_buffer          <= x"0000000" & "00" & eth_rx_los & linkstatus;
-   status250_buffer           <= x"0000000" & "00" & STATUS_reg_250_out;
-   mac_source_rx_buffer       <= x"0000" & mac_source_rx;
-   mac_destination_rx_buffer  <= x"0000" & mac_destination_rx;
-
-  reg_bank_L: for i in 0 to 14 generate
-        registers: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>xgeth_wen, wen=>wen(i), D=>xgeth_wdata, Q=>registers_q_out(i));
-  end generate reg_bank_L;
-
-  reg_bank_H: for i in 33 to 47 generate
-        registers: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>xgeth_wen, wen=>wen(i), D=>xgeth_wdata, Q=>registers_q_out(i));
-  end generate reg_bank_H;
-
-  registers15: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>PKT_rx(31 downto 0),                     Q=>registers_q_out(15));
-  registers16: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>PKT_rx(63 downto 32),                    Q=>registers_q_out(16));
-  registers17: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>TX_count(31 downto 0),                   Q=>registers_q_out(17));
-  registers18: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>TX_count(63 downto 32),                  Q=>registers_q_out(18));
-  registers19: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>latency_buffer(31 downto 0),             Q=>registers_q_out(19));
-  registers20: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>latency_buffer(63 downto 32),            Q=>registers_q_out(20));
-  registers21: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>IDLE_count_receiver_out(31 downto 0),    Q=>registers_q_out(21));
-  registers22: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>IDLE_count_receiver_out(63 downto 32),   Q=>registers_q_out(22));
-  registers23: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>linkstatus_buffer,                       Q=>registers_q_out(23));
-  registers24: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>status250_buffer,                        Q=>registers_q_out(24));
-  registers25: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>mac_source_rx_buffer(31 downto 0),       Q=>registers_q_out(25));
-  registers26: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>mac_source_rx_buffer(63 downto 32),      Q=>registers_q_out(26));
-  registers27: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>mac_destination_rx_buffer(31 downto 0),  Q=>registers_q_out(27));
-  registers28: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>mac_destination_rx_buffer(63 downto 32), Q=>registers_q_out(28));
-  registers29: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>ip_source_rx,                            Q=>registers_q_out(29));
-  registers30: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>ip_destination_rx,                       Q=>registers_q_out(30));
-  registers31: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>cont_error(31 downto 0),                 Q=>registers_q_out(31));
-  registers32: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>cont_error(63 downto 32),                Q=>registers_q_out(32));
-  registers41: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>packets_lost(31 downto 0),               Q=>registers_q_out(41));
-  registers42: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>packets_lost(63 downto 32),              Q=>registers_q_out(42));
-
-   decoder: process(xgeth_waddr)
-   begin
-     wen <= (others => '0');
-      for i in 0 to 47 loop
-        if i = to_integer(unsigned(xgeth_waddr)) then
-          wen(i) <= '1';
-        else
-          wen(i) <= '0';
-        end if;
-      end loop;
-   end process;
-
-   xgeth_rdata <= registers_q_out(to_integer(unsigned(xgeth_raddr)));
 
    	---------------------------------------------------------------------------------------
      	-- FSM implementation
@@ -423,5 +371,58 @@ begin
             DATAIN         => crossClock_buffer_156_in,
             DATAOUT        => crossClock_buffer_250_out
         );
+
+  ---------------------------------------------------------------------------------------
+  -- Register Bank
+  ---------------------------------------------------------------------------------------
+
+  latency_buffer             <= x"0000" & latency;
+  linkstatus_buffer          <= x"0000000" & "00" & eth_rx_los & linkstatus;
+  status250_buffer           <= x"0000000" & "00" & STATUS_reg_250_out;
+  mac_source_rx_buffer       <= x"0000" & mac_source_rx;
+  mac_destination_rx_buffer  <= x"0000" & mac_destination_rx;
+
+  reg_bank_L: for i in 0 to 14 generate
+    registers: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>xgeth_wen, wen=>wen(i), D=>xgeth_wdata, Q=>registers_q_out(i));
+  end generate reg_bank_L;
+
+  reg_bank_H: for i in 33 to 47 generate
+    registers: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>xgeth_wen, wen=>wen(i), D=>xgeth_wdata, Q=>registers_q_out(i));
+  end generate reg_bank_H;
+
+  registers15: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>PKT_rx(31 downto 0),                     Q=>registers_q_out(15));
+  registers16: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>PKT_rx(63 downto 32),                    Q=>registers_q_out(16));
+  registers17: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>TX_count(31 downto 0),                   Q=>registers_q_out(17));
+  registers18: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>TX_count(63 downto 32),                  Q=>registers_q_out(18));
+  registers19: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>latency_buffer(31 downto 0),             Q=>registers_q_out(19));
+  registers20: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>latency_buffer(63 downto 32),            Q=>registers_q_out(20));
+  registers21: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>IDLE_count_receiver_out(31 downto 0),    Q=>registers_q_out(21));
+  registers22: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>IDLE_count_receiver_out(63 downto 32),   Q=>registers_q_out(22));
+  registers23: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>linkstatus_buffer,                       Q=>registers_q_out(23));
+  registers24: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>status250_buffer,                        Q=>registers_q_out(24));
+  registers25: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>mac_source_rx_buffer(31 downto 0),       Q=>registers_q_out(25));
+  registers26: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>mac_source_rx_buffer(63 downto 32),      Q=>registers_q_out(26));
+  registers27: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>mac_destination_rx_buffer(31 downto 0),  Q=>registers_q_out(27));
+  registers28: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>mac_destination_rx_buffer(63 downto 32), Q=>registers_q_out(28));
+  registers29: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>ip_source_rx,                            Q=>registers_q_out(29));
+  registers30: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>ip_destination_rx,                       Q=>registers_q_out(30));
+  registers31: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>cont_error(31 downto 0),                 Q=>registers_q_out(31));
+  registers32: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>cont_error(63 downto 32),                Q=>registers_q_out(32));
+  registers41: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>packets_lost(31 downto 0),               Q=>registers_q_out(41));
+  registers42: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>packets_lost(63 downto 32),              Q=>registers_q_out(42));
+
+  decoder: process(xgeth_waddr)
+  begin
+    wen <= (others => '0');
+    for i in 0 to 47 loop
+      if i = to_integer(unsigned(xgeth_waddr)) then
+        wen(i) <= '1';
+      else
+        wen(i) <= '0';
+      end if;
+    end loop;
+  end process;
+
+  xgeth_rdata <= registers_q_out(to_integer(unsigned(xgeth_raddr)));
 
 end behavioral;
