@@ -174,8 +174,14 @@ attribute mark_debug : string;
   signal test_end                    : std_logic;
   signal time_stamp_flag_reg         : std_logic;
   signal check_reduce_frame_rate_reg : std_logic;
+  signal latency_buffer              : std_logic_vector(63 downto 0);
+  signal linkstatus_buffer           : std_logic_vector(31 downto 0);
+  signal status250_buffer            : std_logic_vector(31 downto 0);
+  signal mac_source_rx_buffer        : std_logic_vector(63 downto 0);
+  signal mac_destination_rx_buffer   : std_logic_vector(63 downto 0);
 
-  type regnbits_out is array (0 to 28) of std_logic_vector(31 downto 0);
+
+  type regnbits_out is array (0 to 47) of std_logic_vector(31 downto 0);
   signal registers_q_out: regnbits_out;
 
   signal crossClock_buffer_250_in    : std_logic_vector(4 downto 0);
@@ -198,14 +204,45 @@ begin
     -- Register Bank
    ---------------------------------------------------------------------------------------
 
-  reg_bank: for i in 0 to 28 generate
+   latency_buffer             <= x"0000" & latency;
+   linkstatus_buffer          <= x"0000000" & "00" & eth_rx_los & linkstatus;
+   status250_buffer           <= x"0000000" & "00" & STATUS_reg_250_out;
+   mac_source_rx_buffer       <= x"0000" & mac_source_rx;
+   mac_destination_rx_buffer  <= x"0000" & mac_destination_rx;
+
+  reg_bank_L: for i in 0 to 14 generate
         registers: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>xgeth_wen, wen=>wen(i), D=>xgeth_wdata, Q=>registers_q_out(i));
-  end generate reg_bank;
+  end generate reg_bank_L;
+
+  reg_bank_H: for i in 33 to 47 generate
+        registers: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>xgeth_wen, wen=>wen(i), D=>xgeth_wdata, Q=>registers_q_out(i));
+  end generate reg_bank_H;
+
+  registers15: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>PKT_rx(31 downto 0),                     Q=>registers_q_out(15));
+  registers16: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>PKT_rx(63 downto 32),                    Q=>registers_q_out(16));
+  registers17: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>TX_count(31 downto 0),                   Q=>registers_q_out(17));
+  registers18: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>TX_count(63 downto 32),                  Q=>registers_q_out(18));
+  registers19: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>latency_buffer(31 downto 0),             Q=>registers_q_out(19));
+  registers20: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>latency_buffer(63 downto 32),            Q=>registers_q_out(20));
+  registers21: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>IDLE_count_receiver_out(31 downto 0),    Q=>registers_q_out(21));
+  registers22: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>IDLE_count_receiver_out(63 downto 32),   Q=>registers_q_out(22));
+  registers23: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>linkstatus_buffer,                       Q=>registers_q_out(23));
+  registers24: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>status250_buffer,                        Q=>registers_q_out(24));
+  registers25: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>mac_source_rx_buffer(31 downto 0),       Q=>registers_q_out(25));
+  registers26: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>mac_source_rx_buffer(63 downto 32),      Q=>registers_q_out(26));
+  registers27: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>mac_destination_rx_buffer(31 downto 0),  Q=>registers_q_out(27));
+  registers28: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>mac_destination_rx_buffer(63 downto 32), Q=>registers_q_out(28));
+  registers29: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>ip_source_rx,                            Q=>registers_q_out(29));
+  registers30: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>ip_destination_rx,                       Q=>registers_q_out(30));
+  registers31: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>cont_error(31 downto 0),                 Q=>registers_q_out(31));
+  registers32: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>cont_error(63 downto 32),                Q=>registers_q_out(32));
+  registers41: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>packets_lost(31 downto 0),               Q=>registers_q_out(41));
+  registers42: entity work.generic_registers port map(ck=>clk_250, rst=>reset, ce=>'1', wen=>'1', D=>packets_lost(63 downto 32),              Q=>registers_q_out(42));
 
    decoder: process(xgeth_waddr)
    begin
      wen <= (others => '0');
-      for i in 0 to 28 loop
+      for i in 0 to 47 loop
         if i = to_integer(unsigned(xgeth_waddr)) then
           wen(i) <= '1';
         else
@@ -328,15 +365,16 @@ begin
 	ip_destination(31 downto 0)   	    <= registers_q_out(12);
 	TIMEOUT_number(15 downto 0)       	<= registers_q_out(13)(15 downto 0);
 	PKT_sequence_in                   	<= registers_q_out(14);
-  seed : for i in 1 to 8 generate
-    lfsr_seed(((i* 32)-1) downto ((i-1 )* 32)) <= registers_q_out(15+(i-1))(31 downto 0);
-  end generate;
-  lfsr_polynomial(1 downto 0)			    <= registers_q_out(24)(1 downto 0);
-  payload_cycles(31 downto 0)         <= registers_q_out(25);
-  loopback_filter                     <= registers_q_out(26)(2 downto 0);
-  reset_test						              <= registers_q_out(27)(0);
-  payload_last_size(7 downto 0)       <= registers_q_out(28)(7 downto 0);
 
+  lfsr_polynomial(1 downto 0)			    <= registers_q_out(43)(1 downto 0);
+  payload_cycles(31 downto 0)         <= registers_q_out(44);
+  payload_last_size(7 downto 0)       <= registers_q_out(45)(7 downto 0);
+  loopback_filter                     <= registers_q_out(46)(2 downto 0);
+  reset_test						              <= registers_q_out(47)(0);
+
+  seed : for i in 1 to 8 generate
+    lfsr_seed(((i* 32)-1) downto ((i-1 )* 32)) <= registers_q_out(33+(i-1))(31 downto 0);
+  end generate;
   time_stamp_flag                     <= time_stamp_flag_reg;
   check_reduce_frame_rate             <= check_reduce_frame_rate_reg;
 
