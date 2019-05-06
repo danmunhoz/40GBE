@@ -313,7 +313,6 @@ begin
 	ip_destination(31 downto 0)   	    <= registers_q_out(12);
 	TIMEOUT_number(15 downto 0)       	<= registers_q_out(13)(15 downto 0);
 	PKT_sequence_in                   	<= registers_q_out(14);
-
   lfsr_polynomial(1 downto 0)			    <= registers_q_out(43)(1 downto 0);
   payload_cycles(31 downto 0)         <= registers_q_out(44);
   payload_last_size(7 downto 0)       <= registers_q_out(45)(7 downto 0);
@@ -323,6 +322,7 @@ begin
   seed : for i in 1 to 8 generate
     lfsr_seed(((i* 32)-1) downto ((i-1 )* 32)) <= registers_q_out(33+(i-1))(31 downto 0);
   end generate;
+
   time_stamp_flag                     <= time_stamp_flag_reg;
   check_reduce_frame_rate             <= check_reduce_frame_rate_reg;
 

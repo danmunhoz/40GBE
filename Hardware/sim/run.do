@@ -185,8 +185,8 @@ vsim -novopt -L unisims_ver -L unimacro_ver -L simprims_ver \
 -L secureip -L xilinxcorelib work.glbl \
 work.TB_4XGTH -t 1ps
 
-#do wave.do
-#run 1000 ms
+do wave.do
+run 30000 ns
 
 transcript file transcript
 #run 1000 ms

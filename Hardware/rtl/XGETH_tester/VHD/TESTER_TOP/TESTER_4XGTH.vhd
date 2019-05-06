@@ -87,10 +87,7 @@ port(
   tx_valid_out_0      : out std_logic;
   tx_valid_out_1      : out std_logic;
   tx_valid_out_2      : out std_logic;
-  tx_valid_out_3      : out std_logic;
-
-  TBD_0               : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
-  TBD_1               : IN STD_LOGIC
+  tx_valid_out_3      : out std_logic
 );
 end TESTER_4XGTH;
 

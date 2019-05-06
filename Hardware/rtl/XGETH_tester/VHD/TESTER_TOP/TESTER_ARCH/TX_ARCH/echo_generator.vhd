@@ -84,17 +84,14 @@ architecture arch_echo_generator of echo_generator is
   signal count              :  integer range 0 to 15;
 
   signal pkt_tx_data_out : std_logic_vector(255 downto 0);
-  signal pkt_tx_data_reg    : std_logic_vector(255 downto 0);
   signal pkt_tx_data_N      : std_logic_vector(255 downto 0);
   signal pkt_tx_data_buffer : std_logic_vector(255 downto 0);
   signal pkt_split          : std_logic_vector(255 downto 0);
-  signal pkt_tx_mod_buffer  : std_logic_vector(4 downto 0);
   signal pkt_tx_mod_ctrl    : std_logic_vector(4 downto 0);
   signal pkt_tx_sop_reg     : std_logic_vector(1 downto 0);
   signal pkt_tx_sop_buffer  : std_logic_vector(1 downto 0);
   signal pkt_tx_val_buffer  : std_logic;
   signal pkt_tx_val_reg     : std_logic;
-  signal pkt_tx_eop_reg     : std_logic;
   signal last_pkt_delay0    : std_logic;
   signal last_pkt_delay1    : std_logic;
   signal last_pkt           : std_logic;
@@ -111,7 +108,7 @@ architecture arch_echo_generator of echo_generator is
   signal ip_checksum       : std_logic_vector(15 downto 0); -- Checksum on the IP header
   signal aux_checksum      : std_logic_vector(31 downto 0); -- Auxiliar flag on the checksum calculation
   signal ip_message_length : std_logic_vector(15 downto 0); -- Frame size internal signal
-  signal ifg  : std_logic := '0';
+  signal ifg  : std_logic := '1';
 
   -------------------------------------------------------------------------------
   -- UDP
@@ -131,7 +128,7 @@ architecture arch_echo_generator of echo_generator is
 BEGIN
 
    pkt_tx_data        <= pkt_tx_data_N when ifg = '0' else                                   --DATAOUT SOP10
-                         pkt_split(127 downto 0) & pkt_tx_data_out(255 downto 128);          --DATAOUT SOP11
+                         pkt_tx_data_out(255 downto 128) & pkt_split(127 downto 0);          --DATAOUT SOP11
    pkt_tx_data_N      <= invert_bytes(pkt_tx_data_buffer);                                   --INVERT DATA
    pkt_tx_data_buffer <= PAYLOAD when current_s = S_PAYLOAD else                             --SEND PAYLOAD
                          IDLE_VALUE & IDLE_VALUE when current_s = S_IDLE else                --SEND IDLE
