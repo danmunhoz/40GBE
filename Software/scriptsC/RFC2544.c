@@ -799,7 +799,7 @@ struct result_timed_throughput timed_throughput (unsigned int pktlen,
 	unsigned long long npkts;				/* Number of packets sent to achieve the desired time of train */
 	unsigned long long idleCount;			/* Number of hardware cycles between each packet to achieve the desired throughput rate */
 	struct result_timed_throughput result;	/* Timed throughput measurements */
-	int randomHigh, randomLow;				/* High and Low parts to the LFSR seed*/
+	int random0, random32, random64, random96, random128, random160, random192, random224;				/* High and Low parts to the LFSR seed*/
 
 	idle_number = idle_calc(rate, pktlen);	/* Calculate the number of hardware idle cycles to obtain the desired throughput rate */
 	rate = rate_calc(idle_number, pktlen);	/* Obtainable rate close to the required */
@@ -866,11 +866,24 @@ struct result_timed_throughput timed_throughput (unsigned int pktlen,
 	mpu_write_pci(sfp, TEST_CODE_REG, 0);							/* Write test code */
 	/* END OF HARDWARE PRECONFIGURATION ############################################### */
 	srand (time(NULL));
-	randomHigh = rand();											/* Generates a random seed based on the system clock */
-	randomLow = rand();												/* Generates a random seed based on the system clock */
+	
+	random224	= rand();											/* Generates a random seed based on the system clock */											
+	random192	= rand();											/* Generates a random seed based on the system clock */
+	random160	= rand();											/* Generates a random seed based on the system clock */
+	random128	= rand();											/* Generates a random seed based on the system clock */
+	random96	= rand();											/* Generates a random seed based on the system clock */
+	random64	= rand();											/* Generates a random seed based on the system clock */
+	random32	= rand();											/* Generates a random seed based on the system clock */
+	random0		= rand();											/* Generates a random seed based on the system clock */
 
-	mpu_write_pci(sfp, LFSR_SEED_63_32_REG, randomHigh);			/* Writes to the hardware the seed */
-	mpu_write_pci(sfp, LFSR_SEED_31_0_REG, randomLow);				/* Writes to the hardware the seed */
+	mpu_write_pci(sfp, LFSR_SEED_255_224_REG, 	random224);			/* Writes to the hardware the seed */
+	mpu_write_pci(sfp, LFSR_SEED_223_192_REG, 	random192);			/* Writes to the hardware the seed */
+	mpu_write_pci(sfp, LFSR_SEED_191_160_REG, 	random160);			/* Writes to the hardware the seed */
+	mpu_write_pci(sfp, LFSR_SEED_159_128_REG, 	random128);			/* Writes to the hardware the seed */
+	mpu_write_pci(sfp, LFSR_SEED_127_96_REG, 	random96);			/* Writes to the hardware the seed */
+	mpu_write_pci(sfp, LFSR_SEED_95_64_REG, 	random64);			/* Writes to the hardware the seed */
+	mpu_write_pci(sfp, LFSR_SEED_63_32_REG, 	random32);			/* Writes to the hardware the seed */
+	mpu_write_pci(sfp, LFSR_SEED_31_0_REG, 		random0);				/* Writes to the hardware the seed */
 	mpu_write_pci(sfp, LFSR_POLYNOMIAL_REG, lfsr_polynomial); 		/* Choses the LFSR polynomial */
 
 	/*Starts test*/
